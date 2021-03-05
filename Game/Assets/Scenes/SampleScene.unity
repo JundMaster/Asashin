@@ -1875,7 +1875,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.781
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.1
@@ -1922,13 +1922,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.4457061, y: -0.029203532, z: 0.116147205, w: 0.88713187}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.26350945, y: -0.005913095, z: 0.119616106, w: 0.95719373}
+  m_LocalPosition: {x: -60, y: 3, z: -20.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 52.9, y: 4.919, z: 17.366}
+  m_LocalEulerAnglesHint: {x: 30.389, y: 3.437, z: 15.18}
 --- !u!4 &717709337 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4261280357280746, guid: e31f4a67713dcf0439ae712421a47733, type: 3}
@@ -2069,6 +2069,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Birch_tree1
       objectReference: {fileID: 0}
+    - target: {fileID: 1216688828669844, guid: 47356d574ebc3a545bfaef26eb02a2ea, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4908765312130676, guid: 47356d574ebc3a545bfaef26eb02a2ea, type: 3}
       propertyPath: m_RootOrder
       value: 29
@@ -2112,6 +2116,10 @@ PrefabInstance:
     - target: {fileID: 4908765312130676, guid: 47356d574ebc3a545bfaef26eb02a2ea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23320235798237312, guid: 47356d574ebc3a545bfaef26eb02a2ea, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47356d574ebc3a545bfaef26eb02a2ea, type: 3}
@@ -3995,6 +4003,10 @@ PrefabInstance:
     - target: {fileID: 4267270626352703512, guid: e233f8c7c27f7d948ac682ffca85357b, type: 3}
       propertyPath: m_Name
       value: Water Plane
+      objectReference: {fileID: 0}
+    - target: {fileID: 4267270626352703514, guid: e233f8c7c27f7d948ac682ffca85357b, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e233f8c7c27f7d948ac682ffca85357b, type: 3}
