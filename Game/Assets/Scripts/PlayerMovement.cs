@@ -14,10 +14,10 @@ public class PlayerMovement : MonoBehaviour, IComponent
     [SerializeField] private float speed = 5f;
     public Vector3 Direction { get; private set; }
     private Vector3 moveDirection;
-    private bool canMove;
+    public bool CanMove { get; set; }
 
     // Rotation Variables
-    [SerializeField] private float turnSmooth = 0.1f;
+    private float turnSmooth = 0.1f;
     private float smoothTime;
 
     private void Awake()
@@ -29,14 +29,15 @@ public class PlayerMovement : MonoBehaviour, IComponent
 
     private void Start()
     {
-        canMove = true;
+        CanMove = true;
     }
 
     public void ComponentUpdate()
     {
-        if (canMove)
+        // Updates movement direction variable
+        if (CanMove)
         {
-            Direction = new Vector3(input.Movement.x, 0, input.Movement.y);
+            Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
         }
         else
         {
@@ -58,7 +59,7 @@ public class PlayerMovement : MonoBehaviour, IComponent
         if (Direction.magnitude > 0.01f)
         {
             // Moves controllers towards the moveDirection set on Rotation()
-            controller.Move(moveDirection.normalized * speed * Time.deltaTime);
+            controller.Move(moveDirection.normalized * speed * Time.fixedDeltaTime);
         }
     }
 
