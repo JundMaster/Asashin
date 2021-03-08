@@ -6,30 +6,30 @@ using System.Collections.Generic;
 /// </summary>
 public class Player : MonoBehaviour
 {
-    private IList<IComponent> myIComponents;
-    private IList<IComponent> componentsToRun;
+    private IList<IAction> myIComponents;
+    private IList<IAction> componentsToRun;
 
     private void Awake()
     {
-        myIComponents = GetComponents<IComponent>();
-        componentsToRun = new List<IComponent>();
+        myIComponents = GetComponents<IAction>();
+        componentsToRun = new List<IAction>();
     }
 
     private void Start()
     {
-        foreach (IComponent comp in myIComponents)
+        foreach (IAction comp in myIComponents)
             componentsToRun.Add(comp);
     }
 
     private void Update()
     {
-        foreach (IComponent comp in componentsToRun)
+        foreach (IAction comp in componentsToRun)
             comp.ComponentUpdate();
     }
 
     private void FixedUpdate()
     {
-        foreach (IComponent comp in componentsToRun)
+        foreach (IAction comp in componentsToRun)
             comp.ComponentFixedUpdate();
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Class responsible for handling player jump.
 /// </summary>
-public class PlayerJump : MonoBehaviour, IComponent
+public class PlayerJump : MonoBehaviour, IAction
 {
     // Components
     private CharacterController controller;
@@ -18,7 +18,7 @@ public class PlayerJump : MonoBehaviour, IComponent
     public Vector3 VerticalVelocity => verticalVelocity;
 
     // Jumping variables
-    [SerializeField] private float jumpForce = -20f;
+    [SerializeField] private float jumpForce = -2f;
     public bool CanJump { get; set; }
 
     // Ground variables
@@ -71,7 +71,8 @@ public class PlayerJump : MonoBehaviour, IComponent
     {
         if (IsGrounded() && CanJump)
         {
-            verticalVelocity.y = Mathf.Sqrt(-2.5f * GRAVITY);
+            verticalVelocity.y = Mathf.Sqrt(jumpForce * GRAVITY);
+            roll.CanRoll = false;
         }
     }
 

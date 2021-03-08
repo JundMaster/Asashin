@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAnimations : MonoBehaviour, IComponent
+public class PlayerAnimations : MonoBehaviour, IAction
 {
     // Components
     private Animator anim;

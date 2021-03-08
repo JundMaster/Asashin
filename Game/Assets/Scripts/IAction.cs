@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// Interface for components.
 /// </summary>
-public interface IComponent
+public interface IAction
 {
     /// <summary>
     /// Runs on update.

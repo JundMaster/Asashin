@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRoll : MonoBehaviour, IComponent
+public class PlayerRoll : MonoBehaviour, IAction
 {
     // Components
     private PlayerMovement movement;
@@ -40,8 +40,7 @@ public class PlayerRoll : MonoBehaviour, IComponent
 
     public void ComponentUpdate()
     {
-        if (jump.VerticalVelocity.y > 0) CanRoll = false;
-        else CanRoll = true;
+
     }
 
     public void ComponentFixedUpdate()
@@ -51,23 +50,27 @@ public class PlayerRoll : MonoBehaviour, IComponent
 
     private void HandleRoll()
     {
-        // If the player is pressing any direction
-        // rotates the character instantly to roll in that direction
-        if (movement.Direction != Vector3.zero)
+        if (CanRoll && jump.IsGrounded())
         {
-            // Finds angle
-            float targetAngle = Mathf.Atan2(movement.Direction.x, movement.Direction.z) *
-                    Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+            // If the player is pressing any direction
+            // rotates the character instantly to roll in that direction
+            if (movement.Direction != Vector3.zero)
+            {
+                // Finds angle
+                float targetAngle = Mathf.Atan2(movement.Direction.x, movement.Direction.z) *
+                        Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
 
-            // Rotates to that angle
-            transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+                // Rotates to that angle
+                transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+            }
+
+            //////////////
+
+            movement.CanMove = false;
+            anim.applyRootMotion = true;
+            Rolling = true;
+            CanRoll = false;
         }
-
-        //////////////
-        
-        movement.CanMove = false;
-        anim.applyRootMotion = true;
-        Rolling = true;
     }
 
     /// <summary>
@@ -78,5 +81,6 @@ public class PlayerRoll : MonoBehaviour, IComponent
         movement.CanMove = true;
         anim.applyRootMotion = false;
         Rolling = false;
+        CanRoll = true;
     }
 }

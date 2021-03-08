@@ -3,7 +3,7 @@
 /// <summary>
 /// Class responsible for handling player movement.
 /// </summary>
-public class PlayerMovement : MonoBehaviour, IComponent
+public class PlayerMovement : MonoBehaviour, IAction
 {
     // Components
     private CharacterController controller;
@@ -13,12 +13,15 @@ public class PlayerMovement : MonoBehaviour, IComponent
     // Movement Variables
     [SerializeField] private float speed = 5f;
     public Vector3 Direction { get; private set; }
+    private float hVel;
+    private float vVel;
+    private float smoothTimeVelocity;
     private Vector3 moveDirection;
     public bool CanMove { get; set; }
 
     // Rotation Variables
     private float turnSmooth = 0.1f;
-    private float smoothTime;
+    private float smoothTimeRotation;
 
     private void Awake()
     {
@@ -30,14 +33,19 @@ public class PlayerMovement : MonoBehaviour, IComponent
     private void Start()
     {
         CanMove = true;
+        smoothTimeVelocity = 0.025f;
     }
 
+    
     public void ComponentUpdate()
     {
         // Updates movement direction variable
         if (CanMove)
         {
-            Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
+            Direction = new Vector3(
+                Mathf.SmoothDamp(Direction.x, input.Movement.x, ref hVel, smoothTimeVelocity), 
+                0f, 
+                Mathf.SmoothDamp(Direction.z, input.Movement.y, ref vVel, smoothTimeVelocity));
         }
         else
         {
@@ -75,7 +83,7 @@ public class PlayerMovement : MonoBehaviour, IComponent
                 Mathf.Rad2Deg + mainCamera.eulerAngles.y;
 
             float angle = Mathf.SmoothDampAngle(
-                transform.eulerAngles.y, targetAngle, ref smoothTime, turnSmooth);
+                transform.eulerAngles.y, targetAngle, ref smoothTimeRotation, turnSmooth);
 
             // Rotates to that angle
             transform.rotation = Quaternion.Euler(0f, angle, 0f);

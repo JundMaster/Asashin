@@ -5,7 +5,7 @@ using System;
 /// <summary>
 /// Class responsible for controlling player input.
 /// </summary>
-public class PlayerInputCustom : MonoBehaviour, IComponent
+public class PlayerInputCustom : MonoBehaviour
 {
     [SerializeField] private PlayerInput controls;
 
@@ -13,18 +13,8 @@ public class PlayerInputCustom : MonoBehaviour, IComponent
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
-    }
-
-    public void ComponentFixedUpdate()
-    {
-        
-    }
-
-    public void ComponentUpdate()
-    {
-        
     }
 
     /// <summary>
@@ -69,4 +59,37 @@ public class PlayerInputCustom : MonoBehaviour, IComponent
     /// Registered on Player Movement.
     /// </summary>
     public event Action Roll;
+
+
+    /// <summary>
+    /// Handles movement.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleMeleeLightAttack(InputAction.CallbackContext context)
+    {
+        if (context.started) OnMeleeLightAttack();
+    }
+
+    protected virtual void OnMeleeLightAttack() => MeleeLightAttack?.Invoke();
+
+    /// <summary>
+    /// Registered on Player Movement.
+    /// </summary>
+    public event Action MeleeLightAttack;
+
+    /// <summary>
+    /// Handles movement.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleMeleeStrongAttack(InputAction.CallbackContext context)
+    {
+        if (context.started) OnMeleeStrongAttack();
+    }
+
+    protected virtual void OnMeleeStrongAttack() => MeleeStrongAttack?.Invoke();
+
+    /// <summary>
+    /// Registered on Player Movement.
+    /// </summary>
+    public event Action MeleeStrongAttack;
 }

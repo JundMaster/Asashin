@@ -49,6 +49,22 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""MeleeLightAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""f44a81a4-5247-4401-a2ef-e3a999208251"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MeleeStrongAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""82997286-c894-4325-85df-2f65c9eb2e2e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -183,6 +199,50 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""action"": ""Roll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d31c0b8-2353-4a3a-a708-46272ffdf3e2"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MeleeLightAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""43975de7-2cd8-418b-af16-b34ae8cee816"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MeleeLightAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b68f94b1-5091-4118-853d-7580a4c7f611"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MeleeStrongAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4bf42146-e3c5-4815-a6da-ad91707abc22"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MeleeStrongAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -195,6 +255,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
         m_Gameplay_Camera = m_Gameplay.FindAction("Camera", throwIfNotFound: true);
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Roll = m_Gameplay.FindAction("Roll", throwIfNotFound: true);
+        m_Gameplay_MeleeLightAttack = m_Gameplay.FindAction("MeleeLightAttack", throwIfNotFound: true);
+        m_Gameplay_MeleeStrongAttack = m_Gameplay.FindAction("MeleeStrongAttack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -248,6 +310,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Camera;
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Roll;
+    private readonly InputAction m_Gameplay_MeleeLightAttack;
+    private readonly InputAction m_Gameplay_MeleeStrongAttack;
     public struct GameplayActions
     {
         private @InputAsset m_Wrapper;
@@ -256,6 +320,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
         public InputAction @Camera => m_Wrapper.m_Gameplay_Camera;
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Roll => m_Wrapper.m_Gameplay_Roll;
+        public InputAction @MeleeLightAttack => m_Wrapper.m_Gameplay_MeleeLightAttack;
+        public InputAction @MeleeStrongAttack => m_Wrapper.m_Gameplay_MeleeStrongAttack;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -277,6 +343,12 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @Roll.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRoll;
                 @Roll.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRoll;
                 @Roll.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRoll;
+                @MeleeLightAttack.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeLightAttack;
+                @MeleeLightAttack.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeLightAttack;
+                @MeleeLightAttack.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeLightAttack;
+                @MeleeStrongAttack.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeStrongAttack;
+                @MeleeStrongAttack.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeStrongAttack;
+                @MeleeStrongAttack.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeStrongAttack;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -293,6 +365,12 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @Roll.started += instance.OnRoll;
                 @Roll.performed += instance.OnRoll;
                 @Roll.canceled += instance.OnRoll;
+                @MeleeLightAttack.started += instance.OnMeleeLightAttack;
+                @MeleeLightAttack.performed += instance.OnMeleeLightAttack;
+                @MeleeLightAttack.canceled += instance.OnMeleeLightAttack;
+                @MeleeStrongAttack.started += instance.OnMeleeStrongAttack;
+                @MeleeStrongAttack.performed += instance.OnMeleeStrongAttack;
+                @MeleeStrongAttack.canceled += instance.OnMeleeStrongAttack;
             }
         }
     }
@@ -303,5 +381,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
         void OnCamera(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
+        void OnMeleeLightAttack(InputAction.CallbackContext context);
+        void OnMeleeStrongAttack(InputAction.CallbackContext context);
     }
 }
