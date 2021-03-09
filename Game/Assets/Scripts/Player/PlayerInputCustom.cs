@@ -28,7 +28,7 @@ public class PlayerInputCustom : MonoBehaviour
     }
 
     /// <summary>
-    /// Handles movement.
+    /// Handles Jump.
     /// </summary>
     /// <param name="context"></param>
     public void HandleJump(InputAction.CallbackContext context)
@@ -39,13 +39,13 @@ public class PlayerInputCustom : MonoBehaviour
     protected virtual void OnJump() => Jump?.Invoke();
 
     /// <summary>
-    /// Registered on Player Movement.
+    /// Registered on Player Jump.
     /// </summary>
     public event Action Jump;
 
 
     /// <summary>
-    /// Handles movement.
+    /// Handles Player Roll.
     /// </summary>
     /// <param name="context"></param>
     public void HandleRoll(InputAction.CallbackContext context)
@@ -56,13 +56,13 @@ public class PlayerInputCustom : MonoBehaviour
     protected virtual void OnRoll() => Roll?.Invoke();
 
     /// <summary>
-    /// Registered on Player Movement.
+    /// Registered on Player Roll.
     /// </summary>
     public event Action Roll;
 
 
     /// <summary>
-    /// Handles movement.
+    /// Handles Player Attack.
     /// </summary>
     /// <param name="context"></param>
     public void HandleMeleeLightAttack(InputAction.CallbackContext context)
@@ -73,12 +73,12 @@ public class PlayerInputCustom : MonoBehaviour
     protected virtual void OnMeleeLightAttack() => MeleeLightAttack?.Invoke();
 
     /// <summary>
-    /// Registered on Player Movement.
+    /// Registered on Player Attack.
     /// </summary>
     public event Action MeleeLightAttack;
 
     /// <summary>
-    /// Handles movement.
+    /// Handles MeleeStrongAttack.
     /// </summary>
     /// <param name="context"></param>
     public void HandleMeleeStrongAttack(InputAction.CallbackContext context)
@@ -89,7 +89,55 @@ public class PlayerInputCustom : MonoBehaviour
     protected virtual void OnMeleeStrongAttack() => MeleeStrongAttack?.Invoke();
 
     /// <summary>
-    /// Registered on Player Movement.
+    /// Registered on Player Attack.
     /// </summary>
     public event Action MeleeStrongAttack;
+
+    /// <summary>
+    /// Handles movement.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleTargetSet(InputAction.CallbackContext context)
+    {
+        if (context.started) OnTargetSet();
+    }
+
+    protected virtual void OnTargetSet() => TargetSet?.Invoke();
+
+    /// <summary>
+    /// Registered on Player Movement.
+    /// </summary>
+    public event Action TargetSet;
+
+    /// <summary>
+    /// Handles target switch.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleTargetChangeRight(InputAction.CallbackContext context)
+    {
+        if (context.started) OnTargetChangeRight();
+    }
+
+    protected virtual void OnTargetChangeRight() => TargetChangeRight?.Invoke();
+
+    /// <summary>
+    /// Registered on Player Movement.
+    /// </summary>
+    public event Action TargetChangeRight;
+
+    /// <summary>
+    /// Handles target switch.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleTargetChangeLeft(InputAction.CallbackContext context)
+    {
+        if (context.started) OnTargetChangeLeft();
+    }
+
+    protected virtual void OnTargetChangeLeft() => TargetChangeLeft?.Invoke();
+
+    /// <summary>
+    /// Registered on Player Movement.
+    /// </summary>
+    public event Action TargetChangeLeft;
 }

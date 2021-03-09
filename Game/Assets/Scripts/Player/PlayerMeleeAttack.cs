@@ -13,6 +13,16 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private PlayerMovement movement;
     private PlayerJump jump;
     private PlayerRoll roll;
+    private CinemachineTarget target;
+
+    // Weapon
+    [SerializeField] private SphereCollider sword;
+
+    // Layers
+    [SerializeField] private LayerMask hittableLayers;
+
+    // Swordhit
+    [SerializeField] private GameObject swordHitPrefab;
 
     private void Awake()
     {
@@ -21,6 +31,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         movement = GetComponent<PlayerMovement>();
         jump = GetComponent<PlayerJump>();
         roll = GetComponent<PlayerRoll>();
+        target = FindObjectOfType<CinemachineTarget>();
     }
 
     private void OnEnable()
@@ -47,6 +58,12 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     private void MeleeLightAttack()
     {
+        if (target.Targeting)
+        {
+            transform.LookAt(target.CurrentTarget);
+            transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
+        }
+
         movement.CanMove = false;
         jump.CanJump = false;
         roll.CanRoll = false;
@@ -59,6 +76,12 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     private void MeleeStrongAttack()
     {
+        if (target.Targeting)
+        {
+            transform.LookAt(target.CurrentTarget);
+            transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
+        }
+
         movement.CanMove = false;
         jump.CanJump = false;
         roll.CanRoll = false;
@@ -81,5 +104,19 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
         anim.speed = 1f;
         anim.applyRootMotion = false;
+    }
+
+    /// <summary>
+    /// Checks attack collision through animation event.
+    /// </summary>
+    public void CheckAttackCollision()
+    {
+        Collider[] swordCol = 
+            Physics.OverlapSphere(sword.transform.position + sword.center, sword.radius, hittableLayers);
+
+        if (swordCol.Length > 0)
+        {
+            Instantiate(swordHitPrefab, sword.transform.position + sword.center, Quaternion.identity);
+        }
     }
 }

@@ -65,6 +65,30 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Target"",
+                    ""type"": ""Button"",
+                    ""id"": ""74ee5ea7-3319-4eb6-853d-56147609d105"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ChangeTargetLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""65e138df-cbe3-4973-898b-1223c202c938"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ChangeTargetRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""0c3642c7-afb0-472d-b3b1-d3b593b889a2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -243,6 +267,72 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""action"": ""MeleeStrongAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c4e81f6-db08-41b2-a4bf-5ee010778adb"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Target"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""abd76c28-cc9e-46cc-841d-3445f88c5a1f"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Target"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""412be4d3-612a-485a-bd5f-331adeac05bd"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeTargetLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc66ac04-017f-4a80-8913-cd354e457b3d"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeTargetLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0ca08a31-fd4a-4e75-b7d5-a8fad91c4842"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeTargetRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c4b1d47-ddca-4eb8-a024-81c50dc8ecb6"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeTargetRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -257,6 +347,9 @@ public class @InputAsset : IInputActionCollection, IDisposable
         m_Gameplay_Roll = m_Gameplay.FindAction("Roll", throwIfNotFound: true);
         m_Gameplay_MeleeLightAttack = m_Gameplay.FindAction("MeleeLightAttack", throwIfNotFound: true);
         m_Gameplay_MeleeStrongAttack = m_Gameplay.FindAction("MeleeStrongAttack", throwIfNotFound: true);
+        m_Gameplay_Target = m_Gameplay.FindAction("Target", throwIfNotFound: true);
+        m_Gameplay_ChangeTargetLeft = m_Gameplay.FindAction("ChangeTargetLeft", throwIfNotFound: true);
+        m_Gameplay_ChangeTargetRight = m_Gameplay.FindAction("ChangeTargetRight", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -312,6 +405,9 @@ public class @InputAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Roll;
     private readonly InputAction m_Gameplay_MeleeLightAttack;
     private readonly InputAction m_Gameplay_MeleeStrongAttack;
+    private readonly InputAction m_Gameplay_Target;
+    private readonly InputAction m_Gameplay_ChangeTargetLeft;
+    private readonly InputAction m_Gameplay_ChangeTargetRight;
     public struct GameplayActions
     {
         private @InputAsset m_Wrapper;
@@ -322,6 +418,9 @@ public class @InputAsset : IInputActionCollection, IDisposable
         public InputAction @Roll => m_Wrapper.m_Gameplay_Roll;
         public InputAction @MeleeLightAttack => m_Wrapper.m_Gameplay_MeleeLightAttack;
         public InputAction @MeleeStrongAttack => m_Wrapper.m_Gameplay_MeleeStrongAttack;
+        public InputAction @Target => m_Wrapper.m_Gameplay_Target;
+        public InputAction @ChangeTargetLeft => m_Wrapper.m_Gameplay_ChangeTargetLeft;
+        public InputAction @ChangeTargetRight => m_Wrapper.m_Gameplay_ChangeTargetRight;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -349,6 +448,15 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @MeleeStrongAttack.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeStrongAttack;
                 @MeleeStrongAttack.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeStrongAttack;
                 @MeleeStrongAttack.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeStrongAttack;
+                @Target.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTarget;
+                @Target.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTarget;
+                @Target.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTarget;
+                @ChangeTargetLeft.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeTargetLeft;
+                @ChangeTargetLeft.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeTargetLeft;
+                @ChangeTargetLeft.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeTargetLeft;
+                @ChangeTargetRight.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeTargetRight;
+                @ChangeTargetRight.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeTargetRight;
+                @ChangeTargetRight.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeTargetRight;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -371,6 +479,15 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @MeleeStrongAttack.started += instance.OnMeleeStrongAttack;
                 @MeleeStrongAttack.performed += instance.OnMeleeStrongAttack;
                 @MeleeStrongAttack.canceled += instance.OnMeleeStrongAttack;
+                @Target.started += instance.OnTarget;
+                @Target.performed += instance.OnTarget;
+                @Target.canceled += instance.OnTarget;
+                @ChangeTargetLeft.started += instance.OnChangeTargetLeft;
+                @ChangeTargetLeft.performed += instance.OnChangeTargetLeft;
+                @ChangeTargetLeft.canceled += instance.OnChangeTargetLeft;
+                @ChangeTargetRight.started += instance.OnChangeTargetRight;
+                @ChangeTargetRight.performed += instance.OnChangeTargetRight;
+                @ChangeTargetRight.canceled += instance.OnChangeTargetRight;
             }
         }
     }
@@ -383,5 +500,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
         void OnRoll(InputAction.CallbackContext context);
         void OnMeleeLightAttack(InputAction.CallbackContext context);
         void OnMeleeStrongAttack(InputAction.CallbackContext context);
+        void OnTarget(InputAction.CallbackContext context);
+        void OnChangeTargetLeft(InputAction.CallbackContext context);
+        void OnChangeTargetRight(InputAction.CallbackContext context);
     }
 }
