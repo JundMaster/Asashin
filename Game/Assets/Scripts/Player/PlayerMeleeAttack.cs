@@ -69,7 +69,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         roll.CanRoll = false;
 
         anim.applyRootMotion = true;
-        anim.speed = 2f;
+
         anim.SetTrigger("MeleeLightAttack");
         anim.ResetTrigger("MeleeStrongAttack");
     }
@@ -87,7 +87,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         roll.CanRoll = false;
 
         anim.applyRootMotion = true;
-        anim.speed = 1.5f;
+
         anim.SetTrigger("MeleeStrongAttack");
         anim.ResetTrigger("MeleeLightAttack");
     }

@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
+using System.Collections;
 
 public class PlayerRoll : MonoBehaviour, IAction
 {
@@ -70,6 +70,9 @@ public class PlayerRoll : MonoBehaviour, IAction
             anim.applyRootMotion = true;
             Rolling = true;
             CanRoll = false;
+
+
+            //StartCoroutine(TriggerSlowMotion());
         }
     }
 
@@ -83,4 +86,29 @@ public class PlayerRoll : MonoBehaviour, IAction
         Rolling = false;
         CanRoll = true;
     }
+
+    private IEnumerator TriggerSlowMotion()
+    {
+        SlowMotionBehaviour[] physicsBodies = FindObjectsOfType<SlowMotionBehaviour>();
+        foreach (SlowMotionBehaviour body in physicsBodies)
+        {
+            body.TriggerSlowMotion();
+        }
+
+        yield return new WaitForSeconds(1);
+
+        foreach (SlowMotionBehaviour body in physicsBodies)
+        {
+            if (body != null)
+                body.StopSlowMotion();
+        }
+    }
+
+
+    protected virtual void OnRoll() => Roll?.Invoke();
+
+    /// <summary>
+    /// Event registered on SlowMotion.
+    /// </summary>
+    public event Action Roll;
 }

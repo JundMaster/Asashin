@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform myTarget;
     public Transform MyTarget => myTarget;
 
+    // ILists with all components on this gameobject
     private IList<IAction> myIComponents;
     private IList<IAction> componentsToRun;
 
