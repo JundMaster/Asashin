@@ -219,7 +219,7 @@ public class CinemachineTarget : MonoBehaviour
     /// </summary>
     private void UpdateTargetCameraLookAt()
     {
-        // Finds closes enemy
+        // Finds closest enemy
         Collider[] closestEnemy =
             Physics.OverlapSphere(
                 new Vector3(
@@ -234,7 +234,8 @@ public class CinemachineTarget : MonoBehaviour
         {
             if (enemy.gameObject.TryGetComponent(out Enemy en))
             {
-                secondTargetcamera.LookAt = en.transform;
+                // Applies target transform to target camera
+                secondTargetcamera.LookAt = en.MyTarget;
             }
         }        
     }

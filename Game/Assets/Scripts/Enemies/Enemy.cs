@@ -6,6 +6,10 @@ using UnityEngine;
 /// </summary>
 public class Enemy : MonoBehaviour
 {
+    // Variables
+    [SerializeField] private Transform myTarget;
+    public Transform MyTarget => myTarget;
+
     private IList<IAction> myIComponents;
     private IList<IAction> componentsToRun;
 
