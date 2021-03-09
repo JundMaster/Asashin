@@ -12,20 +12,25 @@ public class SlowMotionBehaviour : MonoBehaviour
     private float defaultTimeScale;
     private float defaultFixedDeltaTime;
     [SerializeField] private float slowMotionSpeed;
-    private float playerSpeedInSlowMotion;
+    [SerializeField] private float slowMotionDuration;
+    [Range(0.03f, 0.04f)] [SerializeField] private float slowMotionSmoothSpeed;
+    private float currentTimePassed;
+    private Coroutine SlowmotionCoroutine;
 
     // Components
     private PlayerMovement playerMovement;
-    private PlayerJump playerJump;
+    private PlayerValues playerValues;
     private Camera mainCamera;
+    private PlayerRoll roll;
 
-    // Slow motion state
+    // Slow motion variabl
     public bool SlowMotionOn { get; set; }
 
     private void Awake()
     {
         playerMovement = FindObjectOfType<PlayerMovement>();
-        playerJump = FindObjectOfType<PlayerJump>();
+        playerValues = FindObjectOfType<Player>().Values;
+        roll = FindObjectOfType<PlayerRoll>();
         mainCamera = Camera.main;
     }
 
@@ -33,35 +38,83 @@ public class SlowMotionBehaviour : MonoBehaviour
     {
         defaultTimeScale = Time.timeScale;
         defaultFixedDeltaTime = Time.fixedDeltaTime;
-        playerSpeedInSlowMotion = 1 / slowMotionSpeed;
         SlowMotionOn = false;
-
-        TriggerSlowMotion();
+        SlowmotionCoroutine = null;
     }
 
-    public void TriggerSlowMotion()
+    private void OnEnable()
     {
-        Time.timeScale = slowMotionSpeed;
-        Time.fixedDeltaTime = Time.timeScale * 0.01f;
+        roll.Roll += TriggerSlowMotion;
+    }
 
-        playerMovement.TurnSmooth = 0.005f;
+    private void OnDisable()
+    {
+        roll.Roll -= TriggerSlowMotion;
+    }
 
-        mainCamera.GetComponent<CinemachineBrain>().m_UpdateMethod = 
+    private void TriggerSlowMotion()
+    {
+        if (SlowmotionCoroutine == null)
+            SlowmotionCoroutine = StartCoroutine(SlowMotion());
+    }
+
+    /// <summary>
+    /// Coroutine responsible for slowing time.
+    /// </summary>
+    /// <returns>Null.</returns>
+    private IEnumerator SlowMotion()
+    {
+        // Changes turn value on player and changes camera update mode
+        playerMovement.TurnSmooth = playerValues.TurnSmoothInSlowMotion;
+        mainCamera.GetComponent<CinemachineBrain>().m_UpdateMethod =
             CinemachineBrain.UpdateMethod.LateUpdate;
 
         SlowMotionOn = true;
+
+        currentTimePassed = 0;
+        while(currentTimePassed < slowMotionDuration)
+        {
+            if (currentTimePassed < slowMotionDuration * 0.5f)
+            {
+                Time.timeScale = Mathf.Lerp(
+                    Time.timeScale, 
+                    slowMotionSpeed, 
+                    slowMotionSmoothSpeed);
+            }
+
+            else if (currentTimePassed > (slowMotionDuration - (slowMotionDuration/3)))
+            {
+                Time.timeScale = Mathf.Lerp(
+                    Time.timeScale, 
+                    defaultTimeScale, 
+                    slowMotionSmoothSpeed);
+            }
+
+            Time.fixedDeltaTime = Time.timeScale * 0.01f;
+
+            currentTimePassed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        StopSlowMotion();
+        SlowmotionCoroutine = null;
     }
 
+    /// <summary>
+    /// Returns time to normal.
+    /// </summary>
     public void StopSlowMotion()
     {
         Time.timeScale = defaultTimeScale;
         Time.fixedDeltaTime = defaultFixedDeltaTime;
 
-        playerMovement.TurnSmooth = 0.1f;
+        playerMovement.TurnSmooth = playerValues.TurnSmooth;
 
         mainCamera.GetComponent<CinemachineBrain>().m_UpdateMethod =
             CinemachineBrain.UpdateMethod.FixedUpdate;
 
         SlowMotionOn = false;
     }
+
+    
 }

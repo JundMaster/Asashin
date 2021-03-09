@@ -6,6 +6,11 @@ using System.Collections.Generic;
 /// </summary>
 public class Player : MonoBehaviour
 {
+    // Components
+    [SerializeField] private PlayerValues values;
+    public PlayerValues Values => values;
+
+    // ILists with components
     private IList<IAction> myIComponents;
     private IList<IAction> componentsToRun;
 

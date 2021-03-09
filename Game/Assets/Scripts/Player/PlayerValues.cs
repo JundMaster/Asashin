@@ -1,0 +1,29 @@
+﻿using UnityEngine;
+
+[CreateAssetMenu(fileName = "PlayerValues")]
+public class PlayerValues : ScriptableObject
+{
+    [Header("Script Values")]
+    [Header("Movement")]
+    [SerializeField] private float speed;
+    [Header("Rotation")]
+    [SerializeField] private float turnSmooth;
+    [SerializeField] private float turnSmoothInSlowMotion;
+    [SerializeField] private float smoothTimeVelocity;
+    [Header("Jump")]
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float gravity;
+    [SerializeField] private float isGroundedCheckSize;
+
+    public float Speed => speed;
+    public float TurnSmooth => turnSmooth;
+    public float TurnSmoothInSlowMotion => turnSmoothInSlowMotion;
+    public float SmoothTimeVelocity => smoothTimeVelocity;
+    public float JumpForce => jumpForce;
+    public float Gravity => gravity;
+    public float IsGroundedCheckSize => isGroundedCheckSize;
+
+
+    [Header("PlayerStats")]
+    [SerializeField] private float health;
+}

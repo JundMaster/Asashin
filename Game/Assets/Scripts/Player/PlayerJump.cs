@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Class responsible for handling player jump.
@@ -11,15 +9,13 @@ public class PlayerJump : MonoBehaviour, IAction
     private CharacterController controller;
     private PlayerInputCustom input;
     private PlayerRoll roll;
+    private PlayerValues values;
 
     // Gravity
-    public float Gravity { get; set; } = -9.81f;
     private Vector3 verticalVelocity;
     public Vector3 VerticalVelocity => verticalVelocity;
 
     // Jumping variables
-    [SerializeField] private float jumpForce = -2f;
-    public float JumpForce { get => jumpForce; set => jumpForce = value; }
     public bool CanJump { get; set; }
 
     // Ground variables
@@ -30,6 +26,7 @@ public class PlayerJump : MonoBehaviour, IAction
         controller = GetComponent<CharacterController>();
         input = GetComponent<PlayerInputCustom>();
         roll = GetComponent<PlayerRoll>();
+        values = GetComponent<Player>().Values;
     }
 
     private void Start()
@@ -61,7 +58,7 @@ public class PlayerJump : MonoBehaviour, IAction
             verticalVelocity.y = -1f;
         }
 
-        verticalVelocity.y += Gravity * Time.fixedUnscaledDeltaTime;
+        verticalVelocity.y += values.Gravity * Time.fixedUnscaledDeltaTime;
         controller.Move(verticalVelocity * Time.fixedUnscaledDeltaTime);
     }
 
@@ -72,7 +69,7 @@ public class PlayerJump : MonoBehaviour, IAction
     {
         if (IsGrounded() && CanJump)
         {
-            verticalVelocity.y = Mathf.Sqrt(jumpForce * Gravity);
+            verticalVelocity.y = Mathf.Sqrt(values.JumpForce * values.Gravity);
             roll.CanRoll = false;
         }
     }
@@ -83,16 +80,12 @@ public class PlayerJump : MonoBehaviour, IAction
     public bool IsGrounded()
     {
         Collider[] isGrounded =
-            Physics.OverlapSphere(transform.position, 0.1f, groundLayer);
+            Physics.OverlapSphere(
+                transform.position, values.IsGroundedCheckSize, groundLayer);
 
         if (isGrounded.Length > 0)
             return true;
 
         return false;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, 0.1f);
     }
 }

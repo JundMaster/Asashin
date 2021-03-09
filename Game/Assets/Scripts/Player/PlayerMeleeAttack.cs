@@ -56,12 +56,17 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         
     }
 
+    /// <summary>
+    /// Handles light attack.
+    /// </summary>
     private void MeleeLightAttack()
     {
         if (target.Targeting)
         {
+            // Rotates player to target
             transform.LookAt(target.CurrentTarget);
-            transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
+            transform.eulerAngles = new Vector3(
+                0f, transform.eulerAngles.y, transform.eulerAngles.z);
         }
 
         movement.CanMove = false;
@@ -74,6 +79,9 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         anim.ResetTrigger("MeleeStrongAttack");
     }
 
+    /// <summary>
+    /// Handles strong attack.
+    /// </summary>
     private void MeleeStrongAttack()
     {
         if (target.Targeting)

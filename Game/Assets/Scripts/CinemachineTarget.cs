@@ -61,9 +61,6 @@ public class CinemachineTarget : MonoBehaviour
         input.TargetChangeRight -= SwitchTargetRight;
     }
 
-
-    
-
     /// <summary>
     /// Finds nearest enemy.
     /// </summary>
@@ -105,6 +102,9 @@ public class CinemachineTarget : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Switches to target on the left.
+    /// </summary>
     private void SwitchTargetLeft()
     {
         float shortestDistanceLeft = Mathf.Infinity;
@@ -140,6 +140,9 @@ public class CinemachineTarget : MonoBehaviour
         FindCurrentTargetedEnemy();
     }
 
+    /// <summary>
+    /// Switches to target on the right.
+    /// </summary>
     private void SwitchTargetRight()
     {
         float shortestDistanceRight = Mathf.Infinity;
@@ -175,6 +178,9 @@ public class CinemachineTarget : MonoBehaviour
         FindCurrentTargetedEnemy();
     }
 
+    /// <summary>
+    /// Finds all enemies around the player.
+    /// </summary>
     private void FindAllEnemiesAroundPlayer()
     {
         allEnemies = new List<Enemy>();

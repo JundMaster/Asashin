@@ -48,6 +48,9 @@ public class PlayerRoll : MonoBehaviour, IAction
         
     }
 
+    /// <summary>
+    /// Handles rolling.
+    /// </summary>
     private void HandleRoll()
     {
         if (CanRoll && jump.IsGrounded())
@@ -71,8 +74,7 @@ public class PlayerRoll : MonoBehaviour, IAction
             Rolling = true;
             CanRoll = false;
 
-
-            //StartCoroutine(TriggerSlowMotion());
+            OnRoll();
         }
     }
 
@@ -87,28 +89,10 @@ public class PlayerRoll : MonoBehaviour, IAction
         CanRoll = true;
     }
 
-    private IEnumerator TriggerSlowMotion()
-    {
-        SlowMotionBehaviour[] physicsBodies = FindObjectsOfType<SlowMotionBehaviour>();
-        foreach (SlowMotionBehaviour body in physicsBodies)
-        {
-            body.TriggerSlowMotion();
-        }
-
-        yield return new WaitForSeconds(1);
-
-        foreach (SlowMotionBehaviour body in physicsBodies)
-        {
-            if (body != null)
-                body.StopSlowMotion();
-        }
-    }
-
-
     protected virtual void OnRoll() => Roll?.Invoke();
 
     /// <summary>
-    /// Event registered on SlowMotion.
+    /// Event registered on SlowMotionBehaviour.
     /// </summary>
     public event Action Roll;
 }

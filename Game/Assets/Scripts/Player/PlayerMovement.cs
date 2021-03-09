@@ -10,20 +10,17 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerInputCustom input;
     private Transform mainCamera;
     private SlowMotionBehaviour slowMotion;
+    private PlayerValues values;
 
     // Movement Variables
-    [SerializeField] private float speed = 5f;
-    public float Speed { get => speed; set => speed = value; }
     public Vector3 Direction { get; private set; }
     private float hVel;
     private float vVel;
-    private float smoothTimeVelocity;
     private Vector3 moveDirection;
     public bool CanMove { get; set; }
 
     // Rotation Variables
-    private float turnSmooth = 0.1f;
-    public float TurnSmooth { get => turnSmooth; set => turnSmooth = value; }
+    public float TurnSmooth { get; set; }
     private float smoothTimeRotation;
 
     private void Awake()
@@ -32,12 +29,12 @@ public class PlayerMovement : MonoBehaviour, IAction
         input = GetComponent<PlayerInputCustom>();
         mainCamera = Camera.main.transform;
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
+        values = GetComponent<Player>().Values;
     }
 
     private void Start()
     {
         CanMove = true;
-        smoothTimeVelocity = 0.025f;
     }
     
     public void ComponentUpdate()
@@ -46,9 +43,17 @@ public class PlayerMovement : MonoBehaviour, IAction
         if (CanMove && slowMotion.SlowMotionOn == false)
         {
             Direction = new Vector3(
-                Mathf.SmoothDamp(Direction.x, input.Movement.x, ref hVel, smoothTimeVelocity), 
+                Mathf.SmoothDamp(
+                    Direction.x, 
+                    input.Movement.x, 
+                    ref hVel, 
+                    values.SmoothTimeVelocity), 
                 0f, 
-                Mathf.SmoothDamp(Direction.z, input.Movement.y, ref vVel, smoothTimeVelocity));
+                Mathf.SmoothDamp(
+                    Direction.z, 
+                    input.Movement.y, 
+                    ref vVel, 
+                    values.SmoothTimeVelocity));
         }
         else if (CanMove && slowMotion.SlowMotionOn)
         {
@@ -74,7 +79,8 @@ public class PlayerMovement : MonoBehaviour, IAction
         if (Direction.magnitude > 0.01f)
         {
             // Moves controllers towards the moveDirection set on Rotation()
-            controller.Move(moveDirection.normalized * speed * Time.fixedUnscaledDeltaTime);
+            controller.Move(
+                moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
         }
     }
 
@@ -90,7 +96,10 @@ public class PlayerMovement : MonoBehaviour, IAction
                 Mathf.Rad2Deg + mainCamera.eulerAngles.y;
 
             float angle = Mathf.SmoothDampAngle(
-                transform.eulerAngles.y, targetAngle, ref smoothTimeRotation, turnSmooth);
+                transform.eulerAngles.y, 
+                targetAngle, 
+                ref smoothTimeRotation, 
+                TurnSmooth);
 
             // Rotates to that angle
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
