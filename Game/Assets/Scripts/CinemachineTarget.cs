@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using System.Linq;
@@ -12,14 +11,16 @@ public class CinemachineTarget : MonoBehaviour
     private PlayerInputCustom input;
 
     // Target camera
-    [SerializeField] private CinemachineVirtualCamera secondTargetcamera;
+    [SerializeField] private CinemachineVirtualCamera firstTargetCamera;
+    [SerializeField] private CinemachineVirtualCamera secondTargetCamera;
+    private CinemachineVirtualCamera targetCamera;
 
     // Target player
     [SerializeField] private Transform currentTarget;
     public Transform CurrentTarget => currentTarget;
 
     // Target variables
-    [SerializeField] private float findTargetSize = 20f;
+    [SerializeField] private float findTargetSize;
     public bool Targeting { get; private set; }
     private float targetYOffset;
 
@@ -45,6 +46,8 @@ public class CinemachineTarget : MonoBehaviour
         allEnemies = new List<Enemy>();
 
         currentTarget.gameObject.SetActive(false);
+
+        targetCamera = firstTargetCamera;
     }
 
     private void OnEnable()
@@ -81,10 +84,8 @@ public class CinemachineTarget : MonoBehaviour
                                 organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
                                 organizedEnemiesByDistance[0].transform.position.z);
 
-
-
             // Switches camera
-            secondTargetcamera.Priority = thirdPersonCamera.Priority + 1;
+            targetCamera.Priority = thirdPersonCamera.Priority + 1;
             UpdateTargetCameraLookAt();
             currentTarget.gameObject.SetActive(true);
             FindCurrentTargetedEnemy();
@@ -94,7 +95,7 @@ public class CinemachineTarget : MonoBehaviour
         else
         {
             // Switches camera back to third person camera
-            secondTargetcamera.Priority = thirdPersonCamera.Priority - 1;
+            targetCamera.Priority = thirdPersonCamera.Priority - 1;
 
             Targeting = !Targeting;
 
@@ -114,8 +115,8 @@ public class CinemachineTarget : MonoBehaviour
         for (int i = 0; i < allEnemies.Count; i++)
         {
             Vector3 relativePosition = 
-                secondTargetcamera.transform.InverseTransformDirection(
-                    allEnemies[i].transform.position - secondTargetcamera.transform.position);
+                targetCamera.transform.InverseTransformDirection(
+                    allEnemies[i].transform.position - targetCamera.transform.position);
 
             float distanceFromLeftTarget = 
                 currentTarget.transform.position.x - allEnemies[i].transform.position.x;
@@ -152,8 +153,8 @@ public class CinemachineTarget : MonoBehaviour
         for (int i = 0; i < allEnemies.Count; i++)
         {
             Vector3 relativePosition = 
-                secondTargetcamera.transform.InverseTransformDirection(
-                    allEnemies[i].transform.position - secondTargetcamera.transform.position);
+                targetCamera.transform.InverseTransformDirection(
+                    allEnemies[i].transform.position - targetCamera.transform.position);
 
             float distanceFromRightTarget = 
                 currentTarget.transform.position.x + allEnemies[i].transform.position.x;
@@ -221,7 +222,7 @@ public class CinemachineTarget : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates target camera.
+    /// Updates target camera with current target.
     /// </summary>
     private void UpdateTargetCameraLookAt()
     {
@@ -241,7 +242,22 @@ public class CinemachineTarget : MonoBehaviour
             if (enemy.gameObject.TryGetComponent(out Enemy en))
             {
                 // Applies target transform to target camera
-                secondTargetcamera.LookAt = en.MyTarget;
+                if (enemy.gameObject != FindCurrentTargetedEnemy())
+                {
+                    if (targetCamera == firstTargetCamera)
+                    {
+                        targetCamera.Priority = thirdPersonCamera.Priority - 1;
+                        targetCamera = secondTargetCamera;
+                        targetCamera.Priority = thirdPersonCamera.Priority + 1;
+                    }
+                    else if (targetCamera == secondTargetCamera)
+                    {
+                        targetCamera.Priority = thirdPersonCamera.Priority - 1;
+                        targetCamera = firstTargetCamera;
+                        targetCamera.Priority = thirdPersonCamera.Priority + 1;
+                    }       
+                }
+                targetCamera.LookAt = en.MyTarget;
             }
         }        
     }
