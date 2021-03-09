@@ -33,7 +33,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BotLightMelee2
-  m_Speed: 1
+  m_Speed: 1.8
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -8873145032891220440}
@@ -342,7 +342,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BotStrongMelee3
-  m_Speed: 1
+  m_Speed: 1.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7232453480293966170}
@@ -744,16 +744,16 @@ AnimatorStateMachine:
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions:
+  - first: {fileID: 1940515144119334461}
+    second:
+    - {fileID: -3081805418474196809}
+    - {fileID: -1653209394452886964}
   - first: {fileID: -3836856813139534610}
     second:
     - {fileID: 8484520585750009127}
     - {fileID: 9157063388765835305}
     - {fileID: 987302843121021091}
     - {fileID: 6606885596535252981}
-  - first: {fileID: 1940515144119334461}
-    second:
-    - {fileID: -3081805418474196809}
-    - {fileID: -1653209394452886964}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -90, y: 80, z: 0}
   m_EntryPosition: {x: -90, y: 130, z: 0}
@@ -768,7 +768,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BotLightMelee3
-  m_Speed: 1
+  m_Speed: 1.8
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -5604512001275002402}
@@ -1017,7 +1017,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BotLightMelee1
-  m_Speed: 1
+  m_Speed: 1.8
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -4094874305098484183}

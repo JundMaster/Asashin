@@ -13,12 +13,13 @@ public class PlayerJump : MonoBehaviour, IAction
     private PlayerRoll roll;
 
     // Gravity
-    private const float GRAVITY = -9.81f;
+    public float Gravity { get; set; } = -9.81f;
     private Vector3 verticalVelocity;
     public Vector3 VerticalVelocity => verticalVelocity;
 
     // Jumping variables
     [SerializeField] private float jumpForce = -2f;
+    public float JumpForce { get => jumpForce; set => jumpForce = value; }
     public bool CanJump { get; set; }
 
     // Ground variables
@@ -60,8 +61,8 @@ public class PlayerJump : MonoBehaviour, IAction
             verticalVelocity.y = -1f;
         }
 
-        verticalVelocity.y += GRAVITY * Time.fixedDeltaTime;
-        controller.Move(verticalVelocity * Time.fixedDeltaTime);
+        verticalVelocity.y += Gravity * Time.fixedUnscaledDeltaTime;
+        controller.Move(verticalVelocity * Time.fixedUnscaledDeltaTime);
     }
 
     /// <summary>
@@ -71,7 +72,7 @@ public class PlayerJump : MonoBehaviour, IAction
     {
         if (IsGrounded() && CanJump)
         {
-            verticalVelocity.y = Mathf.Sqrt(jumpForce * GRAVITY);
+            verticalVelocity.y = Mathf.Sqrt(jumpForce * Gravity);
             roll.CanRoll = false;
         }
     }

@@ -9,9 +9,11 @@ public class PlayerMovement : MonoBehaviour, IAction
     private CharacterController controller;
     private PlayerInputCustom input;
     private Transform mainCamera;
+    private SlowMotionBehaviour slowMotion;
 
     // Movement Variables
     [SerializeField] private float speed = 5f;
+    public float Speed { get => speed; set => speed = value; }
     public Vector3 Direction { get; private set; }
     private float hVel;
     private float vVel;
@@ -21,6 +23,7 @@ public class PlayerMovement : MonoBehaviour, IAction
 
     // Rotation Variables
     private float turnSmooth = 0.1f;
+    public float TurnSmooth { get => turnSmooth; set => turnSmooth = value; }
     private float smoothTimeRotation;
 
     private void Awake()
@@ -28,6 +31,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         controller = GetComponent<CharacterController>();
         input = GetComponent<PlayerInputCustom>();
         mainCamera = Camera.main.transform;
+        slowMotion = FindObjectOfType<SlowMotionBehaviour>();
     }
 
     private void Start()
@@ -35,17 +39,20 @@ public class PlayerMovement : MonoBehaviour, IAction
         CanMove = true;
         smoothTimeVelocity = 0.025f;
     }
-
     
     public void ComponentUpdate()
     {
         // Updates movement direction variable
-        if (CanMove)
+        if (CanMove && slowMotion.SlowMotionOn == false)
         {
             Direction = new Vector3(
                 Mathf.SmoothDamp(Direction.x, input.Movement.x, ref hVel, smoothTimeVelocity), 
                 0f, 
                 Mathf.SmoothDamp(Direction.z, input.Movement.y, ref vVel, smoothTimeVelocity));
+        }
+        else if (CanMove && slowMotion.SlowMotionOn)
+        {
+            Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);                
         }
         else
         {
@@ -67,7 +74,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         if (Direction.magnitude > 0.01f)
         {
             // Moves controllers towards the moveDirection set on Rotation()
-            controller.Move(moveDirection.normalized * speed * Time.fixedDeltaTime);
+            controller.Move(moveDirection.normalized * speed * Time.fixedUnscaledDeltaTime);
         }
     }
 
