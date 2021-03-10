@@ -9,14 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 870e8152fa7475e43ab50855ebbdb9da, type: 3}
-  m_Name: PlayerValues
+  m_Script: {fileID: 11500000, guid: cacbbe986cdd45e488e900080bf4a645, type: 3}
+  m_Name: Player Common Stats
   m_EditorClassIdentifier: 
-  speed: 5
-  turnSmooth: 0.1
-  turnSmoothInSlowMotion: 0.01
-  smoothTimeVelocity: 0.04
-  jumpForce: -2
-  gravity: -9.81
-  isGroundedCheckSize: 0.1
-  health: 100
+  maxHealth: 100
+  currentHealth: 100
+  damage: 20

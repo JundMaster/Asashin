@@ -22,8 +22,4 @@ public class PlayerValues : ScriptableObject
     public float JumpForce => jumpForce;
     public float Gravity => gravity;
     public float IsGroundedCheckSize => isGroundedCheckSize;
-
-
-    [Header("PlayerStats")]
-    [SerializeField] private float health;
 }

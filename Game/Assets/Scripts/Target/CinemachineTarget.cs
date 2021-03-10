@@ -262,7 +262,7 @@ public class CinemachineTarget : MonoBehaviour
     /// <summary>
     /// Cancels current target.
     /// </summary>
-    private void CancelCurrentTarget()
+    public void CancelCurrentTarget()
     {
         // Fixes rough trainsition with cameras on slow motion
         if (Time.timeScale < 1f) cinemachineBrain.m_DefaultBlend.m_Time = 0.5f;
