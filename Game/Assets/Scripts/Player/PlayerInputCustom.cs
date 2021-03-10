@@ -115,15 +115,8 @@ public class PlayerInputCustom : MonoBehaviour
     /// <param name="context"></param>
     public void HandleTargetChangeRight(InputAction.CallbackContext context)
     {
-        if (context.started) OnTargetChangeRight();
+        if (context.started) OnTargetChange(LeftOrRight.Right);
     }
-
-    protected virtual void OnTargetChangeRight() => TargetChangeRight?.Invoke();
-
-    /// <summary>
-    /// Registered on Player Movement.
-    /// </summary>
-    public event Action TargetChangeRight;
 
     /// <summary>
     /// Handles target switch.
@@ -131,13 +124,15 @@ public class PlayerInputCustom : MonoBehaviour
     /// <param name="context"></param>
     public void HandleTargetChangeLeft(InputAction.CallbackContext context)
     {
-        if (context.started) OnTargetChangeLeft();
+        if (context.started) OnTargetChange(LeftOrRight.Left);
     }
 
-    protected virtual void OnTargetChangeLeft() => TargetChangeLeft?.Invoke();
+    protected virtual void OnTargetChange(LeftOrRight dir) => TargetChange?.Invoke(dir);
+
+
 
     /// <summary>
     /// Registered on Player Movement.
     /// </summary>
-    public event Action TargetChangeLeft;
+    public event Action<LeftOrRight> TargetChange;
 }

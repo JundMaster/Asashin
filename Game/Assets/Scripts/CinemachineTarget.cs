@@ -2,6 +2,7 @@
 using UnityEngine;
 using Cinemachine;
 using System.Linq;
+using System.Collections;
 
 public class CinemachineTarget : MonoBehaviour
 {
@@ -53,15 +54,13 @@ public class CinemachineTarget : MonoBehaviour
     private void OnEnable()
     {
         input.TargetSet += HandleTarget;
-        input.TargetChangeLeft += SwitchTargetLeft;
-        input.TargetChangeRight += SwitchTargetRight;
+        input.TargetChange += SwitchTarget;
     }
 
     private void OnDisable()
     {
         input.TargetSet -= HandleTarget;
-        input.TargetChangeLeft -= SwitchTargetLeft;
-        input.TargetChangeRight -= SwitchTargetRight;
+        input.TargetChange -= SwitchTarget;
     }
 
     /// <summary>
@@ -94,89 +93,99 @@ public class CinemachineTarget : MonoBehaviour
         }
         else
         {
-            // Switches camera back to third person camera
-            targetCamera.Priority = thirdPersonCamera.Priority - 1;
-
-            Targeting = !Targeting;
-
-            currentTarget.gameObject.SetActive(false);
+            CancelCurrentTarget();
         }
     }
 
     /// <summary>
-    /// Switches to target on the left.
+    /// Method to return if a position is left or right of a target.
     /// </summary>
-    private void SwitchTargetLeft()
+    /// <param name="fwd">Forward vector.</param>
+    /// <param name="targetDir">Direction.</param>
+    /// <param name="up">Up vector.</param>
+    /// <returns>-1, 0, 1 depending on the target's position.</returns>
+    float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)
     {
-        float shortestDistanceLeft = Mathf.Infinity;
+        Vector3 perp = Vector3.Cross(fwd, targetDir);
+        float dir = Vector3.Dot(perp, up);
+
+        if (dir > 0f)
+        {
+            return 1f;
+        }
+        else if (dir < 0f)
+        {
+            return -1f;
+        }
+        else
+        {
+            return 0f;
+        }
+    }
+
+    /// <summary>
+    /// Switches to target on the left or right.
+    /// </summary>
+    private void SwitchTarget(LeftOrRight leftOrRight)
+    {
+        Vector3 definitiveTarget = default;
+        float shortestDistance = Mathf.Infinity;
 
         FindAllEnemiesAroundPlayer();
 
         for (int i = 0; i < allEnemies.Count; i++)
         {
-            Vector3 relativePosition = 
-                targetCamera.transform.InverseTransformDirection(
-                    allEnemies[i].transform.position - targetCamera.transform.position);
+            Vector3 direction = allEnemies[i].transform.position - targetCamera.transform.position;
+            float directionAngle = AngleDir(targetCamera.transform.forward, direction, transform.up);
+      
+            float distanceFromTarget =
+                Vector3.Distance(currentTarget.transform.position, allEnemies[i].transform.position);
 
-            float distanceFromLeftTarget = 
-                currentTarget.transform.position.x - allEnemies[i].transform.position.x;
-
-            if (relativePosition.x < 0 && distanceFromLeftTarget < shortestDistanceLeft)
+            if (leftOrRight == LeftOrRight.Left)
             {
-                if (allEnemies[i].gameObject != FindCurrentTargetedEnemy())
+                if (directionAngle < 0 && distanceFromTarget < shortestDistance)
                 {
-                    if (allEnemies[i].gameObject.GetComponentInChildren<Renderer>().isVisible)
+                    if (allEnemies[i].gameObject != FindCurrentTargetedEnemy())
                     {
-                        shortestDistanceLeft = distanceFromLeftTarget;
+                        if (allEnemies[i].gameObject.GetComponentInChildren<Renderer>().isVisible)
+                        {
+                            shortestDistance = distanceFromTarget;
 
-                        currentTarget.transform.position = new Vector3(
-                                    allEnemies[i].transform.position.x,
-                                    allEnemies[i].transform.position.y + targetYOffset,
-                                    allEnemies[i].transform.position.z);
+                            definitiveTarget = allEnemies[i].transform.position;
+                        }
                     }
                 }
-            }  
-        }
-        UpdateTargetCameraLookAt();
-        FindCurrentTargetedEnemy();
-    }
-
-    /// <summary>
-    /// Switches to target on the right.
-    /// </summary>
-    private void SwitchTargetRight()
-    {
-        float shortestDistanceRight = Mathf.Infinity;
-
-        FindAllEnemiesAroundPlayer();
-
-        for (int i = 0; i < allEnemies.Count; i++)
-        {
-            Vector3 relativePosition = 
-                targetCamera.transform.InverseTransformDirection(
-                    allEnemies[i].transform.position - targetCamera.transform.position);
-
-            float distanceFromRightTarget = 
-                currentTarget.transform.position.x + allEnemies[i].transform.position.x;
-
-            if (relativePosition.x > 0 && distanceFromRightTarget < shortestDistanceRight)
+            }
+            else if (leftOrRight == LeftOrRight.Right)
             {
-                if (allEnemies[i].gameObject != FindCurrentTargetedEnemy())
+                if (directionAngle > 0 && distanceFromTarget < shortestDistance)
                 {
-                    if (allEnemies[i].gameObject.GetComponentInChildren<Renderer>().isVisible)
+                    if (allEnemies[i].gameObject != FindCurrentTargetedEnemy())
                     {
-                        shortestDistanceRight = distanceFromRightTarget;
+                        if (allEnemies[i].gameObject.GetComponentInChildren<Renderer>().isVisible)
+                        {
+                            shortestDistance = distanceFromTarget;
 
-                        currentTarget.transform.position = new Vector3(
-                                    allEnemies[i].transform.position.x,
-                                    allEnemies[i].transform.position.y + targetYOffset,
-                                    allEnemies[i].transform.position.z);
+                            currentTarget.transform.position = new Vector3(
+                                        allEnemies[i].transform.position.x,
+                                        allEnemies[i].transform.position.y + targetYOffset,
+                                        allEnemies[i].transform.position.z);
+                        }
                     }
                 }
             }
         }
-        UpdateTargetCameraLookAt();
+
+        if (definitiveTarget != default)
+        {
+            currentTarget.transform.position = new Vector3(
+                                        definitiveTarget.x,
+                                        definitiveTarget.y + targetYOffset,
+                                        definitiveTarget.z);
+        }
+
         FindCurrentTargetedEnemy();
+        UpdateTargetCameraLookAt();
     }
 
     /// <summary>
@@ -208,7 +217,7 @@ public class CinemachineTarget : MonoBehaviour
     {
         // Finds enemies around the current target
         Collider[] currentTargetPosition =
-            Physics.OverlapSphere(currentTarget.transform.position, 1f, enemyLayer);
+            Physics.OverlapSphere(currentTarget.transform.position, 0.5f, enemyLayer);
 
         // If enemy has an Enemy script
         for (int i = 0; i < currentTargetPosition.Length; i++)
@@ -257,9 +266,33 @@ public class CinemachineTarget : MonoBehaviour
                         targetCamera.Priority = thirdPersonCamera.Priority + 1;
                     }       
                 }
+
                 targetCamera.LookAt = en.MyTarget;
             }
-        }        
+        }
+    }
+
+    /// <summary>
+    /// Cancels current target.
+    /// </summary>
+    private void CancelCurrentTarget()
+    {
+        // Switches camera back to third person camera
+        targetCamera.Priority = thirdPersonCamera.Priority - 1;
+        currentTarget.gameObject.SetActive(false);
+        Targeting = !Targeting;
+    }
+
+    private void Update()
+    {
+        // If distance becames too wide while targetting, it cancels the current target
+        if (Targeting && 
+            Vector3.Distance(
+            player.transform.position, currentTarget.transform.position) >
+            findTargetSize)
+        {
+            CancelCurrentTarget();
+        }
     }
 
     private void OnDrawGizmos()

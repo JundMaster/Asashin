@@ -106,6 +106,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private void TurnOffRootMotion()
     {
         anim.ResetTrigger("MeleeLightAttack");
+        anim.ResetTrigger("MeleeStrongAttack");
+
         movement.CanMove = true;
         jump.CanJump = true;
         roll.CanRoll = true;
