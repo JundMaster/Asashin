@@ -46,8 +46,7 @@ public class PlayerJump : MonoBehaviour, IAction
 
     public void ComponentUpdate()
     {
-        if (roll.Rolling) CanJump = false;
-        else CanJump = true;
+
     }
 
     public void ComponentFixedUpdate()

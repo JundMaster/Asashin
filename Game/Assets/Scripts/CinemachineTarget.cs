@@ -12,9 +12,10 @@ public class CinemachineTarget : MonoBehaviour
     private PlayerInputCustom input;
 
     // Target camera
-    [SerializeField] private CinemachineVirtualCamera firstTargetCamera;
-    [SerializeField] private CinemachineVirtualCamera secondTargetCamera;
-    private CinemachineVirtualCamera targetCamera;
+    [SerializeField] private CinemachineVirtualCamera targetCamera;
+
+    // Cinemachine Brain
+    private CinemachineBrain cinemachineBrain;
 
     // Target player
     [SerializeField] private Transform currentTarget;
@@ -37,6 +38,7 @@ public class CinemachineTarget : MonoBehaviour
         player = FindObjectOfType<Player>();
         input = FindObjectOfType<PlayerInputCustom>();
         thirdPersonCamera = GetComponent<CinemachineFreeLook>();
+        cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
     }
 
     private void Start()
@@ -47,8 +49,6 @@ public class CinemachineTarget : MonoBehaviour
         allEnemies = new List<Enemy>();
 
         currentTarget.gameObject.SetActive(false);
-
-        targetCamera = firstTargetCamera;
     }
 
     private void OnEnable()
@@ -70,6 +70,10 @@ public class CinemachineTarget : MonoBehaviour
     {
         if (Targeting == false)
         {
+            // Fixes rought transitions beetween cameras
+            if (Time.timeScale < 1) cinemachineBrain.m_DefaultBlend.m_Time = 0.1f;
+            else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
+
             FindAllEnemiesAroundPlayer();
 
             // Orders array with all enemies
@@ -250,23 +254,6 @@ public class CinemachineTarget : MonoBehaviour
         {
             if (enemy.gameObject.TryGetComponent(out Enemy en))
             {
-                // Applies target transform to target camera
-                if (enemy.gameObject != FindCurrentTargetedEnemy())
-                {
-                    if (targetCamera == firstTargetCamera)
-                    {
-                        targetCamera.Priority = thirdPersonCamera.Priority - 1;
-                        targetCamera = secondTargetCamera;
-                        targetCamera.Priority = thirdPersonCamera.Priority + 1;
-                    }
-                    else if (targetCamera == secondTargetCamera)
-                    {
-                        targetCamera.Priority = thirdPersonCamera.Priority - 1;
-                        targetCamera = firstTargetCamera;
-                        targetCamera.Priority = thirdPersonCamera.Priority + 1;
-                    }       
-                }
-
                 targetCamera.LookAt = en.MyTarget;
             }
         }
@@ -277,10 +264,16 @@ public class CinemachineTarget : MonoBehaviour
     /// </summary>
     private void CancelCurrentTarget()
     {
+        // Fixes rough trainsition with cameras on slow motion
+        if (Time.timeScale < 1f) cinemachineBrain.m_DefaultBlend.m_Time = 0.5f;
+        else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
+
         // Switches camera back to third person camera
         targetCamera.Priority = thirdPersonCamera.Priority - 1;
         currentTarget.gameObject.SetActive(false);
         Targeting = !Targeting;
+
+        cinemachineBrain.m_DefaultBlend.m_Time = 1f;
     }
 
     private void Update()
@@ -293,6 +286,8 @@ public class CinemachineTarget : MonoBehaviour
         {
             CancelCurrentTarget();
         }
+
+        
     }
 
     private void OnDrawGizmos()

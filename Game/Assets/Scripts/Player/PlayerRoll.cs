@@ -24,8 +24,9 @@ public class PlayerRoll : MonoBehaviour, IAction
 
     private void Start()
     {
-        CanRoll = true;
+        CanRoll = false;
         Rolling = false;
+        StartCoroutine(RollToTrueAfterStart());
     }
 
     private void OnEnable()
@@ -36,6 +37,16 @@ public class PlayerRoll : MonoBehaviour, IAction
     private void OnDisable()
     {
         input.Roll -= HandleRoll;
+    }
+
+    /// <summary>
+    /// Can roll only after one second after the game starts.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator RollToTrueAfterStart()
+    {
+        yield return new WaitForSeconds(1f);
+        CanRoll = true;
     }
 
     public void ComponentUpdate()
@@ -72,6 +83,7 @@ public class PlayerRoll : MonoBehaviour, IAction
             movement.CanMove = false;
             anim.applyRootMotion = true;
             Rolling = true;
+            jump.CanJump = false;
             CanRoll = false;
 
             OnRoll();
@@ -86,6 +98,7 @@ public class PlayerRoll : MonoBehaviour, IAction
         movement.CanMove = true;
         anim.applyRootMotion = false;
         Rolling = false;
+        jump.CanJump = true;
         CanRoll = true;
     }
 

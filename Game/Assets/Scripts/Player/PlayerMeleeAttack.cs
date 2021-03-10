@@ -122,11 +122,20 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     public void CheckAttackCollision()
     {
         Collider[] swordCol = 
-            Physics.OverlapSphere(sword.transform.position + sword.center, sword.radius, hittableLayers);
+            Physics.OverlapSphere(
+                sword.transform.position + sword.center, sword.radius, hittableLayers);
 
         if (swordCol.Length > 0)
         {
-            Instantiate(swordHitPrefab, sword.transform.position + sword.center, Quaternion.identity);
+            Hit();
         }
+    }
+
+    /// <summary>
+    /// What happens when the player hits a target
+    /// </summary>
+    private void Hit()
+    {
+        Instantiate(swordHitPrefab, sword.transform.position + sword.center, Quaternion.identity);
     }
 }
