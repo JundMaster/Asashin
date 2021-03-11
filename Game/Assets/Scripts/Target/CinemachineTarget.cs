@@ -63,37 +63,55 @@ public class CinemachineTarget : MonoBehaviour
         input.TargetChange -= SwitchTarget;
     }
 
+    private void Update()
+    {
+        // If distance becames too wide while targetting, it cancels the current target
+        if (Targeting &&
+            Vector3.Distance(
+            player.transform.position, currentTarget.transform.position) >
+            findTargetSize)
+        {
+            CancelCurrentTarget();
+        }
+    }
+
     /// <summary>
-    /// Finds nearest enemy.
+    /// If the player isnt targetting any enemy, finds the closest enemy 
+    /// when the player presses the assigned key. Else it cancels the current
+    /// target 
     /// </summary>
     private void HandleTarget()
     {
         if (Targeting == false)
         {
-            // Fixes rought transitions beetween cameras
-            if (Time.timeScale < 1) cinemachineBrain.m_DefaultBlend.m_Time = 0.1f;
-            else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
-
             FindAllEnemiesAroundPlayer();
 
-            // Orders array with all enemies
-            Enemy[] organizedEnemiesByDistance =
-                allEnemies.OrderBy(i => 
-                (i.transform.position - player.transform.position).magnitude).ToArray();
+            if (allEnemies.Count > 0)
+            {
+                // Fixes rought transitions beetween cameras
+                if (Time.timeScale < 1) cinemachineBrain.m_DefaultBlend.m_Time = 0.1f;
+                else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
 
-            // Sets current target to closest enemy
-            currentTarget.transform.position = new Vector3(
-                                organizedEnemiesByDistance[0].transform.position.x,
-                                organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
-                                organizedEnemiesByDistance[0].transform.position.z);
+                currentTarget.gameObject.SetActive(true);
 
-            // Switches camera
-            targetCamera.Priority = thirdPersonCamera.Priority + 1;
-            UpdateTargetCameraLookAt();
-            currentTarget.gameObject.SetActive(true);
-            FindCurrentTargetedEnemy();
+                // Orders array with all enemies
+                Enemy[] organizedEnemiesByDistance =
+                    allEnemies.OrderBy(i =>
+                    (i.transform.position - player.transform.position).magnitude).ToArray();
 
-            Targeting = !Targeting;
+                // Sets current target to closest enemy
+                currentTarget.transform.position = new Vector3(
+                                    organizedEnemiesByDistance[0].transform.position.x,
+                                    organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
+                                    organizedEnemiesByDistance[0].transform.position.z);
+
+                // Switches camera
+                targetCamera.Priority = thirdPersonCamera.Priority + 1;
+                UpdateTargetCameraLookAt();
+                FindCurrentTargetedEnemy();
+
+                Targeting = !Targeting;
+            }
         }
         else
         {
@@ -130,18 +148,18 @@ public class CinemachineTarget : MonoBehaviour
     /// <summary>
     /// Switches to target on the left or right.
     /// </summary>
-    private void SwitchTarget(LeftOrRight leftOrRight)
+    public void SwitchTarget(LeftOrRight leftOrRight)
     {
         Vector3 definitiveTarget = default;
         float shortestDistance = Mathf.Infinity;
 
         FindAllEnemiesAroundPlayer();
-
+      
         for (int i = 0; i < allEnemies.Count; i++)
         {
             Vector3 direction = allEnemies[i].transform.position - targetCamera.transform.position;
             float directionAngle = AngleDir(targetCamera.transform.forward, direction, transform.up);
-      
+
             float distanceFromTarget =
                 Vector3.Distance(currentTarget.transform.position, allEnemies[i].transform.position);
 
@@ -189,7 +207,7 @@ public class CinemachineTarget : MonoBehaviour
         }
 
         FindCurrentTargetedEnemy();
-        UpdateTargetCameraLookAt();
+        UpdateTargetCameraLookAt(); 
     }
 
     /// <summary>
@@ -262,7 +280,7 @@ public class CinemachineTarget : MonoBehaviour
     /// <summary>
     /// Cancels current target.
     /// </summary>
-    public void CancelCurrentTarget()
+    private void CancelCurrentTarget()
     {
         // Fixes rough trainsition with cameras on slow motion
         if (Time.timeScale < 1f) cinemachineBrain.m_DefaultBlend.m_Time = 0.5f;
@@ -270,24 +288,83 @@ public class CinemachineTarget : MonoBehaviour
 
         // Switches camera back to third person camera
         targetCamera.Priority = thirdPersonCamera.Priority - 1;
-        currentTarget.gameObject.SetActive(false);
+        if (currentTarget) currentTarget.gameObject.SetActive(false);
         Targeting = !Targeting;
 
         cinemachineBrain.m_DefaultBlend.m_Time = 1f;
     }
 
-    private void Update()
+    /// <summary>
+    /// Cancels current target automatically. This method only happens when
+    /// an enemy dies.
+    /// </summary>
+    public void CancelCurrentTargetAutomatically()
     {
-        // If distance becames too wide while targetting, it cancels the current target
-        if (Targeting && 
-            Vector3.Distance(
-            player.transform.position, currentTarget.transform.position) >
-            findTargetSize)
+        FindAllEnemiesAroundPlayer();
+        if (allEnemies.Count == 0)
         {
-            CancelCurrentTarget();
-        }
+            // Fixes rough trainsition with cameras on slow motion
+            if (Time.timeScale < 1f) cinemachineBrain.m_DefaultBlend.m_Time = 0.5f;
+            else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
 
-        
+            // Switches camera back to third person camera
+            targetCamera.Priority = thirdPersonCamera.Priority - 1;
+            if (currentTarget) currentTarget.gameObject.SetActive(false);
+            Targeting = !Targeting;
+
+            cinemachineBrain.m_DefaultBlend.m_Time = 1f;
+        }
+    }
+
+    /// <summary>
+    /// Invokes coroutine to find the second closest target automatically. 
+    /// This method is used when an enemy dies.
+    /// </summary>
+    public void AutomaticallyFindTargetCall()
+        => StartCoroutine(AutomaticallyFindTarget());
+
+    /// <summary>
+    /// Finds second closest target automatically after ending the current frame. 
+    /// </summary>
+    /// <returns>Wait for end of frame.</returns>
+    private IEnumerator AutomaticallyFindTarget()
+    {
+        yield return new WaitForEndOfFrame();
+
+        if (Targeting)
+        {
+            // Fixes rought transitions beetween cameras
+            if (Time.timeScale < 1) cinemachineBrain.m_DefaultBlend.m_Time = 0.1f;
+            else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
+
+            currentTarget.gameObject.SetActive(true);
+
+            FindAllEnemiesAroundPlayer();
+
+            // Orders array with all enemies
+            Enemy[] organizedEnemiesByDistance =
+                allEnemies.OrderBy(i =>
+                (i.transform.position - player.transform.position).magnitude).
+                ToArray();
+
+            if (organizedEnemiesByDistance.Length > 0)
+            {
+                // Sets current target to closest enemy
+                currentTarget.transform.position = new Vector3(
+                                    organizedEnemiesByDistance[0].transform.position.x,
+                                    organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
+                                    organizedEnemiesByDistance[0].transform.position.z);
+
+                // Switches camera
+                targetCamera.Priority = thirdPersonCamera.Priority + 1;
+                UpdateTargetCameraLookAt();
+                FindCurrentTargetedEnemy();
+            }
+            else
+            {
+                CancelCurrentTarget();
+            }
+        }
     }
 
     private void OnDrawGizmos()

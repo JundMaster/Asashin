@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Stats : MonoBehaviour, IStats
+public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
 {
     // Stats
     [SerializeField] protected CommonStatsScriptableObj commonStats;
@@ -10,13 +10,16 @@ public abstract class Stats : MonoBehaviour, IStats
     // Death Behavior
     [SerializeField] private DeathBehaviour deathBehaviour;
 
-    public float Health
-    { 
-        get => commonStats.CurrentHealth; 
-        set => commonStats.CurrentHealth = value;
-    }
+    public float Health { get; set; }
 
-    public float Damage => commonStats.Damage;
+    public float LightDamage => commonStats.Damage;
+
+    public float RangedDamage => commonStats.RangedDamage;
+
+    private void Start()
+    {
+        Health = commonStats.MaxHealth;
+    }
 
     /// <summary>
     /// Takes an amount of damage.

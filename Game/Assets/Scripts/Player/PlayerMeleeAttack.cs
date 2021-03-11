@@ -14,6 +14,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private PlayerJump jump;
     private PlayerRoll roll;
     private CinemachineTarget target;
+    private PlayerStats stats;
 
     // Weapon
     [SerializeField] private SphereCollider sword;
@@ -32,6 +33,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         jump = GetComponent<PlayerJump>();
         roll = GetComponent<PlayerRoll>();
         target = FindObjectOfType<CinemachineTarget>();
+        stats = GetComponent<PlayerStats>();
     }
 
     private void OnEnable()
@@ -119,7 +121,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// <summary>
     /// Checks attack collision through animation event.
     /// </summary>
-    public void CheckAttackCollision()
+    public void CheckLightAttackCollision()
     {
         Collider[] swordCol = 
             Physics.OverlapSphere(
@@ -127,15 +129,36 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
         if (swordCol.Length > 0)
         {
-            Hit();
+            for (int i = 0; i < swordCol.Length; i++)
+            {
+                if (swordCol[i].gameObject.TryGetComponent(out IDamageable enemy))
+                {
+                    enemy.TakeDamage(stats.LightDamage);       
+                }
+                Instantiate(swordHitPrefab, sword.transform.position + sword.center, Quaternion.identity);
+            }
         }
     }
 
     /// <summary>
-    /// What happens when the player hits a target
+    /// Checks attack collision through animation event.
     /// </summary>
-    private void Hit()
+    public void CheckStrongAttackCollision()
     {
-        Instantiate(swordHitPrefab, sword.transform.position + sword.center, Quaternion.identity);
+        Collider[] swordCol =
+            Physics.OverlapSphere(
+                sword.transform.position + sword.center, sword.radius * 1.5f, hittableLayers);
+
+        if (swordCol.Length > 0)
+        {
+            for (int i = 0; i < swordCol.Length; i++)
+            {
+                if (swordCol[i].gameObject.TryGetComponent(out IDamageable enemy))
+                {
+                    enemy.TakeDamage(stats.StrongDamage);
+                }
+                Instantiate(swordHitPrefab, sword.transform.position + sword.center, Quaternion.identity);
+            }
+        }
     }
 }
