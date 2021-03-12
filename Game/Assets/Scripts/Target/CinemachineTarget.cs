@@ -13,6 +13,7 @@ public class CinemachineTarget : MonoBehaviour
 
     // Target camera
     [SerializeField] private CinemachineVirtualCamera targetCamera;
+    [SerializeField] private CinemachineCollider targetCameraCollider;
 
     // Cinemachine Brain
     private CinemachineBrain cinemachineBrain;
@@ -32,6 +33,7 @@ public class CinemachineTarget : MonoBehaviour
 
     // Layers
     [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private LayerMask wallLayer;
 
     private void Awake()
     {
@@ -82,40 +84,43 @@ public class CinemachineTarget : MonoBehaviour
     /// </summary>
     private void HandleTarget()
     {
-        if (Targeting == false)
+        if (cinemachineBrain.IsBlending == false)
         {
-            FindAllEnemiesAroundPlayer();
-
-            if (allEnemies.Count > 0)
+            if (Targeting == false)
             {
-                // Fixes rought transitions beetween cameras
-                if (Time.timeScale < 1) cinemachineBrain.m_DefaultBlend.m_Time = 0.1f;
-                else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
+                FindAllEnemiesAroundPlayer();
 
-                currentTarget.gameObject.SetActive(true);
+                if (allEnemies.Count > 0)
+                {
+                    // Fixes rought transitions beetween cameras
+                    if (Time.timeScale < 1) cinemachineBrain.m_DefaultBlend.m_Time = 0.1f;
+                    else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
 
-                // Orders array with all enemies
-                Enemy[] organizedEnemiesByDistance =
-                    allEnemies.OrderBy(i =>
-                    (i.transform.position - player.transform.position).magnitude).ToArray();
+                    currentTarget.gameObject.SetActive(true);
 
-                // Sets current target to closest enemy
-                currentTarget.transform.position = new Vector3(
-                                    organizedEnemiesByDistance[0].transform.position.x,
-                                    organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
-                                    organizedEnemiesByDistance[0].transform.position.z);
+                    // Orders array with all enemies
+                    Enemy[] organizedEnemiesByDistance =
+                        allEnemies.OrderBy(i =>
+                        (i.transform.position - player.transform.position).magnitude).ToArray();
 
-                // Switches camera
-                targetCamera.Priority = thirdPersonCamera.Priority + 1;
-                UpdateTargetCameraLookAt();
-                FindCurrentTargetedEnemy();
+                    // Sets current target to closest enemy
+                    currentTarget.transform.position = new Vector3(
+                                        organizedEnemiesByDistance[0].transform.position.x,
+                                        organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
+                                        organizedEnemiesByDistance[0].transform.position.z);
 
-                Targeting = !Targeting;
+                    // Switches camera
+                    targetCamera.Priority = thirdPersonCamera.Priority + 1;
+                    UpdateTargetCameraLookAt();
+                    FindCurrentTargetedEnemy();
+
+                    Targeting = !Targeting;
+                }
             }
-        }
-        else
-        {
-            CancelCurrentTarget();
+            else
+            {
+                CancelCurrentTarget();
+            }
         }
     }
 
@@ -329,11 +334,11 @@ public class CinemachineTarget : MonoBehaviour
     /// <returns>Wait for end of frame.</returns>
     private IEnumerator AutomaticallyFindTarget()
     {
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForFixedUpdate();
 
         if (Targeting)
         {
-            // Fixes rought transitions beetween cameras
+            // Fixes rough transitions beetween cameras
             if (Time.timeScale < 1) cinemachineBrain.m_DefaultBlend.m_Time = 0.1f;
             else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
 

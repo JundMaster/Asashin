@@ -1,40 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Cinemachine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
+/// <summary>
+/// Class responsible for handing target position in canvas.
+/// </summary>
 public class TargetScript : MonoBehaviour
 {
     // Components
-    [SerializeField] private CinemachineTarget targetParent;
+    [SerializeField] private Transform targetParent;
 
-    // Cameras
-    [SerializeField] private CinemachineVirtualCamera targetCamera;
-    [SerializeField] private CinemachineFreeLook thirdPersonCamera;
-    private bool thirdPersonActive;
-
-    private void Start()
-    {
-        thirdPersonActive = true;
-    }
-
-    private void OnEnable()
-    {
-        targetParent.CameraChange += SwitchCamera;
-    }
-
-    private void OnDisable()
-    {
-        targetParent.CameraChange -= SwitchCamera;
-    }
-
-    private void SwitchCamera() => thirdPersonActive = !thirdPersonActive;
+    [SerializeField] private RawImage crosshair;
 
     private void Update()
     {
-        if (thirdPersonActive)
-            transform.LookAt(thirdPersonCamera.transform);
-        else
-            transform.LookAt(targetCamera.transform);
+        // Gets target position in world space
+        Vector3 targetPosition = 
+            Camera.main.WorldToScreenPoint(targetParent.transform.position);
+
+        // Updates target in canvas to be the same as targetPosition
+        crosshair.transform.position = targetPosition;
     }
 }

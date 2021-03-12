@@ -21,13 +21,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Cliff_A Material
-  m_Shader: {fileID: -6465566751694194690, guid: bea2c318760f42c4c8e9583363f212e7, type: 3}
-  m_ShaderKeywords: 
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_ShaderKeywords: _ALPHATEST_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -95,17 +96,20 @@ Material:
     m_Floats:
     - Vector1_42383810: 0.541
     - Vector1_60BE0B: 0.17
+    - Vector1_63330E6D: 1
     - Vector1_7B35F358: 0
     - Vector1_8020413A: 0.471
+    - Vector1_AF235C83: 1
     - Vector1_CCE960B8: 0
+    - Vector1_DA221B91: 0
     - Vector1_EE45A91D: 0.214
-    - _AlphaClip: 0
+    - _AlphaClip: 1
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
-    - _Cutoff: 0.5
+    - _Cutoff: 0
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -129,7 +133,7 @@ Material:
     - Color_327B413C: {r: 0, g: 0, b: 0, a: 0}
     - Color_942779B8: {r: 0.16981131, g: 0.16981131, b: 0.16981131, a: 0}
     - Color_B48C64CF: {r: 1, g: 1, b: 1, a: 0}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.9716981, g: 0.93666327, b: 0.7837753, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
