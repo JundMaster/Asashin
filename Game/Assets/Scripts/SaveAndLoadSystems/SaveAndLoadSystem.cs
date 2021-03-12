@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.IO;
+using System.IO.Compression;
 using System;
 
 /// <summary>
@@ -17,8 +18,8 @@ public class SaveAndLoadSystem : MonoBehaviour
     {
         using (FileStream fs = new FileStream(FilePath.SAVEFILE, FileMode.Create, FileAccess.Write))
         {
-            //using (GZipStream gzs = new GZipStream(fs, System.IO.Compression.CompressionLevel.Optimal))
-            //{
+            using (GZipStream gzs = new GZipStream(fs, System.IO.Compression.CompressionLevel.Optimal))
+            {
                 using (StreamWriter fw = new StreamWriter(fs))
                 {
                     fw.WriteLine(playerStats.Lives);
@@ -26,7 +27,7 @@ public class SaveAndLoadSystem : MonoBehaviour
                     fw.WriteLine(playerStats.FirebombKunais);
                     fw.WriteLine(playerStats.SmokeGrenades);
                 }
-            //}
+            }
         }
     }
 
@@ -37,8 +38,8 @@ public class SaveAndLoadSystem : MonoBehaviour
     {
         using (FileStream fs = new FileStream(FilePath.SAVEFILE, FileMode.Open, FileAccess.Read))
         {
-            //using (GZipStream gzs = new GZipStream(fs, System.IO.Compression.CompressionLevel.NoCompression))
-            //{
+            using (GZipStream gzs = new GZipStream(fs, System.IO.Compression.CompressionLevel.NoCompression))
+            {
                 using (StreamReader fr = new StreamReader(fs))
                 {
                     playerStats.Lives = Convert.ToByte(fr.ReadLine());
@@ -46,7 +47,7 @@ public class SaveAndLoadSystem : MonoBehaviour
                     playerStats.FirebombKunais = Convert.ToByte(fr.ReadLine());
                     playerStats.SmokeGrenades = Convert.ToByte(fr.ReadLine());
                 }
-            //}
+            }
         }
     }
 }
