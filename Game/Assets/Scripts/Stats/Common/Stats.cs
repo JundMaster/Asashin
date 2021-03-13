@@ -1,7 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
+/// <summary>
+/// Class responsible for common stats.
+/// </summary>
 public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
 {
     // Stats
@@ -36,5 +38,14 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
             Health = 0;
             deathBehaviour.Die();
         }
+
+        OnTookDamage();
     }
+
+    protected virtual void OnTookDamage() => TookDamage?.Invoke();
+
+    /// <summary>
+    /// Event registered on UIHealthBar.
+    /// </summary>
+    public event Action TookDamage;
 }

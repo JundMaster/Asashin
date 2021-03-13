@@ -11,8 +11,10 @@ public class SlowMotionBehaviour : MonoBehaviour
     // Slowmotion Variables
     private float defaultTimeScale;
     private float defaultFixedDeltaTime;
+    [Tooltip("Speed of slow motion (Time.timeScale)")]
     [SerializeField] private float slowMotionSpeed;
     [SerializeField] private float slowMotionDuration;
+    [Tooltip("Smoothing time beetween the transition from normal time to slow motion")]
     [Range(0.03f, 0.04f)] [SerializeField] private float slowMotionSmoothSpeed;
     private float currentTimePassed;
     private Coroutine SlowmotionCoroutine;
@@ -114,7 +116,5 @@ public class SlowMotionBehaviour : MonoBehaviour
             CinemachineBrain.UpdateMethod.FixedUpdate;
 
         SlowMotionOn = false;
-    }
-
-    
+    } 
 }
