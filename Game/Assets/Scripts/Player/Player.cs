@@ -7,8 +7,8 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
     // Components
-    [SerializeField] private PlayerValues values;
-    public PlayerValues Values => values;
+    [SerializeField] private PlayerValuesScriptableObj values;
+    public PlayerValuesScriptableObj Values => values;
 
     // ILists with components
     private IList<IAction> myIComponents;

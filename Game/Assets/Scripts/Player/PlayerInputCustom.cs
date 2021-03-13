@@ -94,7 +94,7 @@ public class PlayerInputCustom : MonoBehaviour
     public event Action MeleeStrongAttack;
 
     /// <summary>
-    /// Handles movement.
+    /// Handles targeting.
     /// </summary>
     /// <param name="context"></param>
     public void HandleTargetSet(InputAction.CallbackContext context)
@@ -105,7 +105,7 @@ public class PlayerInputCustom : MonoBehaviour
     protected virtual void OnTargetSet() => TargetSet?.Invoke();
 
     /// <summary>
-    /// Registered on Player Movement.
+    /// Registered on CinemachineTarget.
     /// </summary>
     public event Action TargetSet;
 
@@ -129,10 +129,49 @@ public class PlayerInputCustom : MonoBehaviour
 
     protected virtual void OnTargetChange(LeftOrRight dir) => TargetChange?.Invoke(dir);
 
-
-
     /// <summary>
-    /// Registered on Player Movement.
+    /// Registered on CinemachineTarget.
     /// </summary>
     public event Action<LeftOrRight> TargetChange;
+
+    /// <summary>
+    /// Handles item use.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleItemUse(InputAction.CallbackContext context)
+    {
+        if (context.started) OnItemUse();
+    }
+
+    protected virtual void OnItemUse() => ItemUse?.Invoke();
+
+    /// <summary>
+    /// Registered on Item Control.
+    /// </summary>
+    public event Action ItemUse;
+
+    /// <summary>
+    /// Handles item switch to the left.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleItemChangeLeft(InputAction.CallbackContext context)
+    {
+        if (context.started) OnItemChange(LeftOrRight.Left);
+    }
+
+    /// <summary>
+    /// Handles item switch to the right.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleItemChangeRight(InputAction.CallbackContext context)
+    {
+        if (context.started) OnItemChange(LeftOrRight.Right);
+    }
+
+    protected virtual void OnItemChange(LeftOrRight dir) => ItemChange?.Invoke(dir);
+
+    /// <summary>
+    /// Registered on Item Control.
+    /// </summary>
+    public event Action<LeftOrRight> ItemChange;
 }

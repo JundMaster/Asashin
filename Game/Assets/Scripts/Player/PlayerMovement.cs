@@ -10,14 +10,18 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerInputCustom input;
     private Transform mainCamera;
     private SlowMotionBehaviour slowMotion;
-    private PlayerValues values;
+    private PlayerValuesScriptableObj values;
+    private PlayerMeleeAttack attack;
+    private PlayerUseItem useItem;
+    private PlayerRoll roll;
+
+    public bool Performing { get; private set; }
 
     // Movement Variables
     public Vector3 Direction { get; private set; }
     private float hVel;
     private float vVel;
     private Vector3 moveDirection;
-    public bool CanMove { get; set; }
 
     // Rotation Variables
     public float TurnSmooth { get; set; }
@@ -30,17 +34,16 @@ public class PlayerMovement : MonoBehaviour, IAction
         mainCamera = Camera.main.transform;
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         values = GetComponent<Player>().Values;
-    }
-
-    private void Start()
-    {
-        CanMove = true;
+        attack = GetComponent<PlayerMeleeAttack>();
+        roll = GetComponent<PlayerRoll>();
+        useItem = GetComponent<PlayerUseItem>();
     }
     
     public void ComponentUpdate()
     {
         // Updates movement direction variable
-        if (CanMove && slowMotion.SlowMotionOn == false)
+        if (roll.Performing == false && attack.Performing == false && 
+            slowMotion.SlowMotionOn == false && useItem.Performing == false)
         {
             Direction = new Vector3(
                 Mathf.SmoothDamp(
@@ -55,7 +58,8 @@ public class PlayerMovement : MonoBehaviour, IAction
                     ref vVel, 
                     values.SmoothTimeVelocity));
         }
-        else if (CanMove && slowMotion.SlowMotionOn)
+        else if (roll.Performing == false && attack.Performing == false &&
+            slowMotion.SlowMotionOn && useItem.Performing == false)
         {
             Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);                
         }

@@ -10,9 +10,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     // Components
     private PlayerInputCustom input;
     private Animator anim;
-    private PlayerMovement movement;
-    private PlayerJump jump;
     private PlayerRoll roll;
+    private PlayerUseItem useItem;
     private CinemachineTarget target;
     private PlayerStats stats;
 
@@ -25,12 +24,13 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     // Swordhit
     [SerializeField] private GameObject swordHitPrefab;
 
+    public bool Performing { get; private set; }
+
     private void Awake()
     {
         input = GetComponent<PlayerInputCustom>();
         anim = GetComponent<Animator>();
-        movement = GetComponent<PlayerMovement>();
-        jump = GetComponent<PlayerJump>();
+        useItem = GetComponent<PlayerUseItem>();
         roll = GetComponent<PlayerRoll>();
         target = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
@@ -63,22 +63,23 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// </summary>
     private void MeleeLightAttack()
     {
-        if (target.Targeting)
+        if (roll.Performing == false && useItem.Performing == false)
         {
-            // Rotates player to target
-            transform.LookAt(target.CurrentTarget);
-            transform.eulerAngles = new Vector3(
-                0f, transform.eulerAngles.y, transform.eulerAngles.z);
+            if (target.Targeting)
+            {
+                // Rotates player to target
+                transform.LookAt(target.CurrentTarget);
+                transform.eulerAngles = new Vector3(
+                    0f, transform.eulerAngles.y, transform.eulerAngles.z);
+            }
+
+            Performing = true;
+
+            anim.applyRootMotion = true;
+
+            anim.SetTrigger("MeleeLightAttack");
+            anim.ResetTrigger("MeleeStrongAttack");
         }
-
-        movement.CanMove = false;
-        jump.CanJump = false;
-        roll.CanRoll = false;
-
-        anim.applyRootMotion = true;
-
-        anim.SetTrigger("MeleeLightAttack");
-        anim.ResetTrigger("MeleeStrongAttack");
     }
 
     /// <summary>
@@ -86,20 +87,21 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// </summary>
     private void MeleeStrongAttack()
     {
-        if (target.Targeting)
+        if (roll.Performing == false && useItem.Performing == false)
         {
-            transform.LookAt(target.CurrentTarget);
-            transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
+            if (target.Targeting)
+            {
+                transform.LookAt(target.CurrentTarget);
+                transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
+            }
+
+            Performing = true;
+
+            anim.applyRootMotion = true;
+
+            anim.SetTrigger("MeleeStrongAttack");
+            anim.ResetTrigger("MeleeLightAttack");
         }
-
-        movement.CanMove = false;
-        jump.CanJump = false;
-        roll.CanRoll = false;
-
-        anim.applyRootMotion = true;
-
-        anim.SetTrigger("MeleeStrongAttack");
-        anim.ResetTrigger("MeleeLightAttack");
     }
 
     /// <summary>
@@ -110,9 +112,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         anim.ResetTrigger("MeleeLightAttack");
         anim.ResetTrigger("MeleeStrongAttack");
 
-        movement.CanMove = true;
-        jump.CanJump = true;
-        roll.CanRoll = true;
+        Performing = false;
 
         anim.speed = 1f;
         anim.applyRootMotion = false;

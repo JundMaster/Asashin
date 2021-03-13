@@ -8,25 +8,27 @@ public class PlayerRoll : MonoBehaviour, IAction
     private PlayerMovement movement;
     private PlayerInputCustom input;
     private PlayerJump jump;
+    private PlayerMeleeAttack attack;
+    private PlayerUseItem useItem;
     private Animator anim;
 
-    // Roll Variables
-    public bool CanRoll { get; set; }
     public bool Rolling { get; private set; }
+
+    public bool Performing { get; private set; }
 
     private void Awake()
     {
         movement = GetComponent<PlayerMovement>();
         input = GetComponent<PlayerInputCustom>();
         jump = GetComponent<PlayerJump>();
+        attack = GetComponent<PlayerMeleeAttack>();
         anim = GetComponent<Animator>();
+        useItem = GetComponent<PlayerUseItem>();
     }
 
     private void Start()
     {
-        CanRoll = false;
         Rolling = false;
-        StartCoroutine(RollToTrueAfterStart());
     }
 
     private void OnEnable()
@@ -37,16 +39,6 @@ public class PlayerRoll : MonoBehaviour, IAction
     private void OnDisable()
     {
         input.Roll -= HandleRoll;
-    }
-
-    /// <summary>
-    /// Can roll only after one second after the game starts.
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator RollToTrueAfterStart()
-    {
-        yield return new WaitForSeconds(1f);
-        CanRoll = true;
     }
 
     public void ComponentUpdate()
@@ -64,7 +56,8 @@ public class PlayerRoll : MonoBehaviour, IAction
     /// </summary>
     private void HandleRoll()
     {
-        if (CanRoll && jump.IsGrounded())
+        if (Performing == false && attack.Performing == false &&
+            jump.IsGrounded() && useItem.Performing == false)
         {
             // If the player is pressing any direction
             // rotates the character instantly to roll in that direction
@@ -80,11 +73,9 @@ public class PlayerRoll : MonoBehaviour, IAction
 
             //////////////
 
-            movement.CanMove = false;
             anim.applyRootMotion = true;
             Rolling = true;
-            jump.CanJump = false;
-            CanRoll = false;
+            Performing = true;
 
             OnRoll();
         }
@@ -95,11 +86,9 @@ public class PlayerRoll : MonoBehaviour, IAction
     /// </summary>
     public void RollingToFalse()
     {
-        movement.CanMove = true;
+        Performing = false;
         anim.applyRootMotion = false;
         Rolling = false;
-        jump.CanJump = true;
-        CanRoll = true;
     }
 
     protected virtual void OnRoll() => Roll?.Invoke();

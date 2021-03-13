@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayerValues")]
-public class PlayerValues : ScriptableObject
+public class PlayerValuesScriptableObj : ScriptableObject
 {
     [Header("Script Values")]
     [Header("Movement")]

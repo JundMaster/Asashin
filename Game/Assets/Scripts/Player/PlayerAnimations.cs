@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAnimations : MonoBehaviour, IAction
+public class PlayerAnimations : MonoBehaviour
 {
     // Components
     private Animator anim;
@@ -18,16 +18,13 @@ public class PlayerAnimations : MonoBehaviour, IAction
         roll = GetComponent<PlayerRoll>();
     }
 
-    public void ComponentFixedUpdate()
-    {
-
-    }
-
-    public void ComponentUpdate()
+    public void Update()
     {
         anim.SetFloat("Movement", movement.Direction.magnitude);
         anim.SetFloat("VerticalVelocity", jump.VerticalVelocity.y);
         anim.SetBool("IsGrounded", jump.IsGrounded());
         anim.SetBool("Rolling", roll.Rolling);
     }
+
+    public void TriggerKunaiAnimation() => anim.SetTrigger("ThrowKunai");
 }

@@ -9,17 +9,18 @@ public class PlayerJump : MonoBehaviour, IAction
     private CharacterController controller;
     private PlayerInputCustom input;
     private PlayerRoll roll;
-    private PlayerValues values;
+    private PlayerValuesScriptableObj values;
+    private PlayerUseItem useItem;
+    private PlayerMeleeAttack attack;
 
     // Gravity
     private Vector3 verticalVelocity;
     public Vector3 VerticalVelocity => verticalVelocity;
 
-    // Jumping variables
-    public bool CanJump { get; set; }
-
     // Ground variables
     [SerializeField] private LayerMask groundLayer;
+
+    public bool Performing { get; private set; }
 
     private void Awake()
     {
@@ -27,11 +28,8 @@ public class PlayerJump : MonoBehaviour, IAction
         input = GetComponent<PlayerInputCustom>();
         roll = GetComponent<PlayerRoll>();
         values = GetComponent<Player>().Values;
-    }
-
-    private void Start()
-    {
-        CanJump = true;
+        attack = GetComponent<PlayerMeleeAttack>();
+        useItem = GetComponent<PlayerUseItem>();
     }
 
     private void OnEnable()
@@ -66,10 +64,10 @@ public class PlayerJump : MonoBehaviour, IAction
     /// </summary>
     private void HandleJump()
     {
-        if (IsGrounded() && CanJump)
+        if (IsGrounded() && attack.Performing == false &&
+            roll.Performing == false && useItem.Performing == false)
         {
             verticalVelocity.y = Mathf.Sqrt(values.JumpForce * values.Gravity);
-            roll.CanRoll = false;
         }
     }
 

@@ -19,7 +19,7 @@ public class SlowMotionBehaviour : MonoBehaviour
 
     // Components
     private PlayerMovement playerMovement;
-    private PlayerValues playerValues;
+    private PlayerValuesScriptableObj playerValues;
     private Camera mainCamera;
     private PlayerRoll roll;
 
