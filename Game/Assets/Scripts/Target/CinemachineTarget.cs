@@ -334,7 +334,7 @@ public class CinemachineTarget : MonoBehaviour
     /// <returns>Wait for end of frame.</returns>
     private IEnumerator AutomaticallyFindTarget()
     {
-        yield return new WaitForFixedUpdate();
+        yield return new WaitForEndOfFrame();
 
         if (Targeting)
         {

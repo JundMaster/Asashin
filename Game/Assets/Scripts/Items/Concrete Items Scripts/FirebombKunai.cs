@@ -11,6 +11,7 @@ public class FirebombKunai : ItemBehaviour
     // Movement variables
     private float rotation;
     [SerializeField] private float speed;
+    [SerializeField] private float explosionRange;
 
     // Transform from a target if there's one
     private Transform kunaiCurrentTarget;
@@ -91,17 +92,28 @@ public class FirebombKunai : ItemBehaviour
 
         if (other != null)
         {
-            if (other.gameObject.TryGetComponent(out IDamageable enemy))
-            {
-                enemy.TakeDamage(playerStats.FirebombKunaiDamage);
-            }
-        }
+            Collider[] collisions = 
+                Physics.OverlapSphere(other.ClosestPoint(transform.position), explosionRange);
 
-        Destroy(gameObject);
+            foreach (Collider col in collisions)
+            {
+                if (col.gameObject.TryGetComponent(out IDamageable enemy))
+                {
+                    enemy.TakeDamage(playerStats.FirebombKunaiDamage);
+                }
+            }
+     
+            Destroy(gameObject);
+        }
     }
 
     public override void Execute()
     {
         playerStats.FirebombKunais--;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, explosionRange);
     }
 }
