@@ -22,9 +22,9 @@ public class SaveAndLoadSystem : MonoBehaviour
             {
                 using (StreamWriter fw = new StreamWriter(fs))
                 {
-                    fw.WriteLine(playerStats.Lives);
                     fw.WriteLine(playerStats.Kunais);
                     fw.WriteLine(playerStats.FirebombKunais);
+                    fw.WriteLine(playerStats.HealthFlasks);
                     fw.WriteLine(playerStats.SmokeGrenades);
                 }
             }
@@ -42,9 +42,9 @@ public class SaveAndLoadSystem : MonoBehaviour
             {
                 using (StreamReader fr = new StreamReader(fs))
                 {
-                    playerStats.Lives = Convert.ToByte(fr.ReadLine());
                     playerStats.Kunais = Convert.ToByte(fr.ReadLine());
                     playerStats.FirebombKunais = Convert.ToByte(fr.ReadLine());
+                    playerStats.HealthFlasks = Convert.ToByte(fr.ReadLine());
                     playerStats.SmokeGrenades = Convert.ToByte(fr.ReadLine());
                 }
             }

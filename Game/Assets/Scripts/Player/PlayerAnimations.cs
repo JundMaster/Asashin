@@ -56,4 +56,10 @@ public class PlayerAnimations : MonoBehaviour
     }
 
     public void TriggerKunaiAnimation() => anim.SetTrigger("ThrowKunai");
+
+    public void TriggerFirebombKunaiAnimation() => anim.SetTrigger("ThrowFirebombKunai");
+
+    public void TriggerHealthFlaskAnimation() => anim.SetTrigger("UseHealthFlask");
+
+    public void TriggerSmokeGrenadeAnimation() => anim.SetTrigger("UseSmokeGrenade");
 }

@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 /// <summary>
 /// Class responsible for handling usage of items.
@@ -10,6 +9,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
     [SerializeField] private Transform kunaiItemPosition;
     public Transform KunaiItemPosition => kunaiItemPosition;
     [Range(0, 3)][SerializeField] private int delayAfterUse;
+    public int Delay => delayAfterUse;
 
     // Components
     private ItemControl itemControl;
@@ -21,10 +21,10 @@ public class PlayerUseItem : MonoBehaviour, IAction
     private Animator anim;
     private PlayerMovement movement;
     private CinemachineTarget target;
+    private PlayerStats stats;
 
-    private float timeItemWasUsed;
+    public float TimeItemWasUsed { get; private set; }
     private bool canUseItemDelayOver;
-    public bool CanUseItem { get; set; }
 
     public bool Performing { get; private set; }
 
@@ -39,14 +39,13 @@ public class PlayerUseItem : MonoBehaviour, IAction
         anim = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
         target = FindObjectOfType<CinemachineTarget>();
+        stats = GetComponent<PlayerStats>();
     }
 
     private void Start()
     {
-        timeItemWasUsed = 0f;
+        TimeItemWasUsed = 0f;
         canUseItemDelayOver = true;
-
-        CanUseItem = true;
     }
 
     private void OnEnable()
@@ -60,44 +59,93 @@ public class PlayerUseItem : MonoBehaviour, IAction
     }
 
     /// <summary>
+    /// Rotates the character towards something.
+    /// </summary>
+    private void RotationBeforeItemUse()
+    {
+        if (target.Targeting)
+        {
+            transform.LookAt(target.CurrentTarget);
+            transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
+        }
+
+        // If the player is pressing any direction
+        // rotates the character instantly to roll in that direction
+        else if (target.Targeting == false && movement.Direction != Vector3.zero)
+        {
+            // Finds angle
+            float targetAngle = Mathf.Atan2(movement.Direction.x, movement.Direction.z) *
+                    Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+
+            // Rotates to that angle
+            transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+        }
+    }
+
+    /// <summary>
     /// Uses the item and starts it's delay.
     /// Class PlayerItemAnimationEvents complements this class, controlling what
     /// happens after the current animation is set in motion.
+    /// THis method also rotates the player towards a target or towards the
+    /// direction the player is moving.
     /// </summary>
     private void HandleItemUse()
     {
         if (canUseItemDelayOver && attack.Performing == false && jump.Performing == false && roll.Performing == false)
         {
-            if (target.Targeting)
-            {
-                transform.LookAt(target.CurrentTarget);
-                transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
-            }
-
-            // If the player is pressing any direction
-            // rotates the character instantly to roll in that direction
-            else if (target.Targeting == false && movement.Direction != Vector3.zero)
-            {
-                // Finds angle
-                float targetAngle = Mathf.Atan2(movement.Direction.x, movement.Direction.z) *
-                        Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-
-                // Rotates to that angle
-                transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-            }
-            
-
+            // Plays an animation depending on the item used
             switch (itemControl.CurrentItem.ItemType)
             {
-                case ListOfItems.FirebombKunai:
-                    playerAnims.TriggerKunaiAnimation();
+                case ListOfItems.Kunai:
+                    if (stats.Kunais > 0)
+                    {
+                        RotationBeforeItemUse();
+                        playerAnims.TriggerKunaiAnimation();
+                        TimeItemWasUsed = Time.time;
+                        canUseItemDelayOver = false;
+                        OnUsedItemDelay();
+                    }
                     break;
+                case ListOfItems.FirebombKunai:
+                    if (stats.FirebombKunais > 0)
+                    {
+                        RotationBeforeItemUse();
+                        playerAnims.TriggerFirebombKunaiAnimation();
+                        TimeItemWasUsed = Time.time;
+                        canUseItemDelayOver = false;
+                        OnUsedItemDelay();
+                    }
+                    break;
+                case ListOfItems.HealthFlask:
+                    if (stats.HealthFlasks > 0)
+                    {
+                        RotationBeforeItemUse();
+                        playerAnims.TriggerKunaiAnimation();
+                        TimeItemWasUsed = Time.time;
+                        canUseItemDelayOver = false;
+                        OnUsedItemDelay();
+                    }
+                    break;
+                case ListOfItems.SmokeGrenade:
+                    if (stats.SmokeGrenades > 0)
+                    {
+                        RotationBeforeItemUse();
+                        playerAnims.TriggerKunaiAnimation();
+                        TimeItemWasUsed = Time.time;
+                        canUseItemDelayOver = false;
+                        OnUsedItemDelay();
+                    }
+                    break;           
             }
-
-            timeItemWasUsed = Time.time;
-            canUseItemDelayOver = false;
         }
     }
+
+    protected virtual void OnUsedItemDelay() => UsedItemDelay?.Invoke();
+
+    /// <summary>
+    /// Event registered on ItemUIParent.
+    /// </summary>
+    public event Action UsedItemDelay;
 
     /// <summary>
     /// Called on item use animation events.
@@ -120,7 +168,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
     public void ComponentUpdate()
     {
         // Only possible to use an item after delay is over
-        if (Time.time - timeItemWasUsed > delayAfterUse) canUseItemDelayOver = true;
+        if (Time.time - TimeItemWasUsed > delayAfterUse) canUseItemDelayOver = true;
     }
 
     public void ComponentFixedUpdate()

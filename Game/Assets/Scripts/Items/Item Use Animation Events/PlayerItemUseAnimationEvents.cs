@@ -19,8 +19,18 @@ public class PlayerItemUseAnimationEvents : MonoBehaviour
     /// <summary>
     /// Called on animation event.
     /// </summary>
-    public void AnimationEventFirebombKunai()
+    public void AnimationEventThrowKunai()
     {
         Instantiate(itemControl.CurrentItemObject, playerUseItem.KunaiItemPosition.position, Quaternion.identity);
+    }
+
+    public void AnimationEventUseHealthFlask()
+    {
+        itemControl.GetComponent<IItem>().Execute();
+    }
+
+    public void AnimationEventUseSmokeGrenade()
+    {
+        itemControl.GetComponent<IItem>().Execute();
     }
 }

@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// Class responsible for handling items in general.
@@ -14,9 +14,13 @@ public class ItemControl : MonoBehaviour
     private IList<IUsableItems> allItemsInventory;
     public IUsableItems CurrentItem { get; private set; }
     public GameObject CurrentItemObject { get; private set; }
+    private int index;
 
     // List of items
+    [SerializeField] private ItemBehaviour kunai;
     [SerializeField] private ItemBehaviour firebombKunai;
+    [SerializeField] private ItemBehaviour healthFlask;
+    [SerializeField] private ItemBehaviour smokeGrenade;
 
     private void Awake()
     {
@@ -27,11 +31,16 @@ public class ItemControl : MonoBehaviour
     {
         allItemsInventory = new List<IUsableItems>()
         {
+            kunai,
             firebombKunai,
+            healthFlask,
+            smokeGrenade,
         };
 
-        CurrentItem = firebombKunai;
-        CurrentItemObject = firebombKunai.gameObject;
+        CurrentItem = kunai;
+        CurrentItemObject = kunai.gameObject;
+
+        index = 0;
     }
 
     private void OnEnable()
@@ -44,9 +53,62 @@ public class ItemControl : MonoBehaviour
         input.ItemChange -= HandleItemSwitch;
     }
 
+    /// <summary>
+    /// Switches to the next item or to the item before.
+    /// </summary>
+    /// <param name="direction">Right or left item.</param>
     private void HandleItemSwitch(LeftOrRight direction)
     {
-        // Switches current activated item
- 
+        // Switches current activated item to the next one
+        if (direction == LeftOrRight.Right)
+        {
+            if (index < allItemsInventory.Count - 1)
+            {
+                index++;
+            }
+            else
+            {
+                index = 0;
+            }
+        }
+        else // Switches current activated item to the one on the left
+        {
+            if (index > 0)
+            {
+                index--;
+            }
+            else
+            {
+                index = allItemsInventory.Count - 1;
+            }
+        }
+
+        // Updates current selected item
+        CurrentItem = allItemsInventory[index];
+
+        switch (CurrentItem.ItemType)
+        {
+            case ListOfItems.Kunai:
+                CurrentItemObject = kunai.gameObject;
+                break;
+            case ListOfItems.FirebombKunai:
+                CurrentItemObject = firebombKunai.gameObject;
+                break;
+            case ListOfItems.HealthFlask:
+                CurrentItemObject = healthFlask.gameObject;
+                break;
+            case ListOfItems.SmokeGrenade:
+                CurrentItemObject = smokeGrenade.gameObject;
+                break;
+        }
+
+        OnChangedCurrentItem();
     }
+
+    protected virtual void OnChangedCurrentItem() => ChangedCurrentItem?.Invoke();
+
+    /// <summary>
+    /// Event registered on ItemUIParent class.
+    /// </summary>
+    public event Action ChangedCurrentItem;
 }
