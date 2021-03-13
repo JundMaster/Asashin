@@ -76,7 +76,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
 
             // If the player is pressing any direction
             // rotates the character instantly to roll in that direction
-            else if (movement.Direction != Vector3.zero)
+            else if (target.Targeting == false && movement.Direction != Vector3.zero)
             {
                 // Finds angle
                 float targetAngle = Mathf.Atan2(movement.Direction.x, movement.Direction.z) *

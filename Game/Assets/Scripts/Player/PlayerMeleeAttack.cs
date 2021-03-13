@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 /// <summary>
 /// Class responsible for handling player attack.
@@ -18,6 +17,9 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     // Weapon
     [SerializeField] private SphereCollider sword;
 
+    // Trail
+    [SerializeField] private ParticleSystem[] particles;
+
     // Layers
     [SerializeField] private LayerMask hittableLayers;
 
@@ -34,6 +36,12 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         roll = GetComponent<PlayerRoll>();
         target = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
+    }
+
+    private void Start()
+    {
+        foreach(ParticleSystem particle in particles)
+            particle.Stop();
     }
 
     private void OnEnable()
@@ -77,6 +85,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
             anim.applyRootMotion = true;
 
+            OnLightMeleeAttack();
             anim.SetTrigger("MeleeLightAttack");
             anim.ResetTrigger("MeleeStrongAttack");
         }
@@ -99,9 +108,28 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
             anim.applyRootMotion = true;
 
+            OnStrongMeleeAttack();
             anim.SetTrigger("MeleeStrongAttack");
             anim.ResetTrigger("MeleeLightAttack");
         }
+    }
+
+    /// <summary>
+    /// Turns trail to false. Runs on animation event.
+    /// </summary>
+    private void TurnTrailToTrue()
+    {
+        foreach (ParticleSystem particle in particles)
+            particle.Play();
+    }
+
+    /// <summary>
+    /// Turns trail to false. Runs on animation event.
+    /// </summary>
+    private void TurnTrailToFalse()
+    {
+        foreach (ParticleSystem particle in particles)
+            particle.Stop();
     }
 
     /// <summary>
@@ -161,4 +189,19 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             }
         }
     }
+
+
+    protected virtual void OnLightMeleeAttack() => LightMeleeAttack?.Invoke();
+
+    protected virtual void OnStrongMeleeAttack() => StrongMeleeAttack?.Invoke();
+
+    /// <summary>
+    /// Event registered on PlayerAnimations.
+    /// </summary>
+    public event Action LightMeleeAttack;
+
+    /// <summary>
+    /// Event registered on PlayerAnimations.
+    /// </summary>
+    public event Action StrongMeleeAttack;
 }

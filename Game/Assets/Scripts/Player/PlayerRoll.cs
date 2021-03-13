@@ -12,8 +12,6 @@ public class PlayerRoll : MonoBehaviour, IAction
     private PlayerUseItem useItem;
     private Animator anim;
 
-    public bool Rolling { get; private set; }
-
     public bool Performing { get; private set; }
 
     private void Awake()
@@ -28,7 +26,7 @@ public class PlayerRoll : MonoBehaviour, IAction
 
     private void Start()
     {
-        Rolling = false;
+        Performing = false;
     }
 
     private void OnEnable()
@@ -72,11 +70,9 @@ public class PlayerRoll : MonoBehaviour, IAction
             }
 
             //////////////
-
+            
             anim.applyRootMotion = true;
-            Rolling = true;
             Performing = true;
-
             OnRoll();
         }
     }
@@ -84,17 +80,16 @@ public class PlayerRoll : MonoBehaviour, IAction
     /// <summary>
     /// Called with animation event.
     /// </summary>
-    public void RollingToFalse()
+    private void RollingToFalse()
     {
         Performing = false;
         anim.applyRootMotion = false;
-        Rolling = false;
     }
 
     protected virtual void OnRoll() => Roll?.Invoke();
 
     /// <summary>
-    /// Event registered on SlowMotionBehaviour.
+    /// Event registered on SlowMotionBehaviour and PlayerAnimations..
     /// </summary>
     public event Action Roll;
 }

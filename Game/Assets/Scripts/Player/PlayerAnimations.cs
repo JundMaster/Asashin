@@ -9,6 +9,7 @@ public class PlayerAnimations : MonoBehaviour
     private PlayerMovement movement;
     private PlayerJump jump;
     private PlayerRoll roll;
+    private PlayerMeleeAttack attack;
 
     private void Awake()
     {
@@ -16,6 +17,21 @@ public class PlayerAnimations : MonoBehaviour
         movement = GetComponent<PlayerMovement>();
         jump = GetComponent<PlayerJump>();
         roll = GetComponent<PlayerRoll>();
+        attack = GetComponent<PlayerMeleeAttack>();
+    }
+
+    private void OnEnable()
+    {
+        roll.Roll += TriggerRollAnimation;
+        attack.LightMeleeAttack += TriggerLightMeleeAttack;
+        attack.StrongMeleeAttack += TriggerStrongMeleeAttack;
+    }
+
+    private void OnDisable()
+    {
+        roll.Roll -= TriggerRollAnimation;
+        attack.LightMeleeAttack -= TriggerLightMeleeAttack;
+        attack.StrongMeleeAttack -= TriggerStrongMeleeAttack;
     }
 
     public void Update()
@@ -23,7 +39,20 @@ public class PlayerAnimations : MonoBehaviour
         anim.SetFloat("Movement", movement.Direction.magnitude);
         anim.SetFloat("VerticalVelocity", jump.VerticalVelocity.y);
         anim.SetBool("IsGrounded", jump.IsGrounded());
-        anim.SetBool("Rolling", roll.Rolling);
+    }
+
+    private void TriggerRollAnimation() => anim.SetTrigger("Rolling");
+
+    private void TriggerLightMeleeAttack()
+    {
+        anim.SetTrigger("MeleeLightAttack");
+        anim.ResetTrigger("MeleeStrongAttack");
+    }
+
+    private void TriggerStrongMeleeAttack()
+    {
+        anim.SetTrigger("MeleeStrongAttack");
+        anim.ResetTrigger("MeleeLightAttack");
     }
 
     public void TriggerKunaiAnimation() => anim.SetTrigger("ThrowKunai");
