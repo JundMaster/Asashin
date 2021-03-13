@@ -86,8 +86,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             anim.applyRootMotion = true;
 
             OnLightMeleeAttack();
-            anim.SetTrigger("MeleeLightAttack");
-            anim.ResetTrigger("MeleeStrongAttack");
         }
     }
 
@@ -109,8 +107,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             anim.applyRootMotion = true;
 
             OnStrongMeleeAttack();
-            anim.SetTrigger("MeleeStrongAttack");
-            anim.ResetTrigger("MeleeLightAttack");
         }
     }
 

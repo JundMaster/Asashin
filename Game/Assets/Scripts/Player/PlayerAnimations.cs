@@ -34,7 +34,7 @@ public class PlayerAnimations : MonoBehaviour
         attack.StrongMeleeAttack -= TriggerStrongMeleeAttack;
     }
 
-    public void Update()
+    private void Update()
     {
         anim.SetFloat("Movement", movement.Direction.magnitude);
         anim.SetFloat("VerticalVelocity", jump.VerticalVelocity.y);
