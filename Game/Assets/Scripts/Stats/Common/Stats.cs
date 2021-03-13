@@ -39,7 +39,7 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
             deathBehaviour.Die();
         }
 
-        TookDamage();
+        OnTookDamage();
     }
 
     protected virtual void OnTookDamage() => TookDamage?.Invoke();
