@@ -28,11 +28,19 @@ public class SlowMotionBehaviour : MonoBehaviour
     // Slow motion variabl
     public bool SlowMotionOn { get; set; }
 
+    // Particles from player's mesh
+    public bool OptionsSlowMotionParticles {get; set;}
+    [SerializeField] private ParticleSystem slowMotionParticles;
+    private ParticleSystem cloneParticles;
+    private SkinnedMeshRenderer playerMesh;
+
     private void Awake()
     {
         playerMovement = FindObjectOfType<PlayerMovement>();
         playerValues = FindObjectOfType<Player>().Values;
         roll = FindObjectOfType<PlayerRoll>();
+        playerMesh = 
+            GameObject.FindGameObjectWithTag("playerMesh").GetComponent<SkinnedMeshRenderer>();
         mainCamera = Camera.main;
     }
 
@@ -42,6 +50,8 @@ public class SlowMotionBehaviour : MonoBehaviour
         defaultFixedDeltaTime = Time.fixedDeltaTime;
         SlowMotionOn = false;
         SlowmotionCoroutine = null;
+
+        OptionsSlowMotionParticles = true;
     }
 
     private void OnEnable()
@@ -72,6 +82,13 @@ public class SlowMotionBehaviour : MonoBehaviour
             CinemachineBrain.UpdateMethod.LateUpdate;
 
         SlowMotionOn = true;
+
+        if (OptionsSlowMotionParticles)
+        {
+            cloneParticles = Instantiate(slowMotionParticles);
+            var slowMotionParticlesMesh = cloneParticles.shape;
+            slowMotionParticlesMesh.skinnedMeshRenderer = playerMesh;
+        }
 
         currentTimePassed = 0;
         while(currentTimePassed < slowMotionDuration)
@@ -105,7 +122,7 @@ public class SlowMotionBehaviour : MonoBehaviour
     /// <summary>
     /// Returns time to normal.
     /// </summary>
-    public void StopSlowMotion()
+    private void StopSlowMotion()
     {
         Time.timeScale = defaultTimeScale;
         Time.fixedDeltaTime = defaultFixedDeltaTime;
@@ -116,5 +133,10 @@ public class SlowMotionBehaviour : MonoBehaviour
             CinemachineBrain.UpdateMethod.FixedUpdate;
 
         SlowMotionOn = false;
+
+        if (OptionsSlowMotionParticles)
+        {
+            cloneParticles.Stop();
+        }
     } 
 }
