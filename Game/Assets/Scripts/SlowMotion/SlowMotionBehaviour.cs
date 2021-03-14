@@ -1,7 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// Class responsible for handling slow motion.
@@ -29,19 +29,26 @@ public class SlowMotionBehaviour : MonoBehaviour
     public bool SlowMotionOn { get; set; }
 
     // Particles from player's mesh
-    public bool OptionsSlowMotionParticles {get; set;}
+    public bool OptionsSlowMotionParticles { get; set; }
     [SerializeField] private ParticleSystem slowMotionParticles;
     private ParticleSystem cloneParticles;
-    private SkinnedMeshRenderer playerMesh;
+
+    // Slow Motion Shader Variables
+    [SerializeField] private Material slowMotionMaterial;
+    [Tooltip("URP forward renderer data")][SerializeField] private ForwardRendererData data;
+    [Tooltip("Asset with desired shader")] [SerializeField] private ForwardRendererData slowMotionRender;
 
     private void Awake()
     {
         playerMovement = FindObjectOfType<PlayerMovement>();
         playerValues = FindObjectOfType<Player>().Values;
         roll = FindObjectOfType<PlayerRoll>();
-        playerMesh = 
-            GameObject.FindGameObjectWithTag("playerMesh").GetComponent<SkinnedMeshRenderer>();
         mainCamera = Camera.main;
+
+        slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0f); // WaveSize
+        slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
+        slowMotionMaterial.SetFloat("Vector1_58B5DC2F", 0f); // TimeMultiplication
+        slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
     }
 
     private void Start()
@@ -85,20 +92,46 @@ public class SlowMotionBehaviour : MonoBehaviour
 
         if (OptionsSlowMotionParticles)
         {
+            SkinnedMeshRenderer playerMesh =
+               GameObject.FindGameObjectWithTag("playerMesh").
+               GetComponent<SkinnedMeshRenderer>();
             cloneParticles = Instantiate(slowMotionParticles);
             var slowMotionParticlesMesh = cloneParticles.shape;
             slowMotionParticlesMesh.skinnedMeshRenderer = playerMesh;
         }
 
         currentTimePassed = 0;
-        while(currentTimePassed < slowMotionDuration)
+
+        //StartCoroutine(ControlFullScreenShaderEffect());
+
+        slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0.03f); // WaveSize
+        slowMotionMaterial.SetFloat("Vector1_34F127BD", -0.2f); // WaveStrength
+        slowMotionMaterial.SetFloat("Vector1_58B5DC2F", 1f);    // TimeMultiplication
+        float waveTime = 0f;
+
+        while (currentTimePassed < slowMotionDuration)
         {
+            waveTime = currentTimePassed / (slowMotionDuration * 0.5f);
+
             if (currentTimePassed < slowMotionDuration * 0.5f)
             {
                 Time.timeScale = Mathf.Lerp(
                     Time.timeScale, 
                     slowMotionSpeed, 
                     slowMotionSmoothSpeed);
+
+                
+
+                // Wave time
+                slowMotionMaterial.SetFloat("Vector1_24514F13", waveTime);
+            }
+
+            else if (currentTimePassed > slowMotionDuration * 0.5f)
+            {
+                slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0f); // WaveSize
+                slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
+                slowMotionMaterial.SetFloat("Vector1_58B5DC2F", 0f); // TimeMultiplication
+                slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
             }
 
             else if (currentTimePassed > (slowMotionDuration - (slowMotionDuration/3)))
@@ -107,6 +140,7 @@ public class SlowMotionBehaviour : MonoBehaviour
                     Time.timeScale, 
                     defaultTimeScale, 
                     slowMotionSmoothSpeed);
+            
             }
 
             Time.fixedDeltaTime = Time.timeScale * 0.01f;
@@ -117,6 +151,27 @@ public class SlowMotionBehaviour : MonoBehaviour
 
         StopSlowMotion();
         SlowmotionCoroutine = null;
+    }
+
+    /// <summary>
+    /// Controls shader effect while in slow motion.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ControlFullScreenShaderEffect()
+    {
+        /*
+        data.rendererFeatures.Add(temp2);
+        data.SetDirty();
+
+        while (currentTimePassed < slowMotionDuration)
+        {
+            yield return null;
+        }
+
+        data.rendererFeatures.Clear();
+        data.SetDirty();
+        */
+        yield return null;
     }
 
     /// <summary>
