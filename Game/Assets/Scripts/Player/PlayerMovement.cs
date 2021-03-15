@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerMeleeAttack attack;
     private PlayerUseItem useItem;
     private PlayerRoll roll;
+    private PauseSystem pauseSystem;
 
     public bool Performing { get; private set; }
 
@@ -22,6 +23,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private float hVel;
     private float vVel;
     private Vector3 moveDirection;
+    private float runSpeed;
 
     // Rotation Variables
     public float TurnSmooth { get; set; }
@@ -37,31 +39,35 @@ public class PlayerMovement : MonoBehaviour, IAction
         attack = GetComponent<PlayerMeleeAttack>();
         roll = GetComponent<PlayerRoll>();
         useItem = GetComponent<PlayerUseItem>();
+        pauseSystem = FindObjectOfType<PauseSystem>();
     }
-    
+
     public void ComponentUpdate()
     {
         // Updates movement direction variable
-        if (roll.Performing == false && attack.Performing == false && 
-            slowMotion.SlowMotionOn == false && useItem.Performing == false)
+        if (roll.Performing == false && attack.Performing == false &&
+            slowMotion.Performing == false && useItem.Performing == false)
         {
+            /*
             Direction = new Vector3(
                 Mathf.SmoothDamp(
-                    Direction.x, 
-                    input.Movement.x, 
-                    ref hVel, 
-                    values.SmoothTimeVelocity), 
-                0f, 
+                    Direction.x,
+                    input.Movement.x,
+                    ref hVel,
+                    values.SmoothTimeVelocity),
+                0f,
                 Mathf.SmoothDamp(
-                    Direction.z, 
-                    input.Movement.y, 
-                    ref vVel, 
+                    Direction.z,
+                    input.Movement.y,
+                    ref vVel,
                     values.SmoothTimeVelocity));
+            */
+            Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
         }
         else if (roll.Performing == false && attack.Performing == false &&
-            slowMotion.SlowMotionOn && useItem.Performing == false)
+            slowMotion.Performing && useItem.Performing == false)
         {
-            Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);                
+            Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
         }
         else
         {

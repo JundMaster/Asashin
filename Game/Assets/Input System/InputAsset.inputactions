@@ -100,6 +100,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "PauseGame",
+                    "type": "Button",
+                    "id": "985bc3e8-d2f7-49f3-9bba-282c76986550",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -408,6 +416,66 @@
                     "processors": "",
                     "groups": "",
                     "action": "ChangeItemBefore",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7bf568ce-ac42-48a0-9e0f-d0339176cc46",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7b790849-9903-4ebd-92a0-061bafc28d5e",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "GamePaused",
+            "id": "29252d06-4802-4e84-99e9-98ab3fb5cc76",
+            "actions": [
+                {
+                    "name": "UnpauseGame",
+                    "type": "Button",
+                    "id": "7e0c9cd2-e1bb-46ef-b341-d2422b3531ce",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "201fade6-100a-4d1f-9965-b91986b7e489",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UnpauseGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e6be8580-269f-4113-9493-ce03942f57eb",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UnpauseGame",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

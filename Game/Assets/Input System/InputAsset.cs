@@ -113,6 +113,14 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""PauseGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""985bc3e8-d2f7-49f3-9bba-282c76986550"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -423,6 +431,66 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""action"": ""ChangeItemBefore"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7bf568ce-ac42-48a0-9e0f-d0339176cc46"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7b790849-9903-4ebd-92a0-061bafc28d5e"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""GamePaused"",
+            ""id"": ""29252d06-4802-4e84-99e9-98ab3fb5cc76"",
+            ""actions"": [
+                {
+                    ""name"": ""UnpauseGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""7e0c9cd2-e1bb-46ef-b341-d2422b3531ce"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""201fade6-100a-4d1f-9965-b91986b7e489"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UnpauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e6be8580-269f-4113-9493-ce03942f57eb"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UnpauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -443,6 +511,10 @@ public class @InputAsset : IInputActionCollection, IDisposable
         m_Gameplay_UseItem = m_Gameplay.FindAction("UseItem", throwIfNotFound: true);
         m_Gameplay_ChangeItemNext = m_Gameplay.FindAction("ChangeItemNext", throwIfNotFound: true);
         m_Gameplay_ChangeItemBefore = m_Gameplay.FindAction("ChangeItemBefore", throwIfNotFound: true);
+        m_Gameplay_PauseGame = m_Gameplay.FindAction("PauseGame", throwIfNotFound: true);
+        // GamePaused
+        m_GamePaused = asset.FindActionMap("GamePaused", throwIfNotFound: true);
+        m_GamePaused_UnpauseGame = m_GamePaused.FindAction("UnpauseGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -504,6 +576,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_UseItem;
     private readonly InputAction m_Gameplay_ChangeItemNext;
     private readonly InputAction m_Gameplay_ChangeItemBefore;
+    private readonly InputAction m_Gameplay_PauseGame;
     public struct GameplayActions
     {
         private @InputAsset m_Wrapper;
@@ -520,6 +593,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
         public InputAction @UseItem => m_Wrapper.m_Gameplay_UseItem;
         public InputAction @ChangeItemNext => m_Wrapper.m_Gameplay_ChangeItemNext;
         public InputAction @ChangeItemBefore => m_Wrapper.m_Gameplay_ChangeItemBefore;
+        public InputAction @PauseGame => m_Wrapper.m_Gameplay_PauseGame;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -565,6 +639,9 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @ChangeItemBefore.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeItemBefore;
                 @ChangeItemBefore.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeItemBefore;
                 @ChangeItemBefore.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnChangeItemBefore;
+                @PauseGame.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPauseGame;
+                @PauseGame.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPauseGame;
+                @PauseGame.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPauseGame;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -605,10 +682,46 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @ChangeItemBefore.started += instance.OnChangeItemBefore;
                 @ChangeItemBefore.performed += instance.OnChangeItemBefore;
                 @ChangeItemBefore.canceled += instance.OnChangeItemBefore;
+                @PauseGame.started += instance.OnPauseGame;
+                @PauseGame.performed += instance.OnPauseGame;
+                @PauseGame.canceled += instance.OnPauseGame;
             }
         }
     }
     public GameplayActions @Gameplay => new GameplayActions(this);
+
+    // GamePaused
+    private readonly InputActionMap m_GamePaused;
+    private IGamePausedActions m_GamePausedActionsCallbackInterface;
+    private readonly InputAction m_GamePaused_UnpauseGame;
+    public struct GamePausedActions
+    {
+        private @InputAsset m_Wrapper;
+        public GamePausedActions(@InputAsset wrapper) { m_Wrapper = wrapper; }
+        public InputAction @UnpauseGame => m_Wrapper.m_GamePaused_UnpauseGame;
+        public InputActionMap Get() { return m_Wrapper.m_GamePaused; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GamePausedActions set) { return set.Get(); }
+        public void SetCallbacks(IGamePausedActions instance)
+        {
+            if (m_Wrapper.m_GamePausedActionsCallbackInterface != null)
+            {
+                @UnpauseGame.started -= m_Wrapper.m_GamePausedActionsCallbackInterface.OnUnpauseGame;
+                @UnpauseGame.performed -= m_Wrapper.m_GamePausedActionsCallbackInterface.OnUnpauseGame;
+                @UnpauseGame.canceled -= m_Wrapper.m_GamePausedActionsCallbackInterface.OnUnpauseGame;
+            }
+            m_Wrapper.m_GamePausedActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @UnpauseGame.started += instance.OnUnpauseGame;
+                @UnpauseGame.performed += instance.OnUnpauseGame;
+                @UnpauseGame.canceled += instance.OnUnpauseGame;
+            }
+        }
+    }
+    public GamePausedActions @GamePaused => new GamePausedActions(this);
     public interface IGameplayActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -623,5 +736,10 @@ public class @InputAsset : IInputActionCollection, IDisposable
         void OnUseItem(InputAction.CallbackContext context);
         void OnChangeItemNext(InputAction.CallbackContext context);
         void OnChangeItemBefore(InputAction.CallbackContext context);
+        void OnPauseGame(InputAction.CallbackContext context);
+    }
+    public interface IGamePausedActions
+    {
+        void OnUnpauseGame(InputAction.CallbackContext context);
     }
 }

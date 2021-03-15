@@ -174,4 +174,37 @@ public class PlayerInputCustom : MonoBehaviour
     /// Registered on Item Control.
     /// </summary>
     public event Action<LeftOrRight> ItemChange;
+
+    /// <summary>
+    /// Handles pause game.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleGamePaused(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnGamePaused(PauseSystemEnum.Paused);
+            controls.SwitchCurrentActionMap("GamePaused");
+        }
+    }
+
+    /// <summary>
+    /// Handles pause game.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleGameUnpause(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnGamePaused(PauseSystemEnum.Unpaused);
+            controls.SwitchCurrentActionMap("Gameplay");
+        }
+    }
+
+    protected virtual void OnGamePaused(PauseSystemEnum pauseSystem) => GamePaused?.Invoke(pauseSystem);
+
+    /// <summary>
+    /// Event registered on PauseSystem.
+    /// </summary>
+    public event Action<PauseSystemEnum> GamePaused;
 }

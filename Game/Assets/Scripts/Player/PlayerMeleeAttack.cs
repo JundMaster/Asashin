@@ -58,7 +58,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     public void ComponentUpdate()
     {
-        
+
     }
 
     public void ComponentFixedUpdate()
@@ -133,13 +133,18 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// </summary>
     private void TurnOffRootMotion()
     {
-        anim.ResetTrigger("MeleeLightAttack");
-        anim.ResetTrigger("MeleeStrongAttack");
+        // If next animation is not an attack it removes root motion
+        if (anim.GetNextAnimatorStateInfo(0).IsName("BotLightMelee2") == false &&
+            anim.GetNextAnimatorStateInfo(0).IsName("BotLightMelee3") == false &&
+            anim.GetNextAnimatorStateInfo(0).IsName("BotStrongMelee3") == false)
+        {
+            anim.ResetTrigger("MeleeLightAttack");
+            anim.ResetTrigger("MeleeStrongAttack");
 
-        Performing = false;
+            Performing = false;
 
-        anim.speed = 1f;
-        anim.applyRootMotion = false;
+            anim.applyRootMotion = false;
+        }
     }
 
     /// <summary>
@@ -155,12 +160,13 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         {
             for (int i = 0; i < swordCol.Length; i++)
             {
-                if (swordCol[i].gameObject.TryGetComponent(out IDamageable enemy))
+                if (swordCol[i].transform.parent.gameObject.TryGetComponent(out IDamageable enemy))
                 {
-                    enemy.TakeDamage(stats.LightDamage);       
+                    enemy.TakeDamage(stats.LightDamage);
+                    break;
                 }
-                Instantiate(swordHitPrefab, sword.transform.position + sword.center, Quaternion.identity);
             }
+            Instantiate(swordHitPrefab, swordCol[0].ClosestPoint(sword.transform.position), Quaternion.identity);
         }
     }
 
@@ -180,12 +186,12 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
                 if (swordCol[i].gameObject.TryGetComponent(out IDamageable enemy))
                 {
                     enemy.TakeDamage(stats.StrongDamage);
+                    break;
                 }
-                Instantiate(swordHitPrefab, sword.transform.position + sword.center, Quaternion.identity);
             }
+            Instantiate(swordHitPrefab, sword.transform.position + sword.center, Quaternion.identity);
         }
     }
-
 
     protected virtual void OnLightMeleeAttack() => LightMeleeAttack?.Invoke();
 

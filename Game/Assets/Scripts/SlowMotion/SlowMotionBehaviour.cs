@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
 using Cinemachine;
-using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// Class responsible for handling slow motion.
@@ -22,11 +21,13 @@ public class SlowMotionBehaviour : MonoBehaviour
     // Components
     private PlayerMovement playerMovement;
     private PlayerValuesScriptableObj playerValues;
+    private PlayerRoll playerRoll;
     private Camera mainCamera;
-    private PlayerRoll roll;
+    private PauseSystem pauseSystem;
 
-    // Slow motion variabl
-    public bool SlowMotionOn { get; set; }
+    // Slow motion variables
+    public bool Performing { get; private set; }
+    private float unscaledDeltaTime;
 
     // Particles from player's mesh
     public bool OptionsSlowMotionParticles { get; set; }
@@ -35,15 +36,25 @@ public class SlowMotionBehaviour : MonoBehaviour
 
     // Slow Motion Shader Variables
     [SerializeField] private Material slowMotionMaterial;
-    [Tooltip("URP forward renderer data")][SerializeField] private ForwardRendererData data;
-    [Tooltip("Asset with desired shader")] [SerializeField] private ForwardRendererData slowMotionRender;
 
     private void Awake()
     {
         playerMovement = FindObjectOfType<PlayerMovement>();
         playerValues = FindObjectOfType<Player>().Values;
-        roll = FindObjectOfType<PlayerRoll>();
+        playerRoll = FindObjectOfType<PlayerRoll>();
         mainCamera = Camera.main;
+        pauseSystem = FindObjectOfType<PauseSystem>();
+    }
+
+    private void Start()
+    {
+        defaultTimeScale = Time.timeScale;
+        defaultFixedDeltaTime = Time.fixedDeltaTime;
+        Performing = false;
+        SlowmotionCoroutine = null;
+
+        // Defines if slow motion particles are played
+        OptionsSlowMotionParticles = true;
 
         slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0f); // WaveSize
         slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
@@ -51,24 +62,21 @@ public class SlowMotionBehaviour : MonoBehaviour
         slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
     }
 
-    private void Start()
-    {
-        defaultTimeScale = Time.timeScale;
-        defaultFixedDeltaTime = Time.fixedDeltaTime;
-        SlowMotionOn = false;
-        SlowmotionCoroutine = null;
-
-        OptionsSlowMotionParticles = true;
-    }
-
     private void OnEnable()
     {
-        roll.Roll += TriggerSlowMotion;
+        playerRoll.Roll += TriggerSlowMotion;
     }
 
     private void OnDisable()
     {
-        roll.Roll -= TriggerSlowMotion;
+        playerRoll.Roll -= TriggerSlowMotion;
+    }
+
+    private void Update()
+    {
+        if (playerMovement == null) playerMovement = FindObjectOfType<PlayerMovement>();
+        if (playerValues == null) playerValues = FindObjectOfType<Player>().Values;
+        if (playerRoll == null) playerRoll = FindObjectOfType<PlayerRoll>();
     }
 
     private void TriggerSlowMotion()
@@ -88,7 +96,7 @@ public class SlowMotionBehaviour : MonoBehaviour
         mainCamera.GetComponent<CinemachineBrain>().m_UpdateMethod =
             CinemachineBrain.UpdateMethod.LateUpdate;
 
-        SlowMotionOn = true;
+        Performing = true;
 
         if (OptionsSlowMotionParticles)
         {
@@ -113,20 +121,20 @@ public class SlowMotionBehaviour : MonoBehaviour
         {
             waveTime = currentTimePassed / (slowMotionDuration * 0.5f);
 
-            if (currentTimePassed < slowMotionDuration * 0.5f)
+            if (!pauseSystem.PausedGame && currentTimePassed < slowMotionDuration * 0.5f)
             {
                 Time.timeScale = Mathf.Lerp(
                     Time.timeScale, 
                     slowMotionSpeed, 
                     slowMotionSmoothSpeed);
 
-                
-
                 // Wave time
+                // This variable goes from 0 to 1, growing the wave until the
+                // edge of the screen
                 slowMotionMaterial.SetFloat("Vector1_24514F13", waveTime);
             }
 
-            else if (currentTimePassed > slowMotionDuration * 0.5f)
+            else if (!pauseSystem.PausedGame && currentTimePassed > slowMotionDuration * 0.5f)
             {
                 slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0f); // WaveSize
                 slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
@@ -134,44 +142,30 @@ public class SlowMotionBehaviour : MonoBehaviour
                 slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
             }
 
-            else if (currentTimePassed > (slowMotionDuration - (slowMotionDuration/3)))
+            else if (!pauseSystem.PausedGame && currentTimePassed > (slowMotionDuration - (slowMotionDuration/3)))
             {
                 Time.timeScale = Mathf.Lerp(
                     Time.timeScale, 
                     defaultTimeScale, 
-                    slowMotionSmoothSpeed);
-            
+                    slowMotionSmoothSpeed); 
             }
 
-            Time.fixedDeltaTime = Time.timeScale * 0.01f;
-
-            currentTimePassed += Time.unscaledDeltaTime;
+            if (pauseSystem.PausedGame)
+            {
+                Time.fixedDeltaTime = 0f;
+                currentTimePassed += 0f;
+            }
+            else if (!pauseSystem.PausedGame)
+            {
+                Time.fixedDeltaTime = Time.timeScale * 0.01f;
+                currentTimePassed += Time.unscaledDeltaTime;
+            }
+            
             yield return null;
         }
 
         StopSlowMotion();
         SlowmotionCoroutine = null;
-    }
-
-    /// <summary>
-    /// Controls shader effect while in slow motion.
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator ControlFullScreenShaderEffect()
-    {
-        /*
-        data.rendererFeatures.Add(temp2);
-        data.SetDirty();
-
-        while (currentTimePassed < slowMotionDuration)
-        {
-            yield return null;
-        }
-
-        data.rendererFeatures.Clear();
-        data.SetDirty();
-        */
-        yield return null;
     }
 
     /// <summary>
@@ -187,7 +181,7 @@ public class SlowMotionBehaviour : MonoBehaviour
         mainCamera.GetComponent<CinemachineBrain>().m_UpdateMethod =
             CinemachineBrain.UpdateMethod.FixedUpdate;
 
-        SlowMotionOn = false;
+        Performing = false;
 
         if (OptionsSlowMotionParticles)
         {

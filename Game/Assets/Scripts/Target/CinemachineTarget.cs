@@ -10,10 +10,14 @@ public class CinemachineTarget : MonoBehaviour
     private CinemachineFreeLook thirdPersonCamera;
     private Player player;
     private PlayerInputCustom input;
+    private PauseSystem pauseSystem;
 
     // Target camera
     [SerializeField] private CinemachineVirtualCamera targetCamera;
     [SerializeField] private CinemachineCollider targetCameraCollider;
+    [SerializeField] private CinemachineVirtualCamera pauseMenuCamera;
+    private Camera mainCamera;
+    private CinemachineBrain mainCameraBrain;
 
     // Cinemachine Brain
     private CinemachineBrain cinemachineBrain;
@@ -41,6 +45,9 @@ public class CinemachineTarget : MonoBehaviour
         input = FindObjectOfType<PlayerInputCustom>();
         thirdPersonCamera = GetComponent<CinemachineFreeLook>();
         cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
+        pauseSystem = FindObjectOfType<PauseSystem>();
+        mainCamera = Camera.main;
+        mainCameraBrain = mainCamera.GetComponent<CinemachineBrain>();
     }
 
     private void Start()
@@ -57,12 +64,14 @@ public class CinemachineTarget : MonoBehaviour
     {
         input.TargetSet += HandleTarget;
         input.TargetChange += SwitchTarget;
+        pauseSystem.GamePaused += SwitchBeetweenPauseCamera;
     }
 
     private void OnDisable()
     {
         input.TargetSet -= HandleTarget;
         input.TargetChange -= SwitchTarget;
+        pauseSystem.GamePaused -= SwitchBeetweenPauseCamera;
     }
 
     private void Update()
@@ -74,6 +83,18 @@ public class CinemachineTarget : MonoBehaviour
             findTargetSize)
         {
             CancelCurrentTarget();
+        }
+
+        if (player == null || input == null)
+        {
+            player = FindObjectOfType<Player>();
+            input = FindObjectOfType<PlayerInputCustom>();
+            thirdPersonCamera.Follow = player.transform;
+            Transform playerSpineTransform = 
+                GameObject.FindGameObjectWithTag("playerSpine").transform;
+            thirdPersonCamera.LookAt = playerSpineTransform;
+            pauseMenuCamera.Follow = playerSpineTransform;
+            pauseMenuCamera.LookAt = playerSpineTransform;
         }
     }
 
@@ -372,9 +393,71 @@ public class CinemachineTarget : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Switches cameras when the player pauses or unpauses the game.
+    /// </summary>
+    /// <param name="pauseSystem">Parameter that checks if the player
+    /// paused or unpaused the game.</param>
+    private void SwitchBeetweenPauseCamera(PauseSystemEnum pauseSystem)
+    {
+        if (pauseSystem == PauseSystemEnum.Paused)
+        {
+            mainCameraBrain.m_UpdateMethod =
+            CinemachineBrain.UpdateMethod.LateUpdate;
+            mainCameraBrain.m_BlendUpdateMethod =
+            CinemachineBrain.BrainUpdateMethod.LateUpdate;
+
+            pauseMenuCamera.Priority = 100;
+        }
+        else if (pauseSystem == PauseSystemEnum.Unpaused)
+        {
+            SlowMotionBehaviour slowMotionBehaviour = 
+                FindObjectOfType<SlowMotionBehaviour>();
+
+            if (slowMotionBehaviour.Performing)
+            {
+                mainCameraBrain.m_UpdateMethod =
+                    CinemachineBrain.UpdateMethod.LateUpdate;
+
+                mainCameraBrain.m_BlendUpdateMethod =
+                    CinemachineBrain.BrainUpdateMethod.LateUpdate;
+            }
+            else
+            {
+                mainCameraBrain.m_UpdateMethod =
+                    CinemachineBrain.UpdateMethod.FixedUpdate;                
+            }
+            pauseMenuCamera.Priority = 0;
+
+            StartCoroutine(ChangeBlendToFixedUpdate());
+        }
+    }
+
+    /// <summary>
+    /// After the end of frame, after camera stops blending, turns camera brain 
+    /// blend to fixed update.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ChangeBlendToFixedUpdate()
+    {
+        yield return new WaitForEndOfFrame();
+        while (mainCameraBrain.IsBlending)
+        {
+            yield return null;
+        }
+
+        mainCameraBrain.m_BlendUpdateMethod =
+                CinemachineBrain.BrainUpdateMethod.FixedUpdate;
+    }
+
     private void OnDrawGizmos()
     {
         if (Application.isPlaying)
-            Gizmos.DrawWireSphere(player.transform.position, findTargetSize);
+        {
+            if (player)
+            {
+                Gizmos.DrawWireSphere(player.transform.position, findTargetSize);
+            }
+        }
     }
 }

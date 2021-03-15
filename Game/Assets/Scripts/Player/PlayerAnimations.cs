@@ -10,6 +10,7 @@ public class PlayerAnimations : MonoBehaviour
     private PlayerJump jump;
     private PlayerRoll roll;
     private PlayerMeleeAttack attack;
+    private PauseSystem pauseSystem;
 
     private void Awake()
     {
@@ -18,6 +19,7 @@ public class PlayerAnimations : MonoBehaviour
         jump = GetComponent<PlayerJump>();
         roll = GetComponent<PlayerRoll>();
         attack = GetComponent<PlayerMeleeAttack>();
+        pauseSystem = FindObjectOfType<PauseSystem>();
     }
 
     private void OnEnable()
@@ -25,6 +27,7 @@ public class PlayerAnimations : MonoBehaviour
         roll.Roll += TriggerRollAnimation;
         attack.LightMeleeAttack += TriggerLightMeleeAttack;
         attack.StrongMeleeAttack += TriggerStrongMeleeAttack;
+        pauseSystem.GamePaused += PauseSystemAnimator;
     }
 
     private void OnDisable()
@@ -32,6 +35,7 @@ public class PlayerAnimations : MonoBehaviour
         roll.Roll -= TriggerRollAnimation;
         attack.LightMeleeAttack -= TriggerLightMeleeAttack;
         attack.StrongMeleeAttack -= TriggerStrongMeleeAttack;
+        pauseSystem.GamePaused -= PauseSystemAnimator;
     }
 
     private void Update()
@@ -62,4 +66,20 @@ public class PlayerAnimations : MonoBehaviour
     public void TriggerHealthFlaskAnimation() => anim.SetTrigger("UseHealthFlask");
 
     public void TriggerSmokeGrenadeAnimation() => anim.SetTrigger("UseSmokeGrenade");
+
+    /// <summary>
+    /// Sets animator update mode to scaled or unscaled when the game is paused.
+    /// </summary>
+    /// <param name="">Parameter that checks if the game is paused or unpaused.</param>
+    private void PauseSystemAnimator(PauseSystemEnum pauseSystem)
+    {
+        if (pauseSystem == PauseSystemEnum.Paused)
+        {
+            anim.updateMode = AnimatorUpdateMode.Normal;
+        }
+        else
+        {
+            anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+        }
+    }
 }
