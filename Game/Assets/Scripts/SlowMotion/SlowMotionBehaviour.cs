@@ -24,6 +24,7 @@ public class SlowMotionBehaviour : MonoBehaviour
     private PlayerRoll playerRoll;
     private Camera mainCamera;
     private PauseSystem pauseSystem;
+    private CinemachineBrain mainCameraBrain;
 
     // Slow motion variables
     public bool Performing { get; private set; }
@@ -44,6 +45,7 @@ public class SlowMotionBehaviour : MonoBehaviour
         playerRoll = FindObjectOfType<PlayerRoll>();
         mainCamera = Camera.main;
         pauseSystem = FindObjectOfType<PauseSystem>();
+        mainCameraBrain = Camera.main.GetComponent<CinemachineBrain>();
     }
 
     private void Start()
@@ -93,8 +95,11 @@ public class SlowMotionBehaviour : MonoBehaviour
     {
         // Changes turn value on player and changes camera update mode
         playerMovement.TurnSmooth = playerValues.TurnSmoothInSlowMotion;
-        mainCamera.GetComponent<CinemachineBrain>().m_UpdateMethod =
+
+        mainCameraBrain.m_UpdateMethod =
             CinemachineBrain.UpdateMethod.LateUpdate;
+        mainCameraBrain.m_BlendUpdateMethod =
+            CinemachineBrain.BrainUpdateMethod.FixedUpdate;
 
         Performing = true;
 
@@ -178,8 +183,11 @@ public class SlowMotionBehaviour : MonoBehaviour
 
         playerMovement.TurnSmooth = playerValues.TurnSmooth;
 
-        mainCamera.GetComponent<CinemachineBrain>().m_UpdateMethod =
+        mainCameraBrain.m_UpdateMethod =
             CinemachineBrain.UpdateMethod.FixedUpdate;
+
+        mainCameraBrain.m_BlendUpdateMethod =
+            CinemachineBrain.BrainUpdateMethod.LateUpdate;
 
         Performing = false;
 

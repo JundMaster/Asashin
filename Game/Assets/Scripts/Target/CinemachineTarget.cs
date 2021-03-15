@@ -113,10 +113,6 @@ public class CinemachineTarget : MonoBehaviour
 
                 if (allEnemies.Count > 0)
                 {
-                    // Fixes rought transitions beetween cameras
-                    if (Time.timeScale < 1) cinemachineBrain.m_DefaultBlend.m_Time = 0.1f;
-                    else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
-
                     currentTarget.gameObject.SetActive(true);
 
                     // Orders array with all enemies
@@ -308,16 +304,10 @@ public class CinemachineTarget : MonoBehaviour
     /// </summary>
     private void CancelCurrentTarget()
     {
-        // Fixes rough trainsition with cameras on slow motion
-        if (Time.timeScale < 1f) cinemachineBrain.m_DefaultBlend.m_Time = 0.5f;
-        else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
-
         // Switches camera back to third person camera
         targetCamera.Priority = thirdPersonCamera.Priority - 1;
         if (currentTarget) currentTarget.gameObject.SetActive(false);
         Targeting = !Targeting;
-
-        cinemachineBrain.m_DefaultBlend.m_Time = 1f;
     }
 
     /// <summary>
@@ -329,16 +319,10 @@ public class CinemachineTarget : MonoBehaviour
         FindAllEnemiesAroundPlayer();
         if (allEnemies.Count == 0)
         {
-            // Fixes rough trainsition with cameras on slow motion
-            if (Time.timeScale < 1f) cinemachineBrain.m_DefaultBlend.m_Time = 0.5f;
-            else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
-
             // Switches camera back to third person camera
             targetCamera.Priority = thirdPersonCamera.Priority - 1;
             if (currentTarget) currentTarget.gameObject.SetActive(false);
             Targeting = !Targeting;
-
-            cinemachineBrain.m_DefaultBlend.m_Time = 1f;
         }
     }
 
@@ -359,10 +343,6 @@ public class CinemachineTarget : MonoBehaviour
 
         if (Targeting)
         {
-            // Fixes rough transitions beetween cameras
-            if (Time.timeScale < 1) cinemachineBrain.m_DefaultBlend.m_Time = 0.1f;
-            else cinemachineBrain.m_DefaultBlend.m_Time = 1f;
-
             currentTarget.gameObject.SetActive(true);
 
             FindAllEnemiesAroundPlayer();
@@ -420,16 +400,18 @@ public class CinemachineTarget : MonoBehaviour
                     CinemachineBrain.UpdateMethod.LateUpdate;
 
                 mainCameraBrain.m_BlendUpdateMethod =
-                    CinemachineBrain.BrainUpdateMethod.LateUpdate;
+                    CinemachineBrain.BrainUpdateMethod.FixedUpdate;
+                
             }
             else
             {
                 mainCameraBrain.m_UpdateMethod =
-                    CinemachineBrain.UpdateMethod.FixedUpdate;                
+                    CinemachineBrain.UpdateMethod.FixedUpdate;
+
+                mainCameraBrain.m_BlendUpdateMethod =
+                    CinemachineBrain.BrainUpdateMethod.LateUpdate;
             }
             pauseMenuCamera.Priority = 0;
-
-            StartCoroutine(ChangeBlendToFixedUpdate());
         }
     }
 
@@ -447,7 +429,7 @@ public class CinemachineTarget : MonoBehaviour
         }
 
         mainCameraBrain.m_BlendUpdateMethod =
-                CinemachineBrain.BrainUpdateMethod.FixedUpdate;
+                    CinemachineBrain.BrainUpdateMethod.LateUpdate;
     }
 
     private void OnDrawGizmos()
