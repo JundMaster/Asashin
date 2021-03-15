@@ -11,11 +11,9 @@ public class SlowMotionBehaviour : MonoBehaviour
     // Slowmotion Variables
     private float defaultTimeScale;
     private float defaultFixedDeltaTime;
-    [Tooltip("Speed of slow motion (Time.timeScale)")]
-    [SerializeField] private float slowMotionSpeed;
-    [SerializeField] private float slowMotionDuration;
-    [Tooltip("Smoothing time beetween the transition from normal time to slow motion")]
-    [Range(0.03f, 0.04f)] [SerializeField] private float slowMotionSmoothSpeed;
+    private float slowMotionSpeed; // Speed of slow motion (Time.timeScale)
+    private float slowMotionDuration;
+    private float slowMotionSmoothSpeed; //Smoothing time beetween the transition from normal time to slow motion
     private float currentTimePassed;
     private Coroutine SlowmotionCoroutine;
 
@@ -58,6 +56,10 @@ public class SlowMotionBehaviour : MonoBehaviour
         slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
         slowMotionMaterial.SetFloat("Vector1_58B5DC2F", 0f); // TimeMultiplication
         slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
+
+        slowMotionSpeed = 0.1f;
+        slowMotionDuration = 5f;
+        slowMotionSmoothSpeed = 0.005f;
     }
 
     private void OnEnable()
@@ -116,35 +118,31 @@ public class SlowMotionBehaviour : MonoBehaviour
 
         while (currentTimePassed < slowMotionDuration)
         {
-            waveTime = currentTimePassed / (slowMotionDuration * 0.5f);
+            // This variable goes from 0 to 1, growing the wave until the
+            // edge of the screen
+            // Wave time
+            if (waveTime < 0.99f) waveTime = currentTimePassed / (slowMotionDuration * 0.5f);
+            slowMotionMaterial.SetFloat("Vector1_24514F13", waveTime);
 
-            if (!pauseSystem.PausedGame && currentTimePassed < slowMotionDuration * 0.5f)
+            if (!pauseSystem.PausedGame && currentTimePassed < slowMotionDuration * 0.25f)
             {
                 Time.timeScale = Mathf.Lerp(
                     Time.timeScale, 
                     slowMotionSpeed, 
-                    slowMotionSmoothSpeed);
-
-                // Wave time
-                // This variable goes from 0 to 1, growing the wave until the
-                // edge of the screen
-                slowMotionMaterial.SetFloat("Vector1_24514F13", waveTime);
+                    slowMotionSmoothSpeed * 2);
             }
 
-            else if (!pauseSystem.PausedGame && currentTimePassed > slowMotionDuration * 0.5f)
-            {
-                slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0f); // WaveSize
-                slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
-                slowMotionMaterial.SetFloat("Vector1_58B5DC2F", 0f); // TimeMultiplication
-                slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
-            }
-
-            else if (!pauseSystem.PausedGame && currentTimePassed > (slowMotionDuration - (slowMotionDuration/3)))
+            else if (!pauseSystem.PausedGame && currentTimePassed > slowMotionDuration - (slowMotionDuration * 0.25f))
             {
                 Time.timeScale = Mathf.Lerp(
                     Time.timeScale, 
                     defaultTimeScale, 
-                    slowMotionSmoothSpeed); 
+                    slowMotionSmoothSpeed * 2);
+
+                slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0f); // WaveSize
+                slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
+                slowMotionMaterial.SetFloat("Vector1_58B5DC2F", 0f); // TimeMultiplication
+                slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
             }
 
             if (pauseSystem.PausedGame)
@@ -157,6 +155,7 @@ public class SlowMotionBehaviour : MonoBehaviour
                 Time.fixedDeltaTime = Time.timeScale * 0.01f;
                 currentTimePassed += Time.unscaledDeltaTime;
             }
+
             
             yield return null;
         }

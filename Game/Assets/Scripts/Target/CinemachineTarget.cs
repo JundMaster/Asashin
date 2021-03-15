@@ -410,7 +410,7 @@ public class CinemachineTarget : MonoBehaviour
             else
             {
                 mainCameraBrain.m_BlendUpdateMethod =
-                    CinemachineBrain.BrainUpdateMethod.LateUpdate;
+                    CinemachineBrain.BrainUpdateMethod.FixedUpdate;
             }
             mainCameraBrain.m_UpdateMethod =
                     CinemachineBrain.UpdateMethod.FixedUpdate;
