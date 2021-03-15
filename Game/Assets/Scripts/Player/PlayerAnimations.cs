@@ -11,6 +11,7 @@ public class PlayerAnimations : MonoBehaviour
     private PlayerRoll roll;
     private PlayerMeleeAttack attack;
     private PauseSystem pauseSystem;
+    private PlayerBlock block;
 
     private void Awake()
     {
@@ -20,6 +21,7 @@ public class PlayerAnimations : MonoBehaviour
         roll = GetComponent<PlayerRoll>();
         attack = GetComponent<PlayerMeleeAttack>();
         pauseSystem = FindObjectOfType<PauseSystem>();
+        block = GetComponent<PlayerBlock>();
     }
 
     private void OnEnable()
@@ -43,6 +45,7 @@ public class PlayerAnimations : MonoBehaviour
         anim.SetFloat("Movement", movement.Direction.magnitude);
         anim.SetFloat("VerticalVelocity", jump.VerticalVelocity.y);
         anim.SetBool("IsGrounded", jump.IsGrounded());
+        anim.SetBool("Block", block.Performing);
     }
 
     private void TriggerRollAnimation() => anim.SetTrigger("Rolling");

@@ -10,6 +10,7 @@ public class PlayerRoll : MonoBehaviour, IAction
     private PlayerMeleeAttack attack;
     private PlayerUseItem useItem;
     private Animator anim;
+    private PlayerBlock block;
 
     public bool Performing { get; private set; }
 
@@ -21,6 +22,7 @@ public class PlayerRoll : MonoBehaviour, IAction
         attack = GetComponent<PlayerMeleeAttack>();
         anim = GetComponent<Animator>();
         useItem = GetComponent<PlayerUseItem>();
+        block = GetComponent<PlayerBlock>();
     }
 
     private void Start()
@@ -54,22 +56,9 @@ public class PlayerRoll : MonoBehaviour, IAction
     private void HandleRoll()
     {
         if (Performing == false && attack.Performing == false &&
-            jump.IsGrounded() && useItem.Performing == false)
+            jump.IsGrounded() && useItem.Performing == false &&
+            block.Performing == false)
         {
-            // If the player is pressing any direction
-            // rotates the character instantly to roll in that direction
-            if (movement.Direction != Vector3.zero)
-            {
-                // Finds angle
-                float targetAngle = Mathf.Atan2(movement.Direction.x, movement.Direction.z) *
-                        Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-
-                // Rotates to that angle
-                transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-            }
-
-            //////////////
-            
             anim.applyRootMotion = true;
             Performing = true;
             OnRoll();

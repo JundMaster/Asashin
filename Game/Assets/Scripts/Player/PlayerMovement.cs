@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerMeleeAttack attack;
     private PlayerUseItem useItem;
     private PlayerRoll roll;
-    private PauseSystem pauseSystem;
+    private PlayerBlock block;
 
     public bool Performing { get; private set; }
 
@@ -39,14 +39,14 @@ public class PlayerMovement : MonoBehaviour, IAction
         attack = GetComponent<PlayerMeleeAttack>();
         roll = GetComponent<PlayerRoll>();
         useItem = GetComponent<PlayerUseItem>();
-        pauseSystem = FindObjectOfType<PauseSystem>();
+        block = GetComponent<PlayerBlock>();
     }
 
     public void ComponentUpdate()
     {
         // Updates movement direction variable
-        if (roll.Performing == false && attack.Performing == false &&
-            slowMotion.Performing == false && useItem.Performing == false)
+        if ( attack.Performing == false &&
+            slowMotion.Performing == false && useItem.Performing == false )
         {
             /*
             Direction = new Vector3(
@@ -64,8 +64,8 @@ public class PlayerMovement : MonoBehaviour, IAction
             */
             Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
         }
-        else if (roll.Performing == false && attack.Performing == false &&
-            slowMotion.Performing && useItem.Performing == false)
+        else if (attack.Performing == false &&
+            slowMotion.Performing && useItem.Performing == false )
         {
             Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
         }
@@ -86,7 +86,8 @@ public class PlayerMovement : MonoBehaviour, IAction
     /// </summary>
     private void Movement()
     {
-        if (Direction.magnitude > 0.01f)
+        if (Direction.magnitude > 0.01f && block.Performing == false &&
+            roll.Performing == false)
         {
             // Moves controllers towards the moveDirection set on Rotation()
             controller.Move(

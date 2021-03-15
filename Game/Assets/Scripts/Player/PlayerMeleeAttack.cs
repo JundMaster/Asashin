@@ -13,6 +13,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private PlayerUseItem useItem;
     private CinemachineTarget target;
     private PlayerStats stats;
+    private PlayerBlock block;
 
     // Weapon
     [SerializeField] private SphereCollider sword;
@@ -36,6 +37,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         roll = GetComponent<PlayerRoll>();
         target = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
+        block = GetComponent<PlayerBlock>();
     }
 
     private void Start()
@@ -71,7 +73,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// </summary>
     private void MeleeLightAttack()
     {
-        if (roll.Performing == false && useItem.Performing == false)
+        if (roll.Performing == false && useItem.Performing == false &&
+            block.Performing == false)
         {
             if (target.Targeting)
             {
@@ -94,7 +97,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// </summary>
     private void MeleeStrongAttack()
     {
-        if (roll.Performing == false && useItem.Performing == false)
+        if (roll.Performing == false && useItem.Performing == false &&
+            block.Performing == false)
         {
             if (target.Targeting)
             {

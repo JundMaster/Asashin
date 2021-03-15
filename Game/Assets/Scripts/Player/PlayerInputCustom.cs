@@ -207,4 +207,22 @@ public class PlayerInputCustom : MonoBehaviour
     /// Event registered on PauseSystem.
     /// </summary>
     public event Action<PauseSystemEnum> GamePaused;
+
+
+    /// <summary>
+    /// Handles pause game.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleBlock(InputAction.CallbackContext context)
+    {
+        if (context.started) OnBlock(YesOrNo.Yes);
+        if (context.canceled) OnBlock(YesOrNo.No);
+    }
+
+    protected virtual void OnBlock(YesOrNo condition) => Block?.Invoke(condition);
+
+    /// <summary>
+    /// Event registered on PauseSystem.
+    /// </summary>
+    public event Action<YesOrNo> Block;
 }

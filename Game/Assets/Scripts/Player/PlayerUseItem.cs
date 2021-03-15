@@ -22,6 +22,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
     private PlayerMovement movement;
     private CinemachineTarget target;
     private PlayerStats stats;
+    private PlayerBlock block;
 
     public float TimeItemWasUsed { get; private set; }
     private bool canUseItemDelayOver;
@@ -40,6 +41,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
         movement = GetComponent<PlayerMovement>();
         target = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
+        block = GetComponent<PlayerBlock>();
     }
 
     private void Start()
@@ -71,14 +73,17 @@ public class PlayerUseItem : MonoBehaviour, IAction
 
         // If the player is pressing any direction
         // rotates the character instantly to roll in that direction
-        else if (target.Targeting == false && movement.Direction != Vector3.zero)
+        else if (target.Targeting == false)
         {
-            // Finds angle
-            float targetAngle = Mathf.Atan2(movement.Direction.x, movement.Direction.z) *
-                    Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+            if (movement.Direction != Vector3.zero)
+            {
+                // Finds angle
+                float targetAngle = Mathf.Atan2(movement.Direction.x, movement.Direction.z) *
+                        Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
 
-            // Rotates to that angle
-            transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+                // Rotates to that angle
+                transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+            }
         }
     }
 
@@ -91,7 +96,9 @@ public class PlayerUseItem : MonoBehaviour, IAction
     /// </summary>
     private void HandleItemUse()
     {
-        if (canUseItemDelayOver && attack.Performing == false && jump.Performing == false && roll.Performing == false)
+        if (canUseItemDelayOver && attack.Performing == false && 
+            jump.Performing == false && roll.Performing == false &&
+            block.Performing == false)
         {
             // Plays an animation depending on the item used
             switch (itemControl.CurrentItem.ItemType)

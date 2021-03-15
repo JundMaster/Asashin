@@ -12,6 +12,7 @@ public class PlayerJump : MonoBehaviour, IAction
     private PlayerValuesScriptableObj values;
     private PlayerUseItem useItem;
     private PlayerMeleeAttack attack;
+    private PlayerBlock block;
 
     // Gravity
     private Vector3 verticalVelocity;
@@ -30,6 +31,7 @@ public class PlayerJump : MonoBehaviour, IAction
         values = GetComponent<Player>().Values;
         attack = GetComponent<PlayerMeleeAttack>();
         useItem = GetComponent<PlayerUseItem>();
+        block = GetComponent<PlayerBlock>();
     }
 
     private void OnEnable()
@@ -65,7 +67,8 @@ public class PlayerJump : MonoBehaviour, IAction
     private void HandleJump()
     {
         if (IsGrounded() && attack.Performing == false &&
-            roll.Performing == false && useItem.Performing == false)
+            roll.Performing == false && useItem.Performing == false &&
+            block.Performing == false)
         {
             verticalVelocity.y = Mathf.Sqrt(values.JumpForce * values.Gravity);
         }
