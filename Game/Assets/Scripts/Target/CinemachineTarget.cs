@@ -11,10 +11,12 @@ public class CinemachineTarget : MonoBehaviour
     private Player player;
     private PlayerInputCustom input;
     private PauseSystem pauseSystem;
+    private SlowMotionBehaviour slowMotion;
 
     // Target camera
     [SerializeField] private CinemachineVirtualCamera targetCamera;
     [SerializeField] private CinemachineCollider targetCameraCollider;
+    [SerializeField] private CinemachineFreeLook slowMotionThirdPersonCamera;
     [SerializeField] private CinemachineVirtualCamera pauseMenuCamera;
     private Camera mainCamera;
     private CinemachineBrain mainCameraBrain;
@@ -37,7 +39,6 @@ public class CinemachineTarget : MonoBehaviour
 
     // Layers
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private LayerMask wallLayer;
 
     private void Awake()
     {
@@ -48,6 +49,7 @@ public class CinemachineTarget : MonoBehaviour
         pauseSystem = FindObjectOfType<PauseSystem>();
         mainCamera = Camera.main;
         mainCameraBrain = mainCamera.GetComponent<CinemachineBrain>();
+        slowMotion = FindObjectOfType<SlowMotionBehaviour>();
     }
 
     private void Start()
@@ -65,6 +67,7 @@ public class CinemachineTarget : MonoBehaviour
         input.TargetSet += HandleTarget;
         input.TargetChange += SwitchTarget;
         pauseSystem.GamePaused += SwitchBeetweenPauseCamera;
+        slowMotion.SlowMotionEvent += SlowMotionCamera;
     }
 
     private void OnDisable()
@@ -72,6 +75,7 @@ public class CinemachineTarget : MonoBehaviour
         input.TargetSet -= HandleTarget;
         input.TargetChange -= SwitchTarget;
         pauseSystem.GamePaused -= SwitchBeetweenPauseCamera;
+        slowMotion.SlowMotionEvent -= SlowMotionCamera;
     }
 
     private void Update()
@@ -95,6 +99,8 @@ public class CinemachineTarget : MonoBehaviour
             thirdPersonCamera.LookAt = playerSpineTransform;
             pauseMenuCamera.Follow = playerSpineTransform;
             pauseMenuCamera.LookAt = playerSpineTransform;
+            slowMotionThirdPersonCamera.Follow = player.transform;
+            slowMotionThirdPersonCamera.Follow = playerSpineTransform;
         }
     }
 
@@ -127,7 +133,7 @@ public class CinemachineTarget : MonoBehaviour
                                         organizedEnemiesByDistance[0].transform.position.z);
 
                     // Switches camera
-                    targetCamera.Priority = thirdPersonCamera.Priority + 1;
+                    targetCamera.Priority = thirdPersonCamera.Priority + 3;
                     UpdateTargetCameraLookAt();
                     FindCurrentTargetedEnemy();
 
@@ -305,7 +311,7 @@ public class CinemachineTarget : MonoBehaviour
     private void CancelCurrentTarget()
     {
         // Switches camera back to third person camera
-        targetCamera.Priority = thirdPersonCamera.Priority - 1;
+        targetCamera.Priority = thirdPersonCamera.Priority - 3;
         if (currentTarget) currentTarget.gameObject.SetActive(false);
         Targeting = !Targeting;
     }
@@ -320,7 +326,7 @@ public class CinemachineTarget : MonoBehaviour
         if (allEnemies.Count == 0)
         {
             // Switches camera back to third person camera
-            targetCamera.Priority = thirdPersonCamera.Priority - 1;
+            targetCamera.Priority = thirdPersonCamera.Priority - 3;
             if (currentTarget) currentTarget.gameObject.SetActive(false);
             Targeting = !Targeting;
         }
@@ -362,7 +368,7 @@ public class CinemachineTarget : MonoBehaviour
                                     organizedEnemiesByDistance[0].transform.position.z);
 
                 // Switches camera
-                targetCamera.Priority = thirdPersonCamera.Priority + 1;
+                targetCamera.Priority = thirdPersonCamera.Priority + 3;
                 UpdateTargetCameraLookAt();
                 FindCurrentTargetedEnemy();
             }
@@ -387,6 +393,8 @@ public class CinemachineTarget : MonoBehaviour
             mainCameraBrain.m_BlendUpdateMethod =
             CinemachineBrain.BrainUpdateMethod.LateUpdate;
 
+            mainCameraBrain.m_DefaultBlend.m_Time = 0.1f;
+
             pauseMenuCamera.Priority = 100;
         }
         else if (pauseSystem == PauseSystemEnum.Unpaused)
@@ -396,40 +404,66 @@ public class CinemachineTarget : MonoBehaviour
 
             if (slowMotionBehaviour.Performing)
             {
-                mainCameraBrain.m_UpdateMethod =
-                    CinemachineBrain.UpdateMethod.LateUpdate;
-
                 mainCameraBrain.m_BlendUpdateMethod =
-                    CinemachineBrain.BrainUpdateMethod.FixedUpdate;
-                
+                    CinemachineBrain.BrainUpdateMethod.FixedUpdate;     
             }
             else
             {
-                mainCameraBrain.m_UpdateMethod =
-                    CinemachineBrain.UpdateMethod.FixedUpdate;
-
                 mainCameraBrain.m_BlendUpdateMethod =
                     CinemachineBrain.BrainUpdateMethod.LateUpdate;
             }
+            mainCameraBrain.m_UpdateMethod =
+                    CinemachineBrain.UpdateMethod.FixedUpdate;
+
             pauseMenuCamera.Priority = 0;
+
+            StartCoroutine(CameraBlendTimeToNormal());
         }
     }
 
-    /// <summary>
-    /// After the end of frame, after camera stops blending, turns camera brain 
-    /// blend to fixed update.
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator ChangeBlendToFixedUpdate()
+    private IEnumerator CameraBlendTimeToNormal()
     {
-        yield return new WaitForEndOfFrame();
-        while (mainCameraBrain.IsBlending)
+        yield return new WaitForFixedUpdate();
+        while(mainCameraBrain.IsBlending)
         {
             yield return null;
         }
+        mainCameraBrain.m_DefaultBlend.m_Time = 0.75f;
+    }
 
-        mainCameraBrain.m_BlendUpdateMethod =
-                    CinemachineBrain.BrainUpdateMethod.LateUpdate;
+    /// <summary>
+    /// Happens every time slow motion is triggered.
+    /// </summary>
+    /// <param name="condition">Parameter to check if it's slow motion or normal time</param>
+    private void SlowMotionCamera(SlowMotionEnum condition)
+    {
+        if (condition == SlowMotionEnum.SlowMotion)
+        {
+            mainCameraBrain.m_DefaultBlend.m_Time = 0.1f;
+
+            mainCameraBrain.m_UpdateMethod =
+                CinemachineBrain.UpdateMethod.FixedUpdate;
+            mainCameraBrain.m_BlendUpdateMethod =
+                CinemachineBrain.BrainUpdateMethod.FixedUpdate;
+
+            // Gives priority to slow motion camera
+            slowMotionThirdPersonCamera.Priority =
+                thirdPersonCamera.Priority + 1;
+        }
+        else
+        {
+            mainCameraBrain.m_UpdateMethod =
+            CinemachineBrain.UpdateMethod.FixedUpdate;
+
+            mainCameraBrain.m_BlendUpdateMethod =
+                CinemachineBrain.BrainUpdateMethod.LateUpdate;
+
+            mainCameraBrain.m_DefaultBlend.m_Time = 1f;
+
+            // Removes priority to slow motion camera
+            slowMotionThirdPersonCamera.Priority =
+                    thirdPersonCamera.Priority - 1;
+        }
     }
 
     private void OnDrawGizmos()

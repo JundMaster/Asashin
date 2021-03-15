@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using Cinemachine;
+using System;
 
 /// <summary>
 /// Class responsible for handling slow motion.
@@ -22,13 +23,10 @@ public class SlowMotionBehaviour : MonoBehaviour
     private PlayerMovement playerMovement;
     private PlayerValuesScriptableObj playerValues;
     private PlayerRoll playerRoll;
-    private Camera mainCamera;
     private PauseSystem pauseSystem;
-    private CinemachineBrain mainCameraBrain;
 
     // Slow motion variables
     public bool Performing { get; private set; }
-    private float unscaledDeltaTime;
 
     // Particles from player's mesh
     public bool OptionsSlowMotionParticles { get; set; }
@@ -43,9 +41,7 @@ public class SlowMotionBehaviour : MonoBehaviour
         playerMovement = FindObjectOfType<PlayerMovement>();
         playerValues = FindObjectOfType<Player>().Values;
         playerRoll = FindObjectOfType<PlayerRoll>();
-        mainCamera = Camera.main;
         pauseSystem = FindObjectOfType<PauseSystem>();
-        mainCameraBrain = Camera.main.GetComponent<CinemachineBrain>();
     }
 
     private void Start()
@@ -95,11 +91,9 @@ public class SlowMotionBehaviour : MonoBehaviour
     {
         // Changes turn value on player and changes camera update mode
         playerMovement.TurnSmooth = playerValues.TurnSmoothInSlowMotion;
-
-        mainCameraBrain.m_UpdateMethod =
-            CinemachineBrain.UpdateMethod.LateUpdate;
-        mainCameraBrain.m_BlendUpdateMethod =
-            CinemachineBrain.BrainUpdateMethod.FixedUpdate;
+ 
+        // Event for Cinemachine Target. Controls cinemachine brain.
+        OnSlowMotionEvent(SlowMotionEnum.SlowMotion);
 
         Performing = true;
 
@@ -114,8 +108,6 @@ public class SlowMotionBehaviour : MonoBehaviour
         }
 
         currentTimePassed = 0;
-
-        //StartCoroutine(ControlFullScreenShaderEffect());
 
         slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0.03f); // WaveSize
         slowMotionMaterial.SetFloat("Vector1_34F127BD", -0.2f); // WaveStrength
@@ -183,11 +175,8 @@ public class SlowMotionBehaviour : MonoBehaviour
 
         playerMovement.TurnSmooth = playerValues.TurnSmooth;
 
-        mainCameraBrain.m_UpdateMethod =
-            CinemachineBrain.UpdateMethod.FixedUpdate;
-
-        mainCameraBrain.m_BlendUpdateMethod =
-            CinemachineBrain.BrainUpdateMethod.LateUpdate;
+        // Event for Cinemachine Target. Controls cinemachine brain.
+        OnSlowMotionEvent(SlowMotionEnum.NormalTime);
 
         Performing = false;
 
@@ -195,5 +184,12 @@ public class SlowMotionBehaviour : MonoBehaviour
         {
             cloneParticles.Stop();
         }
-    } 
+    }
+
+    protected virtual void OnSlowMotionEvent(SlowMotionEnum condition) => SlowMotionEvent?.Invoke(condition);
+
+    /// <summary>
+    /// Event registered on CinemachineTarget.
+    /// </summary>
+    public event Action<SlowMotionEnum> SlowMotionEvent;
 }
