@@ -42,6 +42,33 @@ public class PlayerMovement : MonoBehaviour, IAction
         block = GetComponent<PlayerBlock>();
     }
 
+    private void Start()
+    {
+        TurnSmooth = values.TurnSmooth;
+    }
+
+    private void OnEnable()
+    {
+        slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
+    }
+
+    private void OnDisable()
+    {
+        slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
+    }
+
+    /// <summary>
+    /// Changes turn smooth value after slow motion.
+    /// </summary>
+    private void ChangeTurnSmoothValue(SlowMotionEnum condition)
+    {
+        // Changes turn value on player and changes camera update mode
+        if (condition == SlowMotionEnum.SlowMotion)
+            TurnSmooth = values.TurnSmoothInSlowMotion;
+        else 
+            TurnSmooth = values.TurnSmooth;
+    }
+
     public void ComponentUpdate()
     {
         // Updates movement direction variable

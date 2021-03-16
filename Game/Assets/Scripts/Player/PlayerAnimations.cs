@@ -48,6 +48,8 @@ public class PlayerAnimations : MonoBehaviour
         anim.SetBool("Block", block.Performing);
     }
 
+    public void TriggerBlockReflect() => anim.SetTrigger("BlockReflect");
+
     private void TriggerRollAnimation() => anim.SetTrigger("Rolling");
 
     private void TriggerLightMeleeAttack()

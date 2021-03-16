@@ -11,7 +11,7 @@ public class TargetScript : MonoBehaviour
 
     [SerializeField] private RawImage crosshair;
 
-    private void Update()
+    private void FixedUpdate()
     {
         // Gets target position in world space
         Vector3 targetPosition = 

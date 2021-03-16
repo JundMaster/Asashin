@@ -7,22 +7,19 @@ using System.Collections;
 public class CinemachineTarget : MonoBehaviour
 {
     // Components
-    private CinemachineFreeLook thirdPersonCamera;
     private Player player;
     private PlayerInputCustom input;
     private PauseSystem pauseSystem;
     private SlowMotionBehaviour slowMotion;
 
-    // Target camera
-    [SerializeField] private CinemachineVirtualCamera targetCamera;
-    [SerializeField] private CinemachineCollider targetCameraCollider;
+    // Camera Variables
+    [SerializeField] private CinemachineFreeLook thirdPersonCamera;
     [SerializeField] private CinemachineFreeLook slowMotionThirdPersonCamera;
+    [SerializeField] private CinemachineVirtualCamera targetCamera;
     [SerializeField] private CinemachineVirtualCamera pauseMenuCamera;
-    private Camera mainCamera;
+    [SerializeField] private CinemachineCollider targetCameraCollider;
     private CinemachineBrain mainCameraBrain;
 
-    // Cinemachine Brain
-    private CinemachineBrain cinemachineBrain;
 
     // Target player
     [SerializeField] private Transform currentTarget;
@@ -45,10 +42,8 @@ public class CinemachineTarget : MonoBehaviour
         player = FindObjectOfType<Player>();
         input = FindObjectOfType<PlayerInputCustom>();
         thirdPersonCamera = GetComponent<CinemachineFreeLook>();
-        cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
         pauseSystem = FindObjectOfType<PauseSystem>();
-        mainCamera = Camera.main;
-        mainCameraBrain = mainCamera.GetComponent<CinemachineBrain>();
+        mainCameraBrain = Camera.main.GetComponent<CinemachineBrain>();
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
     }
 
@@ -59,7 +54,11 @@ public class CinemachineTarget : MonoBehaviour
 
         allEnemies = new List<Enemy>();
 
+        // Disables current player's target
         currentTarget.gameObject.SetActive(false);
+
+        // Sets all cameras follows and lookAts.
+        SetAllCamerasTargets();
     }
 
     private void OnEnable()
@@ -88,20 +87,6 @@ public class CinemachineTarget : MonoBehaviour
         {
             CancelCurrentTarget();
         }
-
-        if (player == null || input == null)
-        {
-            player = FindObjectOfType<Player>();
-            input = FindObjectOfType<PlayerInputCustom>();
-            thirdPersonCamera.Follow = player.transform;
-            Transform playerSpineTransform = 
-                GameObject.FindGameObjectWithTag("playerSpine").transform;
-            thirdPersonCamera.LookAt = playerSpineTransform;
-            pauseMenuCamera.Follow = playerSpineTransform;
-            pauseMenuCamera.LookAt = playerSpineTransform;
-            slowMotionThirdPersonCamera.Follow = player.transform;
-            slowMotionThirdPersonCamera.Follow = playerSpineTransform;
-        }
     }
 
     /// <summary>
@@ -111,7 +96,7 @@ public class CinemachineTarget : MonoBehaviour
     /// </summary>
     private void HandleTarget()
     {
-        if (cinemachineBrain.IsBlending == false)
+        if (mainCameraBrain.IsBlending == false)
         {
             if (Targeting == false)
             {
@@ -429,6 +414,21 @@ public class CinemachineTarget : MonoBehaviour
             yield return null;
         }
         mainCameraBrain.m_DefaultBlend.m_Time = 0.75f;
+    }
+
+    /// <summary>
+    /// Sets cameras follows and lookats.
+    /// </summary>
+    private void SetAllCamerasTargets()
+    {
+        thirdPersonCamera.Follow = player.transform;
+        Transform playerSpineTransform =
+            GameObject.FindGameObjectWithTag("playerSpine").transform;
+        thirdPersonCamera.LookAt = playerSpineTransform;
+        pauseMenuCamera.Follow = playerSpineTransform;
+        pauseMenuCamera.LookAt = playerSpineTransform;
+        slowMotionThirdPersonCamera.Follow = player.transform;
+        slowMotionThirdPersonCamera.LookAt = playerSpineTransform;
     }
 
     /// <summary>

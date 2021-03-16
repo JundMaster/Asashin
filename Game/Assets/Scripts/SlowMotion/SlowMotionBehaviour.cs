@@ -72,13 +72,6 @@ public class SlowMotionBehaviour : MonoBehaviour
         playerRoll.Roll -= TriggerSlowMotion;
     }
 
-    private void Update()
-    {
-        if (playerMovement == null) playerMovement = FindObjectOfType<PlayerMovement>();
-        if (playerValues == null) playerValues = FindObjectOfType<Player>().Values;
-        if (playerRoll == null) playerRoll = FindObjectOfType<PlayerRoll>();
-    }
-
     private void TriggerSlowMotion()
     {
         if (SlowmotionCoroutine == null)
@@ -91,9 +84,7 @@ public class SlowMotionBehaviour : MonoBehaviour
     /// <returns>Null.</returns>
     private IEnumerator SlowMotion()
     {
-        // Changes turn value on player and changes camera update mode
-        playerMovement.TurnSmooth = playerValues.TurnSmoothInSlowMotion;
- 
+        // Changes camera update mode.
         // Event for Cinemachine Target. Controls cinemachine brain.
         OnSlowMotionEvent(SlowMotionEnum.SlowMotion);
 
@@ -172,8 +163,6 @@ public class SlowMotionBehaviour : MonoBehaviour
         Time.timeScale = defaultTimeScale;
         Time.fixedDeltaTime = defaultFixedDeltaTime;
 
-        playerMovement.TurnSmooth = playerValues.TurnSmooth;
-
         // Event for Cinemachine Target. Controls cinemachine brain.
         OnSlowMotionEvent(SlowMotionEnum.NormalTime);
 
@@ -188,7 +177,7 @@ public class SlowMotionBehaviour : MonoBehaviour
     protected virtual void OnSlowMotionEvent(SlowMotionEnum condition) => SlowMotionEvent?.Invoke(condition);
 
     /// <summary>
-    /// Event registered on CinemachineTarget.
+    /// Event registered on CinemachineTarget. Event registered on PlayerMovement
     /// </summary>
     public event Action<SlowMotionEnum> SlowMotionEvent;
 }

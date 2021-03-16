@@ -40,6 +40,11 @@ public class PlayerBlock : MonoBehaviour, IAction
         input.Block -= Block;
     }
 
+    /// <summary>
+    /// Sets block state to true or false.
+    /// </summary>
+    /// <param name="condition">Parameter to check if the player
+    /// pressed block or released block.</param>
     private void Block(YesOrNo condition)
     {
         if (condition == YesOrNo.Yes)
@@ -65,19 +70,6 @@ public class PlayerBlock : MonoBehaviour, IAction
 
     public void ComponentUpdate()
     {
-        if (Performing)
-        {
-            // If the player is pressing any direction
-            // rotates the character instantly to roll in that direction
-            if (movement.Direction != Vector3.zero)
-            {
-                // Finds angle
-                float targetAngle = Mathf.Atan2(movement.Direction.x, movement.Direction.z) *
-                        Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
 
-                // Rotates to that angle
-                transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-            }
-        }
     }
 }

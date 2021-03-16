@@ -60,12 +60,13 @@ public class UIHealthBar : MonoBehaviour
                 Mathf.Lerp(
                     healthBarFill.fillAmount,
                     playerStats.Health / 100,
-                    Time.unscaledDeltaTime * 5f);
+                    Time.unscaledDeltaTime * 2.5f);
 
             yield return null;
         }
 
-        StartCoroutine(UpdateShadowHealthBar());
+        if (healthBarShadow != null)
+            StartCoroutine(UpdateShadowHealthBar());
     }
 
     /// <summary>

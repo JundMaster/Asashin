@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -6,6 +7,11 @@ using UnityEngine;
 /// </summary>
 public class Enemy : MonoBehaviour
 {
+    // TEMP VARIABLE
+    [SerializeField] private GameObject kunai;
+    /////////////////////////////////////////////
+
+
     // Variables
     [SerializeField] private Transform myTarget;
     public Transform MyTarget => myTarget;
@@ -24,6 +30,9 @@ public class Enemy : MonoBehaviour
     {
         foreach (IAction comp in myIComponents)
             componentsToRun.Add(comp);
+
+        // TEMP
+        StartCoroutine(ThrowKunaiTemporary());
     }
 
     private void Update()
@@ -36,5 +45,22 @@ public class Enemy : MonoBehaviour
     {
         foreach (IAction comp in componentsToRun)
             comp.ComponentFixedUpdate();
+    }
+
+
+    // TEMP
+    private IEnumerator ThrowKunaiTemporary()
+    {
+        Player player = FindObjectOfType<Player>();
+        while (player != null)
+        {
+            if (kunai)
+            {
+                GameObject thisKunai = Instantiate(kunai, MyTarget.position + transform.forward, Quaternion.identity);
+                thisKunai.layer = 15;
+                thisKunai.GetComponent<Kunai>().ParentEnemy = this;
+            }
+            yield return new WaitForSeconds(2.5f);
+        }
     }
 }

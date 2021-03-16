@@ -192,10 +192,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb9aa80639ba4e9429528bc6e7819886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  itemType: 0
+  enemyKunai: 0
+  speed: 15
   hitRange: 3
   timeUntilVanish: 5
-  itemType: 0
+  hitParticles: {fileID: 3664975949699414532, guid: 0e1f38f4938bdf244b886fcfd61635b5, type: 3}
+  hittableLayers:
+    serializedVersion: 2
+    m_Bits: 54272
   explosionPosition: {fileID: 20046300}
   explosion: {fileID: 1129694466352766, guid: dd5a0094471d0084b8f409005e07d956, type: 3}
 --- !u!1 &5726274419726256082
