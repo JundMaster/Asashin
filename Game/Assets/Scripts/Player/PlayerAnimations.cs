@@ -45,6 +45,7 @@ public class PlayerAnimations : MonoBehaviour
     private void Update()
     {
         anim.SetFloat("Movement", movement.Direction.magnitude);
+        anim.SetFloat("MovementSpeed", movement.MovementSpeed);
         anim.SetFloat("VerticalVelocity", jump.VerticalVelocity.y);
         anim.SetBool("IsGrounded", jump.IsGrounded());
         anim.SetBool("Block", block.Performing);

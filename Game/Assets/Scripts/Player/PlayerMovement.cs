@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private float vVel;
     private Vector3 moveDirection;
     private float runSpeed;
+    public float MovementSpeed { get; private set; }
 
     // Rotation Variables
     public float TurnSmooth { get; set; }
@@ -51,6 +52,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         TurnSmooth = values.TurnSmooth;
         Walking = false;
         Sprinting = false;
+        MovementSpeed = 0f;
     }
 
     private void OnEnable()
@@ -132,16 +134,22 @@ public class PlayerMovement : MonoBehaviour, IAction
             {
                 controller.Move(
                     moveDirection.normalized * values.WalkingSpeed * Time.fixedUnscaledDeltaTime);
+                MovementSpeed = 
+                    (moveDirection.normalized * values.WalkingSpeed * Time.fixedUnscaledDeltaTime).magnitude;
             }
             else if (Walking == false && Sprinting)
             {
                 controller.Move(
                     moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
+                MovementSpeed = 
+                    (moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime).magnitude;
             }
             else
             {
                 controller.Move(
                     moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
+                MovementSpeed = 
+                    (moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime).magnitude;
             }
         }
     }
