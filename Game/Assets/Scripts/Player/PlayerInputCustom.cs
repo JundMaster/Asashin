@@ -239,7 +239,25 @@ public class PlayerInputCustom : MonoBehaviour
     protected virtual void OnWalk() => Walk?.Invoke();
 
     /// <summary>
-    /// Event registered on PauseSystem.
+    /// Event registered on PlayerMovement.
     /// </summary>
     public event Action Walk;
+
+
+    /// <summary>
+    /// Handles sprint.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleSprint(InputAction.CallbackContext context)
+    {
+        if (context.started) OnSprint(YesOrNo.Yes);
+        if (context.canceled) OnSprint(YesOrNo.No);
+    }
+
+    protected virtual void OnSprint(YesOrNo condition) => Sprint?.Invoke(condition);
+
+    /// <summary>
+    /// Event registered on PauseSystem.
+    /// </summary>
+    public event Action<YesOrNo> Sprint;
 }

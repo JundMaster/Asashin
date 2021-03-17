@@ -6469,8 +6469,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 393034223}
-  m_LocalRotation: {x: 0.012635284, y: -0.00000009950584, z: -0.0000000012573852, w: -0.9999202}
-  m_LocalPosition: {x: -1.4000423, y: 1.2896581, z: -5.981442}
+  m_LocalRotation: {x: 0.08281354, y: 0.00000009917248, z: -0.000000008241132, w: 0.99656504}
+  m_LocalPosition: {x: -1.400046, y: 2.816134, z: -6.613232}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1643325939}
@@ -6766,7 +6766,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 2.508015, z: -8.789721}
+  m_FollowOffset: {x: 0, y: 4.568245, z: -8.970824}
   m_XDamping: 1
   m_YDamping: 0
   m_ZDamping: 0
@@ -7809,7 +7809,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 2.508015, z: -8.789721}
+  m_FollowOffset: {x: 0, y: 4.568245, z: -8.970824}
   m_XDamping: 1
   m_YDamping: 0
   m_ZDamping: 0
@@ -8298,7 +8298,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1059534988}
   m_LocalRotation: {x: -0.19446048, y: 1.4210855e-14, z: -0, w: 0.98091036}
-  m_LocalPosition: {x: 0.000042348584, y: 0.18315983, z: -0.21974048}
+  m_LocalPosition: {x: 0.000045920176, y: -1.0598357, z: 0.8684926}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 863016084}
@@ -8637,7 +8637,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1083266479}
   m_LocalRotation: {x: 0.16261844, y: 0.00000009674608, z: -0.000000015944938, w: 0.98668903}
-  m_LocalPosition: {x: -1.4000423, y: 1.2896581, z: -5.981442}
+  m_LocalPosition: {x: -1.400046, y: 2.816134, z: -6.613232}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1602718947}
@@ -9878,7 +9878,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1575089860}
-  m_LocalRotation: {x: -0.17507245, y: 7.5743856e-12, z: -1.1493029e-12, w: 0.9845556}
+  m_LocalRotation: {x: -0.080348656, y: 7.915446e-12, z: -1.9895197e-12, w: 0.99676687}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10044,7 +10044,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1602718946}
-  m_LocalRotation: {x: -0.17507245, y: 0.0000000063178973, z: -9.594352e-10, w: 0.9845556}
+  m_LocalRotation: {x: -0.080348656, y: 0.0000000061981638, z: -0.0000000015579342, w: 0.99676687}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -15313,7 +15313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 2.508015, z: -8.789721}
+  m_FollowOffset: {x: 0, y: 4.568245, z: -8.970824}
   m_XDamping: 1
   m_YDamping: 0
   m_ZDamping: 0
@@ -18667,7 +18667,19 @@ MonoBehaviour:
     m_ActionId: a0d13d58-fe16-4aba-87ea-6b3052d22ba1
     m_ActionName: Gameplay/Walk[/Keyboard/leftCtrl]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6189250111086780635}
+        m_TargetAssemblyTypeName: PlayerInputCustom, Assembly-CSharp
+        m_MethodName: HandleSprint
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 65e46497-20f2-472c-bc67-f41e9a0d717e
     m_ActionName: Gameplay/Sprint[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0

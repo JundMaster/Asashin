@@ -49,6 +49,7 @@ public class PlayerAnimations : MonoBehaviour
         anim.SetBool("IsGrounded", jump.IsGrounded());
         anim.SetBool("Block", block.Performing);
         anim.SetBool("Walking", movement.Walking);
+        anim.SetBool("Sprinting", movement.Sprinting);
     }
 
     public void TriggerBlockReflect() => anim.SetTrigger("BlockReflect");

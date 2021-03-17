@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerJump jump;
 
     public bool Walking { get; private set; }
+    public bool Sprinting { get; private set; }
     public bool Performing { get; private set; }
 
     // Movement Variables
@@ -49,26 +50,37 @@ public class PlayerMovement : MonoBehaviour, IAction
     {
         TurnSmooth = values.TurnSmooth;
         Walking = false;
+        Sprinting = false;
     }
 
     private void OnEnable()
     {
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
         input.Walk += () => Walking = !Walking;
+        input.Sprint += HandleSprint;
         attack.LightMeleeAttack += () => Walking = false;
+        attack.LightMeleeAttack += () => Sprinting = false;
         attack.StrongMeleeAttack += () => Walking = false;
+        attack.StrongMeleeAttack += () => Sprinting = false;
         roll.Roll += () => Walking = false;
+        roll.Roll += () => Sprinting = false;
         useItem.UsedItemDelay += () => Walking = false;
+        useItem.UsedItemDelay += () => Sprinting = false;
     }
 
     private void OnDisable()
     {
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
         input.Walk -= () => Walking = !Walking;
+        input.Sprint -= HandleSprint;
         attack.LightMeleeAttack -= () => Walking = false;
+        attack.LightMeleeAttack -= () => Sprinting = false;
         attack.StrongMeleeAttack -= () => Walking = false;
+        attack.StrongMeleeAttack -= () => Sprinting = false;
         roll.Roll -= () => Walking = false;
+        roll.Roll -= () => Sprinting = false;
         useItem.UsedItemDelay -= () => Walking = false;
+        useItem.UsedItemDelay -= () => Sprinting = false;
     }
 
     /// <summary>
@@ -97,6 +109,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         if (block.Performing || !jump.IsGrounded())
         {
             Walking = false;
+            Sprinting = false;
         }
     }
 
@@ -115,10 +128,15 @@ public class PlayerMovement : MonoBehaviour, IAction
             roll.Performing == false)
         {
             // Moves controllers towards the moveDirection set on Rotation()
-            if (Walking)
+            if (Walking && Sprinting == false)
             {
                 controller.Move(
                     moveDirection.normalized * values.WalkingSpeed * Time.fixedUnscaledDeltaTime);
+            }
+            else if (Walking == false && Sprinting)
+            {
+                controller.Move(
+                    moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
             }
             else
             {
@@ -126,6 +144,12 @@ public class PlayerMovement : MonoBehaviour, IAction
                     moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
             }
         }
+    }
+
+    private void HandleSprint (YesOrNo condition)
+    {
+        if (condition == YesOrNo.Yes) Sprinting = true;
+        else Sprinting = false;
     }
 
     /// <summary>
