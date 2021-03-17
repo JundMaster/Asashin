@@ -7,7 +7,8 @@ using System;
 public class PlayerUseItem : MonoBehaviour, IAction
 {
     [SerializeField] private Transform kunaiItemPosition;
-    [SerializeField] private Transform leftHandPosition;
+    [SerializeField] private Transform leftHandItemPosition;
+    [SerializeField] private Transform leftHand;
     private GameObject leftHandSpawnedItem;
 
     [Range(0, 3)][SerializeField] private int delayAfterUse;
@@ -151,6 +152,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
 
     /// <summary>
     /// Event registered on ItemUIParent.
+    /// Event registered on PlayerMovement.
     /// </summary>
     public event Action UsedItemDelay;
 
@@ -176,7 +178,10 @@ public class PlayerUseItem : MonoBehaviour, IAction
     /// </summary>
     private void AnimationEventSpawnItemLeftHand()
     {
-        leftHandSpawnedItem = Instantiate(itemControl.CurrentItemObject, leftHandPosition.position, Quaternion.identity);
+        leftHandSpawnedItem = 
+            Instantiate(itemControl.CurrentItemObject, 
+            leftHandItemPosition.position, 
+            leftHand.rotation);
     }
 
     /// <summary>
@@ -214,7 +219,8 @@ public class PlayerUseItem : MonoBehaviour, IAction
     {
         if (leftHandSpawnedItem)
         {
-            leftHandSpawnedItem.transform.position = leftHandPosition.position;
+            leftHandSpawnedItem.transform.position = leftHandItemPosition.position;
+            leftHandSpawnedItem.transform.rotation = leftHand.rotation;
         }
     }
 }

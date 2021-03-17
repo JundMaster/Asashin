@@ -77,7 +77,8 @@ public class PlayerRoll : MonoBehaviour, IAction
     protected virtual void OnRoll() => Roll?.Invoke();
 
     /// <summary>
-    /// Event registered on SlowMotionBehaviour and PlayerAnimations..
+    /// Event registered on SlowMotionBehaviour, PlayerAnimations.
+    /// Event registered on PlayerMovement.
     /// </summary>
     public event Action Roll;
 }

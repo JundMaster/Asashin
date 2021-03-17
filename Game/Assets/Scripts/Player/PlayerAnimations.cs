@@ -48,6 +48,7 @@ public class PlayerAnimations : MonoBehaviour
         anim.SetFloat("VerticalVelocity", jump.VerticalVelocity.y);
         anim.SetBool("IsGrounded", jump.IsGrounded());
         anim.SetBool("Block", block.Performing);
+        anim.SetBool("Walking", movement.Walking);
     }
 
     public void TriggerBlockReflect() => anim.SetTrigger("BlockReflect");

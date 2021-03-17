@@ -225,4 +225,21 @@ public class PlayerInputCustom : MonoBehaviour
     /// Event registered on PauseSystem.
     /// </summary>
     public event Action<YesOrNo> Block;
+
+
+    /// <summary>
+    /// Handles walking.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleWalk(InputAction.CallbackContext context)
+    {
+        if (context.started) OnWalk();
+    }
+
+    protected virtual void OnWalk() => Walk?.Invoke();
+
+    /// <summary>
+    /// Event registered on PauseSystem.
+    /// </summary>
+    public event Action Walk;
 }

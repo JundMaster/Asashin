@@ -3,7 +3,7 @@
 /// <summary>
 /// Class responsible for handling player's stats.
 /// </summary>
-public sealed class PlayerStats : Stats, IPlayerDamage
+public sealed class PlayerStats : Stats, IPlayerDamage, IHealable
 {
     [SerializeField] private PlayerStatsScriptableObj playerStats;
 
@@ -16,4 +16,21 @@ public sealed class PlayerStats : Stats, IPlayerDamage
     // Stats
     public float StrongDamage => commonStats.Damage * 2;
     public float FirebombKunaiDamage => commonStats.RangedDamage * 10;
+
+    /// <summary>
+    /// Heals an amount of damage.
+    /// </summary>
+    /// <param name="health">Heal to receive.</param>
+    public void HealHealth(float health)
+    {
+        if (Health + health > commonStats.MaxHealth)
+        {
+            Health = commonStats.MaxHealth;
+        }
+        else
+        {
+            Health += health;
+        }
+        OnTookDamage();
+    }
 }

@@ -246,11 +246,13 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     /// <summary>
     /// Event registered on PlayerAnimations.
+    /// Event registered on PlayerMovement.
     /// </summary>
     public event Action LightMeleeAttack;
 
     /// <summary>
     /// Event registered on PlayerAnimations.
+    /// Event registered on PlayerMovement.
     /// </summary>
     public event Action StrongMeleeAttack;
 

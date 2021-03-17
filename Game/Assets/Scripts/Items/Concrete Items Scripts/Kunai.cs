@@ -35,6 +35,7 @@ public class Kunai : ItemBehaviour
 
     // Layers to collide with kunai
     [SerializeField] private LayerMask hittableLayers;
+    [SerializeField] private LayerMask enemyLayer;
 
     private void Start()
     {
@@ -54,7 +55,19 @@ public class Kunai : ItemBehaviour
         // the player is facing.
         if (target.CurrentTarget.gameObject.activeSelf && enemyKunai == false)
         {
-            kunaiCurrentTarget = target.CurrentTarget;
+            // Finds enemies around the current target
+            Collider[] currentTargetPosition =
+                Physics.OverlapSphere(target.CurrentTarget.transform.position, 0.5f, enemyLayer);
+
+            // If enemy has an Enemy script
+            for (int i = 0; i < currentTargetPosition.Length; i++)
+            {
+                if (currentTargetPosition[i].gameObject.TryGetComponent<Enemy>(out Enemy en))
+                {
+                    // Sets kunai target to enemy MyTarget
+                    kunaiCurrentTarget = en.MyTarget;
+                }
+            }
         }
         else
         {
@@ -128,17 +141,28 @@ public class Kunai : ItemBehaviour
                 if (enemyKunai)
                 {
                     // If it collides with player layer
-                    if (collisions[0].gameObject.layer == 11 && 
-                        playerBlock.Performing)
+                    // and player is blocking
+                    if (collisions[0].gameObject.layer == 11)
                     {
-                        // If the player is facing the enemy direction
-                        if (Vector3.Angle(
-                            ParentEnemy.transform.position - player.position,
-                            player.forward) < 50f)
+                        if (playerBlock.Performing)
                         {
-                            kunaiCurrentTarget = ParentEnemy.MyTarget;
-                            playerAnim.TriggerBlockReflect();
-                        } 
+                            // If the player is facing the enemy direction
+                            if (Vector3.Angle(
+                                ParentEnemy.transform.position - player.position,
+                                player.forward) < 50f)
+                            {
+                                kunaiCurrentTarget = ParentEnemy.MyTarget;
+                                playerAnim.TriggerBlockReflect();
+                            }
+                            // If the player is blocking but not facing the enemy
+                            else
+                            {
+                                //body.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
+                                body.TakeDamage(5f);
+                                Destroy(gameObject);
+                            }
+                        }
+                        // Else if the player isn't blocking
                         else
                         {
                             //body.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
@@ -146,6 +170,7 @@ public class Kunai : ItemBehaviour
                             Destroy(gameObject);
                         }
                     }
+                    // Else if it's not the player (meaning the kunai was reflected)
                     else
                     {
                         //body.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
@@ -154,7 +179,7 @@ public class Kunai : ItemBehaviour
                     }
                 }
                 // If it's not an enemy kunai, then it means the body it's an
-                // enemy. The enemy will take damage.
+                // enemy. The enemy will take damage from playerStats ranged damage.
                 else
                 {
                     body.TakeDamage(playerStats.RangedDamage);

@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// Interface responsible for player and enemy health stats.
+/// Interface responsible for characters whom can receive damage.
 /// </summary>
 public interface IDamageable
 {

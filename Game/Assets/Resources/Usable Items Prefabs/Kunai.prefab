@@ -47,13 +47,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 1
   enemyKunai: 0
-  speed: 15
-  hitRange: 1
+  speed: 30
+  hitRange: 0.25
   timeUntilVanish: 5
   hitParticles: {fileID: 3664975949699414532, guid: 0e1f38f4938bdf244b886fcfd61635b5, type: 3}
   hittableLayers:
     serializedVersion: 2
     m_Bits: 64512
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!54 &-6646141610341577559
 Rigidbody:
   m_ObjectHideFlags: 0

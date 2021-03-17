@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
 {
     // TEMP VARIABLE
     [SerializeField] private GameObject kunai;
+    [SerializeField] private bool spawnKunais;
     /////////////////////////////////////////////
 
 
@@ -32,7 +33,7 @@ public class Enemy : MonoBehaviour
             componentsToRun.Add(comp);
 
         // TEMP
-        StartCoroutine(ThrowKunaiTemporary());
+        if (spawnKunais) StartCoroutine(ThrowKunaiTemporary());
     }
 
     private void Update()

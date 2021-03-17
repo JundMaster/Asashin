@@ -54,7 +54,7 @@ public class PlayerJump : MonoBehaviour, IAction
         // Gravity
         if (IsGrounded() && verticalVelocity.y < 0)
         {
-            verticalVelocity.y = -0f;
+            verticalVelocity.y = -1f;
         }
 
         verticalVelocity.y += values.Gravity * Time.fixedUnscaledDeltaTime;

@@ -5,6 +5,7 @@ public class PlayerValuesScriptableObj : ScriptableObject
 {
     [Header("Script Values")]
     [Header("Movement")]
+    [SerializeField] private float walkingSpeed;
     [SerializeField] private float speed;
     [Header("Rotation")]
     [SerializeField] private float turnSmooth;
@@ -15,6 +16,7 @@ public class PlayerValuesScriptableObj : ScriptableObject
     [SerializeField] private float gravity;
     [SerializeField] private float isGroundedCheckSize;
 
+    public float WalkingSpeed => walkingSpeed;
     public float Speed => speed;
     public float TurnSmooth => turnSmooth;
     public float TurnSmoothInSlowMotion => turnSmoothInSlowMotion;

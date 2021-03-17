@@ -129,6 +129,22 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Walk"",
+                    ""type"": ""Button"",
+                    ""id"": ""a0d13d58-fe16-4aba-87ea-6b3052d22ba1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""65e46497-20f2-472c-bc67-f41e9a0d717e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -483,6 +499,50 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""action"": ""Block"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a19b08e-9aec-43bf-ad7d-2fbbf5be6fab"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Walk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aa2e4f7c-a712-480a-bcab-d5705494aeb2"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Walk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b95aed07-181d-47af-a377-c73508d3148c"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a2dead6f-944d-46ec-a8a9-92b5c2b6840b"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -543,6 +603,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
         m_Gameplay_ChangeItemBefore = m_Gameplay.FindAction("ChangeItemBefore", throwIfNotFound: true);
         m_Gameplay_PauseGame = m_Gameplay.FindAction("PauseGame", throwIfNotFound: true);
         m_Gameplay_Block = m_Gameplay.FindAction("Block", throwIfNotFound: true);
+        m_Gameplay_Walk = m_Gameplay.FindAction("Walk", throwIfNotFound: true);
+        m_Gameplay_Sprint = m_Gameplay.FindAction("Sprint", throwIfNotFound: true);
         // GamePaused
         m_GamePaused = asset.FindActionMap("GamePaused", throwIfNotFound: true);
         m_GamePaused_UnpauseGame = m_GamePaused.FindAction("UnpauseGame", throwIfNotFound: true);
@@ -609,6 +671,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_ChangeItemBefore;
     private readonly InputAction m_Gameplay_PauseGame;
     private readonly InputAction m_Gameplay_Block;
+    private readonly InputAction m_Gameplay_Walk;
+    private readonly InputAction m_Gameplay_Sprint;
     public struct GameplayActions
     {
         private @InputAsset m_Wrapper;
@@ -627,6 +691,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
         public InputAction @ChangeItemBefore => m_Wrapper.m_Gameplay_ChangeItemBefore;
         public InputAction @PauseGame => m_Wrapper.m_Gameplay_PauseGame;
         public InputAction @Block => m_Wrapper.m_Gameplay_Block;
+        public InputAction @Walk => m_Wrapper.m_Gameplay_Walk;
+        public InputAction @Sprint => m_Wrapper.m_Gameplay_Sprint;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -678,6 +744,12 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @Block.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
                 @Block.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
                 @Block.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
+                @Walk.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWalk;
+                @Walk.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWalk;
+                @Walk.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWalk;
+                @Sprint.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
+                @Sprint.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
+                @Sprint.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -724,6 +796,12 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @Block.started += instance.OnBlock;
                 @Block.performed += instance.OnBlock;
                 @Block.canceled += instance.OnBlock;
+                @Walk.started += instance.OnWalk;
+                @Walk.performed += instance.OnWalk;
+                @Walk.canceled += instance.OnWalk;
+                @Sprint.started += instance.OnSprint;
+                @Sprint.performed += instance.OnSprint;
+                @Sprint.canceled += instance.OnSprint;
             }
         }
     }
@@ -777,6 +855,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
         void OnChangeItemBefore(InputAction.CallbackContext context);
         void OnPauseGame(InputAction.CallbackContext context);
         void OnBlock(InputAction.CallbackContext context);
+        void OnWalk(InputAction.CallbackContext context);
+        void OnSprint(InputAction.CallbackContext context);
     }
     public interface IGamePausedActions
     {

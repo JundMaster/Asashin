@@ -15,7 +15,9 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerUseItem useItem;
     private PlayerRoll roll;
     private PlayerBlock block;
+    private PlayerJump jump;
 
+    public bool Walking { get; private set; }
     public bool Performing { get; private set; }
 
     // Movement Variables
@@ -40,21 +42,33 @@ public class PlayerMovement : MonoBehaviour, IAction
         roll = GetComponent<PlayerRoll>();
         useItem = GetComponent<PlayerUseItem>();
         block = GetComponent<PlayerBlock>();
+        jump = GetComponent<PlayerJump>();
     }
 
     private void Start()
     {
         TurnSmooth = values.TurnSmooth;
+        Walking = false;
     }
 
     private void OnEnable()
     {
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
+        input.Walk += () => Walking = !Walking;
+        attack.LightMeleeAttack += () => Walking = false;
+        attack.StrongMeleeAttack += () => Walking = false;
+        roll.Roll += () => Walking = false;
+        useItem.UsedItemDelay += () => Walking = false;
     }
 
     private void OnDisable()
     {
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
+        input.Walk -= () => Walking = !Walking;
+        attack.LightMeleeAttack -= () => Walking = false;
+        attack.StrongMeleeAttack -= () => Walking = false;
+        roll.Roll -= () => Walking = false;
+        useItem.UsedItemDelay -= () => Walking = false;
     }
 
     /// <summary>
@@ -71,34 +85,18 @@ public class PlayerMovement : MonoBehaviour, IAction
 
     public void ComponentUpdate()
     {
-        // Updates movement direction variable
-        if ( attack.Performing == false &&
-            slowMotion.Performing == false && useItem.Performing == false )
-        {
-            /*
-            Direction = new Vector3(
-                Mathf.SmoothDamp(
-                    Direction.x,
-                    input.Movement.x,
-                    ref hVel,
-                    values.SmoothTimeVelocity),
-                0f,
-                Mathf.SmoothDamp(
-                    Direction.z,
-                    input.Movement.y,
-                    ref vVel,
-                    values.SmoothTimeVelocity));
-            */
-            Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
-        }
-        else if (attack.Performing == false &&
-            slowMotion.Performing && useItem.Performing == false )
+        if (attack.Performing == false && useItem.Performing == false )
         {
             Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
         }
         else
         {
             Direction = Vector3.zero;
+        }
+
+        if (block.Performing || !jump.IsGrounded())
+        {
+            Walking = false;
         }
     }
 
@@ -117,8 +115,16 @@ public class PlayerMovement : MonoBehaviour, IAction
             roll.Performing == false)
         {
             // Moves controllers towards the moveDirection set on Rotation()
-            controller.Move(
-                moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
+            if (Walking)
+            {
+                controller.Move(
+                    moveDirection.normalized * values.WalkingSpeed * Time.fixedUnscaledDeltaTime);
+            }
+            else
+            {
+                controller.Move(
+                    moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
+            }
         }
     }
 

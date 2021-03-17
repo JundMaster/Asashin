@@ -12,7 +12,7 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
     // Death Behavior
     [SerializeField] private DeathBehaviour deathBehaviour;
 
-    public float Health { get; private set; }
+    public float Health { get; protected set; }
 
     public float LightDamage => commonStats.Damage;
 
@@ -41,23 +41,6 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
                 Health = 0;
                 deathBehaviour.Die();
             }
-        }
-        OnTookDamage();
-    }
-
-    /// <summary>
-    /// Heals an amount of damage.
-    /// </summary>
-    /// <param name="health">Heal to receive.</param>
-    public void HealHealth(float health)
-    {
-        if (Health + health > commonStats.MaxHealth)
-        {
-            Health = commonStats.MaxHealth;
-        }
-        else
-        {
-            Health += health;
         }
         OnTookDamage();
     }

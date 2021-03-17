@@ -6469,8 +6469,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 393034223}
-  m_LocalRotation: {x: 0.16278502, y: 0.000000098185346, z: -0.000000016199174, w: 0.98666155}
-  m_LocalPosition: {x: -1.4, y: 4.888074, z: -6.676265}
+  m_LocalRotation: {x: 0.012635284, y: -0.00000009950584, z: -0.0000000012573852, w: -0.9999202}
+  m_LocalPosition: {x: -1.4000423, y: 1.2896581, z: -5.981442}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1643325939}
@@ -6766,7 +6766,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 4.895142, z: -8.929232}
+  m_FollowOffset: {x: 0, y: 2.508015, z: -8.789721}
   m_XDamping: 1
   m_YDamping: 0
   m_ZDamping: 0
@@ -7271,6 +7271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kunai: {fileID: 0}
+  spawnKunais: 0
   myTarget: {fileID: 1348866770}
 --- !u!114 &746817398
 MonoBehaviour:
@@ -7808,7 +7809,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 4.895142, z: -8.929232}
+  m_FollowOffset: {x: 0, y: 2.508015, z: -8.789721}
   m_XDamping: 1
   m_YDamping: 0
   m_ZDamping: 0
@@ -8297,7 +8298,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1059534988}
   m_LocalRotation: {x: -0.19446048, y: 1.4210855e-14, z: -0, w: 0.98091036}
-  m_LocalPosition: {x: -0.000000106970326, y: -3.0019612, z: 1.593092}
+  m_LocalPosition: {x: 0.000042348584, y: 0.18315983, z: -0.21974048}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 863016084}
@@ -8636,7 +8637,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1083266479}
   m_LocalRotation: {x: 0.16261844, y: 0.00000009674608, z: -0.000000015944938, w: 0.98668903}
-  m_LocalPosition: {x: -1.4, y: 4.888074, z: -6.676265}
+  m_LocalPosition: {x: -1.4000423, y: 1.2896581, z: -5.981442}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1602718947}
@@ -9591,6 +9592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kunai: {fileID: 3197458656493009497, guid: 3c8490dfaa7fa6446bdfa8f8aab37dad, type: 3}
+  spawnKunais: 0
   myTarget: {fileID: 670680353}
 --- !u!136 &1510901228
 CapsuleCollider:
@@ -9876,7 +9878,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1575089860}
-  m_LocalRotation: {x: 0.00016883016, y: 6.302514e-12, z: -2.1369573e-12, w: 1}
+  m_LocalRotation: {x: -0.17507245, y: 7.5743856e-12, z: -1.1493029e-12, w: 0.9845556}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10042,7 +10044,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1602718946}
-  m_LocalRotation: {x: 0.00016883016, y: 0.0000000060506977, z: -0.0000000020512854, w: 1}
+  m_LocalRotation: {x: -0.17507245, y: 0.0000000063178973, z: -9.594352e-10, w: 0.9845556}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -15174,6 +15176,36 @@ Transform:
   m_Father: {fileID: 6822797869669399139}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1791073736
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1791073737}
+  m_Layer: 11
+  m_Name: LeftHandItemPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1791073737
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791073736}
+  m_LocalRotation: {x: -0.00000007450581, y: 7.738312e-13, z: 0.0000000149011425, w: 1}
+  m_LocalPosition: {x: -0.003, y: -0.041, z: -0.075}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5427401350907336292}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1794439116
 GameObject:
   m_ObjectHideFlags: 0
@@ -15281,7 +15313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 5
-  m_FollowOffset: {x: 0, y: 4.895142, z: -8.929232}
+  m_FollowOffset: {x: 0, y: 2.508015, z: -8.789721}
   m_XDamping: 1
   m_YDamping: 0
   m_ZDamping: 0
@@ -16668,6 +16700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kunai: {fileID: 0}
+  spawnKunais: 0
   myTarget: {fileID: 1514749477}
 --- !u!136 &2097050983
 CapsuleCollider:
@@ -17764,7 +17797,7 @@ Transform:
   m_Children:
   - {fileID: 4556191166088643507}
   m_Father: {fileID: 5427401350907336292}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3824499377473466882
 GameObject:
@@ -18223,6 +18256,7 @@ Transform:
   m_LocalPosition: {x: -0.12266614, y: -0.0023166884, z: 0.028220579}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1791073737}
   - {fileID: 3693038643569930688}
   m_Father: {fileID: 223402248392165451}
   m_RootOrder: 0
@@ -18616,6 +18650,26 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 2fb1ce9f-efc9-411a-878f-0c430e905b49
     m_ActionName: Gameplay/Block[/Mouse/middleButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6189250111086780635}
+        m_TargetAssemblyTypeName: PlayerInputCustom, Assembly-CSharp
+        m_MethodName: HandleWalk
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a0d13d58-fe16-4aba-87ea-6b3052d22ba1
+    m_ActionName: Gameplay/Walk[/Keyboard/leftCtrl]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 65e46497-20f2-472c-bc67-f41e9a0d717e
+    m_ActionName: Gameplay/Sprint[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
@@ -18776,7 +18830,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kunaiItemPosition: {fileID: 1771556327}
-  leftHandPosition: {fileID: 223402248392165451}
+  leftHandItemPosition: {fileID: 1791073737}
+  leftHand: {fileID: 223402248392165451}
   delayAfterUse: 3
 --- !u!114 &6189250111086780647
 MonoBehaviour:
