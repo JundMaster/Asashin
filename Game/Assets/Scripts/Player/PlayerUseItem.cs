@@ -7,7 +7,9 @@ using System;
 public class PlayerUseItem : MonoBehaviour, IAction
 {
     [SerializeField] private Transform kunaiItemPosition;
-    public Transform KunaiItemPosition => kunaiItemPosition;
+    [SerializeField] private Transform leftHandPosition;
+    private GameObject leftHandSpawnedItem;
+
     [Range(0, 3)][SerializeField] private int delayAfterUse;
     public int Delay => delayAfterUse;
 
@@ -89,8 +91,6 @@ public class PlayerUseItem : MonoBehaviour, IAction
 
     /// <summary>
     /// Uses the item and starts it's delay.
-    /// Class PlayerItemAnimationEvents complements this class, controlling what
-    /// happens after the current animation is set in motion.
     /// THis method also rotates the player towards a target or towards the
     /// direction the player is moving.
     /// </summary>
@@ -127,7 +127,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                     if (stats.HealthFlasks > 0)
                     {
                         RotationBeforeItemUse();
-                        playerAnims.TriggerKunaiAnimation();
+                        playerAnims.TriggerHealthFlaskAnimation();
                         TimeItemWasUsed = Time.time;
                         canUseItemDelayOver = false;
                         OnUsedItemDelay();
@@ -137,7 +137,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                     if (stats.SmokeGrenades > 0)
                     {
                         RotationBeforeItemUse();
-                        playerAnims.TriggerKunaiAnimation();
+                        playerAnims.TriggerSmokeGrenadeAnimation();
                         TimeItemWasUsed = Time.time;
                         canUseItemDelayOver = false;
                         OnUsedItemDelay();
@@ -164,6 +164,38 @@ public class PlayerUseItem : MonoBehaviour, IAction
     }
 
     /// <summary>
+    /// Called on animation event.
+    /// </summary>
+    private void AnimationEventThrowKunai()
+    {
+        Instantiate(itemControl.CurrentItemObject, kunaiItemPosition.position, Quaternion.identity);
+    }
+
+    /// <summary>
+    /// Called on animation event.
+    /// </summary>
+    private void AnimationEventSpawnItemLeftHand()
+    {
+        leftHandSpawnedItem = Instantiate(itemControl.CurrentItemObject, leftHandPosition.position, Quaternion.identity);
+    }
+
+    /// <summary>
+    /// Called on animation event.
+    /// </summary>
+    private void AnimationEventExecuteItemLeftHand()
+    {
+        leftHandSpawnedItem.GetComponent<IUsableItem>().Execute();
+    }
+
+    /// <summary>
+    /// Called on animation event.
+    /// </summary>
+    private void AnimationEventDestroyItemLeftHand()
+    {
+        Destroy(leftHandSpawnedItem);
+    }
+
+    /// <summary>
     /// Called on item use animation events.
     /// </summary>
     private void PerformingItemUseToFalse()
@@ -180,6 +212,9 @@ public class PlayerUseItem : MonoBehaviour, IAction
 
     public void ComponentFixedUpdate()
     {
-        //
+        if (leftHandSpawnedItem)
+        {
+            leftHandSpawnedItem.transform.position = leftHandPosition.position;
+        }
     }
 }

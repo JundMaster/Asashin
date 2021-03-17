@@ -11,8 +11,8 @@ public class ItemControl : MonoBehaviour
     private PlayerInputCustom input;
 
     // Items control
-    private IList<IUsableItems> allItemsInventory;
-    public IUsableItems CurrentItem { get; private set; }
+    private IList<IUsableItem> allItemsInventory;
+    public IUsableItem CurrentItem { get; private set; }
     public GameObject CurrentItemObject { get; private set; }
     private int index;
 
@@ -29,7 +29,7 @@ public class ItemControl : MonoBehaviour
 
     private void Start()
     {
-        allItemsInventory = new List<IUsableItems>()
+        allItemsInventory = new List<IUsableItem>()
         {
             kunai,
             firebombKunai,

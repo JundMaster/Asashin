@@ -10,7 +10,7 @@ public sealed class PlayerStats : Stats, IPlayerDamage
     // Items
     public byte Kunais { get => playerStats.Kunais; set => playerStats.Kunais = value; }
     public byte FirebombKunais { get => playerStats.FirebombKunais; set => playerStats.FirebombKunais = value; }
-    public byte HealthFlasks { get => playerStats.HealthFlasks; set => playerStats.FirebombKunais = value; }
+    public byte HealthFlasks { get => playerStats.HealthFlasks; set => playerStats.HealthFlasks = value; }
     public byte SmokeGrenades { get => playerStats.SmokeGrenades; set => playerStats.SmokeGrenades = value; }
 
     // Stats

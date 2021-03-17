@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Class responsible for handling health flask behaviour.
@@ -12,7 +10,8 @@ public class HealthFlask : ItemBehaviour
     /// </summary>
     public override void Execute()
     {
-        playerStats.TakeDamage(-50f);
+        playerStats.HealHealth(50f);
+        playerStats.HealthFlasks--;
         base.Execute();
     }
 }

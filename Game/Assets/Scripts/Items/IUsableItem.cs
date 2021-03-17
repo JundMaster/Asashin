@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// Interface that extends IItem. Used for usable items.
 /// </summary>
-public interface IUsableItems : IItem
+public interface IUsableItem : IItem
 {
     /// <summary>
     /// Which type of item is this.

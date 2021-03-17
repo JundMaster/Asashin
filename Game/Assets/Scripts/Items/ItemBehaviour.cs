@@ -2,9 +2,8 @@
 
 /// <summary>
 /// Abstract class responsbile for handling item behaviours.
-/// Uses sanbox pattern.
 /// </summary>
-public abstract class ItemBehaviour : MonoBehaviour, IUsableItems
+public abstract class ItemBehaviour : MonoBehaviour, IUsableItem
 {
     // Components
     protected PlayerStats playerStats;

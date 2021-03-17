@@ -29,6 +29,7 @@ public class PlayerAnimations : MonoBehaviour
         roll.Roll += TriggerRollAnimation;
         attack.LightMeleeAttack += TriggerLightMeleeAttack;
         attack.StrongMeleeAttack += TriggerStrongMeleeAttack;
+        attack.AirAttack += TriggerAirAttack;
         pauseSystem.GamePaused += PauseSystemAnimator;
     }
 
@@ -37,6 +38,7 @@ public class PlayerAnimations : MonoBehaviour
         roll.Roll -= TriggerRollAnimation;
         attack.LightMeleeAttack -= TriggerLightMeleeAttack;
         attack.StrongMeleeAttack -= TriggerStrongMeleeAttack;
+        attack.AirAttack -= TriggerAirAttack;
         pauseSystem.GamePaused -= PauseSystemAnimator;
     }
 
@@ -52,6 +54,8 @@ public class PlayerAnimations : MonoBehaviour
 
     private void TriggerRollAnimation() => anim.SetTrigger("Rolling");
 
+    private void TriggerAirAttack() => anim.SetTrigger("AirAttack");
+
     private void TriggerLightMeleeAttack()
     {
         anim.SetTrigger("MeleeLightAttack");
@@ -64,12 +68,28 @@ public class PlayerAnimations : MonoBehaviour
         anim.ResetTrigger("MeleeLightAttack");
     }
 
+    /// <summary>
+    /// The action of this item is called on PlayerAnimationEvents class.
+    /// Its behaviour is called with animation events with a method on that class.
+    /// </summary>
     public void TriggerKunaiAnimation() => anim.SetTrigger("ThrowKunai");
 
+    /// <summary>
+    /// The action of this item is called on PlayerAnimationEvents class.
+    /// Its behaviour is called with animation events with a method on that class.
+    /// </summary>
     public void TriggerFirebombKunaiAnimation() => anim.SetTrigger("ThrowFirebombKunai");
 
+    /// <summary>
+    /// The action of this item is called on PlayerAnimationEvents class.
+    /// Its behaviour is called with animation events with a method on that class.
+    /// </summary>
     public void TriggerHealthFlaskAnimation() => anim.SetTrigger("UseHealthFlask");
 
+    /// <summary>
+    /// The action of this item is called on PlayerAnimationEvents class.
+    /// Its behaviour is called with animation events with a method on that class.
+    /// </summary>
     public void TriggerSmokeGrenadeAnimation() => anim.SetTrigger("UseSmokeGrenade");
 
     /// <summary>
