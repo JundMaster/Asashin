@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 /// <summary>
 /// Class responsible for playing player's animations, uses a kind of sandbox pattern.
@@ -59,13 +60,28 @@ public class PlayerAnimations : MonoBehaviour
     }
 
     /// <summary>
-    /// This methid is called with an animation event.
+    /// This method is called with an animation event.
     /// The method is triggered on the final of the animation.
     /// </summary>
     private void AnimationEventDeathBehaviour()
     {
-
+        OnPlayerDiedEndOfAnimation();
+        OnPlayerDiedEndOfAnimation(PauseSystemEnum.Paused);
     }
+
+    protected virtual void OnPlayerDiedEndOfAnimation() => PlayerDiedEndOfAnimationUIRespawn?.Invoke();
+    protected virtual void OnPlayerDiedEndOfAnimation(PauseSystemEnum condition) =>
+        PlayerDiedEndOfAnimationPauseSystem?.Invoke(condition);
+
+    /// <summary>
+    /// Event registered on UIRespawn.
+    /// </summary>
+    public event Action PlayerDiedEndOfAnimationUIRespawn;
+
+    /// <summary>
+    /// Event registered on PauseSystem.
+    /// </summary>
+    public event Action<PauseSystemEnum> PlayerDiedEndOfAnimationPauseSystem;
 
     private void TriggerDeath() => anim.SetTrigger("Death");
 
