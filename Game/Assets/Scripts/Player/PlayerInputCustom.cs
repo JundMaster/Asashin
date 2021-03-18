@@ -24,8 +24,19 @@ public class PlayerInputCustom : MonoBehaviour
     public void HandleMovement(InputAction.CallbackContext context)
     {
         if (context.performed) Movement = context.ReadValue<Vector2>();
-        if (context.canceled) Movement = new Vector2Int(0, 0);
+        if (context.canceled)
+        {
+            Movement = new Vector2Int(0, 0);
+            OnStopMoving();
+        }
     }
+
+    protected virtual void OnStopMoving() => StopMoving?.Invoke();
+
+    /// <summary>
+    /// Event registered on PlayerMovement.
+    /// </summary>
+    public event Action StopMoving;
 
     /// <summary>
     /// Handles Jump.

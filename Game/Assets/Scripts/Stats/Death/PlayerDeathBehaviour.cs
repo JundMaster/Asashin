@@ -6,33 +6,28 @@ using System;
 /// </summary>
 public class PlayerDeathBehaviour : DeathBehaviour
 {
-    public bool IsAlive { get; private set; }
+    private bool isAlive;
 
     private void Start()
     {
-        IsAlive = true;
-        OnPlayerSpawn();
+        isAlive = true;
     }
 
     public override void Die()
     {
-        if (IsAlive)
+        // Only happens once after the player reached 0 health.
+        if (isAlive)
         {
             Debug.Log("Player died");
             OnPlayerDied();
-            IsAlive = false;
+            isAlive = false;
         }
     }
 
     protected virtual void OnPlayerDied() => PlayerDied?.Invoke();
-    protected virtual void OnPlayerSpawn() => PlayerSpawn?.Invoke();
 
     /// <summary>
-    /// Event registered on                  .
+    /// Event registered on PlayerAnimations.
     /// </summary>
     public event Action PlayerDied;
-    /// <summary>
-    /// Event registered on                     .
-    /// </summary>
-    public event Action PlayerSpawn;
 }

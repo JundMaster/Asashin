@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour, IAction
 
     private void OnEnable()
     {
+        input.StopMoving += HandleStopMovement;
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
         input.Walk += () => Walking = !Walking;
         input.Sprint += HandleSprint;
@@ -72,6 +73,7 @@ public class PlayerMovement : MonoBehaviour, IAction
 
     private void OnDisable()
     {
+        input.StopMoving -= HandleStopMovement;
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
         input.Walk -= () => Walking = !Walking;
         input.Sprint -= HandleSprint;
@@ -83,6 +85,12 @@ public class PlayerMovement : MonoBehaviour, IAction
         roll.Roll -= () => Sprinting = false;
         useItem.UsedItemDelay -= () => Walking = false;
         useItem.UsedItemDelay -= () => Sprinting = false;
+    }
+
+    public void ComponentFixedUpdate()
+    {
+        Movement();
+        Rotation();
     }
 
     /// <summary>
@@ -115,10 +123,12 @@ public class PlayerMovement : MonoBehaviour, IAction
         }
     }
 
-    public void ComponentFixedUpdate()
+    /// <summary>
+    /// Stops movement speed float.
+    /// </summary>
+    private void HandleStopMovement()
     {
-        Movement();
-        Rotation();
+        MovementSpeed = 0f;
     }
 
     /// <summary>
@@ -134,22 +144,22 @@ public class PlayerMovement : MonoBehaviour, IAction
             {
                 controller.Move(
                     moveDirection.normalized * values.WalkingSpeed * Time.fixedUnscaledDeltaTime);
-                MovementSpeed = 
-                    (moveDirection.normalized * values.WalkingSpeed * Time.fixedUnscaledDeltaTime).magnitude;
+
+                MovementSpeed = values.WalkingSpeed;
             }
             else if (Walking == false && Sprinting)
             {
                 controller.Move(
                     moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
-                MovementSpeed = 
-                    (moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime).magnitude;
+
+                MovementSpeed = values.SprintSpeed;
             }
             else
             {
                 controller.Move(
                     moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
-                MovementSpeed = 
-                    (moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime).magnitude;
+
+                MovementSpeed = values.Speed;
             }
         }
     }
