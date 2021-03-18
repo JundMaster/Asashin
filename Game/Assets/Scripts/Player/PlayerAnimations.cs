@@ -56,7 +56,6 @@ public class PlayerAnimations : MonoBehaviour
         anim.SetBool("IsGrounded", jump.IsGrounded());
         anim.SetBool("Block", block.Performing);
         anim.SetBool("Walking", movement.Walking);
-        anim.SetBool("Sprinting", movement.Sprinting);
     }
 
     /// <summary>
@@ -69,17 +68,20 @@ public class PlayerAnimations : MonoBehaviour
         OnPlayerDiedEndOfAnimation(PauseSystemEnum.Paused);
     }
 
-    protected virtual void OnPlayerDiedEndOfAnimation() => PlayerDiedEndOfAnimationUIRespawn?.Invoke();
+    protected virtual void OnPlayerDiedEndOfAnimation() => 
+        PlayerDiedEndOfAnimationUIRespawn?.Invoke();
     protected virtual void OnPlayerDiedEndOfAnimation(PauseSystemEnum condition) =>
         PlayerDiedEndOfAnimationPauseSystem?.Invoke(condition);
 
     /// <summary>
     /// Event registered on UIRespawn.
+    /// Calls respawn screen UI.
     /// </summary>
     public event Action PlayerDiedEndOfAnimationUIRespawn;
 
     /// <summary>
     /// Event registered on PauseSystem.
+    /// Pauses game.
     /// </summary>
     public event Action<PauseSystemEnum> PlayerDiedEndOfAnimationPauseSystem;
 

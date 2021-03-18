@@ -13,6 +13,10 @@ public class PlayerDeathBehaviour : DeathBehaviour
         isAlive = true;
     }
 
+    /// <summary>
+    /// This method happens when the player's health reaches 0.
+    /// Triggers an event.
+    /// </summary>
     public override void Die()
     {
         // Only happens once after the player reached 0 health.
@@ -27,7 +31,7 @@ public class PlayerDeathBehaviour : DeathBehaviour
     protected virtual void OnPlayerDied() => PlayerDied?.Invoke();
 
     /// <summary>
-    /// Event registered on PlayerAnimations.
+    /// Event registered on PlayerAnimations and PlayerInputCustom.
     /// </summary>
     public event Action PlayerDied;
 }

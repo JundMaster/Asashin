@@ -62,13 +62,13 @@ public class PlayerMovement : MonoBehaviour, IAction
         input.Walk += () => Walking = !Walking;
         input.Sprint += HandleSprint;
         attack.LightMeleeAttack += () => Walking = false;
-        attack.LightMeleeAttack += () => Sprinting = false;
+
         attack.StrongMeleeAttack += () => Walking = false;
-        attack.StrongMeleeAttack += () => Sprinting = false;
+
         roll.Roll += () => Walking = false;
-        roll.Roll += () => Sprinting = false;
+
         useItem.UsedItemDelay += () => Walking = false;
-        useItem.UsedItemDelay += () => Sprinting = false;
+
     }
 
     private void OnDisable()
@@ -78,13 +78,10 @@ public class PlayerMovement : MonoBehaviour, IAction
         input.Walk -= () => Walking = !Walking;
         input.Sprint -= HandleSprint;
         attack.LightMeleeAttack -= () => Walking = false;
-        attack.LightMeleeAttack -= () => Sprinting = false;
         attack.StrongMeleeAttack -= () => Walking = false;
-        attack.StrongMeleeAttack -= () => Sprinting = false;
         roll.Roll -= () => Walking = false;
-        roll.Roll -= () => Sprinting = false;
         useItem.UsedItemDelay -= () => Walking = false;
-        useItem.UsedItemDelay -= () => Sprinting = false;
+
     }
 
     public void ComponentFixedUpdate()
@@ -119,7 +116,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         if (block.Performing || !jump.IsGrounded())
         {
             Walking = false;
-            Sprinting = false;
+
         }
     }
 

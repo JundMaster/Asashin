@@ -583,6 +583,12 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Death"",
+            ""id"": ""5e2e2024-f4c1-41a3-a9e8-9d0a276fa4c8"",
+            ""actions"": [],
+            ""bindings"": []
         }
     ],
     ""controlSchemes"": []
@@ -608,6 +614,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
         // GamePaused
         m_GamePaused = asset.FindActionMap("GamePaused", throwIfNotFound: true);
         m_GamePaused_UnpauseGame = m_GamePaused.FindAction("UnpauseGame", throwIfNotFound: true);
+        // Death
+        m_Death = asset.FindActionMap("Death", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -839,6 +847,31 @@ public class @InputAsset : IInputActionCollection, IDisposable
         }
     }
     public GamePausedActions @GamePaused => new GamePausedActions(this);
+
+    // Death
+    private readonly InputActionMap m_Death;
+    private IDeathActions m_DeathActionsCallbackInterface;
+    public struct DeathActions
+    {
+        private @InputAsset m_Wrapper;
+        public DeathActions(@InputAsset wrapper) { m_Wrapper = wrapper; }
+        public InputActionMap Get() { return m_Wrapper.m_Death; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DeathActions set) { return set.Get(); }
+        public void SetCallbacks(IDeathActions instance)
+        {
+            if (m_Wrapper.m_DeathActionsCallbackInterface != null)
+            {
+            }
+            m_Wrapper.m_DeathActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+            }
+        }
+    }
+    public DeathActions @Death => new DeathActions(this);
     public interface IGameplayActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -861,5 +894,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
     public interface IGamePausedActions
     {
         void OnUnpauseGame(InputAction.CallbackContext context);
+    }
+    public interface IDeathActions
+    {
     }
 }

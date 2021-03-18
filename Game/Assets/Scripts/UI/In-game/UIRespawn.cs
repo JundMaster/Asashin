@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class UIRespawn : MonoBehaviour
 {
@@ -35,8 +36,18 @@ public class UIRespawn : MonoBehaviour
 
     public void RespawnButton()
     {
-
+        SceneControl sceneControl = FindObjectOfType<SceneControl>();
+        sceneControl.LoadScene(sceneControl.SceneToLoad());
+        OnRespawnButtonPressed();
     }
+
+    protected virtual void OnRespawnButtonPressed() =>
+        RespawnButtonPressed?.Invoke();
+
+    /// <summary>
+    /// Event registered on PlayerInputCustom.
+    /// </summary>
+    public event Action RespawnButtonPressed;
 
     public void QuitButton()
     {

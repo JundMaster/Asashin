@@ -9,12 +9,38 @@ public class PlayerInputCustom : MonoBehaviour
 {
     [SerializeField] private PlayerInput controls;
 
+    // Components
+    private PlayerDeathBehaviour deathBehaviour;
+    private UIRespawn uiRespawn;
+
     public Vector2 Movement { get; private set; }
+
+    private void Awake()
+    {
+        deathBehaviour = FindObjectOfType<PlayerDeathBehaviour>();
+        uiRespawn = FindObjectOfType<UIRespawn>();
+    }
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
+    }
+
+    private void OnEnable()
+    {
+        deathBehaviour.PlayerDied += () => 
+            controls.SwitchCurrentActionMap("Death");
+        uiRespawn.RespawnButtonPressed += () =>
+            controls.SwitchCurrentActionMap("Gameplay");
+    }
+
+    private void OnDisable()
+    {
+        deathBehaviour.PlayerDied -= () => 
+            controls.SwitchCurrentActionMap("Death");
+        uiRespawn.RespawnButtonPressed -= () =>
+            controls.SwitchCurrentActionMap("Gameplay");
     }
 
     /// <summary>
