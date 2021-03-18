@@ -11,14 +11,12 @@ public class PlayerInputCustom : MonoBehaviour
 
     // Components
     private PlayerDeathBehaviour deathBehaviour;
-    private UIRespawn uiRespawn;
 
     public Vector2 Movement { get; private set; }
 
     private void Awake()
     {
         deathBehaviour = FindObjectOfType<PlayerDeathBehaviour>();
-        uiRespawn = FindObjectOfType<UIRespawn>();
     }
 
     private void Start()
@@ -31,16 +29,12 @@ public class PlayerInputCustom : MonoBehaviour
     {
         deathBehaviour.PlayerDied += () => 
             controls.SwitchCurrentActionMap("Death");
-        uiRespawn.RespawnButtonPressed += () =>
-            controls.SwitchCurrentActionMap("Gameplay");
     }
 
     private void OnDisable()
     {
         deathBehaviour.PlayerDied -= () => 
             controls.SwitchCurrentActionMap("Death");
-        uiRespawn.RespawnButtonPressed -= () =>
-            controls.SwitchCurrentActionMap("Gameplay");
     }
 
     /// <summary>

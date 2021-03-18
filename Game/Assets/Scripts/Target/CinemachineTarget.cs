@@ -4,7 +4,7 @@ using Cinemachine;
 using System.Linq;
 using System.Collections;
 
-public class CinemachineTarget : MonoBehaviour
+public class CinemachineTarget : MonoBehaviour, IFindPlayer
 {
     // Components
     private Player player;
@@ -63,8 +63,11 @@ public class CinemachineTarget : MonoBehaviour
 
     private void OnEnable()
     {
-        input.TargetSet += HandleTarget;
-        input.TargetChange += SwitchTarget;
+        if (input != null)
+        {
+            input.TargetSet += HandleTarget;
+            input.TargetChange += SwitchTarget;
+        }
         pauseSystem.GamePaused += SwitchBeetweenPauseCamera;
         slowMotion.SlowMotionEvent += SlowMotionCamera;
     }
@@ -421,14 +424,17 @@ public class CinemachineTarget : MonoBehaviour
     /// </summary>
     private void SetAllCamerasTargets()
     {
-        thirdPersonCamera.Follow = player.transform;
-        Transform playerSpineTransform =
-            GameObject.FindGameObjectWithTag("playerSpine").transform;
-        thirdPersonCamera.LookAt = playerSpineTransform;
-        pauseMenuCamera.Follow = playerSpineTransform;
-        pauseMenuCamera.LookAt = playerSpineTransform;
-        slowMotionThirdPersonCamera.Follow = player.transform;
-        slowMotionThirdPersonCamera.LookAt = playerSpineTransform;
+        if (player != null)
+        {
+            thirdPersonCamera.Follow = player.transform;
+            Transform playerSpineTransform =
+                GameObject.FindGameObjectWithTag("playerSpine").transform;
+            thirdPersonCamera.LookAt = playerSpineTransform;
+            pauseMenuCamera.Follow = playerSpineTransform;
+            pauseMenuCamera.LookAt = playerSpineTransform;
+            slowMotionThirdPersonCamera.Follow = player.transform;
+            slowMotionThirdPersonCamera.LookAt = playerSpineTransform;
+        }
     }
 
     /// <summary>
@@ -475,5 +481,20 @@ public class CinemachineTarget : MonoBehaviour
                 Gizmos.DrawWireSphere(player.transform.position, findTargetSize);
             }
         }
+    }
+
+    public void FindPlayer()
+    {
+        player = FindObjectOfType<Player>();
+        input = FindObjectOfType<PlayerInputCustom>();
+        input.TargetSet += HandleTarget;
+        input.TargetChange += SwitchTarget;
+        SetAllCamerasTargets();
+    }
+
+    public void PlayerLost()
+    {
+        input.TargetSet -= HandleTarget;
+        input.TargetChange -= SwitchTarget;
     }
 }

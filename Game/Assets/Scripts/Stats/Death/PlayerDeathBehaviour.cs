@@ -31,7 +31,7 @@ public class PlayerDeathBehaviour : DeathBehaviour
     protected virtual void OnPlayerDied() => PlayerDied?.Invoke();
 
     /// <summary>
-    /// Event registered on PlayerAnimations and PlayerInputCustom.
+    /// Event registered on PlayerAnimations and PlayerInputCustom and Check.
     /// </summary>
     public event Action PlayerDied;
 }

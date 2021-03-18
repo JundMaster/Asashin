@@ -52,6 +52,7 @@ public class Enemy : MonoBehaviour
     // TEMP
     private IEnumerator ThrowKunaiTemporary()
     {
+        yield return new WaitForSeconds(3f);
         Player player = FindObjectOfType<Player>();
         while (player != null)
         {

@@ -3,7 +3,7 @@
 /// <summary>
 /// Abstract class responsbile for handling item behaviours.
 /// </summary>
-public abstract class ItemBehaviour : MonoBehaviour, IUsableItem
+public abstract class ItemBehaviour : MonoBehaviour, IUsableItem, IFindPlayer
 {
     // Components
     protected PlayerStats playerStats;
@@ -28,5 +28,15 @@ public abstract class ItemBehaviour : MonoBehaviour, IUsableItem
     {
         // Updates UI of all items.
         itemUIParent.UpdateAllItemUI();
+    }
+
+    public void FindPlayer()
+    {
+        playerStats = FindObjectOfType<PlayerStats>();
+    }
+
+    public void PlayerLost()
+    {
+        //
     }
 }

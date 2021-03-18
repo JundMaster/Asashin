@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using System;
 
-public class UIRespawn : MonoBehaviour
+/// <summary>
+/// Class responsible for UIRespawn menu.
+/// </summary>
+public class UIRespawn : MonoBehaviour, IFindPlayer
 {
     // Components
     private PlayerAnimations playerAnims;
@@ -18,7 +18,8 @@ public class UIRespawn : MonoBehaviour
 
     private void OnEnable()
     {
-        playerAnims.PlayerDiedEndOfAnimationUIRespawn += EnableRespawnUI;
+        if (playerAnims != null)
+            playerAnims.PlayerDiedEndOfAnimationUIRespawn += EnableRespawnUI;
     }
 
     private void OnDisable()
@@ -34,10 +35,11 @@ public class UIRespawn : MonoBehaviour
         respawnUI.SetActive(true);
     }
 
+    /// <summary>
+    /// Defines what happens when respawn button is pressed.
+    /// </summary>
     public void RespawnButton()
     {
-        SceneControl sceneControl = FindObjectOfType<SceneControl>();
-        sceneControl.LoadScene(sceneControl.SceneToLoad());
         OnRespawnButtonPressed();
     }
 
@@ -45,12 +47,24 @@ public class UIRespawn : MonoBehaviour
         RespawnButtonPressed?.Invoke();
 
     /// <summary>
-    /// Event registered on PlayerInputCustom.
+    /// Event registered on SpawnerController.
     /// </summary>
     public event Action RespawnButtonPressed;
 
     public void QuitButton()
     {
+        ////////////////////////////////////////////////////////////
+        Debug.Log("Quit to main menu");
+    }
 
+    public void FindPlayer()
+    {
+        playerAnims = FindObjectOfType<PlayerAnimations>();
+        playerAnims.PlayerDiedEndOfAnimationUIRespawn += EnableRespawnUI;
+    }
+
+    public void PlayerLost()
+    {
+        playerAnims.PlayerDiedEndOfAnimationUIRespawn -= EnableRespawnUI;
     }
 }

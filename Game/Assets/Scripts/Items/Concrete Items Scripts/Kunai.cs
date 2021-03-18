@@ -3,7 +3,7 @@
 /// <summary>
 /// Class responsible for handling kunai behaviour.
 /// </summary>
-public class Kunai : ItemBehaviour
+public class Kunai : ItemBehaviour, IFindPlayer
 {
     // Enemy variables
     [SerializeField] private bool enemyKunai;
@@ -209,5 +209,16 @@ public class Kunai : ItemBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, hitRange);
+    }
+
+    public void FindPlayer()
+    {
+        player = FindObjectOfType<Player>().transform;
+
+        if (enemyKunai)
+        {
+            playerBlock = player.GetComponent<PlayerBlock>();
+            playerAnim = player.GetComponent<PlayerAnimations>();
+        }
     }
 }

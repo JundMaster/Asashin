@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PauseSystem : MonoBehaviour
+public class PauseSystem : MonoBehaviour, IFindPlayer
 {
     // Components
     private PlayerInputCustom input;
@@ -25,8 +25,9 @@ public class PauseSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        input.GamePaused += HandlePauseGame;
-        playerAnimations.PlayerDiedEndOfAnimationPauseSystem += HandlePauseGame;
+        if (input != null) input.GamePaused += HandlePauseGame;
+        if (playerAnimations != null) 
+            playerAnimations.PlayerDiedEndOfAnimationPauseSystem += HandlePauseGame;
     }
 
     private void OnDisable()
@@ -53,6 +54,20 @@ public class PauseSystem : MonoBehaviour
 
     protected virtual void OnGamePaused(PauseSystemEnum pauseEnum) => 
         GamePaused?.Invoke(pauseEnum);
+
+    public void FindPlayer()
+    {
+        input = FindObjectOfType<PlayerInputCustom>();
+        playerAnimations = FindObjectOfType<PlayerAnimations>();
+        input.GamePaused += HandlePauseGame;
+        playerAnimations.PlayerDiedEndOfAnimationPauseSystem += HandlePauseGame;
+    }
+
+    public void PlayerLost()
+    {
+        input.GamePaused -= HandlePauseGame;
+        playerAnimations.PlayerDiedEndOfAnimationPauseSystem -= HandlePauseGame;
+    }
 
     /// <summary>
     /// Event called on PlayerAnimations.

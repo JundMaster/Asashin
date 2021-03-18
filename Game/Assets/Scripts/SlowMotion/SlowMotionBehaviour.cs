@@ -6,7 +6,7 @@ using System;
 /// <summary>
 /// Class responsible for handling slow motion.
 /// </summary>
-public class SlowMotionBehaviour : MonoBehaviour
+public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
 {
     // Slowmotion Variables
     private float defaultTimeScale;
@@ -18,8 +18,6 @@ public class SlowMotionBehaviour : MonoBehaviour
     private Coroutine SlowmotionCoroutine;
 
     // Components
-    private PlayerMovement playerMovement;
-    private PlayerValuesScriptableObj playerValues;
     private PlayerRoll playerRoll;
     private PauseSystem pauseSystem;
 
@@ -36,16 +34,14 @@ public class SlowMotionBehaviour : MonoBehaviour
 
     private void Awake()
     {
-        playerMovement = FindObjectOfType<PlayerMovement>();
-        playerValues = FindObjectOfType<Player>().Values;
         playerRoll = FindObjectOfType<PlayerRoll>();
         pauseSystem = FindObjectOfType<PauseSystem>();
     }
 
     private void Start()
     {
-        defaultTimeScale = Time.timeScale;
-        defaultFixedDeltaTime = Time.fixedDeltaTime;
+        defaultTimeScale = 1f;
+        defaultFixedDeltaTime = 0.01f;
         Performing = false;
         SlowmotionCoroutine = null;
 
@@ -60,11 +56,13 @@ public class SlowMotionBehaviour : MonoBehaviour
         slowMotionSpeed = 0.1f;
         slowMotionDuration = 5f;
         slowMotionSmoothSpeed = 0.005f;
+
+        StopSlowMotion();
     }
 
     private void OnEnable()
     {
-        playerRoll.Roll += TriggerSlowMotion;
+        if (playerRoll != null) playerRoll.Roll += TriggerSlowMotion;
     }
 
     private void OnDisable()
@@ -170,11 +168,23 @@ public class SlowMotionBehaviour : MonoBehaviour
 
         if (OptionsSlowMotionParticles)
         {
-            cloneParticles.Stop();
+            if (cloneParticles && cloneParticles.isPlaying) 
+                cloneParticles.Stop();
         }
     }
 
     protected virtual void OnSlowMotionEvent(SlowMotionEnum condition) => SlowMotionEvent?.Invoke(condition);
+
+    public void FindPlayer()
+    {
+        playerRoll = FindObjectOfType<PlayerRoll>();
+        playerRoll.Roll += TriggerSlowMotion;
+    }
+
+    public void PlayerLost()
+    {
+        playerRoll.Roll -= TriggerSlowMotion;
+    }
 
     /// <summary>
     /// Event registered on CinemachineTarget. Event registered on PlayerMovement

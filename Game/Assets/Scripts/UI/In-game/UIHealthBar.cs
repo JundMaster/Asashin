@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Class responsible for handling player's health bar UI.
 /// </summary>
-public class UIHealthBar : MonoBehaviour
+public class UIHealthBar : MonoBehaviour, IFindPlayer
 {
     [SerializeField] private Image healthBarFill;
     [SerializeField] private Image healthBarShadow;
@@ -26,7 +26,7 @@ public class UIHealthBar : MonoBehaviour
 
     private void OnEnable()
     {
-        playerStats.TookDamage += TookDamage;
+        if (playerStats != null) playerStats.TookDamage += TookDamage;
     }
 
     private void OnDisable()
@@ -86,5 +86,16 @@ public class UIHealthBar : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    public void FindPlayer()
+    {
+        playerStats = FindObjectOfType<PlayerStats>();
+        playerStats.TookDamage += TookDamage;
+    }
+
+    public void PlayerLost()
+    {
+        playerStats.TookDamage -= TookDamage;
     }
 }

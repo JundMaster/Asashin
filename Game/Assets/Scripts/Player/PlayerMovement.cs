@@ -62,13 +62,9 @@ public class PlayerMovement : MonoBehaviour, IAction
         input.Walk += () => Walking = !Walking;
         input.Sprint += HandleSprint;
         attack.LightMeleeAttack += () => Walking = false;
-
         attack.StrongMeleeAttack += () => Walking = false;
-
         roll.Roll += () => Walking = false;
-
         useItem.UsedItemDelay += () => Walking = false;
-
     }
 
     private void OnDisable()

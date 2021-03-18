@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Class responsible for handling item's UI behaviour.
 /// </summary>
-public class ItemUI : MonoBehaviour, IItemUI
+public class ItemUI : MonoBehaviour, IItemUI, IFindPlayer
 {
     [SerializeField] private ListOfItems itemType;
     public ListOfItems ItemType => itemType;
@@ -170,5 +170,16 @@ public class ItemUI : MonoBehaviour, IItemUI
 
             yield return null;
         }       
+    }
+
+    public void FindPlayer()
+    {
+        playerStats = FindObjectOfType<PlayerStats>();
+        useItem = FindObjectOfType<PlayerUseItem>();
+    }
+
+    public void PlayerLost()
+    {
+        //
     }
 }

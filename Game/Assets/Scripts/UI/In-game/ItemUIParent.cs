@@ -4,7 +4,7 @@
 /// Class responsible for controling ItemUI classes.
 /// This script is all ItemUI parent.
 /// </summary>
-public class ItemUIParent : MonoBehaviour
+public class ItemUIParent : MonoBehaviour, IFindPlayer
 {
     // Components
     private IItemUI[] allItemsUI;
@@ -17,14 +17,9 @@ public class ItemUIParent : MonoBehaviour
         useItem = FindObjectOfType<PlayerUseItem>();
     }
 
-    private void Start()
-    {
-        UpdateAllItemUI();
-    }
-
     private void OnEnable()
     {
-        useItem.UsedItemDelay += UpdateAllItemUIDelay;
+        if (useItem != null) useItem.UsedItemDelay += UpdateAllItemUIDelay;
     }
 
     private void OnDisable()
@@ -49,5 +44,16 @@ public class ItemUIParent : MonoBehaviour
         {
             itemUI.UpdateValue();   
         }
+    }
+
+    public void FindPlayer()
+    {
+        useItem = FindObjectOfType<PlayerUseItem>();
+        useItem.UsedItemDelay += UpdateAllItemUIDelay;
+    }
+
+    public void PlayerLost()
+    {
+        useItem.UsedItemDelay -= UpdateAllItemUIDelay;
     }
 }
