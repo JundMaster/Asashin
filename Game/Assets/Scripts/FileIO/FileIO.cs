@@ -30,18 +30,15 @@ public struct FileIO
     /// </summary>
     public void SavePlayerStats()
     {
-        using (FileStream fs = new FileStream(FilePath.SAVEFILESTATS, FileMode.Create, FileAccess.Write))
+        using (GZipStream gzs = new GZipStream(File.Create(FilePath.SAVEFILESTATS), CompressionMode.Compress))
         {
-            using (GZipStream gzs = new GZipStream(fs, CompressionLevel.Optimal))
+            using (StreamWriter fw = new StreamWriter(gzs))
             {
-                using (StreamWriter fw = new StreamWriter(fs))
-                {
-                    fw.WriteLine(playerInventory.Kunais);
-                    fw.WriteLine(playerInventory.FirebombKunais);
-                    fw.WriteLine(playerInventory.HealthFlasks);
-                    fw.WriteLine(playerInventory.SmokeGrenades);
-                    fw.WriteLine(playerStats.Health);
-                }
+                fw.WriteLine(playerInventory.Kunais);
+                fw.WriteLine(playerInventory.FirebombKunais);
+                fw.WriteLine(playerInventory.HealthFlasks);
+                fw.WriteLine(playerInventory.SmokeGrenades);
+                fw.WriteLine(playerStats.Health);
             }
         }
     }
@@ -54,20 +51,24 @@ public struct FileIO
     {
         if (File.Exists(FilePath.SAVEFILESTATS))
         {
-            using (FileStream fs = new FileStream(FilePath.SAVEFILESTATS, FileMode.Open, FileAccess.Read))
+            using (GZipStream gzs = new GZipStream(File.OpenRead(FilePath.SAVEFILESTATS), CompressionMode.Decompress))
             {
-                using (GZipStream gzs = new GZipStream(fs, CompressionLevel.NoCompression))
+                using (StreamReader fr = new StreamReader(gzs))
                 {
-                    using (StreamReader fr = new StreamReader(fs))
-                    {
-                        playerInventory.Kunais = Convert.ToByte(fr.ReadLine());
-                        playerInventory.FirebombKunais = Convert.ToByte(fr.ReadLine());
-                        playerInventory.HealthFlasks = Convert.ToByte(fr.ReadLine());
-                        playerInventory.SmokeGrenades = Convert.ToByte(fr.ReadLine());
-                        //playerStats.TakeDamage(100f - Convert.ToSingle(fr.ReadLine()));
-                    }
+                    playerInventory.Kunais = Convert.ToByte(fr.ReadLine());
+                    playerInventory.FirebombKunais = Convert.ToByte(fr.ReadLine());
+                    playerInventory.HealthFlasks = Convert.ToByte(fr.ReadLine());
+                    playerInventory.SmokeGrenades = Convert.ToByte(fr.ReadLine());
+                    //playerStats.TakeDamage(100f - Convert.ToSingle(fr.ReadLine()));
                 }
             }
+        }
+        else
+        {
+            playerInventory.Kunais = playerInventory.DefaultKunais;
+            playerInventory.FirebombKunais = playerInventory.DefaultFirebombKunais;
+            playerInventory.HealthFlasks = playerInventory.DefaultHealthFlasks;
+            playerInventory.SmokeGrenades = playerInventory.DefaultSmokeGrenades;
         }
     }
 
@@ -81,26 +82,20 @@ public struct FileIO
         switch (condition)
         {
             case SaveAndLoadEnum.Checkpoint:
-                using (FileStream fs = new FileStream(FilePath.SAVEFILECHECKPOINT, FileMode.Create, FileAccess.Write))
+                using (GZipStream gzs = new GZipStream(File.Create(FilePath.SAVEFILECHECKPOINT), CompressionMode.Compress))
                 {
-                    using (GZipStream gzs = new GZipStream(fs, CompressionLevel.Optimal))
+                    using (StreamWriter fw = new StreamWriter(gzs))
                     {
-                        using (StreamWriter fw = new StreamWriter(fs))
-                        {
-                            fw.WriteLine(numberToSave);
-                        }
+                        fw.WriteLine(numberToSave);
                     }
                 }
                 break;
             case SaveAndLoadEnum.CheckpointScene:
-                using (FileStream fs = new FileStream(FilePath.SAVEFILESCENE, FileMode.Create, FileAccess.Write))
+                using (GZipStream gzs = new GZipStream(File.Create(FilePath.SAVEFILESCENE), CompressionMode.Compress))
                 {
-                    using (GZipStream gzs = new GZipStream(fs, CompressionLevel.Optimal))
+                    using (StreamWriter fw = new StreamWriter(gzs))
                     {
-                        using (StreamWriter fw = new StreamWriter(fs))
-                        {
-                            fw.WriteLine(numberToSave);
-                        }
+                        fw.WriteLine(numberToSave);
                     }
                 }
                 break;
@@ -117,25 +112,19 @@ public struct FileIO
         switch (condition)
         {
             case SaveAndLoadEnum.Checkpoint:
-                using (FileStream fs = new FileStream(FilePath.SAVEFILECHECKPOINT, FileMode.Open, FileAccess.Read))
+                using (GZipStream gzs = new GZipStream(File.OpenRead(FilePath.SAVEFILECHECKPOINT), CompressionMode.Decompress))
                 {
-                    using (GZipStream gzs = new GZipStream(fs, CompressionLevel.NoCompression))
+                    using (StreamReader fr = new StreamReader(gzs))
                     {
-                        using (StreamReader fr = new StreamReader(fs))
-                        {
-                            return Convert.ToByte(fr.ReadLine());
-                        }
+                        return Convert.ToByte(fr.ReadLine());
                     }
                 }
             case SaveAndLoadEnum.CheckpointScene:
-                using (FileStream fs = new FileStream(FilePath.SAVEFILESCENE, FileMode.Open, FileAccess.Read))
+                using (GZipStream gzs = new GZipStream(File.OpenRead(FilePath.SAVEFILESCENE), CompressionMode.Decompress))
                 {
-                    using (GZipStream gzs = new GZipStream(fs, CompressionLevel.NoCompression))
+                    using (StreamReader fr = new StreamReader(gzs))
                     {
-                        using (StreamReader fr = new StreamReader(fs))
-                        {
-                            return Convert.ToByte(fr.ReadLine());
-                        }
+                        return Convert.ToByte(fr.ReadLine());
                     }
                 }
             default:

@@ -17,4 +17,17 @@ public sealed class PlayerStatsScriptableObj : ScriptableObject
 
     [SerializeField] private byte smokeGrenades;
     public byte SmokeGrenades { get => smokeGrenades; set => smokeGrenades = value; }
+
+
+    [SerializeField] private byte defaultKunais;
+    public byte DefaultKunais { get => defaultKunais; set => defaultKunais = value; }
+
+    [SerializeField] private byte defaultFirebombKunais;
+    public byte DefaultFirebombKunais { get => defaultFirebombKunais; set => defaultFirebombKunais = value; }
+
+    [SerializeField] private byte defaultHealthFlasks;
+    public byte DefaultHealthFlasks { get => defaultHealthFlasks; set => defaultHealthFlasks = value; }
+
+    [SerializeField] private byte defaultSmokeGrenades;
+    public byte DefaultSmokeGrenades { get => defaultSmokeGrenades; set => defaultSmokeGrenades = value; }
 }

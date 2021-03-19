@@ -430,6 +430,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
             Transform playerSpineTransform =
                 GameObject.FindGameObjectWithTag("playerSpine").transform;
             thirdPersonCamera.LookAt = playerSpineTransform;
+            targetCamera.Follow = playerSpineTransform;
             pauseMenuCamera.Follow = playerSpineTransform;
             pauseMenuCamera.LookAt = playerSpineTransform;
             slowMotionThirdPersonCamera.Follow = player.transform;

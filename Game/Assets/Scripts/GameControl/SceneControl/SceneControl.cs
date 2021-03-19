@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SceneControl : MonoBehaviour
 {
-    public int SceneToLoad() => SceneManager.GetActiveScene().buildIndex;
+    public int CurrentScene() => SceneManager.GetActiveScene().buildIndex;
 
     public void LoadScene(int scene) => SceneManager.LoadScene(scene);
 }

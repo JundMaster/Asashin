@@ -62,9 +62,9 @@ public class SpawnerController : MonoBehaviour
         // Creates FileIO
         saveAndLoad = new FileIO(playerInventory, playerStats);
 
-        // Loads saved stats
+        // Loads saved stats OR default stats, if there's no saved stats yet
         saveAndLoad.LoadPlayerStats();
-        Debug.Log(playerStats.Health);
+
         // Refreshes UI
         FindObjectOfType<ItemUIParent>().UpdateAllItemUI();
     }
@@ -115,7 +115,7 @@ public class SpawnerController : MonoBehaviour
         }
         else
         {
-            sceneControl.LoadScene(saveAndLoad.LoadCheckpoint(0));
+            sceneControl.LoadScene(sceneControl.CurrentScene());
         }
     }
 
