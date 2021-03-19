@@ -107,12 +107,15 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
 
                 if (allEnemies.Count > 0)
                 {
-                    currentTarget.gameObject.SetActive(true);
-
-                    // Orders array with all enemies
+                    // Orders array with all VISIBLE enemies by distance
                     Enemy[] organizedEnemiesByDistance =
                         allEnemies.OrderBy(i =>
-                        (i.transform.position - player.transform.position).magnitude).ToArray();
+                        (i.transform.position - player.transform.position).magnitude).
+                        Where(i => i.gameObject.GetComponentInChildren<Renderer>().isVisible)
+                        .ToArray();
+
+                    
+                    currentTarget.gameObject.SetActive(true);
 
                     // Sets current target to closest enemy
                     currentTarget.transform.position = new Vector3(
@@ -142,7 +145,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
     /// <param name="targetDir">Direction.</param>
     /// <param name="up">Up vector.</param>
     /// <returns>-1, 0, 1 depending on the target's position.</returns>
-    float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)
+    private float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)
     {
         Vector3 perp = Vector3.Cross(fwd, targetDir);
         float dir = Vector3.Dot(perp, up);
@@ -341,10 +344,11 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
 
             FindAllEnemiesAroundPlayer();
 
-            // Orders array with all enemies
+            // Orders array with all VISIBLE enemies by distance
             Enemy[] organizedEnemiesByDistance =
                 allEnemies.OrderBy(i =>
                 (i.transform.position - player.transform.position).magnitude).
+                Where(i => i.gameObject.GetComponentInChildren<Renderer>().isVisible).
                 ToArray();
 
             if (organizedEnemiesByDistance.Length > 0)

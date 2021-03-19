@@ -84,7 +84,10 @@ public class Kunai : ItemBehaviour, IFindPlayer
         if (enemyKunai)
         {
             playerTarget = GameObject.FindGameObjectWithTag("playerTarget").transform;
-            kunaiCurrentTarget = playerTarget;   
+
+            transform.LookAt(playerTarget);
+
+            kunaiCurrentTarget = null;
         }
 
         rotation = 0;
@@ -124,6 +127,10 @@ public class Kunai : ItemBehaviour, IFindPlayer
         Hit(other);
     }
 
+    /// <summary>
+    /// What happens when the kunai hits something.
+    /// </summary>
+    /// <param name="other">Parameter with collision collider.</param>
     protected virtual void Hit(Collider other)
     {
         if (other != null)
@@ -194,6 +201,10 @@ public class Kunai : ItemBehaviour, IFindPlayer
 
             Instantiate(hitParticles, transform.position, Quaternion.identity);
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
@@ -211,7 +222,7 @@ public class Kunai : ItemBehaviour, IFindPlayer
         Gizmos.DrawWireSphere(transform.position, hitRange);
     }
 
-    public void FindPlayer()
+    new public void FindPlayer()
     {
         player = FindObjectOfType<Player>().transform;
 

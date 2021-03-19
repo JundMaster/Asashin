@@ -9,6 +9,10 @@ public class FirebombKunai : Kunai
     [SerializeField] private Transform explosionPosition;
     [SerializeField] private GameObject explosion;
 
+    /// <summary>
+    /// What happens when the kunai hits something.
+    /// </summary>
+    /// <param name="other">Parameter with collision collider.</param>
     protected override void Hit(Collider other)
     {
         Instantiate(explosion, explosionPosition.transform.position, Quaternion.identity);

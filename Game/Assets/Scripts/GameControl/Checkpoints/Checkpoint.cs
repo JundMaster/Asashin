@@ -8,6 +8,7 @@ public class Checkpoint : MonoBehaviour
     [SerializeField] private SpawnerController checkpointController;
     [SerializeField] private byte checkpointNumber;
     [SerializeField] private byte checkpointScene;
+
     public byte CheckpointNumber => checkpointNumber;
 
     private void OnTriggerEnter(Collider other)
