@@ -15,5 +15,5 @@ public struct FilePath
         Application.dataPath + "/Temp/savefileScene.savefile";
 
     public static readonly string CONFIG =
-        Application.dataPath + "/Temp/config.savefile";
+        Application.dataPath + "/Temp/config.configfile";
 }

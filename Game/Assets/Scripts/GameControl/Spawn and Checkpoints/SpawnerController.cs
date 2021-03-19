@@ -12,10 +12,9 @@ public class SpawnerController : MonoBehaviour
     [SerializeField] private Transform initialPosition;
 
     // Components
-    private FileIO saveAndLoad;
+    private GameState gameState;
     private Checkpoint[] childrenCheckpoints;
     private UIRespawn uiRespawn;
-
 
     private void Awake()
     {
@@ -60,15 +59,18 @@ public class SpawnerController : MonoBehaviour
         YieldInstruction waitForFixedUpdate = new WaitForFixedUpdate();
         yield return waitForFixedUpdate;
 
+        // Create a GameState to check if save file exists
+        gameState = new GameState(playerSavedStats);
+
         // After fixed update loads variables saved on last checkpoint
         // If the player already played through a checkpoint
-        if (saveAndLoad.FileExists(FilePath.SAVEFILECHECKPOINT))
+        if (gameState.FileExists(FilePath.SAVEFILECHECKPOINT))
         {
             foreach (Checkpoint checkpoint in childrenCheckpoints)
             {
                 // If checkpoint number is  the same as the saved one
                 if (checkpoint.CheckpointNumber == 
-                    saveAndLoad.LoadCheckpoint(SaveAndLoadEnum.Checkpoint))
+                    gameState.LoadCheckpoint(SaveAndLoadEnum.Checkpoint))
                 {
                     // Instantiates the player on that checkpoint's position
                     Instantiate(
@@ -91,10 +93,10 @@ public class SpawnerController : MonoBehaviour
         PlayerStats playerStats = FindObjectOfType<PlayerStats>();
 
         // Creates FileIO
-        saveAndLoad = new FileIO(playerSavedStats, playerStats);
+        gameState.AddPlayerStats(playerStats);
 
         // Loads saved stats OR default stats, if there's no saved stats yet
-        saveAndLoad.LoadPlayerStats();
+        gameState.LoadPlayerStats();
 
         // Refreshes UI
         FindObjectOfType<ItemUIParent>().UpdateAllItemUI();
@@ -122,20 +124,20 @@ public class SpawnerController : MonoBehaviour
     /// <param name="numberOfScene">Current scene.</param>
     public void SaveCheckpoint(byte numberOfCheckpoint, byte numberOfScene)
     {
-        if (saveAndLoad.FileExists(FilePath.SAVEFILECHECKPOINT))
+        if (gameState.FileExists(FilePath.SAVEFILECHECKPOINT))
         {
-            if (numberOfCheckpoint > saveAndLoad.LoadCheckpoint(SaveAndLoadEnum.Checkpoint))
+            if (numberOfCheckpoint > gameState.LoadCheckpoint(SaveAndLoadEnum.Checkpoint))
             {
-                saveAndLoad.SaveCheckpoint(SaveAndLoadEnum.Checkpoint, numberOfCheckpoint);
-                saveAndLoad.SaveCheckpoint(SaveAndLoadEnum.CheckpointScene, numberOfScene);
-                saveAndLoad.SavePlayerStats();
+                gameState.SaveCheckpoint(SaveAndLoadEnum.Checkpoint, numberOfCheckpoint);
+                gameState.SaveCheckpoint(SaveAndLoadEnum.CheckpointScene, numberOfScene);
+                gameState.SavePlayerStats();
             }
         }
         else
         {
-            saveAndLoad.SaveCheckpoint(SaveAndLoadEnum.Checkpoint, numberOfCheckpoint);
-            saveAndLoad.SaveCheckpoint(SaveAndLoadEnum.CheckpointScene, numberOfScene);
-            saveAndLoad.SavePlayerStats();
+            gameState.SaveCheckpoint(SaveAndLoadEnum.Checkpoint, numberOfCheckpoint);
+            gameState.SaveCheckpoint(SaveAndLoadEnum.CheckpointScene, numberOfScene);
+            gameState.SavePlayerStats();
         }
     }
 
@@ -160,11 +162,11 @@ public class SpawnerController : MonoBehaviour
 
         SceneControl sceneControl = FindObjectOfType<SceneControl>();
 
-        if (saveAndLoad.FileExists(FilePath.SAVEFILESCENE))
+        if (gameState.FileExists(FilePath.SAVEFILESCENE))
         {
             // Loads the scene connected to the last saved checkpoint
             sceneControl.LoadScene(
-                saveAndLoad.LoadCheckpoint(SaveAndLoadEnum.CheckpointScene));
+                gameState.LoadCheckpoint(SaveAndLoadEnum.CheckpointScene));
         }
         else
         {
@@ -176,7 +178,7 @@ public class SpawnerController : MonoBehaviour
     /// <summary>
     /// Deletes all save files. Happens when the player presses new game on main menu.
     /// </summary>
-    private void DeleteFiles() => saveAndLoad.DeleteFiles();
+    private void DeleteFiles() => gameState.DeleteFiles();
 
     /// <summary>
     /// Resets playerprefs TypeOfSpawn when the game closes.

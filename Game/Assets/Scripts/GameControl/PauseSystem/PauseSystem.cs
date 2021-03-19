@@ -18,9 +18,11 @@ public class PauseSystem : MonoBehaviour, IFindPlayer
         playerAnimations = FindObjectOfType<PlayerAnimations>();
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
         PausedGame = false;
+
+        yield return new WaitForSeconds(1f);
     }
 
     private void OnEnable()

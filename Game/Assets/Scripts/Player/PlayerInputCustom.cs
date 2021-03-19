@@ -21,7 +21,7 @@ public class PlayerInputCustom : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
@@ -216,6 +216,9 @@ public class PlayerInputCustom : MonoBehaviour
         {
             OnGamePaused(PauseSystemEnum.Paused);
             controls.SwitchCurrentActionMap("GamePaused");
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 
@@ -229,6 +232,9 @@ public class PlayerInputCustom : MonoBehaviour
         {
             OnGamePaused(PauseSystemEnum.Unpaused);
             controls.SwitchCurrentActionMap("Gameplay");
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 
