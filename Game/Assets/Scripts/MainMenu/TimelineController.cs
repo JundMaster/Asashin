@@ -16,6 +16,9 @@ public class TimelineController : MonoBehaviour
     private PlayableAsset continueTimeline;
 
     [SerializeField]
+    private PlayableAsset optionsTimeline;
+
+    [SerializeField]
     private PlayableAsset quitTimeline;
 
     void Awake()
@@ -56,6 +59,19 @@ public class TimelineController : MonoBehaviour
                 timelineController.Play();
             }
         }
+
+        else if (vmController.IsOptionCamActive)
+        {
+            if (timelineController.playableGraph.IsPlaying())
+            {
+                timelineController.time = 0;
+                timelineController.Stop();
+                timelineController.Evaluate();
+                timelineController.playableAsset = optionsTimeline;
+                timelineController.Play();
+            }
+        }
+
         else
         {
             if (timelineController.playableGraph.IsPlaying())

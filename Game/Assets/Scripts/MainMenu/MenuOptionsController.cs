@@ -11,6 +11,9 @@ public class MenuOptionsController : MonoBehaviour
     private GameObject continueOption;
 
     [SerializeField]
+    private GameObject optionsOption;
+
+    [SerializeField]
     private GameObject quitOption;
 
     private CameraController vmController;
@@ -26,6 +29,7 @@ public class MenuOptionsController : MonoBehaviour
         {
             newGameOption.SetActive(true);
             continueOption.SetActive(false);
+            optionsOption.SetActive(false);
             quitOption.SetActive(false);
         }
 
@@ -33,6 +37,15 @@ public class MenuOptionsController : MonoBehaviour
         {
             newGameOption.SetActive(false);
             continueOption.SetActive(true);
+            optionsOption.SetActive(false);
+            quitOption.SetActive(false);
+        }
+
+        else if (vmController.IsOptionCamActive)
+        {
+            newGameOption.SetActive(false);
+            continueOption.SetActive(false);
+            optionsOption.SetActive(true);
             quitOption.SetActive(false);
         }
 
@@ -40,6 +53,7 @@ public class MenuOptionsController : MonoBehaviour
         {
             newGameOption.SetActive(false);
             continueOption.SetActive(false);
+            optionsOption.SetActive(false);
             quitOption.SetActive(true);
         }
     }

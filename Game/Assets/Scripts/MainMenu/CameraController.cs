@@ -10,18 +10,23 @@ public class CameraController : MonoBehaviour
     private CinemachineVirtualCamera continueCam;
 
     [SerializeField]
+    private CinemachineVirtualCamera optionsCam;
+
+    [SerializeField]
     private CinemachineVirtualCamera quitCam;
 
     private CinemachineVirtualCamera activeCam;
 
     public bool IsNewGameCamActive { get; private set; }
     public bool IsContinueCamActive { get; private set; }
+    public bool IsOptionCamActive { get; private set; }
 
     private void Awake()
     {
         activeCam = newGameCam;
         IsNewGameCamActive = true;
         IsContinueCamActive = false;
+        IsOptionCamActive = false;
     }
 
     private void SetActiveCam()
@@ -30,6 +35,7 @@ public class CameraController : MonoBehaviour
         {
             newGameCam.Priority = 1;
             continueCam.Priority = 0;
+            optionsCam.Priority = 0;
             quitCam.Priority = 0;
             activeCam = newGameCam;
         }
@@ -37,13 +43,23 @@ public class CameraController : MonoBehaviour
         {
             newGameCam.Priority = 0;
             continueCam.Priority = 1;
+            optionsCam.Priority = 0;
             quitCam.Priority = 0;
             activeCam = continueCam;
+        }
+        else if (IsOptionCamActive)
+        {
+            newGameCam.Priority = 0;
+            continueCam.Priority = 0;
+            optionsCam.Priority = 1;
+            quitCam.Priority = 0;
+            activeCam = optionsCam;
         }
         else
         {
             newGameCam.Priority = 0;
             continueCam.Priority = 0;
+            optionsCam.Priority = 0;
             quitCam.Priority = 1;
             activeCam = quitCam;
         }
@@ -53,6 +69,7 @@ public class CameraController : MonoBehaviour
     {
         IsNewGameCamActive = true;
         IsContinueCamActive = false;
+        IsOptionCamActive = false;
         SetActiveCam();
     }
 
@@ -60,6 +77,15 @@ public class CameraController : MonoBehaviour
     {
         IsNewGameCamActive = false;
         IsContinueCamActive = true;
+        IsOptionCamActive = false;
+        SetActiveCam();
+    }
+
+    private void SwitchToOptionsCam()
+    {
+        IsNewGameCamActive = false;
+        IsContinueCamActive = false;
+        IsOptionCamActive = true;
         SetActiveCam();
     }
 
@@ -67,6 +93,7 @@ public class CameraController : MonoBehaviour
     {
         IsNewGameCamActive = false;
         IsContinueCamActive = false;
+        IsOptionCamActive = false;
         SetActiveCam();
     }
 
@@ -74,7 +101,9 @@ public class CameraController : MonoBehaviour
     {
         if (activeCam == newGameCam) SwitchToContinueCam();
 
-        else if (activeCam == continueCam) SwitchToQuitCam();
+        else if (activeCam == continueCam) SwitchToOptionsCam();
+
+        else if(activeCam == optionsCam) SwitchToQuitCam();
 
         else SwitchToNewGameCam();
     }
@@ -83,7 +112,9 @@ public class CameraController : MonoBehaviour
     {
         if (activeCam == newGameCam) SwitchToQuitCam();
 
-        else if (activeCam == quitCam) SwitchToContinueCam();
+        else if (activeCam == quitCam) SwitchToOptionsCam();
+
+        else if (activeCam == optionsCam) SwitchToContinueCam();
 
         else SwitchToNewGameCam();
     }
