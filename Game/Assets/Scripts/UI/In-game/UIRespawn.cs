@@ -40,16 +40,16 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
     /// </summary>
     public void RespawnButton()
     {
-        OnRespawnButtonPressed();
+        OnRespawnButtonPressed(SpawnTypeEnum.Respawn);
     }
 
-    protected virtual void OnRespawnButtonPressed() =>
-        RespawnButtonPressed?.Invoke();
+    protected virtual void OnRespawnButtonPressed(SpawnTypeEnum typeOfSpawn) =>
+        RespawnButtonPressed?.Invoke(typeOfSpawn);
 
     /// <summary>
     /// Event registered on SpawnerController.
     /// </summary>
-    public event Action RespawnButtonPressed;
+    public event Action<SpawnTypeEnum> RespawnButtonPressed;
 
     public void QuitButton()
     {

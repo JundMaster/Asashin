@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName ="Player Stats")]
+[CreateAssetMenu(fileName ="Player Saved Stats")]
 /// <summary>
 /// Scriptable object responsible for handling related player stats.
 /// </summary>
-public sealed class PlayerStatsScriptableObj : ScriptableObject
+public sealed class PlayerSavedStatsScriptableObj : ScriptableObject
 {
     [SerializeField] private byte kunais;
     public byte Kunais { get => kunais; set => kunais = value; }
@@ -18,6 +18,7 @@ public sealed class PlayerStatsScriptableObj : ScriptableObject
     [SerializeField] private byte smokeGrenades;
     public byte SmokeGrenades { get => smokeGrenades; set => smokeGrenades = value; }
 
+    public float SavedHealth { get; set; }
 
     [SerializeField] private byte defaultKunais;
     public byte DefaultKunais { get => defaultKunais; set => defaultKunais = value; }
@@ -30,4 +31,7 @@ public sealed class PlayerStatsScriptableObj : ScriptableObject
 
     [SerializeField] private byte defaultSmokeGrenades;
     public byte DefaultSmokeGrenades { get => defaultSmokeGrenades; set => defaultSmokeGrenades = value; }
+
+    [SerializeField] private float defaultSavedHealth;
+    public float DefaultSavedHealth => defaultSavedHealth;
 }

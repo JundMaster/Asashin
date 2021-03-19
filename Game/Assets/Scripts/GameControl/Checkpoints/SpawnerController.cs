@@ -1,18 +1,21 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class responsible for handling player spawn.
+/// Used in every scenes and main menu.
+/// </summary>
 public class SpawnerController : MonoBehaviour
 {
+    [SerializeField] private PlayerSavedStatsScriptableObj playerSavedStats;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Transform initialPosition;
 
     // Components
-    [SerializeField] private PlayerStatsScriptableObj playerInventory;
-    private PlayerStats playerStats;
     private FileIO saveAndLoad;
     private Checkpoint[] childrenCheckpoints;
     private UIRespawn uiRespawn;
+
 
     private void Awake()
     {
@@ -23,24 +26,51 @@ public class SpawnerController : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(SpawnPlayer());
+        // PLAYER FAZ RESPAWN SEMPRE EM MODO LOADING
+        // SO PARA TESTES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        PlayerPrefs.SetString("TypeOfSpawn", "Load");
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+
+        if (PlayerPrefs.GetString("TypeOfSpawn") == "Respawn")
+        {
+            StartCoroutine(SpawnPlayer(SpawnTypeEnum.Respawn));
+        }
+        else if (PlayerPrefs.GetString("TypeOfSpawn") == "Load")
+        {
+            StartCoroutine(SpawnPlayer(SpawnTypeEnum.Loadgame));
+        }
+        else
+        {
+            // Left brank on purpose
+            // Does nothing, meaning it's on main menu
+        }
     }
 
     /// <summary>
     /// Happens after first fixed update.
     /// </summary>
-    /// <returns></returns>
-    private IEnumerator SpawnPlayer()
+    /// <param name="typeOfSpawn">Respawn or loadgame.</param>
+    /// <returns>Null.</returns>
+    private IEnumerator SpawnPlayer(SpawnTypeEnum typeOfSpawn)
     {
-        yield return new WaitForSeconds(1f);
+        YieldInstruction waitForFixedUpdate = new WaitForFixedUpdate();
+        yield return waitForFixedUpdate;
 
         // After fixed update loads variables saved on last checkpoint
+        // If the player already played through a checkpoint
         if (saveAndLoad.FileExists(FilePath.SAVEFILECHECKPOINT))
         {
             foreach (Checkpoint checkpoint in childrenCheckpoints)
             {
-                if (checkpoint.CheckpointNumber == saveAndLoad.LoadCheckpoint(SaveAndLoadEnum.Checkpoint))
+                // If checkpoint number is  the same as the saved one
+                if (checkpoint.CheckpointNumber == 
+                    saveAndLoad.LoadCheckpoint(SaveAndLoadEnum.Checkpoint))
                 {
+                    // Instantiates the player on that checkpoint's position
                     Instantiate(
                         playerPrefab, 
                         transform.position + checkpoint.transform.position, 
@@ -48,6 +78,7 @@ public class SpawnerController : MonoBehaviour
                 }
             }
         }
+        // else if the player is playing for the first time
         else
         {
             Instantiate(
@@ -57,26 +88,31 @@ public class SpawnerController : MonoBehaviour
         }
 
         // Finds player stats
-        playerStats = FindObjectOfType<PlayerStats>();
+        PlayerStats playerStats = FindObjectOfType<PlayerStats>();
 
         // Creates FileIO
-        saveAndLoad = new FileIO(playerInventory, playerStats);
+        saveAndLoad = new FileIO(playerSavedStats, playerStats);
 
         // Loads saved stats OR default stats, if there's no saved stats yet
         saveAndLoad.LoadPlayerStats();
 
         // Refreshes UI
         FindObjectOfType<ItemUIParent>().UpdateAllItemUI();
+
+        // Updates player's hp to the current hp on the last checkpoint
+        yield return waitForFixedUpdate;
+        if (typeOfSpawn == SpawnTypeEnum.Loadgame)
+            playerStats.TakeDamage(100 - playerSavedStats.SavedHealth);
     }
 
     private void OnEnable()
     {
-        uiRespawn.RespawnButtonPressed += LoadCheckpoint;
+        if (uiRespawn) uiRespawn.RespawnButtonPressed += RespawnPlayer;
     }
 
     private void OnDisable()
     {
-        uiRespawn.RespawnButtonPressed -= LoadCheckpoint;
+        if (uiRespawn) uiRespawn.RespawnButtonPressed -= RespawnPlayer;
     }
 
     /// <summary>
@@ -105,27 +141,48 @@ public class SpawnerController : MonoBehaviour
 
     /// <summary>
     /// Loads a scene corresponding to the last checkpoint.
+    /// If there is no checkpoint yet, loads default initial scene.
     /// </summary>
-    private void LoadCheckpoint()
+    private void RespawnPlayer(SpawnTypeEnum typeOfSpawn)
     {
+        if (typeOfSpawn == SpawnTypeEnum.Respawn)
+        {
+            PlayerPrefs.SetString("TypeOfSpawn", "Respawn");
+        }
+        else if (typeOfSpawn == SpawnTypeEnum.Loadgame)
+        {
+            PlayerPrefs.SetString("TypeOfSpawn", "Load");
+        }
+        else if (typeOfSpawn == SpawnTypeEnum.Newgame)
+        {
+            // left brank on purpose
+        }
+
         SceneControl sceneControl = FindObjectOfType<SceneControl>();
+
         if (saveAndLoad.FileExists(FilePath.SAVEFILESCENE))
         {
-            sceneControl.LoadScene(saveAndLoad.LoadCheckpoint(SaveAndLoadEnum.CheckpointScene));
+            // Loads the scene connected to the last saved checkpoint
+            sceneControl.LoadScene(
+                saveAndLoad.LoadCheckpoint(SaveAndLoadEnum.CheckpointScene));
         }
         else
         {
-            sceneControl.LoadScene(sceneControl.CurrentScene());
-        }
+            // Loads first scene after main menu
+            sceneControl.LoadScene(1);
+        }  
     }
 
-    public void FindPlayer()
-    {
-        
-    }
+    /// <summary>
+    /// Deletes all save files. Happens when the player presses new game on main menu.
+    /// </summary>
+    private void DeleteFiles() => saveAndLoad.DeleteFiles();
 
-    public void PlayerLost()
+    /// <summary>
+    /// Resets playerprefs TypeOfSpawn when the game closes.
+    /// </summary>
+    private void OnApplicationQuit()
     {
-        //
+        PlayerPrefs.SetString("TypeOfSpawn", "RandomStringMeaningTheGameClosed");
     }
 }

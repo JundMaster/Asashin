@@ -8,25 +8,37 @@ using System;
 public struct FileIO
 {
     // Player Stats to save
-    private PlayerStatsScriptableObj playerInventory;
+    private PlayerSavedStatsScriptableObj playerSavedStats;
     private PlayerStats playerStats;
     
     public FileIO(
-        PlayerStatsScriptableObj playerInventory,
+        PlayerSavedStatsScriptableObj playerSavedStats,
         PlayerStats playerStats)
     {
-        this.playerInventory = playerInventory;
+        this.playerSavedStats = playerSavedStats;
         this.playerStats = playerStats;
     }
 
+    /// <summary>
+    /// Checks if file exists.
+    /// </summary>
+    /// <param name="file">File path to check.</param>
+    /// <returns>Returns true if file exists.</returns>
     public bool FileExists(string file)
     {
         if (File.Exists(file)) return true;
         return false;
     }
 
+    public void DeleteFiles()
+    {
+        if (File.Exists(FilePath.SAVEFILECHECKPOINT)) File.Delete(FilePath.SAVEFILECHECKPOINT);
+        if (File.Exists(FilePath.SAVEFILESCENE)) File.Delete(FilePath.SAVEFILESCENE);
+        if (File.Exists(FilePath.SAVEFILESTATS)) File.Delete(FilePath.SAVEFILESTATS);
+    }
+
     /// <summary>
-    /// Saves game.
+    /// Saves player stats.
     /// </summary>
     public void SavePlayerStats()
     {
@@ -34,10 +46,10 @@ public struct FileIO
         {
             using (StreamWriter fw = new StreamWriter(gzs))
             {
-                fw.WriteLine(playerInventory.Kunais);
-                fw.WriteLine(playerInventory.FirebombKunais);
-                fw.WriteLine(playerInventory.HealthFlasks);
-                fw.WriteLine(playerInventory.SmokeGrenades);
+                fw.WriteLine(playerSavedStats.Kunais);
+                fw.WriteLine(playerSavedStats.FirebombKunais);
+                fw.WriteLine(playerSavedStats.HealthFlasks);
+                fw.WriteLine(playerSavedStats.SmokeGrenades);
                 fw.WriteLine(playerStats.Health);
             }
         }
@@ -45,7 +57,7 @@ public struct FileIO
 
 
     /// <summary>
-    /// Loads game.
+    /// Loads player stats.
     /// </summary>
     public void LoadPlayerStats()
     {
@@ -55,20 +67,21 @@ public struct FileIO
             {
                 using (StreamReader fr = new StreamReader(gzs))
                 {
-                    playerInventory.Kunais = Convert.ToByte(fr.ReadLine());
-                    playerInventory.FirebombKunais = Convert.ToByte(fr.ReadLine());
-                    playerInventory.HealthFlasks = Convert.ToByte(fr.ReadLine());
-                    playerInventory.SmokeGrenades = Convert.ToByte(fr.ReadLine());
-                    //playerStats.TakeDamage(100f - Convert.ToSingle(fr.ReadLine()));
+                    playerSavedStats.Kunais = Convert.ToByte(fr.ReadLine());
+                    playerSavedStats.FirebombKunais = Convert.ToByte(fr.ReadLine());
+                    playerSavedStats.HealthFlasks = Convert.ToByte(fr.ReadLine());
+                    playerSavedStats.SmokeGrenades = Convert.ToByte(fr.ReadLine());
+                    playerSavedStats.SavedHealth = Convert.ToSingle(fr.ReadLine());
                 }
             }
         }
         else
         {
-            playerInventory.Kunais = playerInventory.DefaultKunais;
-            playerInventory.FirebombKunais = playerInventory.DefaultFirebombKunais;
-            playerInventory.HealthFlasks = playerInventory.DefaultHealthFlasks;
-            playerInventory.SmokeGrenades = playerInventory.DefaultSmokeGrenades;
+            playerSavedStats.Kunais = playerSavedStats.DefaultKunais;
+            playerSavedStats.FirebombKunais = playerSavedStats.DefaultFirebombKunais;
+            playerSavedStats.HealthFlasks = playerSavedStats.DefaultHealthFlasks;
+            playerSavedStats.SmokeGrenades = playerSavedStats.DefaultSmokeGrenades;
+            playerSavedStats.SavedHealth = playerSavedStats.DefaultSavedHealth;
         }
     }
 
