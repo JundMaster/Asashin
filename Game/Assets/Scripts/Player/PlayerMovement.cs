@@ -109,10 +109,10 @@ public class PlayerMovement : MonoBehaviour, IAction
             Direction = Vector3.zero;
         }
 
+        // Cancels sneak
         if (block.Performing || !jump.IsGrounded())
         {
             Walking = false;
-
         }
     }
 

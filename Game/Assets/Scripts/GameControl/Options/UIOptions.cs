@@ -40,6 +40,10 @@ public class UIOptions : MonoBehaviour
         UpdateAllUI();
     }
 
+    /// <summary>
+    /// Decrements a certain value.
+    /// </summary>
+    /// <param name="option">Value to decrement.</param>
     public void LeftButton(string option)
     {
         switch (option)
@@ -64,6 +68,10 @@ public class UIOptions : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Increments a certain value.
+    /// </summary>
+    /// <param name="option">Value to increment.</param>
     public void RightButton(string option)
     {
         switch (option)

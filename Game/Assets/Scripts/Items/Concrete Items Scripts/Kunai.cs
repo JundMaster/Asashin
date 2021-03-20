@@ -42,12 +42,6 @@ public class Kunai : ItemBehaviour, IFindPlayer
         target = FindObjectOfType<CinemachineTarget>();
         player = FindObjectOfType<Player>().transform;
 
-        if (enemyKunai)
-        {
-            playerBlock = player.GetComponent<PlayerBlock>();
-            playerAnim = player.GetComponent<PlayerAnimations>();
-        }
-
         kunaiCurrentTarget = null;
 
         // If there's an active target, the kunai will have that same target.
@@ -81,11 +75,28 @@ public class Kunai : ItemBehaviour, IFindPlayer
         }
 
         // In case this is a kunai spawned by an enemy, it will go towards the player
+        // If the player is moving, the enemy will throw the kunai to the
+        // front of the player, else, it will throw it to the player's position
         if (enemyKunai)
         {
+            playerBlock = player.GetComponent<PlayerBlock>();
+            playerAnim = player.GetComponent<PlayerAnimations>();
             playerTarget = GameObject.FindGameObjectWithTag("playerTarget").transform;
+            PlayerMovement movement = player.GetComponent<PlayerMovement>();
 
-            transform.LookAt(playerTarget);
+            if (movement.Direction.magnitude > 0)
+            {
+                if (Vector3.Distance(transform.position, playerTarget.transform.position) > 15)
+                    transform.LookAt(playerTarget.transform.position + playerTarget.forward * 3f);
+                else if (Vector3.Distance(transform.position, playerTarget.transform.position) > 10f)
+                    transform.LookAt(playerTarget.transform.position + playerTarget.forward * 2f);
+                else if (Vector3.Distance(transform.position, playerTarget.transform.position) > 5f)
+                    transform.LookAt(playerTarget.transform.position + playerTarget.forward * 1.3f);
+                else
+                    transform.LookAt(playerTarget.transform.position + playerTarget.forward * 0.5f);
+            }
+            else
+                transform.LookAt(playerTarget);
 
             kunaiCurrentTarget = null;
         }

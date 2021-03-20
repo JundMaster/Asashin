@@ -75,7 +75,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
         }
 
         // If the player is pressing any direction
-        // rotates the character instantly to roll in that direction
+        // rotates the character instantly in that direction
         else if (target.Targeting == false)
         {
             if (movement.Direction != Vector3.zero)
@@ -107,8 +107,8 @@ public class PlayerUseItem : MonoBehaviour, IAction
                 case ListOfItems.Kunai:
                     if (stats.Kunais > 0)
                     {
-                        RotationBeforeItemUse();
                         playerAnims.TriggerKunaiAnimation();
+                        RotationBeforeItemUse();
                         TimeItemWasUsed = Time.time;
                         canUseItemDelayOver = false;
                         OnUsedItemDelay();
@@ -117,8 +117,8 @@ public class PlayerUseItem : MonoBehaviour, IAction
                 case ListOfItems.FirebombKunai:
                     if (stats.FirebombKunais > 0)
                     {
-                        RotationBeforeItemUse();
                         playerAnims.TriggerFirebombKunaiAnimation();
+                        RotationBeforeItemUse();
                         TimeItemWasUsed = Time.time;
                         canUseItemDelayOver = false;
                         OnUsedItemDelay();
@@ -127,8 +127,8 @@ public class PlayerUseItem : MonoBehaviour, IAction
                 case ListOfItems.HealthFlask:
                     if (stats.HealthFlasks > 0)
                     {
-                        RotationBeforeItemUse();
                         playerAnims.TriggerHealthFlaskAnimation();
+                        RotationBeforeItemUse();
                         TimeItemWasUsed = Time.time;
                         canUseItemDelayOver = false;
                         OnUsedItemDelay();
@@ -137,8 +137,8 @@ public class PlayerUseItem : MonoBehaviour, IAction
                 case ListOfItems.SmokeGrenade:
                     if (stats.SmokeGrenades > 0)
                     {
-                        RotationBeforeItemUse();
                         playerAnims.TriggerSmokeGrenadeAnimation();
+                        RotationBeforeItemUse();
                         TimeItemWasUsed = Time.time;
                         canUseItemDelayOver = false;
                         OnUsedItemDelay();

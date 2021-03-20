@@ -18,27 +18,29 @@ public class PauseSystem : MonoBehaviour, IFindPlayer
         playerAnimations = FindObjectOfType<PlayerAnimations>();
     }
 
-    private IEnumerator Start()
+    private void Start()
     {
         PausedGame = false;
-
-        yield return new WaitForSeconds(1f);
     }
 
     private void OnEnable()
     {
-        if (input != null) input.GamePaused += HandlePauseGame;
+        if (input != null) input.GamePaused += HandlePause;
         if (playerAnimations != null) 
-            playerAnimations.PlayerDiedEndOfAnimationPauseSystem += HandlePauseGame;
+            playerAnimations.PlayerDiedEndOfAnimationPauseSystem += HandlePauseCharacterDead;
     }
 
     private void OnDisable()
     {
-        input.GamePaused -= HandlePauseGame;
-        playerAnimations.PlayerDiedEndOfAnimationPauseSystem -= HandlePauseGame;
+        input.GamePaused -= HandlePause;
+        playerAnimations.PlayerDiedEndOfAnimationPauseSystem -= HandlePauseCharacterDead;
     }
 
-    private void HandlePauseGame(PauseSystemEnum pauseSystem)
+    /// <summary>
+    /// Only happens when the player presses pause key.
+    /// </summary>
+    /// <param name="pauseSystem"></param>
+    private void HandlePause(PauseSystemEnum pauseSystem)
     {
         if (pauseSystem == PauseSystemEnum.Unpaused)
         {
@@ -52,27 +54,59 @@ public class PauseSystem : MonoBehaviour, IFindPlayer
             OnGamePaused(PauseSystemEnum.Paused);
             PausedGame = true;
         }
+        ChangePlayerAnimatorMode();
     }
 
-    protected virtual void OnGamePaused(PauseSystemEnum pauseEnum) => 
-        GamePaused?.Invoke(pauseEnum);
+    /// <summary>
+    /// Only happens when player death animation reaches the end.
+    /// </summary>
+    /// <param name="pauseSystem"></param>
+    private void HandlePauseCharacterDead(PauseSystemEnum pauseSystem)
+    {
+        if (pauseSystem == PauseSystemEnum.Unpaused)
+        {
+            Time.timeScale = 1f;
+            PausedGame = false;
+        }
+        else
+        {
+            Time.timeScale = 0f;
+            PausedGame = true;
+        }
+        ChangePlayerAnimatorMode();
+    }
+
+    /// <summary>
+    /// Sets animator update mode to scaled or unscaled when the game is paused.
+    /// </summary>
+    private void ChangePlayerAnimatorMode()
+    {
+        Animator anim = playerAnimations.GetComponent<Animator>();
+        if (anim.updateMode == AnimatorUpdateMode.UnscaledTime)
+            anim.updateMode = AnimatorUpdateMode.Normal;
+        else
+            anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+    }
 
     public void FindPlayer()
     {
         input = FindObjectOfType<PlayerInputCustom>();
         playerAnimations = FindObjectOfType<PlayerAnimations>();
-        input.GamePaused += HandlePauseGame;
-        playerAnimations.PlayerDiedEndOfAnimationPauseSystem += HandlePauseGame;
+        input.GamePaused += HandlePause;
+        playerAnimations.PlayerDiedEndOfAnimationPauseSystem += HandlePauseCharacterDead;
     }
 
     public void PlayerLost()
     {
-        input.GamePaused -= HandlePauseGame;
-        playerAnimations.PlayerDiedEndOfAnimationPauseSystem -= HandlePauseGame;
+        input.GamePaused -= HandlePause;
+        playerAnimations.PlayerDiedEndOfAnimationPauseSystem -= HandlePauseCharacterDead;
     }
 
+    protected virtual void OnGamePaused(PauseSystemEnum pauseEnum) =>
+        GamePaused?.Invoke(pauseEnum);
+
     /// <summary>
-    /// Event called on PlayerAnimations.
+    /// Event called on ShowOptionsMenu.
     /// </summary>
     public event Action<PauseSystemEnum> GamePaused;
 }

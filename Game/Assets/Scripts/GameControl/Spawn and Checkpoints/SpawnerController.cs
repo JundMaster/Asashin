@@ -155,7 +155,7 @@ public class SpawnerController : MonoBehaviour
         {
             PlayerPrefs.SetString("TypeOfSpawn", "Load");
         }
-        else if (typeOfSpawn == SpawnTypeEnum.Newgame)
+        else
         {
             // left brank on purpose
         }

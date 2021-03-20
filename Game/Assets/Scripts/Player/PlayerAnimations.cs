@@ -35,7 +35,6 @@ public class PlayerAnimations : MonoBehaviour
         attack.LightMeleeAttack += TriggerLightMeleeAttack;
         attack.StrongMeleeAttack += TriggerStrongMeleeAttack;
         attack.AirAttack += TriggerAirAttack;
-        pauseSystem.GamePaused += PauseSystemAnimator;
         death.PlayerDied += TriggerDeath;
     }
 
@@ -45,7 +44,6 @@ public class PlayerAnimations : MonoBehaviour
         attack.LightMeleeAttack -= TriggerLightMeleeAttack;
         attack.StrongMeleeAttack -= TriggerStrongMeleeAttack;
         attack.AirAttack -= TriggerAirAttack;
-        pauseSystem.GamePaused -= PauseSystemAnimator;
         death.PlayerDied -= TriggerDeath;
     }
 
@@ -61,6 +59,7 @@ public class PlayerAnimations : MonoBehaviour
     /// <summary>
     /// This method is called with an animation event.
     /// The method is triggered on the final of the animation.
+    /// Sets active SpawnUI and triggers pause.
     /// </summary>
     private void AnimationEventDeathBehaviour()
     {
@@ -74,13 +73,13 @@ public class PlayerAnimations : MonoBehaviour
         PlayerDiedEndOfAnimationPauseSystem?.Invoke(condition);
 
     /// <summary>
-    /// Event registered on UIRespawn.
+    /// Event registered on UIRespawn. Only happens after the player death animation is over.
     /// Calls respawn screen UI.
     /// </summary>
     public event Action PlayerDiedEndOfAnimationUIRespawn;
 
     /// <summary>
-    /// Event registered on PauseSystem.
+    /// Event registered on PauseSystem. Triggers pause after the animation is over.
     /// Pauses game.
     /// </summary>
     public event Action<PauseSystemEnum> PlayerDiedEndOfAnimationPauseSystem;
@@ -128,20 +127,4 @@ public class PlayerAnimations : MonoBehaviour
     /// Its behaviour is called with animation events with a method on that class.
     /// </summary>
     public void TriggerSmokeGrenadeAnimation() => anim.SetTrigger("UseSmokeGrenade");
-
-    /// <summary>
-    /// Sets animator update mode to scaled or unscaled when the game is paused.
-    /// </summary>
-    /// <param name="">Parameter that checks if the game is paused or unpaused.</param>
-    private void PauseSystemAnimator(PauseSystemEnum pauseSystem)
-    {
-        if (pauseSystem == PauseSystemEnum.Paused)
-        {
-            anim.updateMode = AnimatorUpdateMode.Normal;
-        }
-        else
-        {
-            anim.updateMode = AnimatorUpdateMode.UnscaledTime;
-        }
-    }
 }

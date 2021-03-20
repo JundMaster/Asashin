@@ -32,6 +32,9 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
     /// </summary>
     private void EnableRespawnUI()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         respawnUI.SetActive(true);
     }
 
