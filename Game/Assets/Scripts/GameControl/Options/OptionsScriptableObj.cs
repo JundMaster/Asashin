@@ -7,24 +7,33 @@
 public class OptionsScriptableObj : ScriptableObject
 {
     [Header("Game Options")]
-    [SerializeField] private byte difficulty;
-    public byte Difficulty { get => difficulty; set => difficulty = value; }
+    [SerializeField] private short difficulty;
+    public short Difficulty { get => difficulty; set => difficulty = value; }
 
-    [SerializeField] private byte defaultDifficulty;
-    public byte DefaultDifficulty => defaultDifficulty;
+    [SerializeField] private short defaultDifficulty;
+    public short DefaultDifficulty => defaultDifficulty;
+
+    [SerializeField] private short maxDifficulty;
+    public short MaxDifficulty => maxDifficulty;
 
     [Header("Graphic Options")]
-    [SerializeField] private byte graphicsQuality;
-    public byte GraphicsQuality { get => graphicsQuality; set => graphicsQuality = value; }
+    [SerializeField] private short graphicsQuality;
+    public short GraphicsQuality { get => graphicsQuality; set => graphicsQuality = value; }
 
-    [SerializeField] private byte defaultGraphicsQuality;
-    public byte DefaultGraphicsQuality => defaultGraphicsQuality;
+    [SerializeField] private short defaultGraphicsQuality;
+    public short DefaultGraphicsQuality => defaultGraphicsQuality;
 
-    [SerializeField] private byte shadowQuality;
-    public byte ShadowQuality { get => shadowQuality; set => shadowQuality = value; }
+    [SerializeField] private short maxGraphicsQuality;
+    public short MaxGraphicsQuality => maxGraphicsQuality;
 
-    [SerializeField] private byte defaultShadowQuality;
-    public byte DefaultShadowQuality => defaultShadowQuality;
+    [SerializeField] private short shadowQuality;
+    public short ShadowQuality { get => shadowQuality; set => shadowQuality = value; }
+
+    [SerializeField] private short defaultShadowQuality;
+    public short DefaultShadowQuality => defaultShadowQuality;
+
+    [SerializeField] private short maxShadowQuality;
+    public short MaxShadowQuality => maxShadowQuality;
 
     [SerializeField] private bool shadows;
     public bool Shadows { get => shadows; set => shadows = value; }
@@ -50,11 +59,24 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private float defaultLightness;
     public float DefaultLightness => defaultLightness;
 
+    [SerializeField] private float minLightness;
+    public float MinLightness => minLightness;
+
+    [SerializeField] private float maxLightness;
+    public float MaxLightness => maxLightness;
+
     [SerializeField] private float contrast;
     public float Contrast { get => contrast; set => contrast = value; }
 
     [SerializeField] private float defaultContrast;
     public float DefaultContrast => defaultContrast;
+
+    [SerializeField] private float minContrast;
+    public float MinContrast => minContrast;
+
+    [SerializeField] private float maxContrast;
+    public float MaxContrast => maxContrast;
+
 
     [Header("Sound Options")]
     [SerializeField] private float soundVolume;
@@ -63,11 +85,23 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private float defaultSoundVolume;
     public float DefaultSoundVolume => defaultSoundVolume;
 
+    [SerializeField] private float minSoundVolume;
+    public float MinSoundVolume => minSoundVolume;
+
+    [SerializeField] private float maxSoundVolume;
+    public float MaxSoundVolume => maxSoundVolume;
+
     [SerializeField] private float musicVolume;
     public float MusicVolume { get => musicVolume; set => musicVolume = value; }
 
     [SerializeField] private float defaultMusicVolume;
     public float DefaultMusicVolume => defaultMusicVolume;
+
+    [SerializeField] private float minMusicVolume;
+    public float MinMusicVolume => minMusicVolume;
+
+    [SerializeField] private float maxMusicVolume;
+    public float MaxMusicVolume => maxMusicVolume;
 
     [Header("Controls")]
     [SerializeField] private float horizontalSensibility;
@@ -76,11 +110,23 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private float defaultHorizontalSensibility;
     public float DefaultHorizontalSensibility => defaultHorizontalSensibility;
 
+    [SerializeField] private float minHorizontalSensibility;
+    public float MinHorizontalSensibility => minHorizontalSensibility;
+
+    [SerializeField] private float maxHorizontalSensibility;
+    public float MaxHorizontalSensibility => maxHorizontalSensibility;
+
     [SerializeField] private float verticalSensibility;
     public float VerticalSensibility { get => verticalSensibility; set => verticalSensibility = value; }
 
     [SerializeField] private float defaultVerticalSensibility;
     public float DefaultVerticalSensibility => defaultVerticalSensibility;
+
+    [SerializeField] private float minVerticalSensibility;
+    public float MinVerticalSensibility => minVerticalSensibility;
+
+    [SerializeField] private float maxVerticalSensibility;
+    public float MaxVerticalSensibility => maxVerticalSensibility;
 
     public void ResetOptions()
     {

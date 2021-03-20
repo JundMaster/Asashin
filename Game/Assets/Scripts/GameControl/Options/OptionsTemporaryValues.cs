@@ -3,9 +3,9 @@
 /// </summary>
 public struct OptionsTemporaryValues
 {
-    public byte Difficulty { get; set; }
-    public byte GraphicsQuality { get; set; }
-    public byte ShadowQuality { get; set; }
+    public short Difficulty { get; set; }
+    public short GraphicsQuality { get; set; }
+    public short ShadowQuality { get; set; }
     public bool Shadows { get; set; }
     public bool AfterImages { get; set; }
     public bool MotionBlur { get; set; }
