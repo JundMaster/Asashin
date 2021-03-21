@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 4694814442096952682}
   - component: {fileID: 1079085353}
   - component: {fileID: 1079085354}
+  - component: {fileID: 4421850154634223376}
   - component: {fileID: 1079085352}
   m_Layer: 13
   m_Name: FirebombKunai
@@ -180,6 +181,27 @@ CapsuleCollider:
   m_Height: 0.32
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: -0.22}
+--- !u!114 &4421850154634223376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5362806877042270160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d575bb82795c70408dcf1528cbd441e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemType: 0
+  behaviour: {fileID: 1079085352}
+  speed: 30
+  hitRange: 1
+  timeUntilVanish: 5
+  hitParticles: {fileID: 3664975949699414532, guid: 0e1f38f4938bdf244b886fcfd61635b5, type: 3}
+  hittableLayers:
+    serializedVersion: 2
+    m_Bits: 64512
 --- !u!114 &1079085352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,20 +214,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb9aa80639ba4e9429528bc6e7819886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  enemyKunai: 0
-  speed: 30
-  hitRange: 3
-  timeUntilVanish: 5
-  hitParticles: {fileID: 3664975949699414532, guid: 0e1f38f4938bdf244b886fcfd61635b5, type: 3}
-  hittableLayers:
-    serializedVersion: 2
-    m_Bits: 54272
   enemyLayer:
     serializedVersion: 2
     m_Bits: 1024
   explosionPosition: {fileID: 20046300}
   explosion: {fileID: 1129694466352766, guid: dd5a0094471d0084b8f409005e07d956, type: 3}
+  explosionRange: 5
 --- !u!1 &5726274419726256082
 GameObject:
   m_ObjectHideFlags: 0

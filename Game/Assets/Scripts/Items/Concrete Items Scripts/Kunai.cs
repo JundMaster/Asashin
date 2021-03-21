@@ -5,24 +5,14 @@
 /// </summary>
 public class Kunai : ItemBehaviour, IFindPlayer
 {
-    // Enemy variables
-    [SerializeField] private bool enemyKunai;
-    public Enemy ParentEnemy { get; set; }
-    private Transform playerTarget;
-    private PlayerBlock playerBlock;
-    private PlayerAnimations playerAnim;
+    [SerializeField] private KunaiBehaviour behaviour;
+    public KunaiBehaviour Behaviour => behaviour;
     /// //////////////////////////////////////
-
-    // Components
-    private CinemachineTarget target;
 
     // Movement variables
     private float rotation;
     [SerializeField] protected float speed;
     
-    // Transform from a target if there's one
-    private Transform kunaiCurrentTarget;
-
     private Transform player;
 
     // Hit variables
@@ -35,89 +25,31 @@ public class Kunai : ItemBehaviour, IFindPlayer
 
     // Layers to collide with kunai
     [SerializeField] private LayerMask hittableLayers;
-    [SerializeField] private LayerMask enemyLayer;
+    
 
     private void Start()
     {
-        target = FindObjectOfType<CinemachineTarget>();
         player = FindObjectOfType<Player>().transform;
+        behaviour.KunaiCurrentTarget = null;
 
-        kunaiCurrentTarget = null;
-
-        // If there's an active target, the kunai will have that same target.
-        // If there's NO active target, the kunai will just go towards where
-        // the player is facing.
-        if (target.CurrentTarget.gameObject.activeSelf && enemyKunai == false)
-        {
-            // Finds enemies around the current target
-            Collider[] currentTargetPosition =
-                Physics.OverlapSphere(target.CurrentTarget.transform.position, 0.5f, enemyLayer);
-
-            // If enemy has an Enemy script
-            for (int i = 0; i < currentTargetPosition.Length; i++)
-            {
-                if (currentTargetPosition[i].gameObject.TryGetComponent<Enemy>(out Enemy en))
-                {
-                    // Sets kunai target to enemy MyTarget
-                    kunaiCurrentTarget = en.MyTarget;
-                }
-            }
-        }
-        else
-        {
-            Vector3 position = player.transform.position;
-            Vector3 direction = position + player.transform.forward * 10f;
-
-            transform.LookAt(direction);
-            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);
-
-            kunaiCurrentTarget = null;
-        }
-
-        // In case this is a kunai spawned by an enemy, it will go towards the player
-        // If the player is moving, the enemy will throw the kunai to the
-        // front of the player, else, it will throw it to the player's position
-        if (enemyKunai)
-        {
-            playerBlock = player.GetComponent<PlayerBlock>();
-            playerAnim = player.GetComponent<PlayerAnimations>();
-            playerTarget = GameObject.FindGameObjectWithTag("playerTarget").transform;
-            PlayerMovement movement = player.GetComponent<PlayerMovement>();
-
-            if (movement.MovementSpeed > 0)
-            {
-                if (Vector3.Distance(transform.position, playerTarget.transform.position) > 15)
-                    transform.LookAt(playerTarget.transform.position + playerTarget.forward * 3f);
-                else if (Vector3.Distance(transform.position, playerTarget.transform.position) > 10f)
-                    transform.LookAt(playerTarget.transform.position + playerTarget.forward * 2f);
-                else if (Vector3.Distance(transform.position, playerTarget.transform.position) > 5f)
-                    transform.LookAt(playerTarget.transform.position + playerTarget.forward * 1.3f);
-                else
-                    transform.LookAt(playerTarget.transform.position + playerTarget.forward * 0.5f);
-            }
-            else
-                transform.LookAt(playerTarget);
-
-            kunaiCurrentTarget = null;
-        }
+        // Decides direction of kunai
+        behaviour.OnStart(player);
 
         rotation = 0;
         timePassed = Time.time;
 
-        // Only for friendly kunais
-        if (enemyKunai == false)
-            Execute();
+        behaviour.Execute(this);
     }
 
     private void FixedUpdate()
     {
         // If kunai has an active target
-        if (kunaiCurrentTarget)
+        if (behaviour.KunaiCurrentTarget)
         {
-            transform.LookAt(kunaiCurrentTarget);
+            transform.LookAt(behaviour.KunaiCurrentTarget);
             transform.position += transform.forward * Time.fixedDeltaTime * speed;
         }
-        else if (kunaiCurrentTarget == null)
+        else if (behaviour.KunaiCurrentTarget == null)
         {
             // Only goes forward until it hits something.
             transform.eulerAngles +=
@@ -149,92 +81,30 @@ public class Kunai : ItemBehaviour, IFindPlayer
             Collider[] collisions =
                 Physics.OverlapSphere(other.ClosestPoint(transform.position), hitRange, hittableLayers);
 
+            // Checks if it's the parent or not
             Transform bodyToHit = null;
-
             if (collisions[0].transform.parent != null)
                 bodyToHit = collisions[0].transform.parent;
             else
                 bodyToHit = collisions[0].transform;
+
             // If this object can receive damage
-            if (bodyToHit.TryGetComponent(out IDamageable body))
+            if (bodyToHit.TryGetComponent(out IDamageable damageableBody))
             {
-                // If it's an enemy kunai,
-                // if the player is blocking, it will be reflected to the enemy
-                // that spawned the kunai,
-                // else, the player will take damage
-                if (enemyKunai)
-                {
-                    // If it collides with player layer
-                    // and player is blocking
-                    if (collisions[0].gameObject.layer == 11)
-                    {
-                        if (playerBlock.Performing)
-                        {
-                            // If the player is facing the enemy direction
-                            if (Vector3.Angle(
-                                ParentEnemy.transform.position - player.position,
-                                player.forward) < 50f)
-                            {
-                                kunaiCurrentTarget = ParentEnemy.MyTarget;
-                                playerAnim.TriggerBlockReflect();
-                            }
-                            // If the player is blocking but not facing the enemy
-                            else
-                            {
-                                //body.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
-                                body.TakeDamage(5f);
-                                Destroy(gameObject);
-                            }
-                        }
-                        // Else if the player isn't blocking
-                        else
-                        {
-                            //body.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
-                            body.TakeDamage(5f);
-                            Debug.Log(body.Health);
-                            Destroy(gameObject);
-                        }
-                    }
-                    // Else if it's not the player (meaning the kunai was reflected)
-                    else
-                    {
-                        //body.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
-                        body.TakeDamage(5f);
-                        Debug.Log(body.Health);
-                        Destroy(gameObject);
-                    }
-                }
-                // If it's not an enemy kunai, then it means the body it's an
-                // enemy. The enemy will take damage from playerStats ranged damage.
-                else
-                {
-                    body.TakeDamage(playerStats.RangedDamage);
-                    Debug.Log(body.Health);
-                    Destroy(gameObject);
-                }
+                // Trigers behaviour hit()
+                behaviour.Hit(damageableBody, bodyToHit, player);
             }
             // Else, if it's not an IDamageable interface, the object is destroyed
             else
             {
                 Destroy(gameObject);
             }
-
             Instantiate(hitParticles, transform.position, Quaternion.identity);
         }
         else
         {
-            Destroy(gameObject);
+            behaviour.Hit(null, null, null);
         }
-    }
-
-    /// <summary>
-    /// Only executes if it's a player's kunai.
-    /// Reduces the number of kunais and updates UI.
-    /// </summary>
-    public override void Execute()
-    {
-        playerStats.Kunais--;
-        base.Execute();
     }
 
     private void OnDrawGizmos()
@@ -245,11 +115,5 @@ public class Kunai : ItemBehaviour, IFindPlayer
     new public void FindPlayer()
     {
         player = FindObjectOfType<Player>().transform;
-
-        if (enemyKunai)
-        {
-            playerBlock = player.GetComponent<PlayerBlock>();
-            playerAnim = player.GetComponent<PlayerAnimations>();
-        }
     }
 }

@@ -3,24 +3,27 @@
 /// <summary>
 /// Class responsible for FirebombKunai's behaviour.
 /// </summary>
-public class FirebombKunai : Kunai
+public class FirebombKunaiBehaviour : FriendlyKunaiBehaviour
 {
     // Explosion variables
     [SerializeField] private Transform explosionPosition;
     [SerializeField] private GameObject explosion;
+    [SerializeField] private float explosionRange;
 
     /// <summary>
-    /// What happens when the kunai hits something.
+    /// 
     /// </summary>
-    /// <param name="other">Parameter with collision collider.</param>
-    protected override void Hit(Collider other)
+    /// <param name="damageableBody"></param>
+    /// <param name="bodyTohit"></param>
+    /// <param name="player"></param>
+    public override void Hit(IDamageable damageableBody, Transform bodyTohit, Transform player)
     {
         Instantiate(explosion, explosionPosition.transform.position, Quaternion.identity);
 
-        if (other != null)
+        if (bodyTohit != null)
         {
             Collider[] collisions =
-                Physics.OverlapSphere(other.ClosestPoint(transform.position), hitRange);
+                Physics.OverlapSphere(bodyTohit.position, explosionRange);
 
             foreach (Collider col in collisions)
             {
@@ -36,9 +39,13 @@ public class FirebombKunai : Kunai
         Destroy(gameObject);
     }
 
-    public override void Execute()
+    /// <summary>
+    /// Happens when IUsableItem execute is called.
+    /// </summary>
+    /// <param name="baseClass">Kunai base class.</param>
+    public override void Execute(ItemBehaviour baseClass)
     {
         playerStats.FirebombKunais--;
-        FindObjectOfType<ItemUIParent>().UpdateAllItemUI();
+        baseClass.Execute();
     }
 }

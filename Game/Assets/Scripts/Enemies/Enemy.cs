@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour
     // TEMP
     private IEnumerator ThrowKunaiTemporary()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         Player player = FindObjectOfType<Player>();
         while (player != null)
         {
@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour
             {
                 GameObject thisKunai = Instantiate(kunai, MyTarget.position + transform.forward, Quaternion.identity);
                 thisKunai.layer = 15;
-                thisKunai.GetComponent<Kunai>().ParentEnemy = this;
+                thisKunai.GetComponent<Kunai>().Behaviour.ParentEnemy = this;
             }
             yield return new WaitForSeconds(2.5f);
         }
