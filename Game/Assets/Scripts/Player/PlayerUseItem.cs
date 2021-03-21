@@ -74,6 +74,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
             transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
         }
 
+        /*
         // If the player is pressing any direction
         // rotates the character instantly in that direction
         else if (target.Targeting == false)
@@ -88,6 +89,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                 transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
             }
         }
+        */
     }
 
     /// <summary>
@@ -107,6 +109,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                 case ListOfItems.Kunai:
                     if (stats.Kunais > 0)
                     {
+                        PerformingItemUseToTrue();
                         playerAnims.TriggerKunaiAnimation();
                         RotationBeforeItemUse();
                         TimeItemWasUsed = Time.time;
@@ -117,6 +120,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                 case ListOfItems.FirebombKunai:
                     if (stats.FirebombKunais > 0)
                     {
+                        PerformingItemUseToTrue();
                         playerAnims.TriggerKunaiAnimation();
                         RotationBeforeItemUse();
                         TimeItemWasUsed = Time.time;
@@ -127,6 +131,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                 case ListOfItems.HealthFlask:
                     if (stats.HealthFlasks > 0)
                     {
+                        PerformingItemUseToTrue();
                         playerAnims.TriggerHealthFlaskAnimation();
                         RotationBeforeItemUse();
                         TimeItemWasUsed = Time.time;
@@ -137,6 +142,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                 case ListOfItems.SmokeGrenade:
                     if (stats.SmokeGrenades > 0)
                     {
+                        PerformingItemUseToTrue();
                         playerAnims.TriggerSmokeGrenadeAnimation();
                         RotationBeforeItemUse();
                         TimeItemWasUsed = Time.time;
@@ -155,15 +161,6 @@ public class PlayerUseItem : MonoBehaviour, IAction
     /// Event registered on PlayerMovement.
     /// </summary>
     public event Action UsedItemDelay;
-
-    /// <summary>
-    /// Called on item use animation events.
-    /// </summary>
-    private void PerformingItemUseToTrue()
-    {
-        anim.applyRootMotion = true;
-        Performing = true;
-    }
 
     /// <summary>
     /// Called on animation event. Throws a normal kunai or firebomb kunai,
@@ -199,6 +196,15 @@ public class PlayerUseItem : MonoBehaviour, IAction
     private void AnimationEventDestroyItemLeftHand()
     {
         Destroy(leftHandSpawnedItem);
+    }
+
+    /// <summary>
+    /// Called on item use animation events.
+    /// </summary>
+    private void PerformingItemUseToTrue()
+    {
+        anim.applyRootMotion = true;
+        Performing = true;
     }
 
     /// <summary>
