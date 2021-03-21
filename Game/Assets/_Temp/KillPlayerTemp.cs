@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class KillPlayerTemp : MonoBehaviour
 {
+    /*
     [MenuItem("Costume Methods/Kill Player")]
     private static void KillPlayer()
     {
@@ -15,4 +16,5 @@ public class KillPlayerTemp : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    */
 }

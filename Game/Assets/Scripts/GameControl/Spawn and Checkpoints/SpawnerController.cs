@@ -171,7 +171,7 @@ public class SpawnerController : MonoBehaviour
         else
         {
             // Loads first scene after main menu
-            sceneControl.LoadScene(1);
+            sceneControl.LoadScene(0);
         }  
     }
 
