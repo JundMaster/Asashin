@@ -6,14 +6,14 @@
 public struct FilePath
 {
     public static readonly string SAVEFILESTATS = 
-        Application.dataPath + "/Temp/savefileStats.savefile";
+        Application.dataPath + "/savefileStats.savefile";
 
     public static readonly string SAVEFILECHECKPOINT =
-        Application.dataPath + "/Temp/savefileCheckpoint.savefile";
+        Application.dataPath + "/savefileCheckpoint.savefile";
 
     public static readonly string SAVEFILESCENE =
-        Application.dataPath + "/Temp/savefileScene.savefile";
+        Application.dataPath + "/savefileScene.savefile";
 
     public static readonly string CONFIG =
-        Application.dataPath + "/Temp/config.configfile";
+        Application.dataPath + "/config.configfile";
 }
