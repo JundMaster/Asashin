@@ -117,7 +117,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                 case ListOfItems.FirebombKunai:
                     if (stats.FirebombKunais > 0)
                     {
-                        playerAnims.TriggerFirebombKunaiAnimation();
+                        playerAnims.TriggerKunaiAnimation();
                         RotationBeforeItemUse();
                         TimeItemWasUsed = Time.time;
                         canUseItemDelayOver = false;
@@ -166,7 +166,8 @@ public class PlayerUseItem : MonoBehaviour, IAction
     }
 
     /// <summary>
-    /// Called on animation event.
+    /// Called on animation event. Throws a normal kunai or firebomb kunai,
+    /// depending on the current item selected
     /// </summary>
     private void AnimationEventThrowKunai()
     {

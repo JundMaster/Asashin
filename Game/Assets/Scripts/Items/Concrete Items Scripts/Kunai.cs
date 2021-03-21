@@ -84,7 +84,7 @@ public class Kunai : ItemBehaviour, IFindPlayer
             playerTarget = GameObject.FindGameObjectWithTag("playerTarget").transform;
             PlayerMovement movement = player.GetComponent<PlayerMovement>();
 
-            if (movement.Direction.magnitude > 0)
+            if (movement.MovementSpeed > 0)
             {
                 if (Vector3.Distance(transform.position, playerTarget.transform.position) > 15)
                     transform.LookAt(playerTarget.transform.position + playerTarget.forward * 3f);
@@ -201,6 +201,7 @@ public class Kunai : ItemBehaviour, IFindPlayer
                 else
                 {
                     body.TakeDamage(playerStats.RangedDamage);
+                    Debug.Log(body.Health);
                     Destroy(gameObject);
                 }
             }

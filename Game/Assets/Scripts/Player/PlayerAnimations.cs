@@ -105,25 +105,25 @@ public class PlayerAnimations : MonoBehaviour
     }
 
     /// <summary>
-    /// The action of this item is called on PlayerAnimationEvents class.
+    /// The action of this item is called on PlayerUseItem class.
     /// Its behaviour is called with animation events with a method on that class.
     /// </summary>
     public void TriggerKunaiAnimation() => anim.SetTrigger("ThrowKunai");
 
     /// <summary>
-    /// The action of this item is called on PlayerAnimationEvents class.
+    /// The action of this item is called on PlayerUseItem class.
     /// Its behaviour is called with animation events with a method on that class.
     /// </summary>
     public void TriggerFirebombKunaiAnimation() => anim.SetTrigger("ThrowFirebombKunai");
 
     /// <summary>
-    /// The action of this item is called on PlayerAnimationEvents class.
+    /// The action of this item is called on PlayerUseItem class.
     /// Its behaviour is called with animation events with a method on that class.
     /// </summary>
     public void TriggerHealthFlaskAnimation() => anim.SetTrigger("UseHealthFlask");
 
     /// <summary>
-    /// The action of this item is called on PlayerAnimationEvents class.
+    /// The action of this item is called on PlayerUseItem class.
     /// Its behaviour is called with animation events with a method on that class.
     /// </summary>
     public void TriggerSmokeGrenadeAnimation() => anim.SetTrigger("UseSmokeGrenade");
