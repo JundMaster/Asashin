@@ -149,8 +149,14 @@ public class Kunai : ItemBehaviour, IFindPlayer
             Collider[] collisions =
                 Physics.OverlapSphere(other.ClosestPoint(transform.position), hitRange, hittableLayers);
 
+            Transform bodyToHit = null;
+
+            if (collisions[0].transform.parent != null)
+                bodyToHit = collisions[0].transform.parent;
+            else
+                bodyToHit = collisions[0].transform;
             // If this object can receive damage
-            if (collisions[0].gameObject.TryGetComponent(out IDamageable body))
+            if (bodyToHit.TryGetComponent(out IDamageable body))
             {
                 // If it's an enemy kunai,
                 // if the player is blocking, it will be reflected to the enemy
@@ -185,6 +191,7 @@ public class Kunai : ItemBehaviour, IFindPlayer
                         {
                             //body.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
                             body.TakeDamage(5f);
+                            Debug.Log(body.Health);
                             Destroy(gameObject);
                         }
                     }
@@ -193,6 +200,7 @@ public class Kunai : ItemBehaviour, IFindPlayer
                     {
                         //body.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
                         body.TakeDamage(5f);
+                        Debug.Log(body.Health);
                         Destroy(gameObject);
                     }
                 }
