@@ -63,6 +63,8 @@ public class Options : MonoBehaviour
     /// <param name="value">Struct with values.</param>
     public void UpdateValues(OptionsTemporaryValues value)
     {
+        options.AutoLock = value.AutoLock;
+        options.ScreenMode = value.ScreenMode;
         options.Difficulty = value.Difficulty;
         options.GraphicsQuality = value.GraphicsQuality;
         options.ShadowQuality = value.ShadowQuality;

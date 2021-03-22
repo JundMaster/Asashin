@@ -12,4 +12,6 @@
     MusicVolume,
     HorizontalSensibility,
     VerticalSensibility,
+    ScreenMode,
+    AutoLock,
 }
