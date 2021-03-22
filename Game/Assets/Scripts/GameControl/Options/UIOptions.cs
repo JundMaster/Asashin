@@ -12,6 +12,13 @@ public class UIOptions : MonoBehaviour
     [SerializeField] private GameObject initialSelectedButton;
     [SerializeField] private OptionsScriptableObj defaultOptions;
 
+    [Header("Screen Mode")]
+    [SerializeField] private TextMeshProUGUI screenModeText;
+
+    [Header("Auto Lock Mode")]
+    [SerializeField] private TextMeshProUGUI autoLockText;
+
+
     [Header("Difficulty")]
     [SerializeField] private TextMeshProUGUI difficultyText;
 
@@ -26,6 +33,7 @@ public class UIOptions : MonoBehaviour
     private void Awake()
     {
         options = FindObjectOfType<Options>();
+        UpdateAllUI();
     }
 
     /// <summary>
@@ -48,6 +56,23 @@ public class UIOptions : MonoBehaviour
     {
         switch (option)
         {
+            case "AutoLock":
+                if (currentValues.AutoLock)
+                {
+                    currentValues.AutoLock = false;
+                    UpdateUI(GameOptionsEnum.AutoLock, 1);
+                }
+                else
+                {
+                    currentValues.AutoLock = defaultOptions.AutoLock;
+                    UpdateUI(GameOptionsEnum.AutoLock, 0);
+                }
+                break;
+            case "ScreenMode":
+                if (currentValues.ScreenMode - 1 >= 0) currentValues.ScreenMode--;
+                else currentValues.ScreenMode = defaultOptions.MaxScreenMode;
+                UpdateUI(GameOptionsEnum.ScreenMode, currentValues.ScreenMode);
+                break;
             case "Difficulty":
                 if (currentValues.Difficulty - 1 >= 0) currentValues.Difficulty--;
                 else currentValues.Difficulty = defaultOptions.MaxDifficulty;
@@ -100,6 +125,34 @@ public class UIOptions : MonoBehaviour
     {
         switch(option)
         {
+            case GameOptionsEnum.AutoLock:
+                switch (number)
+                {
+                    case 0:
+                        autoLockText.text = "On";
+                        break;
+                    case 1:
+                        autoLockText.text = "Off";
+                        break;
+
+                }
+                break;
+
+            case GameOptionsEnum.ScreenMode:
+                switch (number)
+                {
+                    case 0:
+                        screenModeText.text = "Windowed";
+                        break;
+                    case 1:
+                        screenModeText.text = "Fullscreen";
+                        break;
+                    case 2:
+                        screenModeText.text = "Borderless";
+                        break;
+                }
+                break;
+
             case GameOptionsEnum.Difficulty:
                 switch(number)
                 {
@@ -152,6 +205,29 @@ public class UIOptions : MonoBehaviour
 
     private void UpdateAllUI()
     {
+        switch (currentValues.AutoLock)
+        {
+            case true:
+                autoLockText.text = "On";
+                break;
+            case false:
+                autoLockText.text = "Off";
+                break;
+        }
+
+        switch (currentValues.ScreenMode)
+        {
+            case 0:
+                screenModeText.text = "Windowed";
+                break;
+            case 1:
+                screenModeText.text = "Fullscreen";
+                break;
+            case 2:
+                screenModeText.text = "Borderless";
+                break;
+        }
+
         switch (currentValues.Difficulty)
         {
             case 0:

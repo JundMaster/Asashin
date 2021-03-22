@@ -3,6 +3,8 @@
 /// </summary>
 public struct OptionsTemporaryValues
 {
+    public bool AutoLock { get; set; }
+    public short ScreenMode { get; set; }
     public short Difficulty { get; set; }
     public short GraphicsQuality { get; set; }
     public short ShadowQuality { get; set; }
@@ -18,6 +20,8 @@ public struct OptionsTemporaryValues
 
     public OptionsTemporaryValues(OptionsScriptableObj options)
     {
+        AutoLock = options.AutoLock;
+        ScreenMode = options.ScreenMode;
         Difficulty = options.Difficulty;
         GraphicsQuality = options.GraphicsQuality;
         ShadowQuality = options.ShadowQuality;
