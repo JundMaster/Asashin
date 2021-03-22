@@ -110,11 +110,13 @@ public class SpawnerController : MonoBehaviour
     private void OnEnable()
     {
         if (uiRespawn) uiRespawn.RespawnButtonPressed += RespawnPlayer;
+        // MAIN MENU . LOAD GAME += RESPAWN PLAYER
     }
 
     private void OnDisable()
     {
         if (uiRespawn) uiRespawn.RespawnButtonPressed -= RespawnPlayer;
+        // MAIN MENU . LOAD GAME -= RESPAWN PLAYER
     }
 
     /// <summary>
@@ -172,7 +174,7 @@ public class SpawnerController : MonoBehaviour
         {
             // Loads first scene after main menu
             sceneControl.LoadScene(0);
-        }  
+        }
     }
 
     /// <summary>

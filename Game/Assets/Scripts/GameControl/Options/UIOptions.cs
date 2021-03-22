@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using System.Collections;
 
 /// <summary>
 /// Class responsible for controlling UIOptions. Updates values on ui
@@ -22,10 +23,19 @@ public class UIOptions : MonoBehaviour
     // Components
     private Options options;
     private OptionsTemporaryValues currentValues;
+    private EventSystem eventSys;
+    private GameObject lastSelectedGameObject;
+
+    /*
+    [Header("Selected Button After Arrow Click")]
+    [Tooltip("After the user presses an arrow with keyboard, this button will be selected")]
+    [SerializeField] private GameObject selectedBut;
+    */
 
     private void Awake()
     {
         options = FindObjectOfType<Options>();
+        eventSys = FindObjectOfType<EventSystem>();
     }
 
     /// <summary>
@@ -36,9 +46,34 @@ public class UIOptions : MonoBehaviour
     private void OnEnable()
     {
         currentValues = options.CurrentValues;
-        //EventSystem.current.SetSelectedGameObject(initialSelectedButton);
+        eventSys.SetSelectedGameObject(initialSelectedButton);
         UpdateAllUI();
     }
+
+    /// <summary>
+    /// Checks if current selected game object is null.
+    /// If it's null it selects the last game object selected.
+    /// </summary>
+    private void Update()
+    {
+        // Keeps last selected gameobject
+        if (eventSys.currentSelectedGameObject != null &&
+            eventSys.currentSelectedGameObject != lastSelectedGameObject)
+        {
+            lastSelectedGameObject = eventSys.currentSelectedGameObject;
+        }
+        // If the button is null, it selects the last selected button
+        if (eventSys.currentSelectedGameObject == null)
+        {
+            eventSys.SetSelectedGameObject(lastSelectedGameObject);
+        }
+    }
+
+    /// <summary>
+    /// Passes a struct with current values to Options class, updates current
+    /// values and saves those values in a file.
+    /// </summary>
+    public void AcceptValues() => options.UpdateValues(currentValues);
 
     /// <summary>
     /// Decrements a certain value.
@@ -96,6 +131,33 @@ public class UIOptions : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Starts coroutine to select parent button after clicking an arrow with a controller.
+    /// </summary>
+    public void StartCoroutineSelectLastButtonBeforeArrow()
+    {
+        // Gets current button selected (ARROW)
+        GameObject currentButton = eventSys.currentSelectedGameObject;
+        // Selects the parent button of this arrow IF the player is controlling it with a controller/keyboard
+        StartCoroutine(SelectLastButtonBeforeArrow(currentButton.transform.parent.gameObject));
+    }
+
+    /// <summary>
+    /// Selects parent button after clicking arrow.
+    /// </summary>
+    /// <param name="parentButton">Parent button of this arrow.</param>
+    /// <returns>Wait for end of frame.</returns>
+    private IEnumerator SelectLastButtonBeforeArrow(GameObject parentButton)
+    {
+        yield return new WaitForEndOfFrame();
+        eventSys.SetSelectedGameObject(parentButton);
+    }
+
+    /// <summary>
+    /// Updates UI corresponding to the current options.
+    /// </summary>
+    /// <param name="option">What type of option to change.</param>
+    /// <param name="number">Current value of that option.</param>
     private void UpdateUI(GameOptionsEnum option, short number)
     {
         switch(option)
@@ -171,32 +233,26 @@ public class UIOptions : MonoBehaviour
         switch (currentValues.GraphicsQuality)
         {
             case 0:
-                difficultyText.text = "Low";
+                graphicsQualityText.text = "Low";
                 break;
             case 1:
-                difficultyText.text = "Medium";
+                graphicsQualityText.text = "Medium";
                 break;
             case 2:
-                difficultyText.text = "High";
+                graphicsQualityText.text = "High";
                 break;
         }
         switch (currentValues.ShadowQuality)
         {
             case 0:
-                difficultyText.text = "Low";
+                shadowQualityText.text = "Low";
                 break;
             case 1:
-                difficultyText.text = "Medium";
+                shadowQualityText.text = "Medium";
                 break;
             case 2:
-                difficultyText.text = "High";
+                shadowQualityText.text = "High";
                 break;
         }
     }
-
-    /// <summary>
-    /// Passes a struct with current values to Options class, updates current
-    /// values and saves those values in a file.
-    /// </summary>
-    public void AcceptValues() => options.UpdateValues(currentValues);
 }
