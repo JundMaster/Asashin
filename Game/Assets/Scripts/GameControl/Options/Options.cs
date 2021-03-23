@@ -26,7 +26,14 @@ public class Options : MonoBehaviour
             gameOptions = new GameOptions(options);
 
             // When the game begins for the first time on a computer
-            if (PlayerPrefs.GetInt("FirstGame", 1) == 1)
+            if (gameOptions.FileExists(FilePath.CONFIG))
+            {
+                // Updates options values to player last config with options
+                gameOptions.LoadConfig();
+
+            }
+            // Else if file doesn't exist yet
+            else
             {
                 // Creates new file
                 gameOptions.CreateConfigFile();
@@ -36,16 +43,8 @@ public class Options : MonoBehaviour
 
                 // Saves current options
                 gameOptions.SaveConfig();
-
-                PlayerPrefs.SetInt("FirstGame", 0);
             }
-            // Else if this is not the first time
-            else
-            {
-                // Updates options values to player last config with options
-                gameOptions.LoadConfig();
-            }
-
+            
             // Initializes a struct with all current values from options
             CurrentValues = new OptionsTemporaryValues(options);
         }

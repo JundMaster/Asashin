@@ -74,7 +74,6 @@ public class PlayerUseItem : MonoBehaviour, IAction
             transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
         }
 
-        /*
         // If the player is pressing any direction
         // rotates the character instantly in that direction
         else if (target.Targeting == false)
@@ -89,7 +88,6 @@ public class PlayerUseItem : MonoBehaviour, IAction
                 transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
             }
         }
-        */
     }
 
     /// <summary>

@@ -65,10 +65,10 @@ sealed public class GameState : FileIO
             {
                 using (StreamReader fr = new StreamReader(gzs))
                 {
-                    playerSavedStats.Kunais = Convert.ToByte(fr.ReadLine());
-                    playerSavedStats.FirebombKunais = Convert.ToByte(fr.ReadLine());
-                    playerSavedStats.HealthFlasks = Convert.ToByte(fr.ReadLine());
-                    playerSavedStats.SmokeGrenades = Convert.ToByte(fr.ReadLine());
+                    playerSavedStats.Kunais = Convert.ToInt32(fr.ReadLine());
+                    playerSavedStats.FirebombKunais = Convert.ToInt32(fr.ReadLine());
+                    playerSavedStats.HealthFlasks = Convert.ToInt32(fr.ReadLine());
+                    playerSavedStats.SmokeGrenades = Convert.ToInt32(fr.ReadLine());
                     playerSavedStats.SavedHealth = Convert.ToSingle(fr.ReadLine());
                 }
             }

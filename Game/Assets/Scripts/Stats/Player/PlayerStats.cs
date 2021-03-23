@@ -8,13 +8,13 @@ public sealed class PlayerStats : Stats, IPlayerDamage, IHealable
     [SerializeField] private PlayerSavedStatsScriptableObj playerStats;
 
     // Items
-    public byte Kunais 
+    public int Kunais 
     { get => playerStats.Kunais; set => playerStats.Kunais = value; }
-    public byte FirebombKunais 
+    public int FirebombKunais 
     { get => playerStats.FirebombKunais; set => playerStats.FirebombKunais = value; }
-    public byte HealthFlasks 
+    public int HealthFlasks 
     { get => playerStats.HealthFlasks; set => playerStats.HealthFlasks = value; }
-    public byte SmokeGrenades 
+    public int SmokeGrenades 
     { get => playerStats.SmokeGrenades; set => playerStats.SmokeGrenades = value; }
 
     // Stats

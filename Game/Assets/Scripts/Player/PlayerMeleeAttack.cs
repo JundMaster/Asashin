@@ -15,6 +15,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private PlayerStats stats;
     private PlayerBlock block;
     private PlayerJump jump;
+    private PlayerInteract interact;
 
     // Weapon
     [SerializeField] private SphereCollider sword;
@@ -40,6 +41,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         stats = GetComponent<PlayerStats>();
         block = GetComponent<PlayerBlock>();
         jump = GetComponent<PlayerJump>();
+        interact = GetComponent<PlayerInteract>();
     }
 
     private void Start()
@@ -86,11 +88,13 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     /// <summary>
     /// Handles light attack.
+    /// Attacks if the player is not rolling, not using an item, not blocking
+    /// and not near an interectable object.
     /// </summary>
     private void MeleeLightAttack()
     {
         if (roll.Performing == false && useItem.Performing == false &&
-            block.Performing == false)
+            block.Performing == false && interact.InterectableObject == null)
         {
             if (target.Targeting)
             {
