@@ -497,6 +497,7 @@ GameObject:
   - component: {fileID: 4591925704864239293}
   - component: {fileID: 3568062665096697259}
   - component: {fileID: 8774686540004718340}
+  - component: {fileID: 892310889}
   m_Layer: 20
   m_Name: WoodenBox_LP
   m_TagString: Untagged
@@ -556,6 +557,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   brokenObject: {fileID: 4398139454083177415, guid: dd2cfac7edde87640bd67509a5fadea4, type: 3}
+--- !u!114 &892310889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3815143401873691655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da14cb1302d5bab438310145c631ff71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToSpawn:
+  - {fileID: 3720341476399585580, guid: 41cd94c97e850f848a224e6c451653e2, type: 3}
+  - {fileID: 3046560142532366806, guid: f04b4747e62d23840bc7a6555e25184e, type: 3}
+  - {fileID: 5829304964158241986, guid: 449e78d93384fd84ba0f0320d6e1a04f, type: 3}
+  - {fileID: 772889320561755001, guid: 4405bc54c6b9eeb4fa449ebb8ac171a0, type: 3}
+  firstItemSpawnChance: 100
+  spawningChance: 20
 --- !u!1 &5768474836503992732
 GameObject:
   m_ObjectHideFlags: 0

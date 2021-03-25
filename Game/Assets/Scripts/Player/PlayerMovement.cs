@@ -23,10 +23,7 @@ public class PlayerMovement : MonoBehaviour, IAction
 
     // Movement Variables
     public Vector3 Direction { get; private set; }
-    private float hVel;
-    private float vVel;
     private Vector3 moveDirection;
-    private float runSpeed;
     public float MovementSpeed { get; private set; }
 
     // Rotation Variables
@@ -77,7 +74,6 @@ public class PlayerMovement : MonoBehaviour, IAction
         attack.StrongMeleeAttack -= () => Walking = false;
         roll.Roll -= () => Walking = false;
         useItem.UsedItemDelay -= () => Walking = false;
-
     }
 
     public void ComponentFixedUpdate()

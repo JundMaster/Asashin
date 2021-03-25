@@ -9,31 +9,35 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
     [SerializeField] private GameObject[] objectToSpawn;
     private int randomSpawnNumber;
     private Vector3 spawnPosition;
-    [Tooltip("The item needs a chance higher than this in order to be spawned")]
-    [SerializeField] private float spawningChance;
+    [Tooltip("This is the chance of dropping the first item.")]
+    [Range(0, 100)][SerializeField] private float firstItemSpawnChance;
+    [Tooltip("The item needs a chance higher than this in order to be spawned.")]
+    [Range(0, 100)] [SerializeField] private float spawningChance;
 
     private void Start()
     {
         spawnPosition =
             new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+
+        if (firstItemSpawnChance < spawningChance)
+        {
+            firstItemSpawnChance = spawningChance;
+        }
     }
 
     public void ExecuteBehaviour()
     {
         // Spawns at least one item
-        SpawnItem(100f);
+        SpawnItem(ref firstItemSpawnChance);
     }
 
     /// <summary>
     /// Spawns a random item in a random direction.
     /// </summary>
-    /// <param name="probability">Probability of spawning</param>
-    /// <returns>Wait for seconds in realtime.</returns>
-    private void SpawnItem(float probability)
+    /// <param name="probability">Probability of spawning the item.</param>
+    private void SpawnItem(ref float probability)
     {
-        //yield return new WaitForSecondsRealtime(0.5f);
-
-        if (probability > spawningChance)
+        while (probability >= spawningChance)
         {
             randomSpawnNumber = Random.Range(0, objectToSpawn.Length);
 
@@ -49,7 +53,7 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
                 Random.Range(-75f, 75f), 90f, Random.Range(-75f, 75f), ForceMode.Impulse);
 
             // Starts the coroutine again with a random chance of spawning an item
-            SpawnItem(Random.Range(0f, 100f));
+            probability = Random.Range(0f, 100f);
         }
     }
 }

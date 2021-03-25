@@ -10,9 +10,12 @@ public class KenshuseiDeathBehaviour : DeathBehaviour
 
     [SerializeField] private GameObject smokeParticles;
 
+    private ISpawnItemBehaviour spawnItemBehaviour;
+
     private void Awake()
     {
         cinemachineTarget = FindObjectOfType<CinemachineTarget>();
+        spawnItemBehaviour = GetComponent<SpawnItemBehaviour>();
     }
 
     public override void Die()
@@ -21,6 +24,9 @@ public class KenshuseiDeathBehaviour : DeathBehaviour
         // changes target to next enemy
         cinemachineTarget.CancelCurrentTargetAutomatically();
         cinemachineTarget.AutomaticallyFindTargetCall();
+
+        // Random chance of spawning items.
+        spawnItemBehaviour.ExecuteBehaviour();
 
         Instantiate(
             smokeParticles,
