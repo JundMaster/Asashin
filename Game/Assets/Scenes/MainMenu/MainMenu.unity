@@ -134,7 +134,6 @@ GameObject:
   - component: {fileID: 14021469}
   - component: {fileID: 14021471}
   - component: {fileID: 14021470}
-  - component: {fileID: 14021472}
   m_Layer: 5
   m_Name: OptionsMenu( with ui script )
   m_TagString: Untagged
@@ -192,20 +191,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 14021468}
   m_CullTransparentMesh: 0
---- !u!114 &14021472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 14021468}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06ce67867b537914a944086ca0f9bd10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  optionTitleText: {fileID: 0}
-  optionText: {fileID: 0}
 --- !u!1 &16333707
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,6 +205,7 @@ GameObject:
   - component: {fileID: 16333711}
   - component: {fileID: 16333710}
   - component: {fileID: 16333709}
+  - component: {fileID: 16333714}
   m_Layer: 5
   m_Name: LeftArrow
   m_TagString: Untagged
@@ -327,33 +313,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: SwitchActiveCamDown
-        m_Mode: 1
+      - m_Target: {fileID: 14021470}
+        m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+        m_MethodName: LeftButton
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Shadows
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TimelineController, Assembly-CSharp
-        m_MethodName: ChangeTimeline
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuOptionsController, Assembly-CSharp
-        m_MethodName: SwitchMenuOption
+      - m_Target: {fileID: 776374013}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -401,6 +375,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 16333707}
   m_CullTransparentMesh: 0
+--- !u!114 &16333714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16333707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: LeftButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Shadows
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &18686016
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,15 +524,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 18686016}
   m_LocalRotation: {x: -0.0023151443, y: 0.007808484, z: 0.04143104, w: 0.99910825}
-  m_LocalPosition: {x: 0, y: 0, z: -12.499999}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -11.569}
+  m_LocalScale: {x: 0.81, y: 0.81, z: 0.81}
   m_Children: []
   m_Father: {fileID: 1553884068}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -0.302, y: 0.883, z: 4.747}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -180.6, y: -83.5}
+  m_AnchoredPosition: {x: -180.6, y: -109.69998}
   m_SizeDelta: {x: 305.5, y: 146.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &53396019
@@ -2637,11 +2652,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1307930094}
+    m_SelectOnDown: {fileID: 309290061}
+    m_SelectOnLeft: {fileID: 914648947}
+    m_SelectOnRight: {fileID: 1000160460}
   m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -4591,6 +4606,7 @@ GameObject:
   - component: {fileID: 231587054}
   - component: {fileID: 231587053}
   - component: {fileID: 231587052}
+  - component: {fileID: 231587057}
   m_Layer: 5
   m_Name: LeftArrow
   m_TagString: Untagged
@@ -4698,10 +4714,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: SwitchActiveCamDown
-        m_Mode: 1
+      - m_Target: {fileID: 14021470}
+        m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+        m_MethodName: LeftButton
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4710,21 +4726,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TimelineController, Assembly-CSharp
-        m_MethodName: ChangeTimeline
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuOptionsController, Assembly-CSharp
-        m_MethodName: SwitchMenuOption
+      - m_Target: {fileID: 1876771792}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4772,6 +4776,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 231587050}
   m_CullTransparentMesh: 0
+--- !u!114 &231587057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231587050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: LeftButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &231609759
 GameObject:
   m_ObjectHideFlags: 0
@@ -5192,9 +5237,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1100783732}
+    m_SelectOnDown: {fileID: 1930271271}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 2
@@ -5408,11 +5453,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 114929746}
+    m_SelectOnDown: {fileID: 1100783732}
+    m_SelectOnLeft: {fileID: 1243883541}
+    m_SelectOnRight: {fileID: 930098643}
   m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -5931,6 +5976,18 @@ MonoBehaviour:
           m_StringArgument: ScreenMode
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1307930094}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &316726225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5998,6 +6055,18 @@ MonoBehaviour:
             m_StringArgument: ScreenMode
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &320800799
 GameObject:
   m_ObjectHideFlags: 0
@@ -6025,15 +6094,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 320800799}
   m_LocalRotation: {x: -0.0023151443, y: 0.007808484, z: 0.04143104, w: 0.99910825}
-  m_LocalPosition: {x: 0, y: 0, z: -12.499999}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -11.569}
+  m_LocalScale: {x: 0.81, y: 0.81, z: 0.81}
   m_Children: []
   m_Father: {fileID: 1553884068}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -0.302, y: 0.883, z: 4.747}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -180.6, y: -83.5}
+  m_AnchoredPosition: {x: -180.6, y: -109.69998}
   m_SizeDelta: {x: 305.5, y: 146.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &320800801
@@ -6142,17 +6211,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 327323637}
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 27.299995}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.1305274, w: 0.99144477}
+  m_LocalPosition: {x: 0, y: 0, z: 27.686703}
+  m_LocalScale: {x: 1.2717104, y: 1.2717104, z: 1.2717104}
   m_Children: []
   m_Father: {fileID: 1553884068}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 15}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -78.89998, y: 113.59999}
-  m_SizeDelta: {x: 248.2, y: 644.4}
+  m_AnchoredPosition: {x: -209.1, y: 112.5}
+  m_SizeDelta: {x: 360.2, y: 163.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &327323639
 MonoBehaviour:
@@ -6174,7 +6243,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 37e3fb27d24d80446996ece5242eca0d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 40d16d150ab036449b9ef3f4b40b5941, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6219,15 +6288,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 351423465}
   m_LocalRotation: {x: -0.0023151443, y: 0.007808484, z: 0.04143104, w: 0.99910825}
-  m_LocalPosition: {x: 0, y: 0, z: -12.499999}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -11.569}
+  m_LocalScale: {x: 0.81, y: 0.81, z: 0.81}
   m_Children: []
   m_Father: {fileID: 1553884068}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -0.302, y: 0.883, z: 4.747}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -180.6, y: -83.5}
+  m_AnchoredPosition: {x: -180.6, y: -109.69998}
   m_SizeDelta: {x: 305.5, y: 146.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &351423467
@@ -6376,9 +6445,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 581481813}
+    m_SelectOnDown: {fileID: 1100783732}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 2
@@ -6549,6 +6618,7 @@ GameObject:
   - component: {fileID: 395531806}
   - component: {fileID: 395531805}
   - component: {fileID: 395531804}
+  - component: {fileID: 395531809}
   m_Layer: 5
   m_Name: RightWardArrow
   m_TagString: Untagged
@@ -6656,33 +6726,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: SwitchActiveCamUp
-        m_Mode: 1
+      - m_Target: {fileID: 14021470}
+        m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+        m_MethodName: RightButton
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Shadow Quality
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TimelineController, Assembly-CSharp
-        m_MethodName: ChangeTimeline
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuOptionsController, Assembly-CSharp
-        m_MethodName: SwitchMenuOption
+      - m_Target: {fileID: 1150092913}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6730,6 +6788,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 395531802}
   m_CullTransparentMesh: 0
+--- !u!114 &395531809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395531802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: RightButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Shadow Quality
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &448701321
 GameObject:
   m_ObjectHideFlags: 0
@@ -6744,6 +6843,7 @@ GameObject:
   - component: {fileID: 448701325}
   - component: {fileID: 448701324}
   - component: {fileID: 448701323}
+  - component: {fileID: 448701328}
   m_Layer: 5
   m_Name: LeftArrow
   m_TagString: Untagged
@@ -6863,6 +6963,18 @@ MonoBehaviour:
           m_StringArgument: Graphics Quality
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 859844656}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &448701326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6901,6 +7013,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 448701321}
   m_CullTransparentMesh: 0
+--- !u!114 &448701328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 448701321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: LeftButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Graphics Quality
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &462705528
 GameObject:
   m_ObjectHideFlags: 0
@@ -6992,11 +7145,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: -1
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 664708680}
+    m_SelectOnDown: {fileID: 1100783732}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 1934469738}
   m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -7762,9 +7915,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1443565656}
+    m_SelectOnDown: {fileID: 393885007}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 2
@@ -7948,15 +8101,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 585359277}
   m_LocalRotation: {x: -0.0023151443, y: 0.007808484, z: 0.04143104, w: 0.99910825}
-  m_LocalPosition: {x: 0, y: 0, z: -12.499999}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -11.569}
+  m_LocalScale: {x: 0.81, y: 0.81, z: 0.81}
   m_Children: []
   m_Father: {fileID: 1553884068}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -0.302, y: 0.883, z: 4.747}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -180.6, y: -83.5}
+  m_AnchoredPosition: {x: -180.6, y: -109.7}
   m_SizeDelta: {x: 305.5, y: 146.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &585359279
@@ -9249,7 +9402,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5465940246521907071, guid: 3899c58356b4df14ca15900ad60a5d7a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.003992584
+      value: -0.003992582
       objectReference: {fileID: 0}
     - target: {fileID: 5465940246521907071, guid: 3899c58356b4df14ca15900ad60a5d7a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -9257,7 +9410,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5465940246521907071, guid: 3899c58356b4df14ca15900ad60a5d7a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.19241175
+      value: -0.19241165
       objectReference: {fileID: 0}
     - target: {fileID: 5465940246521907071, guid: 3899c58356b4df14ca15900ad60a5d7a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9751,9 +9904,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 2
+    m_SelectOnUp: {fileID: 1443565656}
+    m_SelectOnDown: {fileID: 393885007}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -10011,11 +10164,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: -1
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1901767928}
+    m_SelectOnDown: {fileID: 465679141}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 298949546}
   m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -10813,11 +10966,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1150092913}
+    m_SelectOnDown: {fileID: 1876771792}
+    m_SelectOnLeft: {fileID: 16333711}
+    m_SelectOnRight: {fileID: 1404064804}
   m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -11207,6 +11360,7 @@ GameObject:
   - component: {fileID: 818437048}
   - component: {fileID: 818437047}
   - component: {fileID: 818437046}
+  - component: {fileID: 818437051}
   m_Layer: 5
   m_Name: RightWardArrow
   m_TagString: Untagged
@@ -11314,10 +11468,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: SwitchActiveCamUp
-        m_Mode: 1
+      - m_Target: {fileID: 14021470}
+        m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+        m_MethodName: RightButton
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11326,21 +11480,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TimelineController, Assembly-CSharp
-        m_MethodName: ChangeTimeline
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuOptionsController, Assembly-CSharp
-        m_MethodName: SwitchMenuOption
+      - m_Target: {fileID: 1876771792}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11388,6 +11530,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 818437044}
   m_CullTransparentMesh: 0
+--- !u!114 &818437051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818437044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: RightButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &824809144
 GameObject:
   m_ObjectHideFlags: 0
@@ -11504,6 +11687,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f7b9d983ac807144884bb6b85c07f91e, type: 3}
   m_PrefabInstance: {fileID: 91648013}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &840870802
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840870801}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &846337187 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f7b9d983ac807144884bb6b85c07f91e, type: 3}
@@ -11566,11 +11765,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1100783732}
+    m_SelectOnDown: {fileID: 1150092913}
+    m_SelectOnLeft: {fileID: 448701325}
+    m_SelectOnRight: {fileID: 1501805258}
   m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -15236,6 +15435,18 @@ MonoBehaviour:
           m_StringArgument: AutoLock
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 114929746}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &914648948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15287,10 +15498,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - eventID: 11
+  - eventID: 9
     callback:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: LeftButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: AutoLock
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &921856772
 GameObject:
   m_ObjectHideFlags: 0
@@ -15455,6 +15690,7 @@ GameObject:
   - component: {fileID: 930098643}
   - component: {fileID: 930098642}
   - component: {fileID: 930098641}
+  - component: {fileID: 930098646}
   m_Layer: 5
   m_Name: RightArrow
   m_TagString: Untagged
@@ -15612,6 +15848,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 930098639}
   m_CullTransparentMesh: 0
+--- !u!114 &930098646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930098639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: RightButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Difficulty
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &962968398
 GameObject:
   m_ObjectHideFlags: 0
@@ -15626,6 +15903,7 @@ GameObject:
   - component: {fileID: 962968402}
   - component: {fileID: 962968401}
   - component: {fileID: 962968400}
+  - component: {fileID: 962968405}
   m_Layer: 5
   m_Name: LeftArrow
   m_TagString: Untagged
@@ -15745,6 +16023,18 @@ MonoBehaviour:
           m_StringArgument: Shadow Quality
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1150092913}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Shadow Quality
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &962968403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15783,6 +16073,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 962968398}
   m_CullTransparentMesh: 0
+--- !u!114 &962968405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962968398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: LeftButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Shadow Quality
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!4 &965895008 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f7b9d983ac807144884bb6b85c07f91e, type: 3}
@@ -16083,10 +16414,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: SwitchActiveCamUp
-        m_Mode: 1
+      - m_Target: {fileID: 14021470}
+        m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+        m_MethodName: RightButton
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -16095,21 +16426,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TimelineController, Assembly-CSharp
-        m_MethodName: ChangeTimeline
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuOptionsController, Assembly-CSharp
-        m_MethodName: SwitchMenuOption
+      - m_Target: {fileID: 1443565656}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16171,6 +16490,7 @@ GameObject:
   - component: {fileID: 1000160460}
   - component: {fileID: 1000160459}
   - component: {fileID: 1000160458}
+  - component: {fileID: 1000160463}
   m_Layer: 5
   m_Name: RightArrow
   m_TagString: Untagged
@@ -16290,6 +16610,18 @@ MonoBehaviour:
           m_StringArgument: AutoLock
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 114929746}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1000160461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16328,6 +16660,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000160456}
   m_CullTransparentMesh: 0
+--- !u!114 &1000160463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000160456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: RightButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: AutoLock
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1014714595
 GameObject:
   m_ObjectHideFlags: 0
@@ -16854,6 +17227,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f7b9d983ac807144884bb6b85c07f91e, type: 3}
   m_PrefabInstance: {fileID: 1798670946}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &1092506464
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092506463}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1100783730
 GameObject:
   m_ObjectHideFlags: 0
@@ -17329,15 +17718,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1125512487}
   m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.4444}
+  m_LocalScale: {x: 0.81, y: 0.81, z: 0.81}
   m_Children: []
   m_Father: {fileID: 1553884068}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -180.1, y: -161.6}
+  m_AnchoredPosition: {x: -180.19, y: -172.95798}
   m_SizeDelta: {x: 30, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1125512489
@@ -19023,11 +19412,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 859844656}
+    m_SelectOnDown: {fileID: 776374013}
+    m_SelectOnLeft: {fileID: 962968402}
+    m_SelectOnRight: {fileID: 395531806}
   m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -19485,7 +19874,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 1
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 51.04059, y: 0, z: 0, w: 0}
+  m_margin: {x: 51.04059, y: 0, z: 283.73642, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -19594,6 +19983,7 @@ GameObject:
   - component: {fileID: 1243883541}
   - component: {fileID: 1243883540}
   - component: {fileID: 1243883539}
+  - component: {fileID: 1243883544}
   m_Layer: 5
   m_Name: LeftArrow
   m_TagString: Untagged
@@ -19713,6 +20103,18 @@ MonoBehaviour:
           m_StringArgument: Difficulty
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 309290061}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1243883542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19751,6 +20153,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1243883537}
   m_CullTransparentMesh: 0
+--- !u!114 &1243883544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243883537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: LeftButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Difficulty
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &1244939221
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21334,11 +21777,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: -1
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1100783732}
+    m_SelectOnDown: {fileID: 1901767928}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 1307930094}
   m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -24658,8 +25101,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 2000998296}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1100783732}
     m_SelectOnDown: {fileID: 114929746}
     m_SelectOnLeft: {fileID: 316726224}
     m_SelectOnRight: {fileID: 1458932239}
@@ -24964,6 +25407,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f7b9d983ac807144884bb6b85c07f91e, type: 3}
   m_PrefabInstance: {fileID: 1379175882}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &1343177104
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343177103}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1346854709
 GameObject:
   m_ObjectHideFlags: 0
@@ -26751,6 +27210,7 @@ GameObject:
   - component: {fileID: 1404064804}
   - component: {fileID: 1404064803}
   - component: {fileID: 1404064802}
+  - component: {fileID: 1404064807}
   m_Layer: 5
   m_Name: RightWardArrow
   m_TagString: Untagged
@@ -26858,33 +27318,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: SwitchActiveCamUp
-        m_Mode: 1
+      - m_Target: {fileID: 14021470}
+        m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+        m_MethodName: RightButton
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Shadows
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TimelineController, Assembly-CSharp
-        m_MethodName: ChangeTimeline
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuOptionsController, Assembly-CSharp
-        m_MethodName: SwitchMenuOption
+      - m_Target: {fileID: 776374013}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26932,6 +27380,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1404064800}
   m_CullTransparentMesh: 0
+--- !u!114 &1404064807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404064800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: RightButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Shadows
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1426559379
 GameObject:
   m_ObjectHideFlags: 0
@@ -27064,11 +27553,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1876771792}
+    m_SelectOnDown: {fileID: 581481813}
+    m_SelectOnLeft: {fileID: 2137574537}
+    m_SelectOnRight: {fileID: 987736481}
   m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -27409,7 +27898,6 @@ GameObject:
   - component: {fileID: 1458932238}
   - component: {fileID: 1458932237}
   - component: {fileID: 1458932242}
-  - component: {fileID: 1458932243}
   m_Layer: 5
   m_Name: RightWardArrow
   m_TagString: Untagged
@@ -27529,6 +28017,18 @@ MonoBehaviour:
           m_StringArgument: ScreenMode
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1307930094}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1458932240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27580,23 +28080,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates:
-  - eventID: 3
+  - eventID: 9
     callback:
       m_PersistentCalls:
-        m_Calls: []
---- !u!114 &1458932243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1458932235}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates: []
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: RightButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: ScreenMode
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1460329614
 GameObject:
   m_ObjectHideFlags: 0
@@ -27856,6 +28367,7 @@ GameObject:
   - component: {fileID: 1501805258}
   - component: {fileID: 1501805257}
   - component: {fileID: 1501805256}
+  - component: {fileID: 1501805261}
   m_Layer: 5
   m_Name: RightWardArrow
   m_TagString: Untagged
@@ -27975,6 +28487,18 @@ MonoBehaviour:
           m_StringArgument: Graphics Quality
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 859844656}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1501805259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28013,6 +28537,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1501805254}
   m_CullTransparentMesh: 0
+--- !u!114 &1501805261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501805254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: RightButton
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Graphics Quality
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 14021470}
+          m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+          m_MethodName: StartCoroutineSelectLastButtonBeforeArrow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1528458140 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f7b9d983ac807144884bb6b85c07f91e, type: 3}
@@ -29776,15 +30341,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1636639122}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.4444}
+  m_LocalScale: {x: 0.81, y: 0.81, z: 0.81}
   m_Children: []
   m_Father: {fileID: 1553884068}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -180.1, y: -2.9}
+  m_AnchoredPosition: {x: -180.19, y: -44.414978}
   m_SizeDelta: {x: 30, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1636639124
@@ -30595,6 +31160,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f7b9d983ac807144884bb6b85c07f91e, type: 3}
   m_PrefabInstance: {fileID: 221488904}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &1715700582
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715700581}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1746445114
 GameObject:
   m_ObjectHideFlags: 0
@@ -30650,9 +31231,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1934469738}
+    m_SelectOnDown: {fileID: 1100783732}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 2
@@ -32921,11 +33502,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 776374013}
+    m_SelectOnDown: {fileID: 1443565656}
+    m_SelectOnLeft: {fileID: 231587054}
+    m_SelectOnRight: {fileID: 818437048}
   m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -33381,11 +33962,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: -1
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1271496738}
+    m_SelectOnDown: {fileID: 664708680}
     m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 859844656}
   m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -33884,9 +34465,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 298949546}
+    m_SelectOnDown: {fileID: 1100783732}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 2
@@ -34098,9 +34679,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1100783732}
+    m_SelectOnDown: {fileID: 1746445116}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 2
@@ -38889,10 +39470,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: SwitchActiveCamDown
-        m_Mode: 1
+      - m_Target: {fileID: 14021470}
+        m_TargetAssemblyTypeName: UIOptions, Assembly-CSharp
+        m_MethodName: LeftButton
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -38901,21 +39482,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TimelineController, Assembly-CSharp
-        m_MethodName: ChangeTimeline
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuOptionsController, Assembly-CSharp
-        m_MethodName: SwitchMenuOption
+      - m_Target: {fileID: 1443565656}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
