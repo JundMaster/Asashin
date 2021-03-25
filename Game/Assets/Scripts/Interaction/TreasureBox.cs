@@ -52,7 +52,7 @@ public class TreasureBox : MonoBehaviour, IFindPlayer, IInterectable
     /// <returns>Wait for seconds in realtime.</returns>
     private IEnumerator SpawnItem(float probability)
     {
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(0.5f);
         if (probability > spawningChance)
         {
             randomSpawnNumber = Random.Range(0, objectToSpawn.Length);
