@@ -29,7 +29,7 @@ public abstract class Pickable : MonoBehaviour, IPickable
     /// <returns></returns>
     private IEnumerator Start()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(1f);
         triggerCollider.enabled = true;
 
         Destroy(gameObject, destroyAfterSeconds);

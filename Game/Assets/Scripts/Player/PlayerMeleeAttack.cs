@@ -185,12 +185,21 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         {
             for (int i = 0; i < swordCol.Length; i++)
             {
-                if (swordCol[i].transform.parent.gameObject.TryGetComponent(out IDamageable enemy))
+                if (swordCol[i].transform.parent != null)
                 {
-                    enemy.TakeDamage(stats.LightDamage);
+                    if (swordCol[i].transform.parent.gameObject.TryGetComponent(out IDamageable enemy))
+                    {
+                        enemy?.TakeDamage(stats.LightDamage);
+                        break;
+                    }
+                }
+                else if (swordCol[0].TryGetComponent(out IBreakable breakable))
+                {
+                    breakable?.Execute();
                     break;
                 }
             }
+
             Instantiate(swordHitPrefab, swordCol[0].ClosestPoint(sword.transform.position), Quaternion.identity);
         }
     }
@@ -208,9 +217,17 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         {
             for (int i = 0; i < swordCol.Length; i++)
             {
-                if (swordCol[i].gameObject.TryGetComponent(out IDamageable enemy))
+                if (swordCol[i].transform.parent != null)
                 {
-                    enemy.TakeDamage(stats.StrongDamage);
+                    if (swordCol[i].transform.parent.gameObject.TryGetComponent(out IDamageable enemy))
+                    {
+                        enemy?.TakeDamage(stats.LightDamage);
+                        break;
+                    }
+                }
+                else if (swordCol[0].TryGetComponent(out IBreakable breakable))
+                {
+                    breakable?.Execute();
                     break;
                 }
             }
@@ -231,9 +248,17 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         {
             for (int i = 0; i < swordCol.Length; i++)
             {
-                if (swordCol[i].gameObject.TryGetComponent(out IDamageable enemy))
+                if (swordCol[i].transform.parent != null)
                 {
-                    enemy.TakeDamage(stats.StrongDamage);
+                    if (swordCol[i].transform.parent.gameObject.TryGetComponent(out IDamageable enemy))
+                    {
+                        enemy?.TakeDamage(stats.LightDamage);
+                        break;
+                    }
+                }
+                else if (swordCol[0].TryGetComponent(out IBreakable breakable))
+                {
+                    breakable?.Execute();
                     break;
                 }
 

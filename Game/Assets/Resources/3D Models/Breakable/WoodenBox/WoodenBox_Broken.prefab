@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8116013094313262886}
   - component: {fileID: 6203069058959176654}
   - component: {fileID: 6948654837370333489}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 7690306832153810108}
   - component: {fileID: 6372473934154054647}
   - component: {fileID: 3350512271896274843}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 7822300940857450425}
   - component: {fileID: 2555154988811833222}
   - component: {fileID: 7411386102684426674}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 3986328725593047134}
   - component: {fileID: 5683729630785641091}
   - component: {fileID: 4923866645557538124}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: Structure6_LP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -465,7 +465,7 @@ GameObject:
   - component: {fileID: 2416762518355782368}
   - component: {fileID: 5347729247257585580}
   - component: {fileID: 563318004671394022}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -578,7 +578,7 @@ GameObject:
   - component: {fileID: 1679955450164292922}
   - component: {fileID: 3170489583161325000}
   - component: {fileID: 5527168549891527045}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -691,7 +691,7 @@ GameObject:
   - component: {fileID: 1461195718914353995}
   - component: {fileID: 1765672743469734563}
   - component: {fileID: 188130936218624112}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: WoodPlank5_LP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -804,7 +804,7 @@ GameObject:
   - component: {fileID: 4642115355630371333}
   - component: {fileID: 6963812337789998559}
   - component: {fileID: 7743435275796495361}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: WoodPlank4_LP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -917,7 +917,7 @@ GameObject:
   - component: {fileID: 892267369872109579}
   - component: {fileID: 5904724099511474588}
   - component: {fileID: 4233633831373745471}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1030,7 +1030,7 @@ GameObject:
   - component: {fileID: 2882335623127264628}
   - component: {fileID: 7635318642187327914}
   - component: {fileID: 3911105109710422532}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: Structure5_LP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1139,7 +1139,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3909832748406292861}
-  m_Layer: 0
+  - component: {fileID: 7844219948839256448}
+  - component: {fileID: 5857976203944416457}
+  m_Layer: 21
   m_Name: WoodenBox_Broken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1178,6 +1180,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7844219948839256448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4398139454083177415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da14cb1302d5bab438310145c631ff71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToSpawn:
+  - {fileID: 3720341476399585580, guid: 41cd94c97e850f848a224e6c451653e2, type: 3}
+  - {fileID: 3046560142532366806, guid: f04b4747e62d23840bc7a6555e25184e, type: 3}
+  - {fileID: 5829304964158241986, guid: 449e78d93384fd84ba0f0320d6e1a04f, type: 3}
+  - {fileID: 772889320561755001, guid: 4405bc54c6b9eeb4fa449ebb8ac171a0, type: 3}
+  spawningChance: 20
+--- !u!114 &5857976203944416457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4398139454083177415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca6f4a94e506804d9ea6496d823d8cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5169954494860503169
 GameObject:
   m_ObjectHideFlags: 0
@@ -1191,7 +1223,7 @@ GameObject:
   - component: {fileID: 747417862528835371}
   - component: {fileID: 3129882440077439671}
   - component: {fileID: 2949021184373962067}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1304,7 +1336,7 @@ GameObject:
   - component: {fileID: 7199189060865334005}
   - component: {fileID: 7049591022763625022}
   - component: {fileID: 6823730061846600550}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1417,7 +1449,7 @@ GameObject:
   - component: {fileID: 4726329561877587418}
   - component: {fileID: 1314207503248818948}
   - component: {fileID: 882821781434750706}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: WoodPlank2_LP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1530,7 +1562,7 @@ GameObject:
   - component: {fileID: 1739965036441108184}
   - component: {fileID: 7457302948523554955}
   - component: {fileID: 884246951564532018}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: WoodPlank6_LP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1643,7 +1675,7 @@ GameObject:
   - component: {fileID: 778715307127272477}
   - component: {fileID: 5480500670174757363}
   - component: {fileID: 3271011774722530338}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1756,7 +1788,7 @@ GameObject:
   - component: {fileID: 4516288928871442227}
   - component: {fileID: 3017909266826916024}
   - component: {fileID: 2826224024256396962}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1869,7 +1901,7 @@ GameObject:
   - component: {fileID: 2290574906392445234}
   - component: {fileID: 765547460604195463}
   - component: {fileID: 7044799365209627142}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1982,7 +2014,7 @@ GameObject:
   - component: {fileID: 7513584310508822}
   - component: {fileID: 8189694531911303561}
   - component: {fileID: 7235974780153999760}
-  m_Layer: 0
+  m_Layer: 21
   m_Name: polySurface7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
