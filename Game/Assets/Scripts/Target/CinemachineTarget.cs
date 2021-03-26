@@ -139,32 +139,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
     }
 
     /// <summary>
-    /// Method to return if a position is left or right of a target.
-    /// </summary>
-    /// <param name="fwd">Forward vector.</param>
-    /// <param name="targetDir">Direction.</param>
-    /// <param name="up">Up vector.</param>
-    /// <returns>-1, 0, 1 depending on the target's position.</returns>
-    private float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)
-    {
-        Vector3 perp = Vector3.Cross(fwd, targetDir);
-        float dir = Vector3.Dot(perp, up);
-
-        if (dir > 0f)
-        {
-            return 1f;
-        }
-        else if (dir < 0f)
-        {
-            return -1f;
-        }
-        else
-        {
-            return 0f;
-        }
-    }
-
-    /// <summary>
     /// Switches to target on the left or right.
     /// </summary>
     public void SwitchTarget(LeftOrRight leftOrRight)
@@ -177,7 +151,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
         for (int i = 0; i < allEnemies.Count; i++)
         {
             Vector3 direction = allEnemies[i].transform.position - targetCamera.transform.position;
-            float directionAngle = AngleDir(targetCamera.transform.forward, direction, transform.up);
+            float directionAngle = MathCustom.AngleDir(targetCamera.transform.forward, direction, transform.up);
 
             float distanceFromTarget =
                 Vector3.Distance(currentTarget.transform.position, allEnemies[i].transform.position);

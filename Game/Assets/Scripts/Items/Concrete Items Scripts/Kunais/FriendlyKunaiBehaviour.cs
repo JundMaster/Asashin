@@ -7,7 +7,7 @@ public class FriendlyKunaiBehaviour : KunaiBehaviour
 {
     public override Transform KunaiCurrentTarget { get; set; }
 
-    [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] protected LayerMask enemyLayer;
 
     // Components
     private CinemachineTarget target;

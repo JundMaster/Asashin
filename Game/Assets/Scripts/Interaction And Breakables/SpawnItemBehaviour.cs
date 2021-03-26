@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Class responsible for handling item spawning behaviour.
@@ -12,7 +11,7 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
     [Tooltip("This is the chance of dropping the first item.")]
     [Range(0, 100)][SerializeField] private float firstItemSpawnChance;
     [Tooltip("The item needs a chance higher than this in order to be spawned.")]
-    [Range(0, 100)] [SerializeField] private float spawningChance;
+    [Range(0, 100)][SerializeField] private float spawningChance;
 
     private void Start()
     {

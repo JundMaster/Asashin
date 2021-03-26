@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Class responsible for handlign enemy script.
+/// Class responsible for handling enemy script.
 /// </summary>
 public class Enemy : MonoBehaviour
 {
@@ -54,9 +54,10 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         Player player = FindObjectOfType<Player>();
+        EnemyVisionCone cone = GetComponent<EnemyVisionCone>();
         while (player != null)
         {
-            if (kunai)
+            if (kunai && cone.Performing)
             {
                 GameObject thisKunai = Instantiate(kunai, MyTarget.position + transform.forward, Quaternion.identity);
                 thisKunai.layer = 15;
