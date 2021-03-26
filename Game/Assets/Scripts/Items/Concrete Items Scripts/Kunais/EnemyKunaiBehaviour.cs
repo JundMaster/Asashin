@@ -44,12 +44,12 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
     /// Happens after kunai hits something.
     /// </summary>
     /// <param name="damageableBody">Damageable body.</param>
-    /// <param name="bodyTohit">Body that this object hit.</param>
+    /// <param name="collider">Collider of the collision.</param>
     /// <param name="player">Player transform.</param>
-    public override void Hit(IDamageable damageableBody, Transform bodyToHit, Transform player)
+    public override void Hit(IDamageable damageableBody, Collider collider, Transform player)
     {
         // If it collides with player layer
-        if (bodyToHit?.gameObject.layer == 11)
+        if (collider?.gameObject.layer == 11)
         {
             // and player is blocking
             if (playerBlock.Performing)

@@ -57,9 +57,9 @@ public class FriendlyKunaiBehaviour : KunaiBehaviour
     /// Happens after kunai hits something.
     /// </summary>
     /// <param name="damageableBody">Damageable body.</param>
-    /// <param name="bodyTohit">Body that this object hit.</param>
+    /// <param name="collider">Collider of the collision.</param>
     /// <param name="player">Player transform.</param>
-    public override void Hit(IDamageable damageableBody, Transform bodyTohit, Transform player)
+    public override void Hit(IDamageable damageableBody, Collider collider, Transform player)
     {
         damageableBody?.TakeDamage(playerStats.RangedDamage);
         Destroy(gameObject);

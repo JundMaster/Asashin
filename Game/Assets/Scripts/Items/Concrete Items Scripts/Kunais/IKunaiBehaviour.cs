@@ -20,9 +20,9 @@ public interface IKunaiBehaviour
     /// Happens after kunai hits something.
     /// </summary>
     /// <param name="damageableBody">Damageable body.</param>
-    /// <param name="bodyTohit">Body that this object hit.</param>
+    /// <param name="collider">Collider of the collision.</param>
     /// <param name="player">Player transform.</param>
-    void Hit(IDamageable damageableBody, Transform bodyTohit, Transform player);
+    void Hit(IDamageable damageableBody, Collider collider, Transform player);
 
     /// <summary>
     /// Happens when IUsableItem execute is called.

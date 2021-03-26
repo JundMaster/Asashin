@@ -23,9 +23,9 @@ public abstract class KunaiBehaviour : MonoBehaviour, IKunaiBehaviour
     /// Happens after kunai hits something.
     /// </summary>
     /// <param name="damageableBody">Damageable body.</param>
-    /// <param name="bodyTohit">Body that this object hit.</param>
+    /// <param name="collider">Collider of the collision.</param>
     /// <param name="player">Player transform.</param>
-    public abstract void Hit(IDamageable damageableBody, Transform bodyTohit, Transform player);
+    public abstract void Hit(IDamageable damageableBody, Collider collider, Transform player);
 
     /// <summary>
     /// Happens on start.

@@ -8,10 +8,11 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
     [SerializeField] private GameObject[] objectToSpawn;
     private int randomSpawnNumber;
     private Vector3 spawnPosition;
-    [Tooltip("This is the chance of dropping the first item.")]
+    [Tooltip("Probability of dropping the first item.")]
     [Range(0, 100)][SerializeField] private float firstItemSpawnChance;
-    [Tooltip("The item needs a chance higher than this in order to be spawned.")]
+    [Tooltip("Probability of dropping items after the first one.")]
     [Range(0, 100)][SerializeField] private float spawningChance;
+    [SerializeField] private TypeOfDropEnum typeOfDrop;
 
     private void Start()
     {
@@ -33,26 +34,48 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
     /// <summary>
     /// Spawns a random item in a random direction.
     /// </summary>
-    /// <param name="probability">Probability of spawning the item.</param>
+    /// <param name="probability">First item spawn chance probabilty.</param>
     private void SpawnItem(ref float probability)
     {
-        while (probability >= spawningChance)
+        float random = Random.Range(0f, 100f);
+        // Only happens once for the first time spawn chance
+        // Spawns the first item with firstItemSpawnChance
+        if (probability >= random)
         {
-            randomSpawnNumber = Random.Range(0, objectToSpawn.Length);
+            SpawnObject();
 
-            // Instantiates the item
-            GameObject spawnedObject = Instantiate(
-                objectToSpawn[randomSpawnNumber], spawnPosition, Quaternion.identity);
-
-            spawnedObject.GetComponent<Pickable>().TypeOfDrop = TypeOfDropEnum.Treasure;
-            Rigidbody spawnedObjectRB = spawnedObject.GetComponent<Rigidbody>();
-
-            // Gives it a random force
-            spawnedObjectRB.AddForce(
-                Random.Range(-75f, 75f), 90f, Random.Range(-75f, 75f), ForceMode.Impulse);
-
-            // Starts the coroutine again with a random chance of spawning an item
+            // Only happens if the first item was dropped
             probability = Random.Range(0f, 100f);
-        }
+            // This loop is for the rest of the items after the first one was spawned
+            // Spawns the next items with spawningChance
+            while (spawningChance >= probability)
+            {
+                // Spawns an item, gives it a random force
+                SpawnObject();
+
+                // Attributes new value to probability to continue the loop
+                probability = Random.Range(0f, 100f);
+            }
+        }       
+    }
+
+    /// <summary>
+    /// Spawns a random item from possible loot array with random force and direction.
+    /// </summary>
+    private void SpawnObject()
+    {
+        randomSpawnNumber = Random.Range(0, objectToSpawn.Length);
+
+        // Instantiates the item
+        GameObject spawnedObject = Instantiate(
+            objectToSpawn[randomSpawnNumber], spawnPosition, Quaternion.identity);
+
+        // Determins what kind of object is dropping this loot
+        spawnedObject.GetComponent<Pickable>().TypeOfDrop = typeOfDrop;
+
+        Rigidbody spawnedObjectRB = spawnedObject.GetComponent<Rigidbody>();
+        // Gives it a random force
+        spawnedObjectRB.AddForce(
+            Random.Range(-75f, 75f), 90f, Random.Range(-75f, 75f), ForceMode.Impulse);
     }
 }

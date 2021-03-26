@@ -79,7 +79,7 @@ public class Kunai : ItemBehaviour, IFindPlayer
         if (other != null)
         {
             Collider[] collisions =
-                Physics.OverlapSphere(transform.position, hitRange, hittableLayers);
+                Physics.OverlapSphere(other.transform.position, hitRange, hittableLayers);
 
             // Checks if it's the parent or not
             Transform bodyToHit = null;
@@ -92,12 +92,12 @@ public class Kunai : ItemBehaviour, IFindPlayer
             if (bodyToHit.TryGetComponent(out IDamageable damageableBody))
             {
                 // Trigers behaviour hit()
-                behaviour.Hit(damageableBody, bodyToHit, player);
+                behaviour.Hit(damageableBody, other, player);
             }
             // Else, if it's not an IDamageable interface, the object is destroyed
             else
             {
-                behaviour.Hit(null, bodyToHit, player);
+                behaviour.Hit(null, other, player);
                 Destroy(gameObject);
             }
             Instantiate(hitParticles, transform.position, Quaternion.identity);

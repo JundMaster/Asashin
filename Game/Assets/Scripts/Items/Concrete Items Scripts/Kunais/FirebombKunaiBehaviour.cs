@@ -11,20 +11,22 @@ public class FirebombKunaiBehaviour : FriendlyKunaiBehaviour
     [SerializeField] private float explosionRange;
 
     /// <summary>
-    /// What happens when this kunai hits something.
+    /// Happens after kunai hits something.
     /// </summary>
-    /// <param name="damageableBody">Body to cause damage to.</param>
-    /// <param name="bodyTohit">Body that the kunai collided with.</param>
+    /// <param name="damageableBody">Damageable body.</param>
+    /// <param name="collider">Collider of the collision.</param>
     /// <param name="player">Player transform.</param>
-    public override void Hit(IDamageable damageableBody, Transform bodyTohit, Transform player)
+    public override void Hit(IDamageable damageableBody, Collider collider, Transform player)
     {
         Instantiate(explosion, explosionPosition.transform.position, Quaternion.identity);
 
+        // Gets all enemies around explosion range
         Collider[] collisions =
-            Physics.OverlapSphere(bodyTohit.position, explosionRange, enemyLayer);
+            Physics.OverlapSphere(collider.transform.position, explosionRange, enemyLayer);
 
         foreach (Collider col in collisions)
         {
+            // If it's an enemy, the kundai does damage = to firebombKunaiDamage
             // Only does damage if it hits an enemy
             if (col.gameObject.TryGetComponent(out IDamageable body) &&
                 col.gameObject.TryGetComponent(out Enemy en))
