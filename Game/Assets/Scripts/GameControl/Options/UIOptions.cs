@@ -89,6 +89,7 @@ public class UIOptions : MonoBehaviour
     /// <param name="option">Value to decrement.</param>
     public void LeftButton(string option)
     {
+        Debug.Log("leftBut");
         switch (option)
         {
             case "AutoLock":
@@ -134,6 +135,7 @@ public class UIOptions : MonoBehaviour
     /// <param name="option">Value to increment.</param>
     public void RightButton(string option)
     {
+        Debug.Log("rightBut");
         switch (option)
         {
             case "Difficulty":
