@@ -33,12 +33,6 @@ public class UIOptions : MonoBehaviour
     private EventSystem eventSys;
     private GameObject lastSelectedGameObject;
 
-    /*
-    [Header("Selected Button After Arrow Click")]
-    [Tooltip("After the user presses an arrow with keyboard, this button will be selected")]
-    [SerializeField] private GameObject selectedBut;
-    */
-
     private void Awake()
     {
         options = FindObjectOfType<Options>();
@@ -75,13 +69,30 @@ public class UIOptions : MonoBehaviour
         {
             eventSys.SetSelectedGameObject(lastSelectedGameObject);
         }
+
+        Debug.Log(eventSys.currentSelectedGameObject);
     }
 
     /// <summary>
     /// Passes a struct with current values to Options class, updates current
     /// values and saves those values in a file.
+    /// Copies the options struct again, so it knows the current values.
     /// </summary>
-    public void AcceptValues() => options.UpdateValues(currentValues);
+    public void AcceptValues()
+    {
+        options.UpdateValues(currentValues);
+        currentValues = options.CurrentValues;
+    }
+
+    /// <summary>
+    /// Revers all changed values to the current values before altering them
+    /// to these new ones.
+    /// </summary>
+    public void RevertValues()
+    {
+        currentValues = options.CurrentValues;
+        UpdateAllUI();
+    }
 
     /// <summary>
     /// Decrements a certain value.
@@ -89,7 +100,7 @@ public class UIOptions : MonoBehaviour
     /// <param name="option">Value to decrement.</param>
     public void LeftButton(string option)
     {
-        Debug.Log("leftBut");
+        Debug.Log("leftButton");
         switch (option)
         {
             case "AutoLock":
@@ -100,7 +111,7 @@ public class UIOptions : MonoBehaviour
                 }
                 else
                 {
-                    currentValues.AutoLock = defaultOptions.AutoLock;
+                    currentValues.AutoLock = true;
                     UpdateUI(GameOptionsEnum.AutoLock, 0);
                 }
                 break;
@@ -135,9 +146,27 @@ public class UIOptions : MonoBehaviour
     /// <param name="option">Value to increment.</param>
     public void RightButton(string option)
     {
-        Debug.Log("rightBut");
         switch (option)
         {
+            case "AutoLock":
+                if (currentValues.AutoLock)
+                {
+                    currentValues.AutoLock = false;
+                    UpdateUI(GameOptionsEnum.AutoLock, 1);
+                }
+                else
+                {
+                    currentValues.AutoLock = true;
+                    UpdateUI(GameOptionsEnum.AutoLock, 0);
+                }
+                break;
+
+            case "ScreenMode":
+                if (currentValues.ScreenMode - 1 >= 0) currentValues.ScreenMode--;
+                else currentValues.ScreenMode = defaultOptions.MaxScreenMode;
+                UpdateUI(GameOptionsEnum.ScreenMode, currentValues.ScreenMode);
+                break;
+
             case "Difficulty":
                 if (currentValues.Difficulty + 1 <= defaultOptions.MaxDifficulty) currentValues.Difficulty++;
                 else currentValues.Difficulty = 0;
@@ -166,7 +195,7 @@ public class UIOptions : MonoBehaviour
         // Gets current button selected (ARROW)
         GameObject currentButton = eventSys.currentSelectedGameObject;
         // Selects the parent button of this arrow IF the player is controlling it with a controller/keyboard
-        StartCoroutine(SelectLastButtonBeforeArrow(currentButton.transform.parent.gameObject));
+        StartCoroutine(SelectLastButtonBeforeArrow(currentButton.transform.parent.gameObject)); 
     }
 
     /// <summary>
@@ -198,7 +227,6 @@ public class UIOptions : MonoBehaviour
                     case 1:
                         autoLockText.text = "Off";
                         break;
-
                 }
                 break;
 

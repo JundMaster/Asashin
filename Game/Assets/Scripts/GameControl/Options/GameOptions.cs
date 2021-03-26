@@ -13,7 +13,7 @@ sealed public class GameOptions : FileIO
     {
         this.options = options;
     }
-
+    
     public void CreateConfigFile()
     {
         using (FileStream fs = File.Create(FilePath.CONFIG))

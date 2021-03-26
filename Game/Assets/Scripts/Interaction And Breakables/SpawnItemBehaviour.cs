@@ -11,7 +11,7 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
     [Tooltip("Probability of dropping the first item.")]
     [Range(0, 100)][SerializeField] private float firstItemSpawnChance;
     [Tooltip("Probability of dropping items after the first one.")]
-    [Range(0, 100)][SerializeField] private float spawningChance;
+    [Range(0, 100)][SerializeField] private float nextItemsSpawningChance;
     [SerializeField] private TypeOfDropEnum typeOfDrop;
 
     private void Start()
@@ -19,9 +19,9 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
         spawnPosition =
             new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
 
-        if (firstItemSpawnChance < spawningChance)
+        if (firstItemSpawnChance < nextItemsSpawningChance)
         {
-            firstItemSpawnChance = spawningChance;
+            firstItemSpawnChance = nextItemsSpawningChance;
         }
     }
 
@@ -47,8 +47,8 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
             // Only happens if the first item was dropped
             probability = Random.Range(0f, 100f);
             // This loop is for the rest of the items after the first one was spawned
-            // Spawns the next items with spawningChance
-            while (spawningChance >= probability)
+            // Spawns the next items with nextItemsSpawningChance
+            while (nextItemsSpawningChance >= probability)
             {
                 // Spawns an item, gives it a random force
                 SpawnObject();
