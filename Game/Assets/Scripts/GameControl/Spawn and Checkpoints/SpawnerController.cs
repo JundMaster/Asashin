@@ -42,6 +42,7 @@ public class SpawnerController : MonoBehaviour
         {
             StartCoroutine(SpawnPlayer(SpawnTypeEnum.Loadgame));
         }
+        // Happens if this player is on main menu
         else
         {
             // Left brank on purpose

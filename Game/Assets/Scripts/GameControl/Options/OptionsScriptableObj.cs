@@ -14,16 +14,6 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private bool defaultAutoLock;
     public bool DefaultAutoLock => defaultAutoLock;
 
-    //Screen Mode Options
-    [SerializeField] private short screenMode;
-    public short ScreenMode { get => screenMode; set => screenMode = value; }
-
-    [SerializeField] private short defaultScreenMode;
-    public short DefaultScreenMode => defaultScreenMode;
-
-    [SerializeField] private short maxScreenMode;
-    public short MaxScreenMode => maxScreenMode;
-
     //Difficulty Level Options
     [SerializeField] private short difficulty;
     public short Difficulty { get => difficulty; set => difficulty = value; }
@@ -35,6 +25,17 @@ public class OptionsScriptableObj : ScriptableObject
     public short MaxDifficulty => maxDifficulty;
 
     [Header("Graphic Options")]
+    //Screen Mode Options
+    [SerializeField] private short screenMode;
+    public short ScreenMode { get => screenMode; set => screenMode = value; }
+
+    [SerializeField] private short defaultScreenMode;
+    public short DefaultScreenMode => defaultScreenMode;
+
+    [SerializeField] private short maxScreenMode;
+    public short MaxScreenMode => maxScreenMode;
+
+
     [SerializeField] private short graphicsQuality;
     public short GraphicsQuality { get => graphicsQuality; set => graphicsQuality = value; }
 
@@ -148,7 +149,9 @@ public class OptionsScriptableObj : ScriptableObject
 
     public void ResetOptions()
     {
+        autoLock = defaultAutoLock;
         difficulty = defaultDifficulty;
+        screenMode = defaultScreenMode;
         graphicsQuality = defaultGraphicsQuality;
         shadowQuality = defaultShadowQuality;
         shadows = defaultShadows;
@@ -158,6 +161,36 @@ public class OptionsScriptableObj : ScriptableObject
         contrast = defaultContrast;
         soundVolume = defaultSoundVolume;
         musicVolume = defaultMusicVolume;
+        horizontalSensibility = defaultHorizontalSensibility;
+        verticalSensibility = defaultVerticalSensibility;
+    }
+
+    public void ResetGeneralOptions()
+    {
+        autoLock = defaultAutoLock;
+        difficulty = defaultDifficulty;
+    }
+
+    public void ResetGraphicOptions()
+    {
+        screenMode = defaultScreenMode;
+        graphicsQuality = defaultGraphicsQuality;
+        shadowQuality = defaultShadowQuality;
+        shadows = defaultShadows;
+        afterImages = defaultAfterImages;
+        motionBlur = defaultMotionBlur;
+        lightness = defaultLightness;
+        contrast = defaultContrast;
+    }
+
+    public void ResetAudioOptions()
+    {
+        soundVolume = defaultSoundVolume;
+        musicVolume = defaultMusicVolume;
+    }
+
+    public void ResetControlsOptions()
+    {
         horizontalSensibility = defaultHorizontalSensibility;
         verticalSensibility = defaultVerticalSensibility;
     }
