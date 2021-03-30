@@ -146,6 +146,7 @@ public class UIOptions : MonoBehaviour
     /// <param name="option">Value to increment.</param>
     public void RightButton(string option)
     {
+        Debug.Log("rightButton");
         switch (option)
         {
             case "AutoLock":
