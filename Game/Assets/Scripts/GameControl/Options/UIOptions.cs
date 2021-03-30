@@ -69,8 +69,6 @@ public class UIOptions : MonoBehaviour
         {
             eventSys.SetSelectedGameObject(lastSelectedGameObject);
         }
-
-        Debug.Log(eventSys.currentSelectedGameObject);
     }
 
     /// <summary>
