@@ -16,6 +16,7 @@ public class UIOptions : MonoBehaviour
 
     [Header("General Options")]
     [SerializeField] private TextMeshProUGUI screenModeText;
+    [SerializeField] private TextMeshProUGUI screenResText;
     [SerializeField] private TextMeshProUGUI autoLockText;
     [SerializeField] private TextMeshProUGUI difficultyText;
 
@@ -94,6 +95,7 @@ public class UIOptions : MonoBehaviour
     /// </summary>
     public void AcceptValues()
     {
+        Debug.Log("Accepted");
         optionsScript.UpdateValues(currentValues);
         UpdateAllUI();
     }
@@ -104,14 +106,31 @@ public class UIOptions : MonoBehaviour
     /// </summary>
     public void RevertValues()
     {
+        Debug.Log("Reverted");
         currentValues = optionsScript.SavedValues;
         UpdateAllUI();
     }
 
-    public void ResetGeneralValues() => configScriptableObj.ResetGeneralOptions();
-    public void ResetGraphicValues() => configScriptableObj.ResetGraphicOptions();
-    public void ResetAudioValues() => configScriptableObj.ResetAudioOptions();
-    public void ResetControlValues() => configScriptableObj.ResetControlsOptions();
+    public void ResetGeneralValues()
+    {
+        Debug.Log("DefaultGeneral");
+        configScriptableObj.ResetGeneralOptions();
+    }
+    public void ResetGraphicValues()
+    {
+        Debug.Log("DefaultGraphic");
+        configScriptableObj.ResetGraphicOptions();
+    }
+    public void ResetAudioValues() 
+    {
+        Debug.Log("DefaultÃudio");
+        configScriptableObj.ResetAudioOptions();
+    }
+    public void ResetControlValues()
+    {
+        Debug.Log("DefaultControl");
+        configScriptableObj.ResetControlsOptions();
+    }
     #endregion
     ////////////////////////////////////////////////////////////////////////////
 
@@ -138,6 +157,10 @@ public class UIOptions : MonoBehaviour
             case "ScreenMode":
                 if (currentValues.ScreenMode - 1 >= 0) currentValues.ScreenMode--;
                 else currentValues.ScreenMode = configScriptableObj.MaxScreenMode;
+                break;
+            case "ScreenResolution":
+                if (currentValues.ScreenResolution - 1 >= 0) currentValues.ScreenResolution--;
+                else currentValues.ScreenResolution = configScriptableObj.MaxScreenRes;
                 break;
             case "Difficulty":
                 if (currentValues.Difficulty - 1 >= 0) currentValues.Difficulty--;
@@ -212,6 +235,11 @@ public class UIOptions : MonoBehaviour
             case "ScreenMode":
                 if (currentValues.ScreenMode - 1 >= 0) currentValues.ScreenMode--;
                 else currentValues.ScreenMode = configScriptableObj.MaxScreenMode;
+                break;
+
+            case "ScreenResolution":
+                if (currentValues.ScreenResolution - 1 >= 0) currentValues.ScreenResolution--;
+                else currentValues.ScreenResolution = configScriptableObj.MaxScreenRes;
                 break;
 
             case "Difficulty":
@@ -326,6 +354,19 @@ public class UIOptions : MonoBehaviour
                 break;
             case 2:
                 screenModeText.text = "Fullscreen";
+                break;
+        }
+
+        switch (currentValues.ScreenResolution)
+        {
+            case 0:
+                screenResText.text = "1280x720";
+                break;
+            case 1:
+                screenResText.text = "1600x900";
+                break;
+            case 2:
+                screenResText.text = "1920x1080";
                 break;
         }
 
