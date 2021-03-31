@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Cinemachine;
 using System;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// Class responsible for handling slow motion.
@@ -14,12 +15,12 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     private float slowMotionSpeed; // Speed of slow motion (Time.timeScale)
     private float slowMotionDuration;
     private float slowMotionSmoothSpeed; //Smoothing time beetween the transition from normal time to slow motion
-    private float currentTimePassed;
     private Coroutine SlowmotionCoroutine;
 
     // Components
     private PlayerRoll playerRoll;
     private PauseSystem pauseSystem;
+    private Volume postProcessing;
 
     // Slow motion variables
     public bool Performing { get; private set; }
@@ -36,6 +37,8 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     {
         playerRoll = FindObjectOfType<PlayerRoll>();
         pauseSystem = FindObjectOfType<PauseSystem>();
+        postProcessing = 
+            GameObject.FindGameObjectWithTag("postProcessing").GetComponent<Volume>();
     }
 
     private void Start()
@@ -96,21 +99,43 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
             slowMotionParticlesMesh.skinnedMeshRenderer = playerMesh;
         }
 
-        currentTimePassed = 0;
+        // Post process variables
+        ChromaticAberration chromaticA;
+        LensDistortion lensDistor;
+        if (postProcessing.profile.TryGet(out chromaticA))
+        {
+            chromaticA.active = true;
+            chromaticA.intensity.value = 0;
+        }
+            
+        if (postProcessing.profile.TryGet(out lensDistor))
+        {
+            lensDistor.active = true;
+            lensDistor.intensity.value = 0;
+        }
+            
+
 
         slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0.03f); // WaveSize
         slowMotionMaterial.SetFloat("Vector1_34F127BD", -0.2f); // WaveStrength
         slowMotionMaterial.SetFloat("Vector1_58B5DC2F", 1f);    // TimeMultiplication
         float waveTime = 0f;
 
+        float currentTimePassed = 0;
         while (currentTimePassed < slowMotionDuration)
         {
+            if (chromaticA.intensity.value < 1)
+                chromaticA.intensity.value += Time.fixedUnscaledDeltaTime;
+            if (lensDistor.intensity.value > -0.6f)
+                lensDistor.intensity.value -= Time.fixedUnscaledDeltaTime;
+
             // This variable goes from 0 to 1, growing the wave until the
             // edge of the screen
             // Wave time
             if (waveTime < 0.99f) waveTime = currentTimePassed / (slowMotionDuration * 0.5f);
             slowMotionMaterial.SetFloat("Vector1_24514F13", waveTime);
 
+            // First half of the slow motion effect
             if (!pauseSystem.PausedGame && currentTimePassed < slowMotionDuration * 0.25f)
             {
                 Time.timeScale = Mathf.Lerp(
@@ -119,6 +144,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
                     slowMotionSmoothSpeed * 2);
             }
 
+            // Second half of the slow motion effect, returns to normal speed
             else if (!pauseSystem.PausedGame && currentTimePassed > slowMotionDuration - (slowMotionDuration * 0.25f))
             {
                 Time.timeScale = Mathf.Lerp(
@@ -130,6 +156,11 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
                 slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
                 slowMotionMaterial.SetFloat("Vector1_58B5DC2F", 0f); // TimeMultiplication
                 slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
+
+                if (chromaticA.intensity.value > 0)
+                    chromaticA.intensity.value -= 0.025f;
+                if (lensDistor.intensity.value < -0)
+                    lensDistor.intensity.value += 0.025f;
             }
 
             if (pauseSystem.PausedGame)
@@ -143,9 +174,13 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
                 currentTimePassed += Time.unscaledDeltaTime;
             }
 
-            
             yield return null;
         }
+
+        if (postProcessing.profile.TryGet(out chromaticA))
+            chromaticA.active = false;
+        if (postProcessing.profile.TryGet(out lensDistor))
+            lensDistor.active = false;
 
         StopSlowMotion();
         SlowmotionCoroutine = null;

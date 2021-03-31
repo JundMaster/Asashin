@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using System;
 
 /// <summary>
 /// Class responsible for updating options.
@@ -12,8 +14,13 @@ public class Options : MonoBehaviour
     private GameOptions gameOptions;
     public OptionsTemporaryValues SavedValues { get; private set; }
 
+    [Header("Game Configuration")]
     [SerializeField] private OptionsScriptableObj options;
 
+    [Header("Post Process")]
+    [SerializeField] private Volume postProcess;
+
+    [Header("Quality Settings")]
     [SerializeField] private UniversalRenderPipelineAsset[] qualitySettingsNoShadows;
     [SerializeField] private UniversalRenderPipelineAsset[] qualitySettingsLowShadows;
     [SerializeField] private UniversalRenderPipelineAsset[] qualitySettingsMediumShadows;
@@ -59,7 +66,8 @@ public class Options : MonoBehaviour
             UpdateWindowMode();
             UpdateScreenResolution();
             UpdateQualitySettings();
-            UpdateValuesForInterfaces();
+            UpdatePostProcess();
+            OnUpdatedValues();
         }
         else
         {
@@ -68,7 +76,24 @@ public class Options : MonoBehaviour
     }
     #endregion
     ////////////////////////////////////////////////////////////////////////////
-    
+
+    /// <summary>
+    /// Updates post process values.
+    /// </summary>
+    private void UpdatePostProcess()
+    {
+        if (postProcess.profile.TryGet(out ColorAdjustments colorAdjustement))
+        {
+            colorAdjustement.postExposure.value = options.Lightness;
+            colorAdjustement.contrast.value = options.Contrast;
+        }
+
+        if (postProcess.profile.TryGet(out MotionBlur motionBlur))
+        {
+            motionBlur.active = options.MotionBlur;
+        }
+    }
+
     /// <summary>
     /// Updates options scriptable object to the same values as the struct receives values struct.
     /// Saves current options.
@@ -97,32 +122,14 @@ public class Options : MonoBehaviour
         UpdateWindowMode();
         UpdateScreenResolution();
         UpdateQualitySettings();
-        UpdateValuesForInterfaces();
-    }
-
-    /// <summary>
-    /// Updates values for every class that implements IUpdateOptions.
-    /// </summary>
-    public void UpdateValuesForInterfaces()
-    {
-        SceneControl sceneController = FindObjectOfType<SceneControl>();
-        GameObject[] rootGameObjects = sceneController.CurrentScene().GetRootGameObjects();
-        foreach (GameObject rootGameObject in rootGameObjects)
-        {
-            IUpdateOptions[] childrenInterfaces =
-                rootGameObject.GetComponentsInChildren<IUpdateOptions>();
-
-            foreach (IUpdateOptions childInterface in childrenInterfaces)
-            {
-                childInterface.UpdateValues();
-            }
-        }
+        UpdatePostProcess();
+        OnUpdatedValues();
     }
 
     /// <summary>
     /// Updates quality settings.
     /// </summary>
-    public void UpdateQualitySettings()
+    private void UpdateQualitySettings()
     {
         if (options.Shadows == true)
         {
@@ -130,32 +137,33 @@ public class Options : MonoBehaviour
             switch (options.ShadowQuality)
             {
                 case 0:
-                    QualitySettings.renderPipeline = 
+                    QualitySettings.renderPipeline =
                         qualitySettingsLowShadows[options.GraphicsQuality];
                     break;
                 case 1:
-                    QualitySettings.renderPipeline = 
+                    QualitySettings.renderPipeline =
                         qualitySettingsMediumShadows[options.GraphicsQuality];
                     break;
                 case 2:
-                    QualitySettings.renderPipeline = 
+                    QualitySettings.renderPipeline =
                         qualitySettingsHighShadows[options.GraphicsQuality];
                     break;
             }
-            
+
         }
         else if (options.Shadows == false)
         {
             QualitySettings.SetQualityLevel(options.GraphicsQuality);
-            QualitySettings.renderPipeline = 
+            QualitySettings.renderPipeline =
                 qualitySettingsNoShadows[options.GraphicsQuality];
         }
     }
 
+
     /// <summary>
     /// Updates screen resolution.
     /// </summary>
-    public void UpdateScreenResolution()
+    private void UpdateScreenResolution()
     {
         /*
         switch (options.ScreenResolution)
@@ -185,7 +193,7 @@ public class Options : MonoBehaviour
     /// <summary>
     /// Updates window mode
     /// </summary>
-    public void UpdateWindowMode()
+    private void UpdateWindowMode()
     {
         FullScreenMode windowMode = default;
         switch (options.ScreenMode)
@@ -203,4 +211,11 @@ public class Options : MonoBehaviour
         Screen.fullScreenMode = windowMode;
     }
 
+
+    protected virtual void OnUpdatedValues() => UpdatedValues?.Invoke();
+
+    /// <summary>
+    /// Registered on CinemachineTarget.
+    /// </summary>
+    public event Action UpdatedValues;
 }

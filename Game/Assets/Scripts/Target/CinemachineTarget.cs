@@ -6,13 +6,14 @@ using System.Collections;
 
 public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 {
-    [SerializeField] private OptionsScriptableObj options;
+    [SerializeField] private OptionsScriptableObj configScriptableObj;
 
     // Components
     private Player player;
     private PlayerInputCustom input;
     private PauseSystem pauseSystem;
     private SlowMotionBehaviour slowMotion;
+    private Options optionsScript;
 
     // Camera Variables
     [SerializeField] private CinemachineFreeLook thirdPersonCamera;
@@ -42,6 +43,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         player = FindObjectOfType<Player>();
         input = FindObjectOfType<PlayerInputCustom>();
         pauseSystem = FindObjectOfType<PauseSystem>();
+        optionsScript = FindObjectOfType<Options>();
         mainCameraBrain = Camera.main.GetComponent<CinemachineBrain>();
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         CurrentTarget = GameObject.FindGameObjectWithTag("targetUIForCinemachine").transform;
@@ -70,14 +72,19 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         }
         pauseSystem.GamePaused += SwitchBeetweenPauseCamera;
         slowMotion.SlowMotionEvent += SlowMotionCamera;
+        optionsScript.UpdatedValues += UpdateValues;
     }
 
     private void OnDisable()
     {
-        input.TargetSet -= HandleTarget;
-        input.TargetChange -= SwitchTarget;
+        if (input != null)
+        {
+            input.TargetSet -= HandleTarget;
+            input.TargetChange -= SwitchTarget;
+        }
         pauseSystem.GamePaused -= SwitchBeetweenPauseCamera;
         slowMotion.SlowMotionEvent -= SlowMotionCamera;
+        optionsScript.UpdatedValues -= UpdateValues;
     }
 
     private void Update()
@@ -313,7 +320,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         yield return new WaitForEndOfFrame();
 
         // If player is targetting and autolock option is on
-        if (Targeting && options.AutoLock)
+        if (Targeting && configScriptableObj.AutoLock)
         {
             CurrentTarget.gameObject.SetActive(true);
 
@@ -469,6 +476,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         }
     }
 
+    /// <summary>
+    /// If the player spawns on the scene.
+    /// </summary>
     public void FindPlayer()
     {
         player = FindObjectOfType<Player>();
@@ -478,6 +488,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         SetAllCamerasTargets();
     }
 
+    /// <summary>
+    /// If the player is destroyed from the scene.
+    /// </summary>
     public void PlayerLost()
     {
         input.TargetSet -= HandleTarget;
@@ -485,13 +498,13 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     }
 
     /// <summary>
-    /// Updates values when options are updated.
+    /// Updates values when configScriptableObj are updated.
     /// </summary>
     public void UpdateValues()
     {
-        thirdPersonCamera.m_YAxis.m_MaxSpeed = options.VerticalSensibility;
-        thirdPersonCamera.m_XAxis.m_MaxSpeed = options.HorizontalSensibility;
-        slowMotionThirdPersonCamera.m_YAxis.m_MaxSpeed = options.VerticalSensibility;
-        slowMotionThirdPersonCamera.m_XAxis.m_MaxSpeed = options.HorizontalSensibility;
+        thirdPersonCamera.m_YAxis.m_MaxSpeed = configScriptableObj.VerticalSensibility;
+        thirdPersonCamera.m_XAxis.m_MaxSpeed = configScriptableObj.HorizontalSensibility;
+        slowMotionThirdPersonCamera.m_YAxis.m_MaxSpeed = configScriptableObj.VerticalSensibility;
+        slowMotionThirdPersonCamera.m_XAxis.m_MaxSpeed = configScriptableObj.HorizontalSensibility;
     }
 }
