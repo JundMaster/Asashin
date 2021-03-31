@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 using System.Collections;
+using System;
 
 /// <summary>
 /// Class responsible for controlling UIOptions. Updates values on ui
@@ -11,44 +12,58 @@ using System.Collections;
 public class UIOptions : MonoBehaviour
 {
     [SerializeField] private GameObject initialSelectedButton;
-    [SerializeField] private OptionsScriptableObj defaultOptions;
+    [SerializeField] private OptionsScriptableObj configScriptableObj;
 
-    [Header("Screen Mode")]
+    [Header("General Options")]
     [SerializeField] private TextMeshProUGUI screenModeText;
-
-    [Header("Auto Lock Mode")]
     [SerializeField] private TextMeshProUGUI autoLockText;
-
-
-    [Header("Difficulty")]
     [SerializeField] private TextMeshProUGUI difficultyText;
 
-    [Header("Graphics Quality")]
+    [Header("Graphic Options")]
     [SerializeField] private TextMeshProUGUI graphicsQualityText;
     [SerializeField] private TextMeshProUGUI shadowQualityText;
+    [SerializeField] private TextMeshProUGUI shadowsText;
+    [SerializeField] private TextMeshProUGUI afterImagesText;
+    [SerializeField] private TextMeshProUGUI motionBlurText;
+    [SerializeField] private Slider lightness;
+    [SerializeField] private Slider contrast;
+
+    [Header("Sound Options")]
+    [SerializeField] private Slider musicVolume;
+    [SerializeField] private Slider soundVolume;
+
+    [Header("Control Options")]
+    [SerializeField] private Slider verticalSensiblity;
+    [SerializeField] private Slider horizontalSensiblity;
 
     // Components
-    private Options options;
+    private Options optionsScript;
     private OptionsTemporaryValues currentValues;
     private EventSystem eventSys;
     private GameObject lastSelectedGameObject;
 
     private void Awake()
     {
-        options = FindObjectOfType<Options>();
+        optionsScript = FindObjectOfType<Options>();
         eventSys = FindObjectOfType<EventSystem>();
-        UpdateAllUI();
     }
 
     /// <summary>
-    /// Every time this script is enabled, the values are copied from Options
-    /// OptionsTemporaryValues struct, which is a struct with the current
-    /// option values.
+    /// Updates all UI
     /// </summary>
-    private void OnEnable()
+    /// <returns></returns>
+    private IEnumerator Start()
     {
-        currentValues = options.CurrentValues;
         eventSys.SetSelectedGameObject(initialSelectedButton);
+
+        yield return new WaitForFixedUpdate();
+        currentValues = optionsScript.SavedValues;
+
+        // Updates current values
+        UpdateAllUI();
+        // Sets min and max values on sliders
+        SetMinAndMaxSliderValues();
+        // Updates values again
         UpdateAllUI();
     }
 
@@ -71,71 +86,108 @@ public class UIOptions : MonoBehaviour
         }
     }
 
+    #region Methods called from UI buttons
+    ////////////////////////////////////////////////////////////////////////////
     /// <summary>
     /// Passes a struct with current values to Options class, updates current
     /// values and saves those values in a file.
-    /// Copies the options struct again, so it knows the current values.
     /// </summary>
     public void AcceptValues()
     {
-        options.UpdateValues(currentValues);
-        currentValues = options.CurrentValues;
+        optionsScript.UpdateValues(currentValues);
+        UpdateAllUI();
     }
 
     /// <summary>
-    /// Revers all changed values to the current values before altering them
+    /// Reverts all changed values to the current values before altering them
     /// to these new ones.
     /// </summary>
     public void RevertValues()
     {
-        currentValues = options.CurrentValues;
+        currentValues = optionsScript.SavedValues;
         UpdateAllUI();
     }
 
+    public void ResetGeneralValues() => configScriptableObj.ResetGeneralOptions();
+    public void ResetGraphicValues() => configScriptableObj.ResetGraphicOptions();
+    public void ResetAudioValues() => configScriptableObj.ResetAudioOptions();
+    public void ResetControlValues() => configScriptableObj.ResetControlsOptions();
+    #endregion
+    ////////////////////////////////////////////////////////////////////////////
+
+    #region Updates strings with arrows
+    ////////////////////////////////////////////////////////////////////////////
     /// <summary>
     /// Decrements a certain value.
     /// </summary>
     /// <param name="option">Value to decrement.</param>
     public void LeftButton(string option)
     {
-        Debug.Log("leftButton");
         switch (option)
         {
             case "AutoLock":
                 if (currentValues.AutoLock)
                 {
                     currentValues.AutoLock = false;
-                    UpdateUI(GameOptionsEnum.AutoLock, 1);
                 }
                 else
                 {
                     currentValues.AutoLock = true;
-                    UpdateUI(GameOptionsEnum.AutoLock, 0);
                 }
                 break;
             case "ScreenMode":
                 if (currentValues.ScreenMode - 1 >= 0) currentValues.ScreenMode--;
-                else currentValues.ScreenMode = defaultOptions.MaxScreenMode;
-                UpdateUI(GameOptionsEnum.ScreenMode, currentValues.ScreenMode);
+                else currentValues.ScreenMode = configScriptableObj.MaxScreenMode;
                 break;
             case "Difficulty":
                 if (currentValues.Difficulty - 1 >= 0) currentValues.Difficulty--;
-                else currentValues.Difficulty = defaultOptions.MaxDifficulty;
-                UpdateUI(GameOptionsEnum.Difficulty, currentValues.Difficulty);
+                else currentValues.Difficulty = configScriptableObj.MaxDifficulty;
                 break;
 
-            case "Graphics Quality":
+            case "GraphicsQuality":
                 if (currentValues.GraphicsQuality - 1 >= 0) currentValues.GraphicsQuality--;
-                else currentValues.GraphicsQuality = defaultOptions.MaxGraphicsQuality;
-                UpdateUI(GameOptionsEnum.GraphicsQuality, currentValues.GraphicsQuality);
+                else currentValues.GraphicsQuality = configScriptableObj.MaxGraphicsQuality;
                 break;
 
-            case "Shadow Quality":
+            case "ShadowQuality":
                 if (currentValues.ShadowQuality - 1 >= 0) currentValues.ShadowQuality--;
-                else currentValues.ShadowQuality = defaultOptions.MaxShadowQuality;
-                UpdateUI(GameOptionsEnum.ShadowQuality, currentValues.ShadowQuality);
+                else currentValues.ShadowQuality = configScriptableObj.MaxShadowQuality;
+                break;
+
+            case "Shadows":
+                if (currentValues.Shadows)
+                {
+                    currentValues.Shadows = false;
+                }
+                else
+                {
+                    currentValues.Shadows = true;
+                }
+                break;
+
+            case "AfterImages":
+                if (currentValues.AfterImages)
+                {
+                    currentValues.AfterImages = false;
+                }
+                else
+                {
+                    currentValues.AfterImages = true;
+                }
+                break;
+
+            case "MotionBlur":
+                if (currentValues.MotionBlur)
+                {
+                    currentValues.MotionBlur = false;
+                }
+                else
+                {
+                    currentValues.MotionBlur = true;
+                }
                 break;
         }
+        UpdateAllUI();
     }
 
     /// <summary>
@@ -144,47 +196,88 @@ public class UIOptions : MonoBehaviour
     /// <param name="option">Value to increment.</param>
     public void RightButton(string option)
     {
-        Debug.Log("rightButton");
         switch (option)
         {
             case "AutoLock":
                 if (currentValues.AutoLock)
                 {
                     currentValues.AutoLock = false;
-                    UpdateUI(GameOptionsEnum.AutoLock, 1);
                 }
                 else
                 {
                     currentValues.AutoLock = true;
-                    UpdateUI(GameOptionsEnum.AutoLock, 0);
                 }
                 break;
 
             case "ScreenMode":
                 if (currentValues.ScreenMode - 1 >= 0) currentValues.ScreenMode--;
-                else currentValues.ScreenMode = defaultOptions.MaxScreenMode;
-                UpdateUI(GameOptionsEnum.ScreenMode, currentValues.ScreenMode);
+                else currentValues.ScreenMode = configScriptableObj.MaxScreenMode;
                 break;
 
             case "Difficulty":
-                if (currentValues.Difficulty + 1 <= defaultOptions.MaxDifficulty) currentValues.Difficulty++;
+                if (currentValues.Difficulty + 1 <= configScriptableObj.MaxDifficulty) currentValues.Difficulty++;
                 else currentValues.Difficulty = 0;
-                UpdateUI(GameOptionsEnum.Difficulty, currentValues.Difficulty);
                 break;
 
-            case "Graphics Quality":
-                if (currentValues.GraphicsQuality + 1 <= defaultOptions.MaxGraphicsQuality) currentValues.GraphicsQuality++;
+            case "GraphicsQuality":
+                if (currentValues.GraphicsQuality + 1 <= configScriptableObj.MaxGraphicsQuality) currentValues.GraphicsQuality++;
                 else currentValues.GraphicsQuality = 0;
-                UpdateUI(GameOptionsEnum.GraphicsQuality, currentValues.GraphicsQuality);
                 break;
 
-            case "Shadow Quality":
-                if (currentValues.ShadowQuality + 1 <= defaultOptions.MaxShadowQuality) currentValues.ShadowQuality++;
+            case "ShadowQuality":
+                if (currentValues.ShadowQuality + 1 <= configScriptableObj.MaxShadowQuality) currentValues.ShadowQuality++;
                 else currentValues.ShadowQuality = 0;
-                UpdateUI(GameOptionsEnum.ShadowQuality, currentValues.ShadowQuality);
+                break;
+
+            case "Shadows":
+                if (currentValues.Shadows)
+                {
+                    currentValues.Shadows = false;
+                }
+                else
+                {
+                    currentValues.Shadows = true;
+                }
+                break;
+
+            case "AfterImages":
+                if (currentValues.AfterImages)
+                {
+                    currentValues.AfterImages = false;
+                }
+                else
+                {
+                    currentValues.AfterImages = true;
+                }
+                break;
+
+            case "MotionBlur":
+                if (currentValues.MotionBlur)
+                {
+                    currentValues.MotionBlur = false;
+                }
+                else
+                {
+                    currentValues.MotionBlur = true;
+                }
                 break;
         }
+        UpdateAllUI();
     }
+    #endregion
+    ////////////////////////////////////////////////////////////////////////////
+
+    #region Methods called from sliders
+    ////////////////////////////////////////////////////////////////////////////
+    public void UpdateLightnessValue(float value) => currentValues.Lightness = value;
+    public void UpdateContrastValue(float value) => currentValues.Contrast = value;
+    public void UpdateMusicVolume(float value) => currentValues.MusicVolume = value;
+    public void UpdateSoundVolume(float value) => currentValues.SoundVolume = value;
+    public void VerticalSensiblity(float value) => currentValues.VerticalSensibility = value;
+    public void HorizontalSensiblity(float value) => currentValues.HorizontalSensibility = value;
+
+    #endregion
+    ////////////////////////////////////////////////////////////////////////////
 
     /// <summary>
     /// Starts coroutine to select parent button after clicking an arrow with a controller.
@@ -209,91 +302,8 @@ public class UIOptions : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates UI corresponding to the current options.
+    /// Updates all UI.
     /// </summary>
-    /// <param name="option">What type of option to change.</param>
-    /// <param name="number">Current value of that option.</param>
-    private void UpdateUI(GameOptionsEnum option, short number)
-    {
-        switch(option)
-        {
-            case GameOptionsEnum.AutoLock:
-                switch (number)
-                {
-                    case 0:
-                        autoLockText.text = "On";
-                        break;
-                    case 1:
-                        autoLockText.text = "Off";
-                        break;
-                }
-                break;
-
-            case GameOptionsEnum.ScreenMode:
-                switch (number)
-                {
-                    case 0:
-                        screenModeText.text = "Windowed";
-                        break;
-                    case 1:
-                        screenModeText.text = "Fullscreen";
-                        break;
-                    case 2:
-                        screenModeText.text = "Borderless";
-                        break;
-                }
-                break;
-
-            case GameOptionsEnum.Difficulty:
-                switch(number)
-                {
-                    case 0:
-                        difficultyText.text = "Easy";
-                        break;
-                    case 1:
-                        difficultyText.text = "Medium";
-                        break;
-                    case 2:
-                        difficultyText.text = "Hard";
-                        break;
-                    case 3:
-                        difficultyText.text = "Impossible";
-                        break;
-                }
-                break;
-
-            case GameOptionsEnum.GraphicsQuality:
-                switch (number)
-                {
-                    case 0:
-                        graphicsQualityText.text = "Low";
-                        break;
-                    case 1:
-                        graphicsQualityText.text = "Medium";
-                        break;
-                    case 2:
-                        graphicsQualityText.text = "High";
-                        break;
-                }
-                break;
-
-            case GameOptionsEnum.ShadowQuality:
-                switch (number)
-                {
-                    case 0:
-                        shadowQualityText.text = "Low";
-                        break;
-                    case 1:
-                        shadowQualityText.text = "Medium";
-                        break;
-                    case 2:
-                        shadowQualityText.text = "High";
-                        break;
-                }
-                break;
-        }
-    }
-
     private void UpdateAllUI()
     {
         switch (currentValues.AutoLock)
@@ -312,10 +322,10 @@ public class UIOptions : MonoBehaviour
                 screenModeText.text = "Windowed";
                 break;
             case 1:
-                screenModeText.text = "Fullscreen";
+                screenModeText.text = "Borderless";
                 break;
             case 2:
-                screenModeText.text = "Borderless";
+                screenModeText.text = "Fullscreen";
                 break;
         }
 
@@ -359,5 +369,58 @@ public class UIOptions : MonoBehaviour
                 shadowQualityText.text = "High";
                 break;
         }
+        switch (currentValues.Shadows)
+        {
+            case true:
+                shadowsText.text = "On";
+                break;
+            case false:
+                shadowsText.text = "Off";
+                break;
+        }
+        switch (currentValues.AfterImages)
+        {
+            case true:
+                afterImagesText.text = "On";
+                break;
+            case false:
+                afterImagesText.text = "Off";
+                break;
+        }
+        switch (currentValues.MotionBlur)
+        {
+            case true:
+                motionBlurText.text = "On";
+                break;
+            case false:
+                motionBlurText.text = "Off";
+                break;
+        }
+
+        lightness.value = currentValues.Lightness;
+        contrast.value = currentValues.Contrast;
+        musicVolume.value = currentValues.MusicVolume;
+        soundVolume.value = currentValues.SoundVolume;
+        verticalSensiblity.value = currentValues.VerticalSensibility;
+        horizontalSensiblity.value = currentValues.HorizontalSensibility;
+    }
+
+    /// <summary>
+    /// Sets slider values to min and max from options scriptable object.
+    /// </summary>
+    private void SetMinAndMaxSliderValues()
+    {
+        lightness.minValue = configScriptableObj.MinLightness;
+        lightness.maxValue = configScriptableObj.MaxLightness;
+        contrast.minValue = configScriptableObj.MinContrast;
+        contrast.maxValue = configScriptableObj.MaxContrast;
+        musicVolume.minValue = configScriptableObj.MinMusicVolume;
+        musicVolume.maxValue = configScriptableObj.MaxMusicVolume;
+        soundVolume.minValue = configScriptableObj.MinSoundVolume;
+        soundVolume.maxValue = configScriptableObj.MaxSoundVolume;
+        verticalSensiblity.minValue = configScriptableObj.MinVerticalSensibility;
+        verticalSensiblity.maxValue = configScriptableObj.MaxVerticalSensibility;
+        horizontalSensiblity.minValue = configScriptableObj.MinHorizontalSensibility;
+        horizontalSensiblity.maxValue = configScriptableObj.MaxHorizontalSensibility;
     }
 }

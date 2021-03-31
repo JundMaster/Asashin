@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SceneControl : MonoBehaviour
 {
+    public Scene CurrentScene() => SceneManager.GetActiveScene();
+
     /// <summary>
     /// Loads a scene.
     /// </summary>

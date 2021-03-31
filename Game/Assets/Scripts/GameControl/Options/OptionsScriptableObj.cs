@@ -147,6 +147,9 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private float maxVerticalSensibility;
     public float MaxVerticalSensibility => maxVerticalSensibility;
 
+    /// <summary>
+    /// Resets all options.
+    /// </summary>
     public void ResetOptions()
     {
         autoLock = defaultAutoLock;

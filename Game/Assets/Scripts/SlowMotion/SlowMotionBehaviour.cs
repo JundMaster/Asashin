@@ -25,7 +25,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     public bool Performing { get; private set; }
 
     // Particles from player's mesh
-    public bool OptionsSlowMotionParticles { get; set; }
+    [SerializeField] private OptionsScriptableObj options;
     [SerializeField] private ParticleSystem slowMotionParticles;
     private ParticleSystem cloneParticles;
 
@@ -44,9 +44,6 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
         defaultFixedDeltaTime = 0.01f;
         Performing = false;
         SlowmotionCoroutine = null;
-
-        // Defines if slow motion particles are played
-        OptionsSlowMotionParticles = true;
 
         slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0f); // WaveSize
         slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
@@ -88,7 +85,8 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
 
         Performing = true;
 
-        if (OptionsSlowMotionParticles)
+        // Only plays if after images are enabled
+        if (options.AfterImages)
         {
             SkinnedMeshRenderer playerMesh =
                GameObject.FindGameObjectWithTag("playerMesh").
@@ -166,7 +164,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
 
         Performing = false;
 
-        if (OptionsSlowMotionParticles)
+        if (options.AfterImages)
         {
             if (cloneParticles && cloneParticles.isPlaying) 
                 cloneParticles.Stop();

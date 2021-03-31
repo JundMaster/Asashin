@@ -4,8 +4,10 @@ using Cinemachine;
 using System.Linq;
 using System.Collections;
 
-public class CinemachineTarget : MonoBehaviour, IFindPlayer
+public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 {
+    [SerializeField] private OptionsScriptableObj options;
+
     // Components
     private Player player;
     private PlayerInputCustom input;
@@ -20,10 +22,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
     [SerializeField] private CinemachineCollider targetCameraCollider;
     private CinemachineBrain mainCameraBrain;
 
-
-    // Target player
-    [SerializeField] private Transform currentTarget;
-    public Transform CurrentTarget => currentTarget;
+    // Current target from player
+    public Transform CurrentTarget { get; private set; }
 
     // Target variables
     [SerializeField] private float findTargetSize;
@@ -41,10 +41,10 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
     {
         player = FindObjectOfType<Player>();
         input = FindObjectOfType<PlayerInputCustom>();
-        thirdPersonCamera = GetComponent<CinemachineFreeLook>();
         pauseSystem = FindObjectOfType<PauseSystem>();
         mainCameraBrain = Camera.main.GetComponent<CinemachineBrain>();
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
+        CurrentTarget = GameObject.FindGameObjectWithTag("targetUIForCinemachine").transform;
     }
 
     private void Start()
@@ -55,7 +55,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
         allEnemies = new List<Enemy>();
 
         // Disables current player's target
-        currentTarget.gameObject.SetActive(false);
+        CurrentTarget.gameObject.SetActive(false);
 
         // Sets all cameras follows and lookAts.
         SetAllCamerasTargets();
@@ -85,7 +85,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
         // If distance becames too wide while targetting, it cancels the current target
         if (Targeting &&
             Vector3.Distance(
-            player.transform.position, currentTarget.transform.position) >
+            player.transform.position, CurrentTarget.transform.position) >
             findTargetSize)
         {
             CancelCurrentTarget();
@@ -115,10 +115,10 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
                         .ToArray();
 
                     
-                    currentTarget.gameObject.SetActive(true);
+                    CurrentTarget.gameObject.SetActive(true);
 
                     // Sets current target to closest enemy
-                    currentTarget.transform.position = new Vector3(
+                    CurrentTarget.transform.position = new Vector3(
                                         organizedEnemiesByDistance[0].transform.position.x,
                                         organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
                                         organizedEnemiesByDistance[0].transform.position.z);
@@ -154,7 +154,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
             float directionAngle = MathCustom.AngleDir(targetCamera.transform.forward, direction, transform.up);
 
             float distanceFromTarget =
-                Vector3.Distance(currentTarget.transform.position, allEnemies[i].transform.position);
+                Vector3.Distance(CurrentTarget.transform.position, allEnemies[i].transform.position);
 
             if (leftOrRight == LeftOrRight.Left)
             {
@@ -181,7 +181,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
                         {
                             shortestDistance = distanceFromTarget;
 
-                            currentTarget.transform.position = new Vector3(
+                            CurrentTarget.transform.position = new Vector3(
                                         allEnemies[i].transform.position.x,
                                         allEnemies[i].transform.position.y + targetYOffset,
                                         allEnemies[i].transform.position.z);
@@ -193,7 +193,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
 
         if (definitiveTarget != default)
         {
-            currentTarget.transform.position = new Vector3(
+            CurrentTarget.transform.position = new Vector3(
                                         definitiveTarget.x,
                                         definitiveTarget.y + targetYOffset,
                                         definitiveTarget.z);
@@ -232,7 +232,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
     {
         // Finds enemies around the current target
         Collider[] currentTargetPosition =
-            Physics.OverlapSphere(currentTarget.transform.position, 0.5f, enemyLayer);
+            Physics.OverlapSphere(CurrentTarget.transform.position, 0.5f, enemyLayer);
 
         // If enemy has an Enemy script
         for (int i = 0; i < currentTargetPosition.Length; i++)
@@ -254,9 +254,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
         Collider[] closestEnemy =
             Physics.OverlapSphere(
                 new Vector3(
-                    currentTarget.transform.position.x,
-                    currentTarget.transform.position.y - targetYOffset,
-                    currentTarget.transform.position.z), 
+                    CurrentTarget.transform.position.x,
+                    CurrentTarget.transform.position.y - targetYOffset,
+                    CurrentTarget.transform.position.z), 
                 0.1f, 
                 enemyLayer);
 
@@ -277,7 +277,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
     {
         // Switches camera back to third person camera
         targetCamera.Priority = thirdPersonCamera.Priority - 3;
-        if (currentTarget) currentTarget.gameObject.SetActive(false);
+        if (CurrentTarget) CurrentTarget.gameObject.SetActive(false);
         Targeting = !Targeting;
     }
 
@@ -292,7 +292,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
         {
             // Switches camera back to third person camera
             targetCamera.Priority = thirdPersonCamera.Priority - 3;
-            if (currentTarget) currentTarget.gameObject.SetActive(false);
+            if (CurrentTarget) CurrentTarget.gameObject.SetActive(false);
             Targeting = !Targeting;
         }
     }
@@ -312,9 +312,10 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
     {
         yield return new WaitForEndOfFrame();
 
-        if (Targeting)
+        // If player is targetting and autolock option is on
+        if (Targeting && options.AutoLock)
         {
-            currentTarget.gameObject.SetActive(true);
+            CurrentTarget.gameObject.SetActive(true);
 
             FindAllEnemiesAroundPlayer();
 
@@ -325,10 +326,11 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
                 Where(i => i.gameObject.GetComponentInChildren<Renderer>().isVisible).
                 ToArray();
 
+            // If there's a target
             if (organizedEnemiesByDistance.Length > 0)
             {
                 // Sets current target to closest enemy
-                currentTarget.transform.position = new Vector3(
+                CurrentTarget.transform.position = new Vector3(
                                     organizedEnemiesByDistance[0].transform.position.x,
                                     organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
                                     organizedEnemiesByDistance[0].transform.position.z);
@@ -342,6 +344,11 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
             {
                 CancelCurrentTarget();
             }
+        }
+        // Means the player has autolock option off
+        else
+        {
+            CancelCurrentTarget();
         }
     }
 
@@ -475,5 +482,16 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer
     {
         input.TargetSet -= HandleTarget;
         input.TargetChange -= SwitchTarget;
+    }
+
+    /// <summary>
+    /// Updates values when options are updated.
+    /// </summary>
+    public void UpdateValues()
+    {
+        thirdPersonCamera.m_YAxis.m_MaxSpeed = options.VerticalSensibility;
+        thirdPersonCamera.m_XAxis.m_MaxSpeed = options.HorizontalSensibility;
+        slowMotionThirdPersonCamera.m_YAxis.m_MaxSpeed = options.VerticalSensibility;
+        slowMotionThirdPersonCamera.m_XAxis.m_MaxSpeed = options.HorizontalSensibility;
     }
 }

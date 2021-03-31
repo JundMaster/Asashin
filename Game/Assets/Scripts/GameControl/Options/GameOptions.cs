@@ -26,7 +26,7 @@ sealed public class GameOptions : FileIO
     }
 
     /// <summary>
-    /// Write current config options.
+    /// Saves all current config options.
     /// </summary>
     public void SaveConfig()
     {
@@ -52,7 +52,7 @@ sealed public class GameOptions : FileIO
     }
 
     /// <summary>
-    /// Read last saved config options.
+    /// Read last saved config options and updates current values.
     /// </summary>
     public void LoadConfig()
     {
@@ -80,9 +80,8 @@ sealed public class GameOptions : FileIO
         }
         else
         {
-            LoadDefaultOptions();
+            // Resets all options to default
+            options.ResetOptions();
         }
     }
-
-    public void LoadDefaultOptions() => options.ResetOptions();
 }
