@@ -14,6 +14,16 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private bool defaultAutoLock;
     public bool DefaultAutoLock => defaultAutoLock;
 
+    //ScreenResolution Option
+    [SerializeField] private short screenRes;
+    public short ScreenResolution { get => screenRes; set => screenRes = value; }
+
+    [SerializeField] private short defaultScreenRes;
+    public short DefaultScreenRes => defaultScreenRes;
+
+    [SerializeField] private short maxScreenRes;
+    public short MaxScreenRes => maxScreenRes;
+
     //Difficulty Level Options
     [SerializeField] private short difficulty;
     public short Difficulty { get => difficulty; set => difficulty = value; }

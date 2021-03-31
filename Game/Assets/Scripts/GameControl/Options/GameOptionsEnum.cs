@@ -13,5 +13,6 @@
     HorizontalSensibility,
     VerticalSensibility,
     ScreenMode,
+    ScreenRes,
     AutoLock,
 }

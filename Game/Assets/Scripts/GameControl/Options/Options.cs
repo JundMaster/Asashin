@@ -103,6 +103,7 @@ public class Options : MonoBehaviour
     {
         options.AutoLock = value.AutoLock;
         options.ScreenMode = value.ScreenMode;
+        options.ScreenResolution = value.ScreenResolution;
         options.Difficulty = value.Difficulty;
         options.GraphicsQuality = value.GraphicsQuality;
         options.ShadowQuality = value.ShadowQuality;
@@ -165,7 +166,7 @@ public class Options : MonoBehaviour
     /// </summary>
     private void UpdateScreenResolution()
     {
-        /*
+
         switch (options.ScreenResolution)
         {
             case 0:
@@ -181,13 +182,13 @@ public class Options : MonoBehaviour
                     Screen.SetResolution(1600, 900, false);
                 break;
             case 2:
-                if (options.ScreenResolution == 1 || options.WindowMode == 2)
+                if (options.ScreenResolution == 1 || options.ScreenMode == 2)
                     Screen.SetResolution(1920, 1080, true);
                 else
                     Screen.SetResolution(1920, 1080, false);
                 break;
         }
-        */
+
     }
 
     /// <summary>
