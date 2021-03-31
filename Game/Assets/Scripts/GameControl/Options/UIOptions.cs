@@ -59,16 +59,14 @@ public class UIOptions : MonoBehaviour
 
         currentValues = optionsScript.SavedValues;
 
-        
-
         // Updates current values
         UpdateAllUI();
-
 
         // Sets min and max values on sliders
         SetMinAndMaxSliderValues();
 
-        
+        // Updates current values again
+        UpdateAllUI();
     }
 
     /// <summary>
@@ -90,11 +88,9 @@ public class UIOptions : MonoBehaviour
         }
     }
 
-    #region Methods called from UI buttons
-    ////////////////////////////////////////////////////////////////////////////
     /// <summary>
     /// Passes a struct with current values to Options class, updates current
-    /// values and saves those values in a file.
+    /// values and saves those values in a file. Also updates UI.
     /// </summary>
     public void AcceptValues()
     {
@@ -112,21 +108,47 @@ public class UIOptions : MonoBehaviour
         UpdateAllUI();
     }
 
+    #region Reset values
+    ////////////////////////////////////////////////////////////////////////////
+    /// <summary>
+    /// Resets options, creates new copies of the new values, updates all options and UI.
+    /// </summary>
     public void ResetGeneralValues()
     {
-        configScriptableObj.ResetGeneralOptions();
+        configScriptableObj.ResetGeneralOptions();  // Resets options
+        optionsScript.CreateNewStructWithSavedValues(); // Creates a new struct with the new values
+        currentValues = optionsScript.SavedValues;  // Creates a copy of the new values
+        AcceptValues(); // Updates values and updates UI
     }
+    /// <summary>
+    /// Resets options, creates new copies of the new values, updates all options and UI.
+    /// </summary>
     public void ResetGraphicValues()
     {
-        configScriptableObj.ResetGraphicOptions();
+        configScriptableObj.ResetGraphicOptions();  // Resets options
+        optionsScript.CreateNewStructWithSavedValues(); // Creates a new struct with the new values
+        currentValues = optionsScript.SavedValues;  // Creates a copy of the new values
+        AcceptValues(); // Updates values and updates UI
     }
+    /// <summary>
+    /// Resets options, creates new copies of the new values, updates all options and UI.
+    /// </summary>
     public void ResetAudioValues() 
     {
-        configScriptableObj.ResetAudioOptions();
+        configScriptableObj.ResetAudioOptions();  // Resets options
+        optionsScript.CreateNewStructWithSavedValues(); // Creates a new struct with the new values
+        currentValues = optionsScript.SavedValues;  // Creates a copy of the new values
+        AcceptValues(); // Updates values and updates UI
     }
+    /// <summary>
+    /// Resets options, creates new copies of the new values, updates all options and UI.
+    /// </summary>
     public void ResetControlValues()
     {
-        configScriptableObj.ResetControlsOptions();
+        configScriptableObj.ResetControlsOptions();  // Resets options
+        optionsScript.CreateNewStructWithSavedValues(); // Creates a new struct with the new values
+        currentValues = optionsScript.SavedValues;  // Creates a copy of the new values
+        AcceptValues(); // Updates values and updates UI
     }
     #endregion
     ////////////////////////////////////////////////////////////////////////////
@@ -233,12 +255,12 @@ public class UIOptions : MonoBehaviour
                 break;
 
             case "ScreenMode":
-                if (currentValues.ScreenMode + 1 <= 0) currentValues.ScreenMode++;
+                if (currentValues.ScreenMode + 1 <= configScriptableObj.MaxScreenMode) currentValues.ScreenMode++;
                 else currentValues.ScreenMode = 0;
                 break;
 
             case "ScreenResolution":
-                if (currentValues.ScreenResolution + 1 <= 0) currentValues.ScreenResolution++;
+                if (currentValues.ScreenResolution + 1 <= configScriptableObj.MaxScreenRes) currentValues.ScreenResolution++;
                 else currentValues.ScreenResolution = 0;
                 break;
 
@@ -438,18 +460,12 @@ public class UIOptions : MonoBehaviour
                 break;
         }
 
-        Debug.Log(currentValues.HorizontalSensibility);
-        Debug.Log(optionsScript.SavedValues.HorizontalSensibility);
-
         lightness.value = currentValues.Lightness;
         contrast.value = currentValues.Contrast;
         musicVolume.value = currentValues.MusicVolume;
         soundVolume.value = currentValues.SoundVolume;
         verticalSensiblity.value = currentValues.VerticalSensibility;
         horizontalSensiblity.value = currentValues.HorizontalSensibility;
-
-        Debug.Log(currentValues.HorizontalSensibility);
-        Debug.Log(optionsScript.SavedValues.HorizontalSensibility);
     }
 
     /// <summary>

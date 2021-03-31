@@ -60,9 +60,9 @@ public class Options : MonoBehaviour
                 // Saves current options
                 gameOptions.SaveConfig();
             }
-            
+
             // Initializes a struct with all current values from options
-            SavedValues = new OptionsTemporaryValues(options);
+            CreateNewStructWithSavedValues();
             UpdateWindowMode();
             UpdateScreenResolution();
             UpdateQualitySettings();
@@ -76,6 +76,12 @@ public class Options : MonoBehaviour
     }
     #endregion
     ////////////////////////////////////////////////////////////////////////////
+
+    /// <summary>
+    /// Creates a new copy of the saved values.
+    /// </summary>
+    public void CreateNewStructWithSavedValues() =>
+        SavedValues = new OptionsTemporaryValues(options);
 
     /// <summary>
     /// Updates post process values.
