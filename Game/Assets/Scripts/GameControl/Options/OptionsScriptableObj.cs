@@ -7,14 +7,21 @@
 public class OptionsScriptableObj : ScriptableObject
 {
     [Header("Game Options")]
-    //AutoLock Option
     [SerializeField] private bool autoLock;
     public bool AutoLock { get => autoLock; set => autoLock = value; }
 
     [SerializeField] private bool defaultAutoLock;
     public bool DefaultAutoLock => defaultAutoLock;
+    
+    [SerializeField] private short screenMode;
+    public short ScreenMode { get => screenMode; set => screenMode = value; }
 
-    //ScreenResolution Option
+    [SerializeField] private short defaultScreenMode;
+    public short DefaultScreenMode => defaultScreenMode;
+
+    [SerializeField] private short maxScreenMode;
+    public short MaxScreenMode => maxScreenMode;
+
     [SerializeField] private short screenRes;
     public short ScreenResolution { get => screenRes; set => screenRes = value; }
 
@@ -24,7 +31,6 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private short maxScreenRes;
     public short MaxScreenRes => maxScreenRes;
 
-    //Difficulty Level Options
     [SerializeField] private short difficulty;
     public short Difficulty { get => difficulty; set => difficulty = value; }
 
@@ -35,15 +41,6 @@ public class OptionsScriptableObj : ScriptableObject
     public short MaxDifficulty => maxDifficulty;
 
     [Header("Graphic Options")]
-    //Screen Mode Options
-    [SerializeField] private short screenMode;
-    public short ScreenMode { get => screenMode; set => screenMode = value; }
-
-    [SerializeField] private short defaultScreenMode;
-    public short DefaultScreenMode => defaultScreenMode;
-
-    [SerializeField] private short maxScreenMode;
-    public short MaxScreenMode => maxScreenMode;
 
 
     [SerializeField] private short graphicsQuality;
@@ -163,8 +160,9 @@ public class OptionsScriptableObj : ScriptableObject
     public void ResetOptions()
     {
         autoLock = defaultAutoLock;
-        difficulty = defaultDifficulty;
         screenMode = defaultScreenMode;
+        screenRes = defaultScreenRes;
+        difficulty = defaultDifficulty;
         graphicsQuality = defaultGraphicsQuality;
         shadowQuality = defaultShadowQuality;
         shadows = defaultShadows;
@@ -181,6 +179,8 @@ public class OptionsScriptableObj : ScriptableObject
     public void ResetGeneralOptions()
     {
         autoLock = defaultAutoLock;
+        screenMode = defaultScreenMode;
+        screenRes = defaultScreenRes;
         difficulty = defaultDifficulty;
     }
 

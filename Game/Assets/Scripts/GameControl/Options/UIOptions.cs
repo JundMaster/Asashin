@@ -53,19 +53,22 @@ public class UIOptions : MonoBehaviour
     /// Updates all UI
     /// </summary>
     /// <returns></returns>
-    private IEnumerator Start()
+    private void OnEnable()
     {
         eventSys.SetSelectedGameObject(initialSelectedButton);
 
-        yield return new WaitForFixedUpdate();
         currentValues = optionsScript.SavedValues;
+
+        
 
         // Updates current values
         UpdateAllUI();
+
+
         // Sets min and max values on sliders
         SetMinAndMaxSliderValues();
-        // Updates values again
-        UpdateAllUI();
+
+        
     }
 
     /// <summary>
@@ -95,7 +98,6 @@ public class UIOptions : MonoBehaviour
     /// </summary>
     public void AcceptValues()
     {
-        Debug.Log("Accepted");
         optionsScript.UpdateValues(currentValues);
         UpdateAllUI();
     }
@@ -106,29 +108,24 @@ public class UIOptions : MonoBehaviour
     /// </summary>
     public void RevertValues()
     {
-        Debug.Log("Reverted");
         currentValues = optionsScript.SavedValues;
         UpdateAllUI();
     }
 
     public void ResetGeneralValues()
     {
-        Debug.Log("DefaultGeneral");
         configScriptableObj.ResetGeneralOptions();
     }
     public void ResetGraphicValues()
     {
-        Debug.Log("DefaultGraphic");
         configScriptableObj.ResetGraphicOptions();
     }
     public void ResetAudioValues() 
     {
-        Debug.Log("DefaultÃudio");
         configScriptableObj.ResetAudioOptions();
     }
     public void ResetControlValues()
     {
-        Debug.Log("DefaultControl");
         configScriptableObj.ResetControlsOptions();
     }
     #endregion
@@ -154,14 +151,17 @@ public class UIOptions : MonoBehaviour
                     currentValues.AutoLock = true;
                 }
                 break;
+
             case "ScreenMode":
                 if (currentValues.ScreenMode - 1 >= 0) currentValues.ScreenMode--;
                 else currentValues.ScreenMode = configScriptableObj.MaxScreenMode;
                 break;
+
             case "ScreenResolution":
                 if (currentValues.ScreenResolution - 1 >= 0) currentValues.ScreenResolution--;
                 else currentValues.ScreenResolution = configScriptableObj.MaxScreenRes;
                 break;
+
             case "Difficulty":
                 if (currentValues.Difficulty - 1 >= 0) currentValues.Difficulty--;
                 else currentValues.Difficulty = configScriptableObj.MaxDifficulty;
@@ -233,13 +233,13 @@ public class UIOptions : MonoBehaviour
                 break;
 
             case "ScreenMode":
-                if (currentValues.ScreenMode - 1 >= 0) currentValues.ScreenMode--;
-                else currentValues.ScreenMode = configScriptableObj.MaxScreenMode;
+                if (currentValues.ScreenMode + 1 <= 0) currentValues.ScreenMode++;
+                else currentValues.ScreenMode = 0;
                 break;
 
             case "ScreenResolution":
-                if (currentValues.ScreenResolution - 1 >= 0) currentValues.ScreenResolution--;
-                else currentValues.ScreenResolution = configScriptableObj.MaxScreenRes;
+                if (currentValues.ScreenResolution + 1 <= 0) currentValues.ScreenResolution++;
+                else currentValues.ScreenResolution = 0;
                 break;
 
             case "Difficulty":
@@ -438,12 +438,18 @@ public class UIOptions : MonoBehaviour
                 break;
         }
 
+        Debug.Log(currentValues.HorizontalSensibility);
+        Debug.Log(optionsScript.SavedValues.HorizontalSensibility);
+
         lightness.value = currentValues.Lightness;
         contrast.value = currentValues.Contrast;
         musicVolume.value = currentValues.MusicVolume;
         soundVolume.value = currentValues.SoundVolume;
         verticalSensiblity.value = currentValues.VerticalSensibility;
         horizontalSensiblity.value = currentValues.HorizontalSensibility;
+
+        Debug.Log(currentValues.HorizontalSensibility);
+        Debug.Log(optionsScript.SavedValues.HorizontalSensibility);
     }
 
     /// <summary>
