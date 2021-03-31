@@ -17,7 +17,7 @@ public class PlayerRoll : MonoBehaviour, IAction
     private void Awake()
     {
         movement = GetComponent<PlayerMovement>();
-        input = GetComponent<PlayerInputCustom>();
+        input = FindObjectOfType<PlayerInputCustom>();
         jump = GetComponent<PlayerJump>();
         attack = GetComponent<PlayerMeleeAttack>();
         anim = GetComponent<Animator>();

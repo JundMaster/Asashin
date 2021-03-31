@@ -15,7 +15,7 @@ public class PlayerInteract : MonoBehaviour
 
     private void Awake()
     {
-        input = GetComponent<PlayerInputCustom>();
+        input = FindObjectOfType<PlayerInputCustom>();
     }
 
     private void Start()

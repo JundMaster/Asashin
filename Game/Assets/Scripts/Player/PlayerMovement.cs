@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        input = GetComponent<PlayerInputCustom>();
+        input = FindObjectOfType<PlayerInputCustom>();
         mainCamera = Camera.main.transform;
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         values = GetComponent<Player>().Values;

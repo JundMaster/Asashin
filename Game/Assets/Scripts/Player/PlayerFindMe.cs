@@ -20,6 +20,7 @@ public class PlayerFindMe : MonoBehaviour
             foreach (IFindPlayer childInterface in childrenInterfaces)
             {
                 childInterface.FindPlayer();
+                Debug.Log(childInterface);
             }
         }        
     }

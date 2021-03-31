@@ -26,7 +26,7 @@ public class PlayerJump : MonoBehaviour, IAction
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        input = GetComponent<PlayerInputCustom>();
+        input = FindObjectOfType<PlayerInputCustom>();
         roll = GetComponent<PlayerRoll>();
         values = GetComponent<Player>().Values;
         attack = GetComponent<PlayerMeleeAttack>();

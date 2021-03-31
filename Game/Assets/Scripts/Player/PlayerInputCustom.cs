@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using System.Collections;
 
 /// <summary>
 /// Class responsible for controlling player input.
 /// </summary>
-public class PlayerInputCustom : MonoBehaviour
+public class PlayerInputCustom : MonoBehaviour, IFindPlayer
 {
     [SerializeField] private PlayerInput controls;
 
@@ -17,6 +18,7 @@ public class PlayerInputCustom : MonoBehaviour
     private void Awake()
     {
         deathBehaviour = FindObjectOfType<PlayerDeathBehaviour>();
+        SwitchActionMapToGamePaused();
     }
 
     private void Start()
@@ -27,15 +29,33 @@ public class PlayerInputCustom : MonoBehaviour
 
     private void OnEnable()
     {
-        deathBehaviour.PlayerDied += () => 
-            controls.SwitchCurrentActionMap("Death");
+        if (deathBehaviour != null)
+        {
+            deathBehaviour.PlayerDied += () =>
+                controls.SwitchCurrentActionMap("Death");
+        }
     }
 
     private void OnDisable()
     {
-        deathBehaviour.PlayerDied -= () => 
+        if (deathBehaviour != null)
+        {
+            deathBehaviour.PlayerDied -= () =>
             controls.SwitchCurrentActionMap("Death");
+        }
     }
+
+    /// <summary>
+    /// Switches action map to gameplay.
+    /// </summary>
+    public void SwitchActionMapToGameplay() =>
+        controls.SwitchCurrentActionMap("Gameplay");
+
+    /// <summary>
+    /// Switches action map to GamePaused.
+    /// </summary>
+    public void SwitchActionMapToGamePaused() =>
+        controls.SwitchCurrentActionMap("GamePaused");
 
     /// <summary>
     /// Handles movement.
@@ -222,22 +242,6 @@ public class PlayerInputCustom : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Handles pause game.
-    /// </summary>
-    /// <param name="context"></param>
-    public void HandleGameUnpause(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            OnGamePaused(PauseSystemEnum.Unpaused);
-            controls.SwitchCurrentActionMap("Gameplay");
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
-
     protected virtual void OnGamePaused(PauseSystemEnum pauseSystem) => GamePaused?.Invoke(pauseSystem);
 
     /// <summary>
@@ -292,6 +296,31 @@ public class PlayerInputCustom : MonoBehaviour
     }
 
     protected virtual void OnSprint(YesOrNo condition) => Sprint?.Invoke(condition);
+
+    public void FindPlayer()
+    {
+        deathBehaviour = FindObjectOfType<PlayerDeathBehaviour>();
+        deathBehaviour.PlayerDied += () =>
+            controls.SwitchCurrentActionMap("Death");
+        Debug.Log("tyem");
+        StartCoroutine(SwitchToGameplayAfterSeconds());
+    }
+
+    /// <summary>
+    /// Switches to gameplay controls after fixed update.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator SwitchToGameplayAfterSeconds()
+    {
+        yield return new WaitForFixedUpdate();
+        SwitchActionMapToGameplay();
+    }
+
+    public void PlayerLost()
+    {
+        deathBehaviour.PlayerDied -= () =>
+            controls.SwitchCurrentActionMap("Death");
+    }
 
     /// <summary>
     /// Event registered on PauseSystem.

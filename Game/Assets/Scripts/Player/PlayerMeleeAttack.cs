@@ -33,7 +33,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     private void Awake()
     {
-        input = GetComponent<PlayerInputCustom>();
+        input = FindObjectOfType<PlayerInputCustom>();
         anim = GetComponent<Animator>();
         useItem = GetComponent<PlayerUseItem>();
         roll = GetComponent<PlayerRoll>();

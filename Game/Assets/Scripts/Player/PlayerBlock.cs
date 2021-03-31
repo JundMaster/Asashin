@@ -21,7 +21,7 @@ public class PlayerBlock : MonoBehaviour, IAction
 
     private void Awake()
     {
-        input = GetComponent<PlayerInputCustom>();
+        input = FindObjectOfType<PlayerInputCustom>();
         anim = GetComponent<Animator>();
         attack = GetComponent<PlayerMeleeAttack>();
         jump = GetComponent<PlayerJump>();

@@ -35,7 +35,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
     private void Awake()
     {
         itemControl = FindObjectOfType<ItemControl>();
-        input = GetComponent<PlayerInputCustom>();
+        input = FindObjectOfType<PlayerInputCustom>();
         playerAnims = GetComponent<PlayerAnimations>();
         attack = GetComponent<PlayerMeleeAttack>();
         jump = GetComponent<PlayerJump>();

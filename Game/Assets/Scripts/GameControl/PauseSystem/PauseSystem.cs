@@ -25,7 +25,7 @@ public class PauseSystem : MonoBehaviour, IFindPlayer
 
     private void OnEnable()
     {
-        if (input != null) input.GamePaused += HandlePause;
+        input.GamePaused += HandlePause;
         if (playerAnimations != null) 
             playerAnimations.PlayerDiedEndOfAnimationPauseSystem += HandlePauseCharacterDead;
     }
@@ -33,14 +33,15 @@ public class PauseSystem : MonoBehaviour, IFindPlayer
     private void OnDisable()
     {
         input.GamePaused -= HandlePause;
-        playerAnimations.PlayerDiedEndOfAnimationPauseSystem -= HandlePauseCharacterDead;
+        if (playerAnimations != null)
+            playerAnimations.PlayerDiedEndOfAnimationPauseSystem -= HandlePauseCharacterDead;
     }
 
     /// <summary>
     /// Only happens when the player presses pause key.
     /// </summary>
     /// <param name="pauseSystem"></param>
-    private void HandlePause(PauseSystemEnum pauseSystem)
+    public void HandlePause(PauseSystemEnum pauseSystem)
     {
         if (pauseSystem == PauseSystemEnum.Unpaused)
         {
@@ -90,15 +91,12 @@ public class PauseSystem : MonoBehaviour, IFindPlayer
 
     public void FindPlayer()
     {
-        input = FindObjectOfType<PlayerInputCustom>();
         playerAnimations = FindObjectOfType<PlayerAnimations>();
-        input.GamePaused += HandlePause;
         playerAnimations.PlayerDiedEndOfAnimationPauseSystem += HandlePauseCharacterDead;
     }
 
     public void PlayerLost()
     {
-        input.GamePaused -= HandlePause;
         playerAnimations.PlayerDiedEndOfAnimationPauseSystem -= HandlePauseCharacterDead;
     }
 
