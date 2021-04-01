@@ -89,9 +89,20 @@ public class OptionsScriptableObj : ScriptableObject
     public float MaxContrast => maxContrast;
 
 
-    public float SoundVolume { get; set; }
+    public float MasterVolume { get; set; }
 
     [Header("Sound Options")]
+    [SerializeField] private float defaultMasterVolume;
+
+    [SerializeField] private float minMasterVolume;
+    public float MinMasterVolume => minMasterVolume;
+
+    [SerializeField] private float maxMasterVolume;
+    public float MaxMasterVolume => maxMasterVolume;
+
+
+    public float SoundVolume { get; set; }
+
     [SerializeField] private float defaultSoundVolume;
 
     [SerializeField] private float minSoundVolume;
@@ -147,6 +158,7 @@ public class OptionsScriptableObj : ScriptableObject
         PlayerPrefs.SetString(GameOptionsEnum.MotionBlur.ToString(), MotionBlur.ToString());
         PlayerPrefs.SetFloat(GameOptionsEnum.Lightness.ToString(), Lightness);
         PlayerPrefs.SetFloat(GameOptionsEnum.Contrast.ToString(), Contrast);
+        PlayerPrefs.SetFloat(GameOptionsEnum.MasterVolume.ToString(), MasterVolume);
         PlayerPrefs.SetFloat(GameOptionsEnum.SoundVolume.ToString(), SoundVolume);
         PlayerPrefs.SetFloat(GameOptionsEnum.MusicVolume.ToString(), MusicVolume);
         PlayerPrefs.SetFloat(GameOptionsEnum.HorizontalSensibility.ToString(), HorizontalSensibility);
@@ -166,6 +178,7 @@ public class OptionsScriptableObj : ScriptableObject
         MotionBlur = bool.Parse(PlayerPrefs.GetString(GameOptionsEnum.MotionBlur.ToString(), defaultMotionBlur.ToString()));
         Lightness = PlayerPrefs.GetFloat(GameOptionsEnum.Lightness.ToString(), defaultLightness);
         Contrast = PlayerPrefs.GetFloat(GameOptionsEnum.Contrast.ToString(), defaultContrast);
+        SoundVolume = PlayerPrefs.GetFloat(GameOptionsEnum.MasterVolume.ToString(), defaultMasterVolume);
         SoundVolume = PlayerPrefs.GetFloat(GameOptionsEnum.SoundVolume.ToString(), defaultSoundVolume);
         MusicVolume = PlayerPrefs.GetFloat(GameOptionsEnum.MusicVolume.ToString(), defaultMusicVolume);
         HorizontalSensibility = PlayerPrefs.GetFloat(GameOptionsEnum.HorizontalSensibility.ToString(), defaultHorizontalSensibility);
@@ -188,6 +201,7 @@ public class OptionsScriptableObj : ScriptableObject
         MotionBlur = defaultMotionBlur;
         Lightness = defaultLightness;
         Contrast = defaultContrast;
+        MasterVolume = defaultMasterVolume;
         SoundVolume = defaultSoundVolume;
         MusicVolume = defaultMusicVolume;
         HorizontalSensibility = defaultHorizontalSensibility;
@@ -215,6 +229,7 @@ public class OptionsScriptableObj : ScriptableObject
 
     public void ResetAudioOptions()
     {
+        MasterVolume = defaultMasterVolume;
         SoundVolume = defaultSoundVolume;
         MusicVolume = defaultMusicVolume;
     }

@@ -30,6 +30,7 @@ public class UIOptions : MonoBehaviour
     [SerializeField] private Slider contrast;
 
     [Header("Sound Options")]
+    [SerializeField] private Slider masterVolume;
     [SerializeField] private Slider musicVolume;
     [SerializeField] private Slider soundVolume;
 
@@ -301,6 +302,7 @@ public class UIOptions : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////
     public void UpdateLightnessValue(float value) => currentValues.Lightness = value;
     public void UpdateContrastValue(float value) => currentValues.Contrast = value;
+    public void UpdateMasterVolume(float value) => currentValues.MasterVolume = value;
     public void UpdateMusicVolume(float value) => currentValues.MusicVolume = value;
     public void UpdateSoundVolume(float value) => currentValues.SoundVolume = value;
     public void VerticalSensiblity(float value) => currentValues.VerticalSensibility = value;
@@ -442,6 +444,7 @@ public class UIOptions : MonoBehaviour
 
         lightness.value = currentValues.Lightness;
         contrast.value = currentValues.Contrast;
+        //masterVolume.value = currentValues.MasterVolume;
         musicVolume.value = currentValues.MusicVolume;
         soundVolume.value = currentValues.SoundVolume;
         verticalSensiblity.value = currentValues.VerticalSensibility;
@@ -459,6 +462,8 @@ public class UIOptions : MonoBehaviour
         contrast.maxValue = configScriptableObj.MaxContrast;
         musicVolume.minValue = configScriptableObj.MinMusicVolume;
         musicVolume.maxValue = configScriptableObj.MaxMusicVolume;
+        //masterVolume.minValue = configScriptableObj.MinMasterVolume;
+        //masterVolume.maxValue = configScriptableObj.MaxMasterVolume;
         soundVolume.minValue = configScriptableObj.MinSoundVolume;
         soundVolume.maxValue = configScriptableObj.MaxSoundVolume;
         verticalSensiblity.minValue = configScriptableObj.MinVerticalSensibility;

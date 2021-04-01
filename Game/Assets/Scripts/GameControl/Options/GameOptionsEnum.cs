@@ -15,4 +15,5 @@
     ScreenMode,
     ScreenResolution,
     AutoLock,
+    MasterVolume,
 }

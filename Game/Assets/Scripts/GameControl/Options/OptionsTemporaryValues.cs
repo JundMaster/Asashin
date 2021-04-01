@@ -14,6 +14,7 @@ public struct OptionsTemporaryValues
     public bool MotionBlur { get; set; }
     public float Lightness { get; set; }
     public float Contrast { get; set; }
+    public float MasterVolume { get; set; }
     public float SoundVolume { get; set; }
     public float MusicVolume { get; set; }
     public float HorizontalSensibility { get; set; }
@@ -32,6 +33,7 @@ public struct OptionsTemporaryValues
         MotionBlur = options.MotionBlur;
         Lightness = options.Lightness;
         Contrast = options.Contrast;
+        MasterVolume = options.MasterVolume;
         SoundVolume = options.SoundVolume;
         MusicVolume = options.MusicVolume;
         HorizontalSensibility = options.HorizontalSensibility;
