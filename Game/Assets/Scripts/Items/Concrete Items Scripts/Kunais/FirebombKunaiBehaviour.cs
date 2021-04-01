@@ -22,7 +22,7 @@ public class FirebombKunaiBehaviour : FriendlyKunaiBehaviour
 
         // Gets all enemies around explosion range
         Collider[] collisions =
-            Physics.OverlapSphere(collider.transform.position, explosionRange, enemyLayer);
+            Physics.OverlapSphere(transform.position, explosionRange, enemyLayer);
 
         foreach (Collider col in collisions)
         {

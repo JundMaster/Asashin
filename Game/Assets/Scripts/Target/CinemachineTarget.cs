@@ -24,7 +24,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     [SerializeField] private CinemachineBrain mainCameraBrain;
 
     // Current target from player
-    public Transform CurrentTarget { get; private set; }
+    [SerializeField] private Transform currentTarget;
+    public Transform CurrentTarget => currentTarget;
 
     // Target variables
     [SerializeField] private float findTargetSize;
@@ -45,7 +46,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         pauseSystem = FindObjectOfType<PauseSystem>();
         optionsScript = FindObjectOfType<Options>();
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
-        CurrentTarget = GameObject.FindGameObjectWithTag("targetUIForCinemachine").transform;
     }
 
     private void Start()
@@ -56,7 +56,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         allEnemies = new List<Enemy>();
 
         // Disables current player's target
-        CurrentTarget.gameObject.SetActive(false);
+        currentTarget.gameObject.SetActive(false);
 
         // Sets all cameras follows and lookAts.
         SetAllCamerasTargets();
@@ -91,7 +91,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         // If distance becames too wide while targetting, it cancels the current target
         if (Targeting &&
             Vector3.Distance(
-            player.transform.position, CurrentTarget.transform.position) >
+            player.transform.position, currentTarget.transform.position) >
             findTargetSize)
         {
             CancelCurrentTarget();
@@ -110,7 +110,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             if (Targeting == false)
             {
                 FindAllEnemiesAroundPlayer();
-
                 if (allEnemies.Count > 0)
                 {
                     // Orders array with all VISIBLE enemies by distance
@@ -120,11 +119,10 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                         Where(i => i.gameObject.GetComponentInChildren<Renderer>().isVisible)
                         .ToArray();
 
-                    
-                    CurrentTarget.gameObject.SetActive(true);
+                    currentTarget.gameObject.SetActive(true);
 
                     // Sets current target to closest enemy
-                    CurrentTarget.transform.position = new Vector3(
+                    currentTarget.transform.position = new Vector3(
                                         organizedEnemiesByDistance[0].transform.position.x,
                                         organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
                                         organizedEnemiesByDistance[0].transform.position.z);
@@ -160,7 +158,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             float directionAngle = MathCustom.AngleDir(targetCamera.transform.forward, direction, transform.up);
 
             float distanceFromTarget =
-                Vector3.Distance(CurrentTarget.transform.position, allEnemies[i].transform.position);
+                Vector3.Distance(currentTarget.transform.position, allEnemies[i].transform.position);
 
             if (leftOrRight == LeftOrRight.Left)
             {
@@ -187,7 +185,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                         {
                             shortestDistance = distanceFromTarget;
 
-                            CurrentTarget.transform.position = new Vector3(
+                            currentTarget.transform.position = new Vector3(
                                         allEnemies[i].transform.position.x,
                                         allEnemies[i].transform.position.y + targetYOffset,
                                         allEnemies[i].transform.position.z);
@@ -199,7 +197,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
         if (definitiveTarget != default)
         {
-            CurrentTarget.transform.position = new Vector3(
+            currentTarget.transform.position = new Vector3(
                                         definitiveTarget.x,
                                         definitiveTarget.y + targetYOffset,
                                         definitiveTarget.z);
@@ -238,7 +236,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         // Finds enemies around the current target
         Collider[] currentTargetPosition =
-            Physics.OverlapSphere(CurrentTarget.transform.position, 0.5f, enemyLayer);
+            Physics.OverlapSphere(currentTarget.transform.position, 0.5f, enemyLayer);
 
         // If enemy has an Enemy script
         for (int i = 0; i < currentTargetPosition.Length; i++)
@@ -260,9 +258,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         Collider[] closestEnemy =
             Physics.OverlapSphere(
                 new Vector3(
-                    CurrentTarget.transform.position.x,
-                    CurrentTarget.transform.position.y - targetYOffset,
-                    CurrentTarget.transform.position.z), 
+                    currentTarget.transform.position.x,
+                    currentTarget.transform.position.y - targetYOffset,
+                    currentTarget.transform.position.z), 
                 0.1f, 
                 enemyLayer);
 
@@ -283,23 +281,31 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         // Switches camera back to third person camera
         targetCamera.Priority = thirdPersonCamera.Priority - 3;
-        if (CurrentTarget) CurrentTarget.gameObject.SetActive(false);
+        if (currentTarget) currentTarget.gameObject.SetActive(false);
         Targeting = !Targeting;
     }
+
+    /// <summary>
+    /// Calls a coroutine to cancel the current target. Only happens after an
+    /// enemy dies.
+    /// </summary>
+    public void CancelCurrentTargetAutomaticallyCall() =>
+        StartCoroutine(CancelCurrentTargetAutomatically());
 
     /// <summary>
     /// Cancels current target automatically. This method only happens when
     /// an enemy dies.
     /// </summary>
-    public void CancelCurrentTargetAutomatically()
+    private IEnumerator CancelCurrentTargetAutomatically()
     {
+        yield return new WaitForSecondsRealtime(0.5f);
         FindAllEnemiesAroundPlayer();
         if (allEnemies.Count == 0)
         {
             // Switches camera back to third person camera
             targetCamera.Priority = thirdPersonCamera.Priority - 3;
-            if (CurrentTarget) CurrentTarget.gameObject.SetActive(false);
-            Targeting = !Targeting;
+            if (currentTarget) currentTarget.gameObject.SetActive(false);
+            Targeting = false;;
         }
     }
 
@@ -321,7 +327,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         // If player is targetting and autolock option is on
         if (Targeting && configScriptableObj.AutoLock)
         {
-            CurrentTarget.gameObject.SetActive(true);
+            currentTarget.gameObject.SetActive(true);
 
             FindAllEnemiesAroundPlayer();
 
@@ -336,7 +342,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             if (organizedEnemiesByDistance.Length > 0)
             {
                 // Sets current target to closest enemy
-                CurrentTarget.transform.position = new Vector3(
+                currentTarget.transform.position = new Vector3(
                                     organizedEnemiesByDistance[0].transform.position.x,
                                     organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
                                     organizedEnemiesByDistance[0].transform.position.z);
@@ -481,9 +487,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     public void FindPlayer()
     {
         player = FindObjectOfType<Player>();
-        input = FindObjectOfType<PlayerInputCustom>();
-        input.TargetSet += HandleTarget;
-        input.TargetChange += SwitchTarget;
         SetAllCamerasTargets();
         mainCameraBrain.enabled = true;
     }
@@ -493,9 +496,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// </summary>
     public void PlayerLost()
     {
-        input.TargetSet -= HandleTarget;
-        input.TargetChange -= SwitchTarget;
-
         thirdPersonCamera.Follow = null;
         thirdPersonCamera.LookAt = null;
         targetCamera.Follow = null;

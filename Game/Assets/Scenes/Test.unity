@@ -3532,7 +3532,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1009973338, guid: c28a1a83b351031478a794182c79edd7, type: 3}
   m_PrefabInstance: {fileID: 3553272087682608750}
   m_PrefabAsset: {fileID: 0}
---- !u!82 &1009973339
+--- !u!82 &1009973341
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4119,8 +4119,9 @@ GameObject:
   - component: {fileID: 1072756604}
   - component: {fileID: 1072756606}
   - component: {fileID: 1072756605}
+  - component: {fileID: 1072756607}
   m_Layer: 0
-  m_Name: RawImage
+  m_Name: Crosshair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4180,6 +4181,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1072756603}
   m_CullTransparentMesh: 0
+--- !u!114 &1072756607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072756603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d7edcef3bdc124ab900f529383f8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentCanvas: {fileID: 1757454344}
+  crosshair: {fileID: 1072756605}
 --- !u!1 &1083266479
 GameObject:
   m_ObjectHideFlags: 0
@@ -5105,9 +5120,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1411101979}
-  - component: {fileID: 1411101980}
   m_Layer: 0
-  m_Name: Target
+  m_Name: Target Transform
   m_TagString: targetUIForCinemachine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5121,27 +5135,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1411101978}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -990, y: -556.2672, z: 0}
-  m_LocalScale: {x: 3.8899803, y: 3.8899803, z: 3.8899803}
-  m_Children:
-  - {fileID: 1757454341}
-  m_Father: {fileID: 1535715499}
-  m_RootOrder: 0
+  m_LocalPosition: {x: 0, y: 0.2858429, z: 0}
+  m_LocalScale: {x: 1.0294696, y: 1.0294696, z: 1.0294696}
+  m_Children: []
+  m_Father: {fileID: 1643325939}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1411101980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1411101978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6d7edcef3bdc124ab900f529383f8fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetParent: {fileID: 1411101979}
-  crosshair: {fileID: 1072756605}
 --- !u!1 &1483324296
 GameObject:
   m_ObjectHideFlags: 0
@@ -5461,7 +5460,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1411101979}
+  - {fileID: 1757454341}
   - {fileID: 1037416184}
   - {fileID: 2146684605}
   - {fileID: 641457042}
@@ -5602,7 +5601,7 @@ Transform:
   m_Children:
   - {fileID: 136714386}
   m_Father: {fileID: 1643325939}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1572747245
 MonoBehaviour:
@@ -6052,6 +6051,7 @@ Transform:
   - {fileID: 1083266481}
   - {fileID: 1985006619}
   - {fileID: 1322449319}
+  - {fileID: 1411101979}
   - {fileID: 1572747243}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -6075,6 +6075,7 @@ MonoBehaviour:
   pauseMenuCamera: {fileID: 1572747245}
   targetCameraCollider: {fileID: 1322449320}
   mainCameraBrain: {fileID: 393034227}
+  currentTarget: {fileID: 1411101979}
   findTargetSize: 20
   enemyLayer:
     serializedVersion: 2
@@ -6188,7 +6189,7 @@ GameObject:
   - component: {fileID: 1757454343}
   - component: {fileID: 1757454342}
   m_Layer: 0
-  m_Name: CrosshairCanvas
+  m_Name: Target Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6203,16 +6204,16 @@ RectTransform:
   m_GameObject: {fileID: 1757454340}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.63625, y: 0.63625, z: 0.63625}
+  m_LocalScale: {x: 2.475, y: 2.475, z: 2.475}
   m_Children:
   - {fileID: 1072756604}
-  m_Father: {fileID: 1411101979}
+  m_Father: {fileID: 1535715499}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 254.5, y: 143}
-  m_SizeDelta: {x: 800, y: 449.50882}
+  m_AnchoredPosition: {x: 990.0001, y: 557.34735}
+  m_SizeDelta: {x: 800.00006, y: 450.3817}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1757454342
 MonoBehaviour:

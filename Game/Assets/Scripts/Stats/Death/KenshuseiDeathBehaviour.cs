@@ -22,7 +22,7 @@ public class KenshuseiDeathBehaviour : DeathBehaviour
     {
         // If the player is targetting and if there are more enemies around,
         // changes target to next enemy
-        cinemachineTarget.CancelCurrentTargetAutomatically();
+        cinemachineTarget.CancelCurrentTargetAutomaticallyCall();
         cinemachineTarget.AutomaticallyFindTargetCall();
 
         // Random chance of spawning items.

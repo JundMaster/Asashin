@@ -5,7 +5,7 @@ using System;
 /// <summary>
 /// Class responsible for handling items in general.
 /// </summary>
-public class ItemControl : MonoBehaviour, IFindPlayer
+public class ItemControl : MonoBehaviour
 {
     // Components
     private PlayerInputCustom input;
@@ -106,17 +106,6 @@ public class ItemControl : MonoBehaviour, IFindPlayer
     }
 
     protected virtual void OnChangedCurrentItem() => ChangedCurrentItem?.Invoke();
-
-    public void FindPlayer()
-    {
-        input = FindObjectOfType<PlayerInputCustom>();
-        input.ItemChange += HandleItemSwitch;
-    }
-
-    public void PlayerLost()
-    {
-        input.ItemChange -= HandleItemSwitch;
-    }
 
     /// <summary>
     /// Event registered on ItemUIParent class.

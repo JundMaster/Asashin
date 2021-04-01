@@ -7,12 +7,28 @@ using UnityEngine.UI;
 public class TargetScript : MonoBehaviour
 {
     // Components
-    [SerializeField] private Transform targetParent;
+    private Transform targetParent;
 
+    [SerializeField] private Canvas parentCanvas;
     [SerializeField] private RawImage crosshair;
+
+    private void Awake()
+    {
+        targetParent = 
+            GameObject.FindGameObjectWithTag("targetUIForCinemachine").transform;
+    }
 
     private void FixedUpdate()
     {
+        if (targetParent.gameObject.activeSelf)
+        {
+            if (parentCanvas.enabled == false) parentCanvas.enabled = true;
+        }
+        else
+        {
+            if (parentCanvas.enabled) parentCanvas.enabled = false;
+        }
+
         // Gets target position in world space
         Vector3 targetPosition = 
             Camera.main.WorldToScreenPoint(targetParent.transform.position);
