@@ -31,8 +31,7 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     {
         if (deathBehaviour != null)
         {
-            deathBehaviour.PlayerDied += () =>
-                controls.SwitchCurrentActionMap("Death");
+            deathBehaviour.PlayerDied += SwitchActionMapToGamePaused;
         }
     }
 
@@ -40,8 +39,7 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     {
         if (deathBehaviour != null)
         {
-            deathBehaviour.PlayerDied -= () =>
-            controls.SwitchCurrentActionMap("Death");
+            deathBehaviour.PlayerDied -= SwitchActionMapToGamePaused;
         }
     }
 

@@ -581,20 +581,17 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Left Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""f98626ae-10ce-4c10-9220-d7cc99a119a0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""1299974f-9f9c-41b3-ab29-17e7d5429697"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Submit"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""5d4f78c8-6a97-4513-8858-78f2f5c28ba3"",
@@ -621,17 +618,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""name"": """",
                     ""id"": ""976d51e2-66cb-40fa-84da-3dfed536753b"",
                     ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Cancel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""42829622-a71f-43d0-891d-0078c8b3b5c1"",
-                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -803,6 +789,17 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b6a3e5eb-91dd-4ffe-aeab-ff4b29f5b48a"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -833,6 +830,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
         m_GamePaused_Cancel = m_GamePaused.FindAction("Cancel", throwIfNotFound: true);
         m_GamePaused_Move = m_GamePaused.FindAction("Move", throwIfNotFound: true);
         m_GamePaused_Point = m_GamePaused.FindAction("Point", throwIfNotFound: true);
+        m_GamePaused_LeftClick = m_GamePaused.FindAction("Left Click", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1039,6 +1037,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_GamePaused_Cancel;
     private readonly InputAction m_GamePaused_Move;
     private readonly InputAction m_GamePaused_Point;
+    private readonly InputAction m_GamePaused_LeftClick;
     public struct GamePausedActions
     {
         private @InputAsset m_Wrapper;
@@ -1047,6 +1046,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
         public InputAction @Cancel => m_Wrapper.m_GamePaused_Cancel;
         public InputAction @Move => m_Wrapper.m_GamePaused_Move;
         public InputAction @Point => m_Wrapper.m_GamePaused_Point;
+        public InputAction @LeftClick => m_Wrapper.m_GamePaused_LeftClick;
         public InputActionMap Get() { return m_Wrapper.m_GamePaused; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1068,6 +1068,9 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @Point.started -= m_Wrapper.m_GamePausedActionsCallbackInterface.OnPoint;
                 @Point.performed -= m_Wrapper.m_GamePausedActionsCallbackInterface.OnPoint;
                 @Point.canceled -= m_Wrapper.m_GamePausedActionsCallbackInterface.OnPoint;
+                @LeftClick.started -= m_Wrapper.m_GamePausedActionsCallbackInterface.OnLeftClick;
+                @LeftClick.performed -= m_Wrapper.m_GamePausedActionsCallbackInterface.OnLeftClick;
+                @LeftClick.canceled -= m_Wrapper.m_GamePausedActionsCallbackInterface.OnLeftClick;
             }
             m_Wrapper.m_GamePausedActionsCallbackInterface = instance;
             if (instance != null)
@@ -1084,6 +1087,9 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @Point.started += instance.OnPoint;
                 @Point.performed += instance.OnPoint;
                 @Point.canceled += instance.OnPoint;
+                @LeftClick.started += instance.OnLeftClick;
+                @LeftClick.performed += instance.OnLeftClick;
+                @LeftClick.canceled += instance.OnLeftClick;
             }
         }
     }
@@ -1113,5 +1119,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
         void OnCancel(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
+        void OnLeftClick(InputAction.CallbackContext context);
     }
 }

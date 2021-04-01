@@ -1,8 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Class responsible for changing arrow colors when selected.
+/// </summary>
 public class ChangeArrowColor : MonoBehaviour
 {
     [SerializeField]

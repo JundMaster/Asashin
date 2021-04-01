@@ -1,7 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Class responsible for handling menu actions.
+/// </summary>
 public class MenuOptionsController : MonoBehaviour
 {
     [SerializeField]
@@ -17,10 +18,17 @@ public class MenuOptionsController : MonoBehaviour
     private GameObject quitOption;
 
     private CameraController vmController;
-    // Start is called before the first frame update
-    void Awake()
+
+    private void Awake()
     {
         vmController = FindObjectOfType<CameraController>();
+    }
+
+    private void Start()
+    {
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void SwitchMenuOption()
