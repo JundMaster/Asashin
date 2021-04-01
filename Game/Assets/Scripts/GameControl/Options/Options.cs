@@ -10,8 +10,6 @@ using System;
 /// </summary>
 public class Options : MonoBehaviour
 {
-    // Components
-    private GameOptions gameOptions;
     public OptionsTemporaryValues SavedValues { get; private set; }
 
     [Header("Game Configuration")]
@@ -39,27 +37,10 @@ public class Options : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this);
-            gameOptions = new GameOptions(options);
 
-            // When the game begins for the first time on a computer
-            if (gameOptions.FileExists(FilePath.CONFIG))
-            {
-                // Updates options values to player last config with options
-                gameOptions.LoadConfig();
-
-            }
-            // Else if file doesn't exist yet
-            else
-            {
-                // Creates new file
-                gameOptions.CreateConfigFile();
-
-                // Resets options to default
-                options.ResetOptions();
-
-                // Saves current options
-                gameOptions.SaveConfig();
-            }
+            // Updates options values to player last config with options
+            // If the values don't exist yet, it gives them default values
+            options.LoadConfig();
 
             // Initializes a struct with all current values from options
             CreateNewStructWithSavedValues();
@@ -125,7 +106,7 @@ public class Options : MonoBehaviour
 
         // Copies the script received
         SavedValues = value;
-        gameOptions.SaveConfig();
+        options.SaveConfig();
         UpdateWindowMode();
         UpdateScreenResolution();
         UpdateQualitySettings();

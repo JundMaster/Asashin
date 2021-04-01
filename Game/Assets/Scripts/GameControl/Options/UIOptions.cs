@@ -177,13 +177,9 @@ public class UIOptions : MonoBehaviour
         {
             case "AutoLock":
                 if (currentValues.AutoLock)
-                {
                     currentValues.AutoLock = false;
-                }
                 else
-                {
                     currentValues.AutoLock = true;
-                }
                 break;
 
             case "ScreenMode":
@@ -193,7 +189,7 @@ public class UIOptions : MonoBehaviour
 
             case "ScreenResolution":
                 if (currentValues.ScreenResolution - 1 >= 0) currentValues.ScreenResolution--;
-                else currentValues.ScreenResolution = configScriptableObj.MaxScreenRes;
+                else currentValues.ScreenResolution = configScriptableObj.MaxScreenResolution;
                 break;
 
             case "Difficulty":
@@ -213,35 +209,23 @@ public class UIOptions : MonoBehaviour
 
             case "Shadows":
                 if (currentValues.Shadows)
-                {
                     currentValues.Shadows = false;
-                }
                 else
-                {
                     currentValues.Shadows = true;
-                }
                 break;
 
             case "AfterImages":
                 if (currentValues.AfterImages)
-                {
                     currentValues.AfterImages = false;
-                }
                 else
-                {
                     currentValues.AfterImages = true;
-                }
                 break;
 
             case "MotionBlur":
                 if (currentValues.MotionBlur)
-                {
                     currentValues.MotionBlur = false;
-                }
                 else
-                {
                     currentValues.MotionBlur = true;
-                }
                 break;
         }
         UpdateAllUI();
@@ -257,13 +241,9 @@ public class UIOptions : MonoBehaviour
         {
             case "AutoLock":
                 if (currentValues.AutoLock)
-                {
                     currentValues.AutoLock = false;
-                }
                 else
-                {
                     currentValues.AutoLock = true;
-                }
                 break;
 
             case "ScreenMode":
@@ -272,7 +252,7 @@ public class UIOptions : MonoBehaviour
                 break;
 
             case "ScreenResolution":
-                if (currentValues.ScreenResolution + 1 <= configScriptableObj.MaxScreenRes) currentValues.ScreenResolution++;
+                if (currentValues.ScreenResolution + 1 <= configScriptableObj.MaxScreenResolution) currentValues.ScreenResolution++;
                 else currentValues.ScreenResolution = 0;
                 break;
 
@@ -293,35 +273,23 @@ public class UIOptions : MonoBehaviour
 
             case "Shadows":
                 if (currentValues.Shadows)
-                {
                     currentValues.Shadows = false;
-                }
                 else
-                {
                     currentValues.Shadows = true;
-                }
                 break;
 
             case "AfterImages":
                 if (currentValues.AfterImages)
-                {
                     currentValues.AfterImages = false;
-                }
                 else
-                {
                     currentValues.AfterImages = true;
-                }
                 break;
 
             case "MotionBlur":
                 if (currentValues.MotionBlur)
-                {
                     currentValues.MotionBlur = false;
-                }
                 else
-                {
                     currentValues.MotionBlur = true;
-                }
                 break;
         }
         UpdateAllUI();

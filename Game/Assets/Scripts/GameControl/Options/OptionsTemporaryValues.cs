@@ -4,11 +4,11 @@
 public struct OptionsTemporaryValues
 {
     public bool AutoLock { get; set; }
-    public short ScreenMode { get; set; }
-    public short ScreenResolution { get; set; }
-    public short Difficulty { get; set; }
-    public short GraphicsQuality { get; set; }
-    public short ShadowQuality { get; set; }
+    public int ScreenMode { get; set; }
+    public int ScreenResolution { get; set; }
+    public int Difficulty { get; set; }
+    public int GraphicsQuality { get; set; }
+    public int ShadowQuality { get; set; }
     public bool Shadows { get; set; }
     public bool AfterImages { get; set; }
     public bool MotionBlur { get; set; }

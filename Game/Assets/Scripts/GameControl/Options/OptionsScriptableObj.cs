@@ -6,84 +6,70 @@
 [CreateAssetMenu(fileName = "Game Options")]
 public class OptionsScriptableObj : ScriptableObject
 {
+    public bool AutoLock { get; set; }
+
     [Header("Game Options")]
-    [SerializeField] private bool autoLock;
-    public bool AutoLock { get => autoLock; set => autoLock = value; }
-
     [SerializeField] private bool defaultAutoLock;
-    public bool DefaultAutoLock => defaultAutoLock;
     
-    [SerializeField] private short screenMode;
-    public short ScreenMode { get => screenMode; set => screenMode = value; }
+    public int ScreenMode { get; set; }
 
-    [SerializeField] private short defaultScreenMode;
-    public short DefaultScreenMode => defaultScreenMode;
+    [SerializeField] private int defaultScreenMode;
 
-    [SerializeField] private short maxScreenMode;
-    public short MaxScreenMode => maxScreenMode;
+    [SerializeField] private int maxScreenMode;
+    public int MaxScreenMode => maxScreenMode;
 
-    [SerializeField] private short screenRes;
-    public short ScreenResolution { get => screenRes; set => screenRes = value; }
 
-    [SerializeField] private short defaultScreenRes;
-    public short DefaultScreenRes => defaultScreenRes;
+    public int ScreenResolution { get; set; }
 
-    [SerializeField] private short maxScreenRes;
-    public short MaxScreenRes => maxScreenRes;
+    [SerializeField] private int defaultScreenResolution;
 
-    [SerializeField] private short difficulty;
-    public short Difficulty { get => difficulty; set => difficulty = value; }
+    [SerializeField] private int maxScreenResolution;
+    public int MaxScreenResolution => maxScreenResolution;
 
-    [SerializeField] private short defaultDifficulty;
-    public short DefaultDifficulty => defaultDifficulty;
 
-    [SerializeField] private short maxDifficulty;
-    public short MaxDifficulty => maxDifficulty;
+    public int Difficulty { get; set; }
+
+    [SerializeField] private int defaultDifficulty;
+
+    [SerializeField] private int maxDifficulty;
+    public int MaxDifficulty => maxDifficulty;
+
+
+    public int GraphicsQuality { get; set; }
 
     [Header("Graphic Options")]
+    [SerializeField] private int defaultGraphicsQuality;
+
+    [SerializeField] private int maxGraphicsQuality;
+    public int MaxGraphicsQuality => maxGraphicsQuality;
 
 
-    [SerializeField] private short graphicsQuality;
-    public short GraphicsQuality { get => graphicsQuality; set => graphicsQuality = value; }
+    public int ShadowQuality { get; set; }
 
-    [SerializeField] private short defaultGraphicsQuality;
-    public short DefaultGraphicsQuality => defaultGraphicsQuality;
+    [SerializeField] private int defaultShadowQuality;
 
-    [SerializeField] private short maxGraphicsQuality;
-    public short MaxGraphicsQuality => maxGraphicsQuality;
+    [SerializeField] private int maxShadowQuality;
+    public int MaxShadowQuality => maxShadowQuality;
 
-    [SerializeField] private short shadowQuality;
-    public short ShadowQuality { get => shadowQuality; set => shadowQuality = value; }
 
-    [SerializeField] private short defaultShadowQuality;
-    public short DefaultShadowQuality => defaultShadowQuality;
-
-    [SerializeField] private short maxShadowQuality;
-    public short MaxShadowQuality => maxShadowQuality;
-
-    [SerializeField] private bool shadows;
-    public bool Shadows { get => shadows; set => shadows = value; }
+    public bool Shadows { get; set; }
 
     [SerializeField] private bool defaultShadows;
-    public bool DefaultShadows => defaultShadows;
 
-    [SerializeField] private bool afterImages;
-    public bool AfterImages { get => afterImages; set => afterImages = value; }
+
+    public bool AfterImages { get; set; }
 
     [SerializeField] private bool defaultAfterImages;
-    public bool DefaultAfterImages => defaultAfterImages;
 
-    [SerializeField] private bool motionBlur;
-    public bool MotionBlur { get => motionBlur; set => motionBlur = value; }
+
+    public bool MotionBlur { get; set; }
 
     [SerializeField] private bool defaultMotionBlur;
-    public bool DefaultMotionBlur => defaultMotionBlur;
 
-    [SerializeField] private float lightness;
-    public float Lightness { get => lightness; set => lightness = value; }
+
+    public float Lightness { get; set; }
 
     [SerializeField] private float defaultLightness;
-    public float DefaultLightness => defaultLightness;
 
     [SerializeField] private float minLightness;
     public float MinLightness => minLightness;
@@ -91,11 +77,10 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private float maxLightness;
     public float MaxLightness => maxLightness;
 
-    [SerializeField] private float contrast;
-    public float Contrast { get => contrast; set => contrast = value; }
+
+    public float Contrast { get; set; }
 
     [SerializeField] private float defaultContrast;
-    public float DefaultContrast => defaultContrast;
 
     [SerializeField] private float minContrast;
     public float MinContrast => minContrast;
@@ -104,12 +89,10 @@ public class OptionsScriptableObj : ScriptableObject
     public float MaxContrast => maxContrast;
 
 
-    [Header("Sound Options")]
-    [SerializeField] private float soundVolume;
-    public float SoundVolume { get => soundVolume; set => soundVolume = value; }
+    public float SoundVolume { get; set; }
 
+    [Header("Sound Options")]
     [SerializeField] private float defaultSoundVolume;
-    public float DefaultSoundVolume => defaultSoundVolume;
 
     [SerializeField] private float minSoundVolume;
     public float MinSoundVolume => minSoundVolume;
@@ -117,11 +100,10 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private float maxSoundVolume;
     public float MaxSoundVolume => maxSoundVolume;
 
-    [SerializeField] private float musicVolume;
-    public float MusicVolume { get => musicVolume; set => musicVolume = value; }
+
+    public float MusicVolume { get; set; }
 
     [SerializeField] private float defaultMusicVolume;
-    public float DefaultMusicVolume => defaultMusicVolume;
 
     [SerializeField] private float minMusicVolume;
     public float MinMusicVolume => minMusicVolume;
@@ -129,12 +111,11 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private float maxMusicVolume;
     public float MaxMusicVolume => maxMusicVolume;
 
-    [Header("Controls")]
-    [SerializeField] private float horizontalSensibility;
-    public float HorizontalSensibility { get => horizontalSensibility; set => horizontalSensibility = value; }
 
+    public float HorizontalSensibility { get; set; }
+
+    [Header("Controls")]
     [SerializeField] private float defaultHorizontalSensibility;
-    public float DefaultHorizontalSensibility => defaultHorizontalSensibility;
 
     [SerializeField] private float minHorizontalSensibility;
     public float MinHorizontalSensibility => minHorizontalSensibility;
@@ -142,11 +123,10 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private float maxHorizontalSensibility;
     public float MaxHorizontalSensibility => maxHorizontalSensibility;
 
-    [SerializeField] private float verticalSensibility;
-    public float VerticalSensibility { get => verticalSensibility; set => verticalSensibility = value; }
+
+    public float VerticalSensibility { get; set; }
 
     [SerializeField] private float defaultVerticalSensibility;
-    public float DefaultVerticalSensibility => defaultVerticalSensibility;
 
     [SerializeField] private float minVerticalSensibility;
     public float MinVerticalSensibility => minVerticalSensibility;
@@ -154,57 +134,94 @@ public class OptionsScriptableObj : ScriptableObject
     [SerializeField] private float maxVerticalSensibility;
     public float MaxVerticalSensibility => maxVerticalSensibility;
 
+    public void SaveConfig()
+    {
+        PlayerPrefs.SetString(GameOptionsEnum.AutoLock.ToString(), AutoLock.ToString());
+        PlayerPrefs.SetInt(GameOptionsEnum.ScreenMode.ToString(), ScreenMode);
+        PlayerPrefs.SetInt(GameOptionsEnum.ScreenResolution.ToString(), ScreenResolution);
+        PlayerPrefs.SetInt(GameOptionsEnum.Difficulty.ToString(), Difficulty);
+        PlayerPrefs.SetInt(GameOptionsEnum.GraphicsQuality.ToString(), GraphicsQuality);
+        PlayerPrefs.SetInt(GameOptionsEnum.ShadowQuality.ToString(), ShadowQuality);
+        PlayerPrefs.SetString(GameOptionsEnum.Shadows.ToString(), Shadows.ToString());
+        PlayerPrefs.SetString(GameOptionsEnum.AfterImages.ToString(), AfterImages.ToString());
+        PlayerPrefs.SetString(GameOptionsEnum.MotionBlur.ToString(), MotionBlur.ToString());
+        PlayerPrefs.SetFloat(GameOptionsEnum.Lightness.ToString(), Lightness);
+        PlayerPrefs.SetFloat(GameOptionsEnum.Contrast.ToString(), Contrast);
+        PlayerPrefs.SetFloat(GameOptionsEnum.SoundVolume.ToString(), SoundVolume);
+        PlayerPrefs.SetFloat(GameOptionsEnum.MusicVolume.ToString(), MusicVolume);
+        PlayerPrefs.SetFloat(GameOptionsEnum.HorizontalSensibility.ToString(), HorizontalSensibility);
+        PlayerPrefs.SetFloat(GameOptionsEnum.VerticalSensibility.ToString(), VerticalSensibility);
+    }
+
+    public void LoadConfig()
+    {
+        AutoLock = bool.Parse(PlayerPrefs.GetString(GameOptionsEnum.AutoLock.ToString(), defaultAutoLock.ToString()));
+        ScreenMode = PlayerPrefs.GetInt(GameOptionsEnum.ScreenMode.ToString(), defaultScreenMode);
+        ScreenResolution = PlayerPrefs.GetInt(GameOptionsEnum.ScreenResolution.ToString(), defaultScreenResolution);
+        Difficulty = PlayerPrefs.GetInt(GameOptionsEnum.Difficulty.ToString(), defaultDifficulty);
+        GraphicsQuality = PlayerPrefs.GetInt(GameOptionsEnum.GraphicsQuality.ToString(), defaultGraphicsQuality);
+        ShadowQuality = PlayerPrefs.GetInt(GameOptionsEnum.ShadowQuality.ToString(), defaultShadowQuality);
+        Shadows = bool.Parse(PlayerPrefs.GetString(GameOptionsEnum.Shadows.ToString(), defaultShadows.ToString()));
+        AfterImages = bool.Parse(PlayerPrefs.GetString(GameOptionsEnum.AfterImages.ToString(), defaultAfterImages.ToString()));
+        MotionBlur = bool.Parse(PlayerPrefs.GetString(GameOptionsEnum.MotionBlur.ToString(), defaultMotionBlur.ToString()));
+        Lightness = PlayerPrefs.GetFloat(GameOptionsEnum.Lightness.ToString(), defaultLightness);
+        Contrast = PlayerPrefs.GetFloat(GameOptionsEnum.Contrast.ToString(), defaultContrast);
+        SoundVolume = PlayerPrefs.GetFloat(GameOptionsEnum.SoundVolume.ToString(), defaultSoundVolume);
+        MusicVolume = PlayerPrefs.GetFloat(GameOptionsEnum.MusicVolume.ToString(), defaultMusicVolume);
+        HorizontalSensibility = PlayerPrefs.GetFloat(GameOptionsEnum.HorizontalSensibility.ToString(), defaultHorizontalSensibility);
+        VerticalSensibility = PlayerPrefs.GetFloat(GameOptionsEnum.VerticalSensibility.ToString(), defaultVerticalSensibility);
+    }
+
     /// <summary>
     /// Resets all options.
     /// </summary>
     public void ResetOptions()
     {
-        autoLock = defaultAutoLock;
-        screenMode = defaultScreenMode;
-        screenRes = defaultScreenRes;
-        difficulty = defaultDifficulty;
-        graphicsQuality = defaultGraphicsQuality;
-        shadowQuality = defaultShadowQuality;
-        shadows = defaultShadows;
-        afterImages = defaultAfterImages;
-        motionBlur = defaultMotionBlur;
-        lightness = defaultLightness;
-        contrast = defaultContrast;
-        soundVolume = defaultSoundVolume;
-        musicVolume = defaultMusicVolume;
-        horizontalSensibility = defaultHorizontalSensibility;
-        verticalSensibility = defaultVerticalSensibility;
+        AutoLock = defaultAutoLock;
+        ScreenMode = defaultScreenMode;
+        ScreenResolution = defaultScreenResolution;
+        Difficulty = defaultDifficulty;
+        GraphicsQuality = defaultGraphicsQuality;
+        ShadowQuality = defaultShadowQuality;
+        Shadows = defaultShadows;
+        AfterImages = defaultAfterImages;
+        MotionBlur = defaultMotionBlur;
+        Lightness = defaultLightness;
+        Contrast = defaultContrast;
+        SoundVolume = defaultSoundVolume;
+        MusicVolume = defaultMusicVolume;
+        HorizontalSensibility = defaultHorizontalSensibility;
+        VerticalSensibility = defaultVerticalSensibility;
     }
 
     public void ResetGeneralOptions()
     {
-        autoLock = defaultAutoLock;
-        screenMode = defaultScreenMode;
-        screenRes = defaultScreenRes;
-        difficulty = defaultDifficulty;
+        AutoLock = defaultAutoLock;
+        ScreenMode = defaultScreenMode;
+        ScreenResolution = defaultScreenResolution;
+        Difficulty = defaultDifficulty;
     }
 
     public void ResetGraphicOptions()
     {
-        screenMode = defaultScreenMode;
-        graphicsQuality = defaultGraphicsQuality;
-        shadowQuality = defaultShadowQuality;
-        shadows = defaultShadows;
-        afterImages = defaultAfterImages;
-        motionBlur = defaultMotionBlur;
-        lightness = defaultLightness;
-        contrast = defaultContrast;
+        GraphicsQuality = defaultGraphicsQuality;
+        ShadowQuality = defaultShadowQuality;
+        Shadows = defaultShadows;
+        AfterImages = defaultAfterImages;
+        MotionBlur = defaultMotionBlur;
+        Lightness = defaultLightness;
+        Contrast = defaultContrast;
     }
 
     public void ResetAudioOptions()
     {
-        soundVolume = defaultSoundVolume;
-        musicVolume = defaultMusicVolume;
+        SoundVolume = defaultSoundVolume;
+        MusicVolume = defaultMusicVolume;
     }
 
     public void ResetControlsOptions()
     {
-        horizontalSensibility = defaultHorizontalSensibility;
-        verticalSensibility = defaultVerticalSensibility;
+        HorizontalSensibility = defaultHorizontalSensibility;
+        VerticalSensibility = defaultVerticalSensibility;
     }
 }
