@@ -805,12 +805,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
-        },
-        {
-            ""name"": ""Death"",
-            ""id"": ""5e2e2024-f4c1-41a3-a9e8-9d0a276fa4c8"",
-            ""actions"": [],
-            ""bindings"": []
         }
     ],
     ""controlSchemes"": []
@@ -839,8 +833,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
         m_GamePaused_Cancel = m_GamePaused.FindAction("Cancel", throwIfNotFound: true);
         m_GamePaused_Move = m_GamePaused.FindAction("Move", throwIfNotFound: true);
         m_GamePaused_Point = m_GamePaused.FindAction("Point", throwIfNotFound: true);
-        // Death
-        m_Death = asset.FindActionMap("Death", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1096,31 +1088,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
         }
     }
     public GamePausedActions @GamePaused => new GamePausedActions(this);
-
-    // Death
-    private readonly InputActionMap m_Death;
-    private IDeathActions m_DeathActionsCallbackInterface;
-    public struct DeathActions
-    {
-        private @InputAsset m_Wrapper;
-        public DeathActions(@InputAsset wrapper) { m_Wrapper = wrapper; }
-        public InputActionMap Get() { return m_Wrapper.m_Death; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(DeathActions set) { return set.Get(); }
-        public void SetCallbacks(IDeathActions instance)
-        {
-            if (m_Wrapper.m_DeathActionsCallbackInterface != null)
-            {
-            }
-            m_Wrapper.m_DeathActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-            }
-        }
-    }
-    public DeathActions @Death => new DeathActions(this);
     public interface IGameplayActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -1146,8 +1113,5 @@ public class @InputAsset : IInputActionCollection, IDisposable
         void OnCancel(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
-    }
-    public interface IDeathActions
-    {
     }
 }

@@ -83,10 +83,13 @@ public class PauseSystem : MonoBehaviour, IFindPlayer
     private void ChangePlayerAnimatorMode()
     {
         Animator anim = playerAnimations.GetComponent<Animator>();
-        if (anim.updateMode == AnimatorUpdateMode.UnscaledTime)
-            anim.updateMode = AnimatorUpdateMode.Normal;
-        else
-            anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+        if (anim != null)
+        {
+            if (anim.updateMode == AnimatorUpdateMode.UnscaledTime)
+                anim.updateMode = AnimatorUpdateMode.Normal;
+            else
+                anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+        }
     }
 
     public void FindPlayer()

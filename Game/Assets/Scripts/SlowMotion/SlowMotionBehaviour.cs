@@ -19,11 +19,14 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
 
     // Components
     private PlayerRoll playerRoll;
+    private PlayerDeathBehaviour playerDeath;
     private PauseSystem pauseSystem;
     private Volume postProcessing;
 
     // Slow motion variables
     public bool Performing { get; private set; }
+    private ChromaticAberration chromaticA;
+    private LensDistortion lensDistor;
 
     // Particles from player's mesh
     [SerializeField] private OptionsScriptableObj options;
@@ -36,6 +39,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     private void Awake()
     {
         playerRoll = FindObjectOfType<PlayerRoll>();
+        playerDeath = FindObjectOfType<PlayerDeathBehaviour>();
         pauseSystem = FindObjectOfType<PauseSystem>();
         postProcessing = 
             GameObject.FindGameObjectWithTag("postProcessing").GetComponent<Volume>();
@@ -68,6 +72,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     private void OnDisable()
     {
         playerRoll.Roll -= TriggerSlowMotion;
+        playerDeath.PlayerDied += StopSlowMotion;
     }
 
     private void TriggerSlowMotion()
@@ -100,8 +105,6 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
         }
 
         // Post process variables
-        ChromaticAberration chromaticA;
-        LensDistortion lensDistor;
         if (postProcessing.profile.TryGet(out chromaticA))
         {
             chromaticA.active = true;
@@ -114,8 +117,6 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
             lensDistor.intensity.value = 0;
         }
             
-
-
         slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0.03f); // WaveSize
         slowMotionMaterial.SetFloat("Vector1_34F127BD", -0.2f); // WaveStrength
         slowMotionMaterial.SetFloat("Vector1_58B5DC2F", 1f);    // TimeMultiplication
@@ -177,11 +178,6 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
             yield return null;
         }
 
-        if (postProcessing.profile.TryGet(out chromaticA))
-            chromaticA.active = false;
-        if (postProcessing.profile.TryGet(out lensDistor))
-            lensDistor.active = false;
-
         StopSlowMotion();
         SlowmotionCoroutine = null;
     }
@@ -191,6 +187,16 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     /// </summary>
     private void StopSlowMotion()
     {
+        if (postProcessing.profile.TryGet(out chromaticA))
+            chromaticA.active = false;
+        if (postProcessing.profile.TryGet(out lensDistor))
+            lensDistor.active = false;
+
+        slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0f); // WaveSize
+        slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
+        slowMotionMaterial.SetFloat("Vector1_58B5DC2F", 0f); // TimeMultiplication
+        slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
+
         Time.timeScale = defaultTimeScale;
         Time.fixedDeltaTime = defaultFixedDeltaTime;
 
@@ -211,12 +217,15 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     public void FindPlayer()
     {
         playerRoll = FindObjectOfType<PlayerRoll>();
+        playerDeath = FindObjectOfType<PlayerDeathBehaviour>();
         playerRoll.Roll += TriggerSlowMotion;
+        playerDeath.PlayerDied += StopSlowMotion;
     }
 
     public void PlayerLost()
     {
         playerRoll.Roll -= TriggerSlowMotion;
+        playerDeath.PlayerDied -= StopSlowMotion;
     }
 
     /// <summary>

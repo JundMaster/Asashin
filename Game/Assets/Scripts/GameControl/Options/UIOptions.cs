@@ -108,6 +108,18 @@ public class UIOptions : MonoBehaviour
         UpdateAllUI();
     }
 
+    /// <summary>
+    /// Compares if the current values are the same as the saved values.
+    /// </summary>
+    public bool CompareCurrentValues()
+    {
+        if (currentValues.Equals(optionsScript.SavedValues))
+        {
+            return true;
+        }
+        return false;
+    }
+
     #region Reset values
     ////////////////////////////////////////////////////////////////////////////
     /// <summary>

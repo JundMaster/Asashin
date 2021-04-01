@@ -301,8 +301,8 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     {
         deathBehaviour = FindObjectOfType<PlayerDeathBehaviour>();
         deathBehaviour.PlayerDied += () =>
-            controls.SwitchCurrentActionMap("Death");
-        Debug.Log("tyem");
+            controls.SwitchCurrentActionMap("GamePaused");
+
         StartCoroutine(SwitchToGameplayAfterSeconds());
     }
 

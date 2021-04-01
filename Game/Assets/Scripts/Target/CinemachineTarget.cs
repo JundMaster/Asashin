@@ -21,7 +21,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     [SerializeField] private CinemachineVirtualCamera targetCamera;
     [SerializeField] private CinemachineVirtualCamera pauseMenuCamera;
     [SerializeField] private CinemachineCollider targetCameraCollider;
-    private CinemachineBrain mainCameraBrain;
+    [SerializeField] private CinemachineBrain mainCameraBrain;
 
     // Current target from player
     public Transform CurrentTarget { get; private set; }
@@ -44,7 +44,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         input = FindObjectOfType<PlayerInputCustom>();
         pauseSystem = FindObjectOfType<PauseSystem>();
         optionsScript = FindObjectOfType<Options>();
-        mainCameraBrain = Camera.main.GetComponent<CinemachineBrain>();
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         CurrentTarget = GameObject.FindGameObjectWithTag("targetUIForCinemachine").transform;
     }
@@ -486,6 +485,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         input.TargetSet += HandleTarget;
         input.TargetChange += SwitchTarget;
         SetAllCamerasTargets();
+        mainCameraBrain.enabled = true;
     }
 
     /// <summary>
@@ -495,6 +495,15 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         input.TargetSet -= HandleTarget;
         input.TargetChange -= SwitchTarget;
+
+        thirdPersonCamera.Follow = null;
+        thirdPersonCamera.LookAt = null;
+        targetCamera.Follow = null;
+        pauseMenuCamera.Follow = null;
+        pauseMenuCamera.LookAt = null;
+        slowMotionThirdPersonCamera.Follow = null;
+        slowMotionThirdPersonCamera.LookAt = null;
+        mainCameraBrain.enabled = false;
     }
 
     /// <summary>
