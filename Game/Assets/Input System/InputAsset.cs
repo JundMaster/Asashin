@@ -802,6 +802,12 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""DisableControls"",
+            ""id"": ""66aa0c03-2971-4ae0-afec-92b68c5ebfc9"",
+            ""actions"": [],
+            ""bindings"": []
         }
     ],
     ""controlSchemes"": []
@@ -831,6 +837,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
         m_GamePaused_Move = m_GamePaused.FindAction("Move", throwIfNotFound: true);
         m_GamePaused_Point = m_GamePaused.FindAction("Point", throwIfNotFound: true);
         m_GamePaused_LeftClick = m_GamePaused.FindAction("Left Click", throwIfNotFound: true);
+        // DisableControls
+        m_DisableControls = asset.FindActionMap("DisableControls", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1094,6 +1102,31 @@ public class @InputAsset : IInputActionCollection, IDisposable
         }
     }
     public GamePausedActions @GamePaused => new GamePausedActions(this);
+
+    // DisableControls
+    private readonly InputActionMap m_DisableControls;
+    private IDisableControlsActions m_DisableControlsActionsCallbackInterface;
+    public struct DisableControlsActions
+    {
+        private @InputAsset m_Wrapper;
+        public DisableControlsActions(@InputAsset wrapper) { m_Wrapper = wrapper; }
+        public InputActionMap Get() { return m_Wrapper.m_DisableControls; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DisableControlsActions set) { return set.Get(); }
+        public void SetCallbacks(IDisableControlsActions instance)
+        {
+            if (m_Wrapper.m_DisableControlsActionsCallbackInterface != null)
+            {
+            }
+            m_Wrapper.m_DisableControlsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+            }
+        }
+    }
+    public DisableControlsActions @DisableControls => new DisableControlsActions(this);
     public interface IGameplayActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -1120,5 +1153,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
         void OnLeftClick(InputAction.CallbackContext context);
+    }
+    public interface IDisableControlsActions
+    {
     }
 }

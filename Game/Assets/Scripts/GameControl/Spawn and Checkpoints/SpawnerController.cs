@@ -173,21 +173,23 @@ public class SpawnerController : MonoBehaviour
         }
         else
         {
-            // Loads first scene after main menu
-            sceneControl.LoadScene(0);
+            // Loads first scene after main menu.
+            // Or happens when the player is playing and didn't reach
+            // the first checkpoint yet.
+            sceneControl.LoadSceneWithEnum(SceneEnum.Area1);
         }
     }
 
     /// <summary>
     /// Deletes all save files. Happens when the player presses new game on main menu.
     /// </summary>
-    private void DeleteFiles() => gameState.DeleteFiles();
+    public void DeleteFiles() => gameState.DeleteFiles();
 
     /// <summary>
     /// Resets playerprefs TypeOfSpawn when the game closes.
     /// </summary>
     private void OnApplicationQuit()
     {
-        PlayerPrefs.SetString("TypeOfSpawn", "RandomStringMeaningTheGameClosed");
+        PlayerPrefs.DeleteKey("TypeOfSpawn");
     }
 }
