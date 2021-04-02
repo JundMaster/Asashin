@@ -7,7 +7,7 @@ public class Checkpoint : MonoBehaviour
 {
     [SerializeField] private SpawnerController checkpointController;
     [SerializeField] private byte checkpointNumber;
-    [SerializeField] private byte checkpointScene;
+    [SerializeField] private SceneEnum checkpointScene;
 
     public byte CheckpointNumber => checkpointNumber;
 

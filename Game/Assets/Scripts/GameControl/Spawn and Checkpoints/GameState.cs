@@ -88,30 +88,15 @@ sealed public class GameState : FileIO
     /// </summary>
     /// <param name="condition">Type of save.</param>
     /// <param name="numberToSave">Number of checkpoint or scene.</param>
-    public void SaveCheckpoint(SaveAndLoadEnum condition, byte numberToSave)
+    public void SaveCheckpoint(byte numberToSave)
     {
-        switch (condition)
+        using (GZipStream gzs = new GZipStream(
+            File.Create(FilePath.SAVEFILECHECKPOINT), CompressionMode.Compress))
         {
-            case SaveAndLoadEnum.Checkpoint:
-                using (GZipStream gzs = new GZipStream(
-                    File.Create(FilePath.SAVEFILECHECKPOINT), CompressionMode.Compress))
-                {
-                    using (StreamWriter fw = new StreamWriter(gzs))
-                    {
-                        fw.WriteLine(numberToSave);
-                    }
-                }
-                break;
-            case SaveAndLoadEnum.CheckpointScene:
-                using (GZipStream gzs = new GZipStream(
-                    File.Create(FilePath.SAVEFILESCENE), CompressionMode.Compress))
-                {
-                    using (StreamWriter fw = new StreamWriter(gzs))
-                    {
-                        fw.WriteLine(numberToSave);
-                    }
-                }
-                break;
+            using (StreamWriter fw = new StreamWriter(gzs))
+            {
+                fw.WriteLine(numberToSave);
+            }
         }
     }
 
@@ -120,7 +105,24 @@ sealed public class GameState : FileIO
     /// </summary>
     /// <param name="condition">Type of save.</param>
     /// <param name="numberToSave">Number of checkpoint or scene.</param>
-    public byte LoadCheckpoint(SaveAndLoadEnum condition)
+    public void SaveCheckpointScene(SceneEnum scene)
+    {
+        using (GZipStream gzs = new GZipStream(
+            File.Create(FilePath.SAVEFILESCENE), CompressionMode.Compress))
+        {
+            using (StreamWriter fw = new StreamWriter(gzs))
+            {
+                fw.WriteLine(scene);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Saves current checkpoint and current scene.
+    /// </summary>
+    /// <param name="condition">Type of save.</param>
+    /// <param name="numberToSave">Number of checkpoint or scene.</param>
+    public T LoadCheckpoint<T>(SaveAndLoadEnum condition)
     {
         switch (condition)
         {
@@ -130,7 +132,7 @@ sealed public class GameState : FileIO
                 {
                     using (StreamReader fr = new StreamReader(gzs))
                     {
-                        return Convert.ToByte(fr.ReadLine());
+                        return (T)Convert.ChangeType(fr.ReadLine(), typeof(T));
                     }
                 }
             case SaveAndLoadEnum.CheckpointScene:
@@ -139,11 +141,13 @@ sealed public class GameState : FileIO
                 {
                     using (StreamReader fr = new StreamReader(gzs))
                     {
-                        return Convert.ToByte(fr.ReadLine());
+                        if (Enum.TryParse(fr.ReadLine(), out SceneEnum savedVal))
+                        { };
+                        return (T)Convert.ChangeType(savedVal, typeof(T));
                     }
                 }
             default:
-                return 0;
+                return default;
         }
     }
 }

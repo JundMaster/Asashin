@@ -24,7 +24,8 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
 
     private void OnDisable()
     {
-        playerAnims.PlayerDiedEndOfAnimationUIRespawn -= EnableRespawnUI;
+        if (playerAnims != null)
+            playerAnims.PlayerDiedEndOfAnimationUIRespawn -= EnableRespawnUI;
     }
 
     /// <summary>

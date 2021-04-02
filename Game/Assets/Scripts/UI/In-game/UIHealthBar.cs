@@ -29,7 +29,7 @@ public class UIHealthBar : MonoBehaviour, IFindPlayer
 
     private void OnDisable()
     {
-        playerStats.TookDamage -= TookDamage;
+        if (playerStats != null) playerStats.TookDamage -= TookDamage;
     }
 
     private void TookDamage() => StartCoroutine(UpdateHealthBar());

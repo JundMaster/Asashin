@@ -24,7 +24,7 @@ public class ItemUIParent : MonoBehaviour, IFindPlayer
 
     private void OnDisable()
     {
-        useItem.UsedItemDelay -= UpdateAllItemUIDelay;
+        if (useItem != null) useItem.UsedItemDelay -= UpdateAllItemUIDelay;
     }
 
     private void UpdateAllItemUIDelay()

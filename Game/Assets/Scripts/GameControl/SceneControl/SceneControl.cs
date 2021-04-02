@@ -20,29 +20,25 @@ public class SceneControl : MonoBehaviour
 
     /// <summary>
     /// Loads a scene.
-    /// </summary>
-    /// <param name="scene">Scene to load.</param>
-    public void LoadScene(int scene) => StartCoroutine(LoadNewScene(scene));
-
-    /// <summary>
-    /// Loads a scene.
     /// Can't overload because of animation events.
     /// </summary>
     /// <param name="scene">Scene to load.</param>
-    public void LoadSceneWithEnum(SceneEnum scene) => 
-        StartCoroutine(LoadNewScene((int)scene));
+    public void LoadScene(SceneEnum scene) => 
+        StartCoroutine(LoadNewScene(scene));
 
     /// <summary>
     /// Coroutine that loads a new scene.
     /// </summary>
     /// <param name="scene">Scene to load.</param>
     /// <returns>Returns null.</returns>
-    private IEnumerator LoadNewScene(int scene)
+    private IEnumerator LoadNewScene(SceneEnum scene)
     {
         YieldInstruction waitForFrame = new WaitForEndOfFrame();
 
+        DisableControls();
         // Triggers transition to area animation
         anim.SetTrigger("TransitionToArea");
+
         yield return waitForFrame;
         while (anim.GetCurrentAnimatorStateInfo(0).IsName("TransitionToArea"))
         {
@@ -52,7 +48,8 @@ public class SceneControl : MonoBehaviour
 
         // Asyc loads a scene
         AsyncOperation sceneToLoad =
-            SceneManager.LoadSceneAsync(SceneManager.GetSceneByBuildIndex(scene).name);
+            SceneManager.LoadSceneAsync(scene.ToString());
+
         // After the progress of the async operation reaches 1, the scene loads
         while (sceneToLoad.progress < 1)
         {

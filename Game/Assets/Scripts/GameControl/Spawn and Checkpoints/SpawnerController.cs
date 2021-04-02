@@ -15,32 +15,39 @@ public class SpawnerController : MonoBehaviour
     private GameState gameState;
     private Checkpoint[] childrenCheckpoints;
     private UIRespawn uiRespawn;
+    private UIMainMenu uiMainMenu;
 
     private void Awake()
     {
+        // Checkpoint variables
         childrenCheckpoints = new Checkpoint[GetComponentsInChildren<Checkpoint>().Length];
         childrenCheckpoints = GetComponentsInChildren<Checkpoint>();
+
+        // Spawner variables
         uiRespawn = FindObjectOfType<UIRespawn>();
+        uiMainMenu = FindObjectOfType<UIMainMenu>();
+
+        // Create a GameState to check if save file exists
+        gameState = new GameState(playerSavedStats);
     }
 
     private void Start()
     {
-        // PLAYER FAZ RESPAWN SEMPRE EM MODO LOADING
-        // SO PARA TESTES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        PlayerPrefs.SetString("TypeOfSpawn", "Load");
-        ////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////
+        //PlayerPrefs.SetString("TypeOfSpawn", "Load");
+        //PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString());
 
-        if (PlayerPrefs.GetString("TypeOfSpawn") == "Respawn")
+
+        if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Respawn.ToString())
         {
             StartCoroutine(SpawnPlayer(SpawnTypeEnum.Respawn));
         }
-        else if (PlayerPrefs.GetString("TypeOfSpawn") == "Load")
+        else if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Loadgame.ToString())
         {
             StartCoroutine(SpawnPlayer(SpawnTypeEnum.Loadgame));
+        }
+        else if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Newgame.ToString())
+        {
+            StartCoroutine(SpawnPlayer(SpawnTypeEnum.Newgame));
         }
         // Happens if this player is on main menu
         else
@@ -60,18 +67,16 @@ public class SpawnerController : MonoBehaviour
         YieldInstruction waitForFixedUpdate = new WaitForFixedUpdate();
         yield return waitForFixedUpdate;
 
-        // Create a GameState to check if save file exists
-        gameState = new GameState(playerSavedStats);
-
         // After fixed update loads variables saved on last checkpoint
         // If the player already played through a checkpoint
-        if (gameState.FileExists(FilePath.SAVEFILECHECKPOINT))
+        if (gameState.FileExists(FilePath.SAVEFILECHECKPOINT) &&
+            typeOfSpawn != SpawnTypeEnum.Newgame)
         {
             foreach (Checkpoint checkpoint in childrenCheckpoints)
             {
                 // If checkpoint number is  the same as the saved one
                 if (checkpoint.CheckpointNumber == 
-                    gameState.LoadCheckpoint(SaveAndLoadEnum.Checkpoint))
+                    gameState.LoadCheckpoint<byte>(SaveAndLoadEnum.Checkpoint))
                 {
                     // Instantiates the player on that checkpoint's position
                     Instantiate(
@@ -110,36 +115,36 @@ public class SpawnerController : MonoBehaviour
 
     private void OnEnable()
     {
-        if (uiRespawn) uiRespawn.RespawnButtonPressed += RespawnPlayer;
-        // MAIN MENU . LOAD GAME += RESPAWN PLAYER
+        if (uiRespawn != null) uiRespawn.RespawnButtonPressed += RespawnPlayer;
+        if (uiMainMenu != null) uiMainMenu.MainMenuSpawn += RespawnPlayer;
     }
 
     private void OnDisable()
     {
         if (uiRespawn) uiRespawn.RespawnButtonPressed -= RespawnPlayer;
-        // MAIN MENU . LOAD GAME -= RESPAWN PLAYER
+        if (uiMainMenu != null) uiMainMenu.MainMenuSpawn -= RespawnPlayer;
     }
 
     /// <summary>
     /// If the player passes through a checkpoint, the script saves player stats.
     /// </summary>
     /// <param name="numberOfCheckpoint">Current checkpoint.</param>
-    /// <param name="numberOfScene">Current scene.</param>
-    public void SaveCheckpoint(byte numberOfCheckpoint, byte numberOfScene)
+    /// <param name="nameOfScene">Current scene.</param>
+    public void SaveCheckpoint(byte numberOfCheckpoint, SceneEnum nameOfScene)
     {
         if (gameState.FileExists(FilePath.SAVEFILECHECKPOINT))
         {
-            if (numberOfCheckpoint > gameState.LoadCheckpoint(SaveAndLoadEnum.Checkpoint))
+            if (numberOfCheckpoint > gameState.LoadCheckpoint<byte>(SaveAndLoadEnum.Checkpoint))
             {
-                gameState.SaveCheckpoint(SaveAndLoadEnum.Checkpoint, numberOfCheckpoint);
-                gameState.SaveCheckpoint(SaveAndLoadEnum.CheckpointScene, numberOfScene);
+                gameState.SaveCheckpoint(numberOfCheckpoint);
+                gameState.SaveCheckpointScene(nameOfScene);
                 gameState.SavePlayerStats();
             }
         }
         else
         {
-            gameState.SaveCheckpoint(SaveAndLoadEnum.Checkpoint, numberOfCheckpoint);
-            gameState.SaveCheckpoint(SaveAndLoadEnum.CheckpointScene, numberOfScene);
+            gameState.SaveCheckpoint(numberOfCheckpoint);
+            gameState.SaveCheckpointScene(nameOfScene);
             gameState.SavePlayerStats();
         }
     }
@@ -150,33 +155,38 @@ public class SpawnerController : MonoBehaviour
     /// </summary>
     private void RespawnPlayer(SpawnTypeEnum typeOfSpawn)
     {
+        SceneControl sceneControl = FindObjectOfType<SceneControl>();
+
         if (typeOfSpawn == SpawnTypeEnum.Respawn)
         {
-            PlayerPrefs.SetString("TypeOfSpawn", "Respawn");
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Respawn.ToString());
         }
         else if (typeOfSpawn == SpawnTypeEnum.Loadgame)
         {
-            PlayerPrefs.SetString("TypeOfSpawn", "Load");
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());
         }
-        else
+        else if (typeOfSpawn == SpawnTypeEnum.Newgame)
         {
             // left brank on purpose
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString());
+            sceneControl.LoadScene(SceneEnum.Area1);
         }
 
-        SceneControl sceneControl = FindObjectOfType<SceneControl>();
-
-        if (gameState.FileExists(FilePath.SAVEFILESCENE))
+        if (PlayerPrefs.GetString("TypeOfSpawn") != SpawnTypeEnum.Newgame.ToString())
         {
-            // Loads the scene connected to the last saved checkpoint
-            sceneControl.LoadScene(
-                gameState.LoadCheckpoint(SaveAndLoadEnum.CheckpointScene));
-        }
-        else
-        {
-            // Loads first scene after main menu.
-            // Or happens when the player is playing and didn't reach
-            // the first checkpoint yet.
-            sceneControl.LoadSceneWithEnum(SceneEnum.Area1);
+            if (gameState.FileExists(FilePath.SAVEFILESCENE))
+            {
+                // Loads the scene connected to the last saved checkpoint
+                sceneControl.LoadScene(
+                    gameState.LoadCheckpoint<SceneEnum>(SaveAndLoadEnum.CheckpointScene));
+            }
+            else
+            {
+                // Loads first scene after main menu.
+                // Happens when the player is playing and didn't reach
+                // the first checkpoint yet.
+                sceneControl.LoadScene(SceneEnum.Area1);
+            }
         }
     }
 
@@ -190,6 +200,6 @@ public class SpawnerController : MonoBehaviour
     /// </summary>
     private void OnApplicationQuit()
     {
-        PlayerPrefs.DeleteKey("TypeOfSpawn");
+        //PlayerPrefs.DeleteKey("TypeOfSpawn");
     }
 }
