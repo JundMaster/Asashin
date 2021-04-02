@@ -33,10 +33,6 @@ public class SpawnerController : MonoBehaviour
 
     private void Start()
     {
-        //PlayerPrefs.SetString("TypeOfSpawn", "Load");
-        //PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString());
-
-
         if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Respawn.ToString())
         {
             StartCoroutine(SpawnPlayer(SpawnTypeEnum.Respawn));
@@ -49,7 +45,6 @@ public class SpawnerController : MonoBehaviour
         {
             StartCoroutine(SpawnPlayer(SpawnTypeEnum.Newgame));
         }
-        // Happens if this player is on main menu
         else
         {
             // Left brank on purpose
@@ -79,20 +74,22 @@ public class SpawnerController : MonoBehaviour
                     gameState.LoadCheckpoint<byte>(SaveAndLoadEnum.Checkpoint))
                 {
                     // Instantiates the player on that checkpoint's position
-                    Instantiate(
-                        playerPrefab, 
-                        transform.position + checkpoint.transform.position, 
-                        checkpoint.transform.rotation);
+                    if (FindObjectOfType<Player>() == null)
+                        Instantiate(
+                            playerPrefab, 
+                            transform.position + checkpoint.transform.position, 
+                            checkpoint.transform.rotation);
                 }
             }
         }
         // else if the player is playing for the first time
         else
         {
-            Instantiate(
-                        playerPrefab,
-                        transform.position + initialPosition.transform.position,
-                        initialPosition.transform.rotation);
+            if (FindObjectOfType<Player>() == null)
+                Instantiate(
+                    playerPrefab,
+                    transform.position + initialPosition.transform.position,
+                    initialPosition.transform.rotation);
         }
 
         // Finds player stats

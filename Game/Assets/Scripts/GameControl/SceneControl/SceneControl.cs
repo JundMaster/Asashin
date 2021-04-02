@@ -16,6 +16,12 @@ public class SceneControl : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
+    private void Start()
+    {
+        // If there is a UI Input base module, it enables it
+        EnableControls();
+    }
+
     public Scene CurrentScene() => SceneManager.GetActiveScene();
 
     /// <summary>
@@ -67,5 +73,14 @@ public class SceneControl : MonoBehaviour
         BaseInputModule inputModule = FindObjectOfType<BaseInputModule>();
         if (input != null) input.SwitchActionMapToDisable();
         if (inputModule != null) inputModule.enabled = false;
+    }
+
+    /// <summary>
+    /// Enables controls.
+    /// </summary>
+    private void EnableControls()
+    {
+        BaseInputModule inputModule = FindObjectOfType<BaseInputModule>();
+        if (inputModule != null) inputModule.enabled = true;
     }
 }
