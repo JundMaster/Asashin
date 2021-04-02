@@ -17,7 +17,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
     // Camera Variables
     [SerializeField] private CinemachineFreeLook thirdPersonCamera;
-    [SerializeField] private CinemachineFreeLook slowMotionThirdPersonCamera;
     [SerializeField] private CinemachineVirtualCamera targetCamera;
     [SerializeField] private CinemachineVirtualCamera pauseMenuCamera;
     [SerializeField] private CinemachineCollider targetCameraCollider;
@@ -158,8 +157,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         {
             thirdPersonCamera.m_YAxis.m_MaxSpeed = 0;
             thirdPersonCamera.m_XAxis.m_MaxSpeed = 0;
-            slowMotionThirdPersonCamera.m_YAxis.m_MaxSpeed = 0;
-            slowMotionThirdPersonCamera.m_XAxis.m_MaxSpeed = 0;
             yield return null;
         }
         blendingCoroutine = null;
@@ -509,8 +506,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             targetCamera.Follow = playerSpineTransform;
             pauseMenuCamera.Follow = playerSpineTransform;
             pauseMenuCamera.LookAt = playerSpineTransform;
-            slowMotionThirdPersonCamera.Follow = player.transform;
-            slowMotionThirdPersonCamera.LookAt = playerSpineTransform;
         }
     }
 
@@ -528,10 +523,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                 CinemachineBrain.UpdateMethod.FixedUpdate;
             mainCameraBrain.m_BlendUpdateMethod =
                 CinemachineBrain.BrainUpdateMethod.FixedUpdate;
-
-            // Gives priority to slow motion camera
-            slowMotionThirdPersonCamera.Priority =
-                thirdPersonCamera.Priority + 1;
         }
         else
         {
@@ -541,11 +532,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             mainCameraBrain.m_BlendUpdateMethod =
                 CinemachineBrain.BrainUpdateMethod.LateUpdate;
 
-            mainCameraBrain.m_DefaultBlend.m_Time = 1f;
-
-            // Removes priority to slow motion camera
-            slowMotionThirdPersonCamera.Priority =
-                    thirdPersonCamera.Priority - 1;
+            mainCameraBrain.m_DefaultBlend.m_Time = 0.1f;
         }
     }
 
@@ -580,8 +567,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         targetCamera.Follow = null;
         pauseMenuCamera.Follow = null;
         pauseMenuCamera.LookAt = null;
-        slowMotionThirdPersonCamera.Follow = null;
-        slowMotionThirdPersonCamera.LookAt = null;
         mainCameraBrain.enabled = false;
     }
 
@@ -592,7 +577,5 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         thirdPersonCamera.m_YAxis.m_MaxSpeed = configScriptableObj.VerticalSensibility;
         thirdPersonCamera.m_XAxis.m_MaxSpeed = configScriptableObj.HorizontalSensibility;
-        slowMotionThirdPersonCamera.m_YAxis.m_MaxSpeed = configScriptableObj.VerticalSensibility;
-        slowMotionThirdPersonCamera.m_XAxis.m_MaxSpeed = configScriptableObj.HorizontalSensibility;
     }
 }

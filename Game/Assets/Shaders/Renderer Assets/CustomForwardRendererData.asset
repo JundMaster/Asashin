@@ -1,24 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-2007832130999819630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d5b0f23e706b6d4c880a6484583315e, type: 3}
-  m_Name: SlowMotionWaveBlit
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  settings:
-    Event: 500
-    blitMaterial: {fileID: 2100000, guid: 95f8bad0e72685f4090c8905d042a3d4, type: 2}
-    blitMaterialPassIndex: 0
-    destination: 0
-    textureId: _BlitPassSlowMotionWave
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
-  m_Name: UniversalRenderPipelineAsset_Renderer
+  m_Name: CustomForwardRendererData
   m_EditorClassIdentifier: 
   m_RendererFeatures:
-  - {fileID: -2007832130999819630}
-  m_RendererFeatureMap: 92e2239750bf22e4
+  - {fileID: 2943452758778484606}
+  m_RendererFeatureMap: 7e972264b03ed928
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
@@ -55,7 +36,7 @@ MonoBehaviour:
     failOperation: 0
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
---- !u!114 &8076131945086844761
+--- !u!114 &2943452758778484606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,7 +46,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d5b0f23e706b6d4c880a6484583315e, type: 3}
-  m_Name: SlowMotionBlit
+  m_Name: SlowMotionWaveBlit
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
@@ -73,4 +54,4 @@ MonoBehaviour:
     blitMaterial: {fileID: 2100000, guid: 95f8bad0e72685f4090c8905d042a3d4, type: 2}
     blitMaterialPassIndex: 0
     destination: 0
-    textureId: _BlitPassSlowMotion
+    textureId: _BlitPassSlowMotionWave
