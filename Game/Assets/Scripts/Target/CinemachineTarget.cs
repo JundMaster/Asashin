@@ -66,7 +66,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         // Sets all cameras follows and lookAts.
         SetAllCamerasTargets();
 
-        //StartCoroutine(KeepsFindingClosestTarget());
+        StartCoroutine(KeepsFindingClosestTarget());
     }
 
     /// <summary>
@@ -318,7 +318,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             // If enemy has an Enemy script
             for (int i = 0; i < enemies.Length; i++)
             {
-                if (enemies[i].gameObject.TryGetComponent<Enemy>(out Enemy en))
+                if (enemies[i].gameObject.TryGetComponent<Enemy>(out Enemy en) &&
+                    enemies[i].gameObject.GetComponentInChildren<Renderer>().isVisible)
                 {
                     allEnemies.Add(en);
                 }
