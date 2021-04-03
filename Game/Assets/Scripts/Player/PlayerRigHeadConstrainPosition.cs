@@ -4,7 +4,7 @@ using UnityEngine.Animations.Rigging;
 /// <summary>
 /// Class responsible for constraining the player's head.
 /// </summary>
-public class RigHeadConstrainPosition : MonoBehaviour
+public class PlayerRigHeadConstrainPosition : MonoBehaviour
 {
     // Components
     private Camera mainCam;

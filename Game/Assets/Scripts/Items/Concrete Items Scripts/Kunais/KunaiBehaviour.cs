@@ -1,11 +1,13 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Base class for kunai behaviours.
 /// </summary>
 public abstract class KunaiBehaviour : MonoBehaviour, IKunaiBehaviour
 {
+    /// <summary>
+    /// Enemy parent.
+    /// </summary>
     public Enemy ParentEnemy { get; set; }
 
     /// <summary>

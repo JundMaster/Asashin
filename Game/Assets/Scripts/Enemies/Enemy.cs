@@ -1,57 +1,90 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
 /// Class responsible for handling enemy script.
 /// </summary>
-public class Enemy : MonoBehaviour
+[RequireComponent(typeof(NavMeshAgent))]
+public class Enemy : MonoBehaviour, IFindPlayer
 {
-    // TEMP VARIABLE
-    [SerializeField] private GameObject kunai;
-    [SerializeField] private bool spawnKunais;
-    /////////////////////////////////////////////
-
-
-    // Variables
+    [Header("Enemy Target")]
     [SerializeField] private Transform myTarget;
     public Transform MyTarget => myTarget;
 
-    // ILists with all components on this gameobject
-    private IList<IAction> myIComponents;
-    private IList<IAction> componentsToRun;
+    [Header("Enemy Patrol path")]
+    [SerializeField] private Transform[] patrolPoints;
+    public Transform[] PatrolPoints => patrolPoints;
+
+
+
+
+    // Player variables
+    public Transform PlayerTarget { get; private set; }
+
+    // State variables
+    [SerializeField] private EnemyPatrolState patrolStateOriginal;
+    [SerializeField] private EnemyDefenseState defenseStateOriginal;
+    public IEnemyState PatrolState { get; private set; }
+    public IEnemyState DefenseState { get; private set; }
+    private IEnemyState currentState;
+    private IEnumerable<IEnemyState> allStates;
+
+    // Components
+    public NavMeshAgent Agent { get; private set; }
 
     private void Awake()
     {
-        myIComponents = GetComponents<IAction>();
-        componentsToRun = new List<IAction>();
+        Agent = GetComponent<NavMeshAgent>();
+
+        PatrolState = Instantiate(patrolStateOriginal);
+        DefenseState = Instantiate(defenseStateOriginal);
+        allStates = new List<IEnemyState>
+        {
+            PatrolState,
+            DefenseState,
+        }; 
     }
 
     private void Start()
     {
-        foreach (IAction comp in myIComponents)
-            componentsToRun.Add(comp);
+        foreach (IEnemyState state in allStates)
+            state.Initialize(this);
 
-        // TEMP
-        if (spawnKunais) StartCoroutine(ThrowKunaiTemporary());
-    }
-
-    private void Update()
-    {
-        foreach (IAction comp in componentsToRun)
-            comp.ComponentUpdate();
+        currentState = PatrolState;
     }
 
     private void FixedUpdate()
     {
-        foreach (IAction comp in componentsToRun)
-            comp.ComponentFixedUpdate();
+        currentState = currentState.Execute(this);
     }
+
+    /// <summary>
+    /// Finds player target transform when the player spawns.
+    /// </summary>
+    public void FindPlayer()
+    {
+        PlayerTarget = GameObject.FindGameObjectWithTag("playerTarget").transform;
+    }
+
+    /// <summary>
+    /// Turns playerTarget to null when the player disappears.
+    /// </summary>
+    public void PlayerLost()
+    {
+        PlayerTarget = null;
+    }
+
+
+
 
 
     // TEMP
     private IEnumerator ThrowKunaiTemporary()
     {
+        yield return new WaitForSeconds(1f);
+        /*
         yield return new WaitForSeconds(1f);
         Player player = FindObjectOfType<Player>();
         EnemyVisionCone cone = GetComponent<EnemyVisionCone>();
@@ -65,5 +98,6 @@ public class Enemy : MonoBehaviour
             }
             yield return new WaitForSeconds(2.5f);
         }
+        */
     }
 }

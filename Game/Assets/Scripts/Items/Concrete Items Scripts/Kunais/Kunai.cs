@@ -81,15 +81,11 @@ public class Kunai : ItemBehaviour, IFindPlayer
             Collider[] collisions =
                 Physics.OverlapSphere(other.transform.position, hitRange, hittableLayers);
 
-            // Checks if it's the parent or not
-            Transform bodyToHit = null;
-            if (collisions[0].transform.parent != null)
-                bodyToHit = collisions[0].transform.parent;
-            else
-                bodyToHit = collisions[0].transform;
+            // Checks if this object or parent has a damageable body
+            GameObject body = GetDamageableBody(collisions[0].gameObject);
 
             // If this object can receive damage
-            if (bodyToHit.TryGetComponent(out IDamageable damageableBody))
+            if (body.TryGetComponent(out IDamageable damageableBody))
             {
                 // Trigers behaviour hit()
                 behaviour.Hit(damageableBody, other, player);
@@ -106,6 +102,24 @@ public class Kunai : ItemBehaviour, IFindPlayer
         {
             behaviour.Hit(null, null, null);
         }
+    }
+
+    /// <summary>
+    /// Checks if this object has a damgeable body, if it doesn't it will check
+    /// its parent until there is not parent.
+    /// </summary>
+    /// <param name="col">Gameobject to check.</param>
+    /// <returns>Returns a gameobject with IDamageable interface.</returns>
+    private GameObject GetDamageableBody(GameObject col)
+    {
+        col.TryGetComponent(out IDamageable damageableBody);
+        if (damageableBody != null) return col.gameObject;
+
+        else if (col.gameObject.transform.parent != null)
+        {
+            GetDamageableBody(col.transform.parent.gameObject);
+        }
+        return null;
     }
 
     private void OnDrawGizmos()

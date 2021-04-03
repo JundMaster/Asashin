@@ -66,7 +66,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         // Sets all cameras follows and lookAts.
         SetAllCamerasTargets();
 
-        StartCoroutine(KeepsFindingClosestTarget());
+        //StartCoroutine(KeepsFindingClosestTarget());
     }
 
     /// <summary>
@@ -76,13 +76,16 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// <returns></returns>
     private IEnumerator KeepsFindingClosestTarget()
     {
-        YieldInstruction wfs = new WaitForSeconds(5f);
+        YieldInstruction wfs = new WaitForSeconds(2f);
 
         while(true)
         {
             FindAllEnemiesAroundPlayer();
 
-            if (allEnemies.Count > 0)
+            // If there are enemies around and the camera is not blending
+            if (allEnemies.Count > 0 && 
+                currentTarget.gameObject.activeSelf == false &&
+                mainCameraBrain.IsBlending == false)
             {
                 Enemy[] organizedEnemiesByDistance =
                             allEnemies.OrderBy(i =>
@@ -172,6 +175,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         if (mainCameraBrain.IsBlending == false)
         {
+            mainCameraBrain.m_DefaultBlend.m_Time = 0.5f;
             if (Targeting == false)
             {
                 FindAllEnemiesAroundPlayer();
@@ -306,15 +310,18 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         allEnemies = new List<Enemy>();
 
         // Finds all enemies around
-        enemies =
+        if (player != null)
+        {
+            enemies =
                 Physics.OverlapSphere(player.transform.position, findTargetSize, enemyLayer);
 
-        // If enemy has an Enemy script
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            if (enemies[i].gameObject.TryGetComponent<Enemy>(out Enemy en))
+            // If enemy has an Enemy script
+            for (int i = 0; i < enemies.Length; i++)
             {
-                allEnemies.Add(en);
+                if (enemies[i].gameObject.TryGetComponent<Enemy>(out Enemy en))
+                {
+                    allEnemies.Add(en);
+                }
             }
         }
     }

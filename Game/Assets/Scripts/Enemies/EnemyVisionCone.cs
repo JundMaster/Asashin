@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -38,8 +37,8 @@ public class EnemyVisionCone : MonoBehaviour, IFindPlayer, IAction
             {
                 if (playerTarget != null)
                 {
-                    Vector3 direction = playerTarget.position - myTarget.position;
-                    Ray rayToPlayer = new Ray(myTarget.position, direction);
+                    Vector3 direction = playerTarget.position - transform.position;
+                    Ray rayToPlayer = new Ray(transform.position, direction);
 
                     // If player is in the cone range
                     if (Vector3.Angle(direction, transform.forward) < 45)
