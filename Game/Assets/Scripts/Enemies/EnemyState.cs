@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Abstract Scriptable object responsible for controlling enemy defense states.
+/// Abstract Scriptable object responsible for controlling enemy states.
 /// </summary>
-public abstract class EnemyDefenseState : ScriptableObject, IEnemyState
+public abstract class EnemyState : ScriptableObject, IEnemyState
 {
     /// <summary>
     /// Method that defines what happens when this state is initialized.

@@ -82,15 +82,20 @@ public class Kunai : ItemBehaviour, IFindPlayer
                 Physics.OverlapSphere(other.transform.position, hitRange, hittableLayers);
 
             // Checks if this object or parent has a damageable body
-            GameObject body = GetDamageableBody(collisions[0].gameObject);
+            GameObject body = null;
+            if (collisions.Length > 0)
+                body = GetDamageableBody(collisions[0].gameObject);
 
             // If this object can receive damage
-            if (body.TryGetComponent(out IDamageable damageableBody))
+            if (body != null)
             {
-                // Trigers behaviour hit()
-                behaviour.Hit(damageableBody, other, player);
+                if (body.TryGetComponent(out IDamageable damageableBody))
+                {
+                    // Trigers behaviour hit()
+                    behaviour.Hit(damageableBody, other, player);
+                }
             }
-            // Else, if it's not an IDamageable interface, the object is destroyed
+            // Else if the object can not receive damage
             else
             {
                 behaviour.Hit(null, other, player);

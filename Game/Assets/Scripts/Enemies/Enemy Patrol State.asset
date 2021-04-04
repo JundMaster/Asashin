@@ -9,12 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed0e0abea3bff504682c969569910019, type: 3}
-  m_Name: Enemy Senshi Defense State
+  m_Script: {fileID: 11500000, guid: 8c0bcf90f3947174b8c94c8fe9355c82, type: 3}
+  m_Name: Enemy Patrol State
   m_EditorClassIdentifier: 
-  kunai: {fileID: 8828656709029744851, guid: 7eb2e6810ee58df4881990ee266d00c8, type: 3}
-  searchCheckDelay: 2
-  sphereRange: 20
+  coneRange: 20
   playerLayer:
     serializedVersion: 2
     m_Bits: 2048
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 22528
+  searchCheckDelay: 0.5
+  waitingDelay: 2

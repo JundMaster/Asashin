@@ -5,50 +5,46 @@ using UnityEngine.AI;
 /// Scriptable object responsible for controlling enemy movement state.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Senshi Defense State")]
-public class EnemySenshiDefenseState : EnemyDefenseState, IEnemyState
+public class EnemySenshiDefenseState : EnemyStateWithVision
 {
     [Header("Kunai to spawn")]
     [SerializeField] private GameObject kunai;
 
-    [Header("Checks if player is in cone range every X seconds")]
-    [SerializeField] private float searchCheckDelay;
+    [Header("Kunai spawn delay")]
+    [SerializeField] private float kunaiDelay;
 
-    [Header("Sphere range to look for the player")]
-    [SerializeField] private float sphereRange;
-    [SerializeField] private LayerMask playerLayer;
-
-    private NavMeshAgent agent;
-    private Transform playerTarget;
-    private Transform myTarget;
-
-    private float lastTimeSearch;
+    [Header("Rotation smooth time")]
+    [SerializeField] private float turnSmooth;
+    private float smoothTimeRotation;
 
     /// <summary>
-    /// Runs once on start.
+    /// Runs once on start and when the player spawns.
     /// </summary>
     /// <param name="enemy">Enemy to get variables from.</param>
     public override void Initialize(Enemy enemy)
     {
-        agent = enemy.Agent;
-        myTarget = enemy.MyTarget;
-        playerTarget = enemy.PlayerTarget;
+        // Gets enemy target and player target
+        base.Initialize(enemy);
     }
 
     public override IEnemyState Execute(Enemy enemy)
     {
-        if (playerTarget == null) playerTarget = enemy.PlayerTarget;
-
+        RotateEnemy(enemy.transform);
 
         // Search for player every searchCheckDelay seconds inside a vision cone
-        if (Time.time - lastTimeSearch > searchCheckDelay)
+        if (Time.time - lastTimeChecked > kunaiDelay)
         {
             // If it found the player throws a kunai
-            if (SearchForPlayer())
+            if (PlayerInRange())
             {
-                ThrowKunai(enemy); ;
+                ThrowKunai(enemy);
+            }
+            else
+            {
+                enemy.PlayerLastKnownPosition = playerTarget.position;
+                return enemy.LostPlayerState;
             }
         }
-
         return enemy.DefenseState;
     }
 
@@ -72,24 +68,16 @@ public class EnemySenshiDefenseState : EnemyDefenseState, IEnemyState
         }
     }
 
-    /// <summary>
-    /// Search for player every searchCheckDelay seconds inside a sphere.
-    /// </summary>
-    private bool SearchForPlayer()
+    private void RotateEnemy(Transform enemy)
     {
-        bool playerFound = false;
-
-        Collider[] playerCollider =
-            Physics.OverlapSphere(myTarget.position, sphereRange, playerLayer);
-
-        // If player is in this collider
-        if (playerCollider.Length > 0)
-        {
-            playerFound = true;
-        }
-
-        lastTimeSearch = Time.time;
-
-        return playerFound;
+        // Rotates the enemy towards the player
+        Vector3 dir = playerTarget.transform.position - myTarget.position;
+        float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        float angle = Mathf.SmoothDampAngle(
+                enemy.transform.eulerAngles.y,
+                targetAngle,
+                ref smoothTimeRotation,
+                turnSmooth);
+        enemy.transform.rotation = Quaternion.Euler(0f, angle, 0f);
     }
 }

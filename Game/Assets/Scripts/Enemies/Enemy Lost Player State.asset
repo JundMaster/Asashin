@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28ce590dd75bb97458d80d3f0116a0d5, type: 3}
+  m_Name: Enemy Lost Player State
+  m_EditorClassIdentifier: 
+  coneRange: 20
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 22528
+  timeToLookForPlayer: 10
+  rotationSpeed: 3.67

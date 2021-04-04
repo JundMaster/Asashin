@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,6 +6,8 @@ using UnityEngine.AI;
 /// Class responsible for handling enemy script.
 /// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(EnemyStats))]
+[RequireComponent(typeof(DeathBehaviour))]
 public class Enemy : MonoBehaviour, IFindPlayer
 {
     [Header("Enemy Target")]
@@ -17,19 +18,19 @@ public class Enemy : MonoBehaviour, IFindPlayer
     [SerializeField] private Transform[] patrolPoints;
     public Transform[] PatrolPoints => patrolPoints;
 
-
-
-
     // Player variables
     public Transform PlayerTarget { get; private set; }
+    public Vector3 PlayerLastKnownPosition { get; set; }
 
     // State variables
-    [SerializeField] private EnemyPatrolState patrolStateOriginal;
-    [SerializeField] private EnemyDefenseState defenseStateOriginal;
+    [SerializeField] private EnemyState patrolStateOriginal;
+    [SerializeField] private EnemyState defenseStateOriginal;
+    [SerializeField] private EnemyState lostPlayerStateOriginal;
+
     public IEnemyState PatrolState { get; private set; }
     public IEnemyState DefenseState { get; private set; }
-    private IEnemyState currentState;
-    private IEnumerable<IEnemyState> allStates;
+    public IEnemyState LostPlayerState { get; private set; }
+    private IEnemyState currentBehaviourState;
 
     // Components
     public NavMeshAgent Agent { get; private set; }
@@ -40,24 +41,30 @@ public class Enemy : MonoBehaviour, IFindPlayer
 
         PatrolState = Instantiate(patrolStateOriginal);
         DefenseState = Instantiate(defenseStateOriginal);
-        allStates = new List<IEnemyState>
-        {
-            PatrolState,
-            DefenseState,
-        }; 
+        LostPlayerState = Instantiate(lostPlayerStateOriginal);
     }
 
     private void Start()
     {
-        foreach (IEnemyState state in allStates)
-            state.Initialize(this);
+        // States are also initialized once the player spawns.
+        InitializeStates();
 
-        currentState = PatrolState;
+        currentBehaviourState = PatrolState;
     }
 
     private void FixedUpdate()
     {
-        currentState = currentState.Execute(this);
+        currentBehaviourState = currentBehaviourState.Execute(this);
+    }
+
+    /// <summary>
+    /// Spawns all states.
+    /// </summary>
+    private void InitializeStates()
+    {
+        PatrolState.Initialize(this);
+        DefenseState.Initialize(this);
+        LostPlayerState.Initialize(this);
     }
 
     /// <summary>
@@ -65,7 +72,10 @@ public class Enemy : MonoBehaviour, IFindPlayer
     /// </summary>
     public void FindPlayer()
     {
-        PlayerTarget = GameObject.FindGameObjectWithTag("playerTarget").transform;
+        PlayerTarget = 
+            GameObject.FindGameObjectWithTag("playerTarget").transform;
+
+        InitializeStates();
     }
 
     /// <summary>
@@ -74,30 +84,5 @@ public class Enemy : MonoBehaviour, IFindPlayer
     public void PlayerLost()
     {
         PlayerTarget = null;
-    }
-
-
-
-
-
-    // TEMP
-    private IEnumerator ThrowKunaiTemporary()
-    {
-        yield return new WaitForSeconds(1f);
-        /*
-        yield return new WaitForSeconds(1f);
-        Player player = FindObjectOfType<Player>();
-        EnemyVisionCone cone = GetComponent<EnemyVisionCone>();
-        while (player != null)
-        {
-            if (kunai && cone.Performing)
-            {
-                GameObject thisKunai = Instantiate(kunai, MyTarget.position + transform.forward, Quaternion.identity);
-                thisKunai.layer = 15;
-                thisKunai.GetComponent<Kunai>().Behaviour.ParentEnemy = this;
-            }
-            yield return new WaitForSeconds(2.5f);
-        }
-        */
     }
 }

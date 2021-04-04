@@ -14,19 +14,18 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
     [Range(0, 100)][SerializeField] private float nextItemsSpawningChance;
     [SerializeField] private TypeOfDropEnum typeOfDrop;
 
-    private void Start()
+    public void ExecuteBehaviour()
     {
-        spawnPosition =
-            new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+        spawnPosition = new Vector3(
+                transform.position.x, 
+                transform.position.y + 0.5f, 
+                transform.position.z);
 
         if (firstItemSpawnChance < nextItemsSpawningChance)
         {
             firstItemSpawnChance = nextItemsSpawningChance;
         }
-    }
 
-    public void ExecuteBehaviour()
-    {
         // Spawns at least one item
         SpawnItem(ref firstItemSpawnChance);
     }
@@ -74,8 +73,12 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
         spawnedObject.GetComponent<Pickable>().TypeOfDrop = typeOfDrop;
 
         Rigidbody spawnedObjectRB = spawnedObject.GetComponent<Rigidbody>();
+
         // Gives it a random force
         spawnedObjectRB.AddForce(
-            Random.Range(-75f, 75f), 90f, Random.Range(-75f, 75f), ForceMode.Impulse);
+            Random.Range(-75f, 75f), 
+            90f, 
+            Random.Range(-75f, 75f), 
+            ForceMode.Impulse);
     }
 }
