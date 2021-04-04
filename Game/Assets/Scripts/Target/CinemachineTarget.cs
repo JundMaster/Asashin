@@ -29,7 +29,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     // Target variables
     [SerializeField] private float findTargetSize;
     public bool Targeting { get; private set; }
-    private float targetYOffset;
+    private Vector3 targetYOffset;
 
     // Enemies
     private Collider[] enemies;
@@ -54,7 +54,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     private void Start()
     {
         Targeting = false;
-        targetYOffset = 1;
+        targetYOffset = new Vector3(0, 1, 0);
         blendingCoroutine = null;
         isLerpingTargetCoroutine = null;
 
@@ -76,7 +76,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// <returns></returns>
     private IEnumerator KeepsFindingClosestTarget()
     {
-        YieldInstruction wfs = new WaitForSeconds(2f);
+        YieldInstruction wfs = new WaitForSeconds(0.25f);
 
         while(true)
         {
@@ -94,10 +94,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                             .ToArray();
 
                 // Sets current target to closest enemy
-                currentTarget.transform.position = new Vector3(
-                                    organizedEnemiesByDistance[0].transform.position.x,
-                                    organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
-                                    organizedEnemiesByDistance[0].transform.position.z);
+                currentTarget.transform.position =
+                    organizedEnemiesByDistance[0].transform.position + targetYOffset;
             }
             
             yield return wfs;
@@ -126,6 +124,16 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         pauseSystem.GamePaused -= SwitchBeetweenPauseCamera;
         slowMotion.SlowMotionEvent -= SlowMotionCamera;
         optionsScript.UpdatedValues -= UpdateValues;
+    }
+
+    /// <summary>
+    /// Sets current target on current targeted enemy.
+    /// </summary>
+    private void FixedUpdate()
+    {
+        if (FindCurrentTargetedEnemy() != null && isLerpingTargetCoroutine == null) 
+            currentTarget.position = 
+                FindCurrentTargetedEnemy().transform.position + targetYOffset;
     }
 
     private void Update()
@@ -191,10 +199,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                     currentTarget.gameObject.SetActive(true);
 
                     // Sets current target to closest enemy
-                    Vector3 aimTowards = new Vector3(
-                                        organizedEnemiesByDistance[0].transform.position.x,
-                                        organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
-                                        organizedEnemiesByDistance[0].transform.position.z);
+                    Vector3 aimTowards =
+                        organizedEnemiesByDistance[0].transform.position +
+                        targetYOffset;
 
                     // Moves the current target towards the desired target
                     if (isLerpingTargetCoroutine == null)
@@ -243,7 +250,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                         {
                             shortestDistance = distanceFromTarget;
 
-                            definitiveTarget = allEnemies[i].transform.position;
+                            definitiveTarget = 
+                                allEnemies[i].transform.position + targetYOffset;
                         }
                     }
                 }
@@ -258,7 +266,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                         {
                             shortestDistance = distanceFromTarget;
 
-                            definitiveTarget = allEnemies[i].transform.position;
+                            definitiveTarget = 
+                                allEnemies[i].transform.position + targetYOffset;
                         }
                     }
                 }
@@ -267,15 +276,10 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
         if (definitiveTarget != default)
         {
-            // Target + target y offset
-            Vector3 aimTowards = new Vector3(
-                                        definitiveTarget.x,
-                                        definitiveTarget.y + targetYOffset,
-                                        definitiveTarget.z);
-
             // Moves the current target towards the desired target
             if (isLerpingTargetCoroutine == null)
-                isLerpingTargetCoroutine = StartCoroutine(LerpingTargetToClosestTarget(aimTowards));
+                isLerpingTargetCoroutine = 
+                    StartCoroutine(LerpingTargetToClosestTarget(definitiveTarget));
         }
     }
 
@@ -287,13 +291,14 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     private IEnumerator LerpingTargetToClosestTarget(Vector3 aimTowards)
     {
         YieldInstruction wffup = new WaitForFixedUpdate();
+
         while(currentTarget.transform.position != aimTowards)
         {
             currentTarget.transform.position = 
                 Vector3.MoveTowards(
                     currentTarget.transform.position, 
                     aimTowards, 
-                    25f * Time.fixedUnscaledDeltaTime);
+                    30f * Time.fixedUnscaledDeltaTime);
 
             yield return wffup;
         }
@@ -335,7 +340,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         // Finds enemies around the current target
         Collider[] currentTargetPosition =
-            Physics.OverlapSphere(currentTarget.transform.position, 0.5f, enemyLayer);
+            Physics.OverlapSphere(currentTarget.transform.position, 0.2f, enemyLayer);
 
         // If enemy has an Enemy script
         for (int i = 0; i < currentTargetPosition.Length; i++)
@@ -421,15 +426,11 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             // If there's a target
             if (organizedEnemiesByDistance.Length > 0)
             {
-                // Sets current target to closest enemy
-                Vector3 aimTowards = new Vector3(
-                                    organizedEnemiesByDistance[0].transform.position.x,
-                                    organizedEnemiesByDistance[0].transform.position.y + targetYOffset,
-                                    organizedEnemiesByDistance[0].transform.position.z);
-
                 // Moves the current target towards the desired target
                 if (isLerpingTargetCoroutine == null)
-                    isLerpingTargetCoroutine = StartCoroutine(LerpingTargetToClosestTarget(aimTowards));
+                    isLerpingTargetCoroutine = 
+                        StartCoroutine(LerpingTargetToClosestTarget(
+                            organizedEnemiesByDistance[0].transform.position));
 
                 // Switches camera
                 targetCamera.Priority = thirdPersonCamera.Priority + 3;
