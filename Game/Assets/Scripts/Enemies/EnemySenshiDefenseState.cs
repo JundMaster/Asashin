@@ -12,10 +12,20 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
 
     [Header("Kunai spawn delay")]
     [SerializeField] private float kunaiDelay;
+    private float kunaiLastTimeChecked;
+
+    [Header("Search for player delay")]
+    [SerializeField] private float checkDelay;
 
     [Header("Rotation smooth time")]
     [SerializeField] private float turnSmooth;
     private float smoothTimeRotation;
+
+    // Components
+    private NavMeshAgent agent;
+
+    // Movement variables
+    private float randomDistance;
 
     /// <summary>
     /// Runs once on start and when the player spawns.
@@ -25,27 +35,79 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     {
         // Gets enemy target and player target
         base.Initialize(enemy);
+
+        kunaiLastTimeChecked = 0f;
+        agent = enemy.Agent;
+
+        randomDistance = Random.Range(6f, 8f);
     }
 
     public override IEnemyState Execute(Enemy enemy)
     {
-        RotateEnemy(enemy.transform);
-
-        // Search for player every searchCheckDelay seconds inside a vision cone
-        if (Time.time - lastTimeChecked > kunaiDelay)
+        // Only if the player isn't fighting an enemy yet
+        // Changes state to aggresive state
+        if (enemy.PlayerCurrentlyFighting == false)
         {
-            // If it found the player throws a kunai
-            if (PlayerInRange())
+            enemy.PlayerCurrentlyFighting = true;
+            return enemy.AggressiveState;
+        }
+
+        // If the enemy is not moving towards the end position
+        if (MoveToDefensiveRange() == false)
+        {
+            // If the enemy can see and is facing the player
+            if (PlayerInRange() && FacingPlayer())
             {
                 ThrowKunai(enemy);
             }
-            else
+            // If the enemy can NOT see and is facing the player
+            else if (PlayerInRange() == false && FacingPlayer())
             {
+                // If the enemy can't see the player
+                // Changes the state to lost player state
                 enemy.PlayerLastKnownPosition = playerTarget.position;
                 return enemy.LostPlayerState;
             }
+
+            // Keeps rotating the enemy towards the player
+            RotateEnemy(enemy.transform);
         }
+        // Else it moves to the enemy without rotating towards the player
+
         return enemy.DefenseState;
+    }
+
+    /// <summary>
+    /// Moves the enemy towards the desired defense position.
+    /// </summary>
+    /// <returns>Returns true if it needs to move. 
+    /// Returns false if it's in the desired position.</returns>
+    private bool MoveToDefensiveRange()
+    {
+        bool inFinalDestination;
+        float distance = 
+            Vector3.Distance(myTarget.position, playerTarget.position);
+
+        // If the enemy is NOT in the desired position
+        if (distance > randomDistance + 0.5f || 
+            distance < randomDistance - 0.5f)
+        {
+            agent.isStopped = false;
+
+            Vector3 desiredDirection =
+            (playerTarget.position - myTarget.position).normalized;
+
+            agent.SetDestination(
+                playerTarget.position - desiredDirection * randomDistance);
+
+            inFinalDestination = true;
+        }
+        else
+        {
+            agent.isStopped = true;
+            inFinalDestination = false;
+        }
+        return inFinalDestination;
     }
 
     /// <summary>
@@ -56,18 +118,27 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     {
         if (playerTarget != null)
         {
-            // Spawns a kunai
-            GameObject thisKunai = Instantiate(
-                kunai, 
-                myTarget.position + myTarget.forward, 
-                Quaternion.identity);
+            if (Time.time - kunaiLastTimeChecked > kunaiDelay)
+            {
+                // Spawns a kunai
+                GameObject thisKunai = Instantiate(
+                    kunai,
+                    myTarget.position + myTarget.forward,
+                    Quaternion.identity);
 
-            // Sets layer and parent enemy of the kunai
-            thisKunai.layer = 15;
-            thisKunai.GetComponent<Kunai>().Behaviour.ParentEnemy = enemy;
+                // Sets layer and parent enemy of the kunai
+                thisKunai.layer = 15;
+                thisKunai.GetComponent<Kunai>().Behaviour.ParentEnemy = enemy;
+
+                kunaiLastTimeChecked = Time.time;
+            }
         }
     }
 
+    /// <summary>
+    /// Rotates enemy towards the player
+    /// </summary>
+    /// <param name="enemy"></param>
     private void RotateEnemy(Transform enemy)
     {
         // Rotates the enemy towards the player
@@ -79,5 +150,19 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
                 ref smoothTimeRotation,
                 turnSmooth);
         enemy.transform.rotation = Quaternion.Euler(0f, angle, 0f);
+    }
+
+    /// <summary>
+    /// Checks if the enemy is facing the player
+    /// </summary>
+    /// <returns>Returns true if the enemy is facing the player,</returns>
+    private bool FacingPlayer()
+    {
+        Vector3 dir = playerTarget.position - myTarget.position;
+
+        if (Vector3.Angle(dir, myTarget.forward) < 10)
+            return true;
+        return false;
+
     }
 }

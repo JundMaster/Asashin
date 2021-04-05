@@ -70,6 +70,7 @@ public class EnemyLostPlayerState : EnemyStateWithVision
 
     /// <summary>
     /// Method that sets agent's path to player's last known position.
+    /// Happens once after the enemy transits to this state.
     /// </summary>
     /// <param name="enemy"></param>
     private void GoToLastKnownPosition(Enemy enemy)

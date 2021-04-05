@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerValuesScriptableObj values;
     public PlayerValuesScriptableObj Values => values;
 
+    public bool PlayerCurrentlyFighting { get; set; }
+
     // ILists with components
     private IList<IAction> myIComponents;
     private IList<IAction> componentsToRun;
@@ -18,6 +20,8 @@ public class Player : MonoBehaviour
     {
         myIComponents = GetComponents<IAction>();
         componentsToRun = new List<IAction>();
+
+        PlayerCurrentlyFighting = false;
     }
 
     private void Start()
@@ -29,12 +33,12 @@ public class Player : MonoBehaviour
     private void Update()
     {
         foreach (IAction comp in componentsToRun)
-            comp.ComponentUpdate();
+            comp?.ComponentUpdate();
     }
 
     private void FixedUpdate()
     {
         foreach (IAction comp in componentsToRun)
-            comp.ComponentFixedUpdate();
+            comp?.ComponentFixedUpdate();
     }
 }

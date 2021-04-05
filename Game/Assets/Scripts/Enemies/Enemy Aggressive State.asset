@@ -9,15 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28ce590dd75bb97458d80d3f0116a0d5, type: 3}
-  m_Name: Enemy Lost Player State
+  m_Script: {fileID: 11500000, guid: a4caef0ce2cf78242a3d442eefb0c5dc, type: 3}
+  m_Name: Enemy Aggressive State
   m_EditorClassIdentifier: 
-  coneRange: 20
+  sphereRange: 1
   playerLayer:
     serializedVersion: 2
     m_Bits: 2048
-  collisionLayers:
-    serializedVersion: 2
-    m_Bits: 22528
-  timeToLookForPlayer: 10
-  rotationSpeed: 2.08

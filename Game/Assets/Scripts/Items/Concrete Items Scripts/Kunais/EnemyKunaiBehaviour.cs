@@ -49,20 +49,30 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
     public override void Hit(IDamageable damageableBody, Collider collider, Transform player)
     {
         // If it collides with player layer
-        if (collider?.gameObject.layer == 11)
+        if (collider != null)
         {
-            // and player is blocking
-            if (playerBlock.Performing)
+            if (collider.gameObject.layer == 11)
             {
-                // If the player is facing the enemy direction
-                if (Vector3.Angle(
-                    ParentEnemy.transform.position - player.position,
-                    player.forward) < 50f)
+                // and player is blocking
+                if (playerBlock.Performing)
                 {
-                    KunaiCurrentTarget = ParentEnemy.MyTarget;
-                    playerAnim.TriggerBlockReflect();
+                    // If the player is facing the enemy direction
+                    if (Vector3.Angle(
+                        ParentEnemy.transform.position - player.position,
+                        player.forward) < 50f)
+                    {
+                        KunaiCurrentTarget = ParentEnemy.MyTarget;
+                        playerAnim.TriggerBlockReflect();
+                    }
+                    // If the player is blocking but not facing the enemy
+                    else
+                    {
+                        //damageableBody.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
+                        damageableBody?.TakeDamage(5f);
+                        Destroy(gameObject);
+                    }
                 }
-                // If the player is blocking but not facing the enemy
+                // Else if the player isn't blocking
                 else
                 {
                     //damageableBody.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
@@ -70,7 +80,7 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
                     Destroy(gameObject);
                 }
             }
-            // Else if the player isn't blocking
+            // Else if it's not the player (meaning the kunai was reflected)
             else
             {
                 //damageableBody.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
@@ -78,11 +88,8 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
                 Destroy(gameObject);
             }
         }
-        // Else if it's not the player (meaning the kunai was reflected)
         else
         {
-            //damageableBody.TakeDamage(ParentEnemy.GetComponent<Stats>().RangedDamage);
-            damageableBody?.TakeDamage(5f);
             Destroy(gameObject);
         }
     }

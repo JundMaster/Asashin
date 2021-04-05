@@ -14,22 +14,36 @@ public class Enemy : MonoBehaviour, IFindPlayer
     [SerializeField] private Transform myTarget;
     public Transform MyTarget => myTarget;
 
-    [Header("Enemy Patrol path")]
+    [Header("Enemy Patrol path (order is important)")]
     [SerializeField] private Transform[] patrolPoints;
     public Transform[] PatrolPoints => patrolPoints;
 
+    [Header("Enemy animator")]
+    [SerializeField] private Animator anim;
+    public Animator Anim => anim;
+
     // Player variables
+    private Player player;
+    public bool PlayerCurrentlyFighting
+    {
+        get => player.PlayerCurrentlyFighting;
+        set => player.PlayerCurrentlyFighting = value;
+    }
     public Transform PlayerTarget { get; private set; }
     public Vector3 PlayerLastKnownPosition { get; set; }
 
-    // State variables
+    [Header("EnemyStates")]
     [SerializeField] private EnemyState patrolStateOriginal;
     [SerializeField] private EnemyState defenseStateOriginal;
     [SerializeField] private EnemyState lostPlayerStateOriginal;
+    [SerializeField] private EnemyState aggressiveStateOriginal;
 
+    // State getters
     public IEnemyState PatrolState { get; private set; }
     public IEnemyState DefenseState { get; private set; }
     public IEnemyState LostPlayerState { get; private set; }
+    public IEnemyState AggressiveState { get; private set; }
+
     private IEnemyState currentBehaviourState;
 
     // Components
@@ -39,9 +53,20 @@ public class Enemy : MonoBehaviour, IFindPlayer
     {
         Agent = GetComponent<NavMeshAgent>();
 
-        PatrolState = Instantiate(patrolStateOriginal);
-        DefenseState = Instantiate(defenseStateOriginal);
-        LostPlayerState = Instantiate(lostPlayerStateOriginal);
+        PlayerLastKnownPosition = default;
+        if (player != null) PlayerCurrentlyFighting = false;
+
+        if (patrolStateOriginal != null)
+            PatrolState = Instantiate(patrolStateOriginal);
+
+        if (defenseStateOriginal != null)
+            DefenseState = Instantiate(defenseStateOriginal);
+
+        if (lostPlayerStateOriginal != null)
+            LostPlayerState = Instantiate(lostPlayerStateOriginal);
+
+        if (aggressiveStateOriginal != null)
+            AggressiveState = Instantiate(aggressiveStateOriginal);
     }
 
     private void Start()
@@ -54,7 +79,7 @@ public class Enemy : MonoBehaviour, IFindPlayer
 
     private void FixedUpdate()
     {
-        currentBehaviourState = currentBehaviourState.Execute(this);
+        currentBehaviourState = currentBehaviourState?.Execute(this);
     }
 
     /// <summary>
@@ -62,18 +87,22 @@ public class Enemy : MonoBehaviour, IFindPlayer
     /// </summary>
     private void InitializeStates()
     {
-        PatrolState.Initialize(this);
-        DefenseState.Initialize(this);
-        LostPlayerState.Initialize(this);
+        PatrolState?.Initialize(this);
+        DefenseState?.Initialize(this);
+        LostPlayerState?.Initialize(this);
+        AggressiveState?.Initialize(this);
     }
 
     /// <summary>
-    /// Finds player target transform when the player spawns.
+    /// Finds player when the player spawns.
+    /// Initializes values for all states.
     /// </summary>
     public void FindPlayer()
     {
         PlayerTarget = 
             GameObject.FindGameObjectWithTag("playerTarget").transform;
+
+        player = FindObjectOfType<Player>();
 
         InitializeStates();
     }
@@ -84,5 +113,6 @@ public class Enemy : MonoBehaviour, IFindPlayer
     public void PlayerLost()
     {
         PlayerTarget = null;
+        PlayerCurrentlyFighting = false;
     }
 }

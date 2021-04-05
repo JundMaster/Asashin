@@ -73,7 +73,9 @@ public class EnemyPatrolState : EnemyStateWithVision
             {
                 if (patrolIndex + 1 > patrolPoints.Length - 1) patrolIndex = 0;
                 else patrolIndex++;
-                agent.SetDestination(patrolPoints[patrolIndex].transform.position);
+
+                agent.SetDestination(
+                    patrolPoints[patrolIndex].transform.position);
             } 
         }
     }
