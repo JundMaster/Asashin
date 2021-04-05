@@ -161,7 +161,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         // If next animation is not an attack it removes root motion
         if (anim.GetNextAnimatorStateInfo(0).IsName("BotLightMelee2") == false &&
             anim.GetNextAnimatorStateInfo(0).IsName("BotLightMelee3") == false &&
-            anim.GetNextAnimatorStateInfo(0).IsName("BotStrongMelee3") == false)
+            anim.GetNextAnimatorStateInfo(0).IsName("BotStrongMelee1") == false &&
+            anim.GetNextAnimatorStateInfo(0).IsName("BotStrongMelee2") == false)
         {
             anim.ResetTrigger("MeleeLightAttack");
             anim.ResetTrigger("MeleeStrongAttack");
