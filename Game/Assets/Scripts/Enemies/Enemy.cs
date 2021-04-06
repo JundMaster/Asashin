@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,6 +17,14 @@ public class Enemy : MonoBehaviour, IFindPlayer
     [Header("Enemy Patrol path (order is important)")]
     [SerializeField] private Transform[] patrolPoints;
     public Transform[] PatrolPoints => patrolPoints;
+
+    [Header("Cone Mesh")]
+    [SerializeField] private GameObject visionCone;
+    public GameObject VisionCone => visionCone;
+
+    [SerializeField] private MeshFilter meshFilter;
+    public MeshFilter EnemyMeshFilter 
+    { get => meshFilter; set => meshFilter = value; }
 
     [Header("Enemy animator")]
     [SerializeField] private Animator anim;
@@ -48,6 +55,7 @@ public class Enemy : MonoBehaviour, IFindPlayer
 
     private IEnumerable<IState> states;
     private StateMachine stateMachine;
+    public StateMachine StateMachineGet => stateMachine;
 
     // Components
     public NavMeshAgent Agent { get; private set; }

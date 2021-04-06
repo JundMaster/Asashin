@@ -8,9 +8,10 @@ public abstract class EnemyStateWithVision : EnemyState
 {
     // Vision
     [Header("Vision Cone Attributes")]
-    [SerializeField] private float coneRange;
+    [SerializeField] protected float coneRange;
+    [Range(0, 90)] [SerializeField] protected float desiredConeAngle;
     [SerializeField] private LayerMask playerLayer;
-    [SerializeField] private LayerMask collisionLayers;
+    [SerializeField] protected LayerMask collisionLayers;
     protected float lastTimeChecked;
 
     /// <summary>
@@ -33,7 +34,8 @@ public abstract class EnemyStateWithVision : EnemyState
                 Ray rayToPlayer = new Ray(myTarget.position, direction);
 
                 // If player is in the cone range
-                if (Vector3.Angle(direction, myTarget.forward) < 45)
+                if (Vector3.Angle(
+                    direction, myTarget.forward) < desiredConeAngle)
                 {
                     if (Physics.Raycast(
                         rayToPlayer,

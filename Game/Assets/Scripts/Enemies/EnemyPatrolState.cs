@@ -10,6 +10,16 @@ public class EnemyPatrolState : EnemyStateWithVision
     [SerializeField] private float searchCheckDelay;
     [SerializeField] private float waitingDelay;
 
+    [Header("Enemy cone render variables")]
+    [SerializeField] private byte amountOfVertices;
+    private Quaternion startingAngle;
+    private Quaternion stepAngle;
+    // Cone Mesh components
+    private Mesh mesh;
+    private Vector3[] vertices;
+    private Vector2[] uv;
+    private int[] triangles;
+
     // Movement
     private Transform[] patrolPoints;
     private byte patrolIndex;
@@ -24,6 +34,21 @@ public class EnemyPatrolState : EnemyStateWithVision
     {
         patrolPoints = enemy.PatrolPoints;
 
+        // Mesh setup
+        mesh = new Mesh();
+        enemy.EnemyMeshFilter.mesh = mesh;
+        vertices = new Vector3[amountOfVertices];
+        uv = new Vector2[amountOfVertices];
+        triangles = new int[vertices.Length * 3];
+
+        // Cone angles setup
+        startingAngle = Quaternion.AngleAxis(-desiredConeAngle, Vector3.up);
+        stepAngle = Quaternion.AngleAxis(
+            (desiredConeAngle + desiredConeAngle) /
+            vertices.Length,
+            Vector3.up);
+
+        // Agent destination setup
         patrolIndex = 0;
         agent.SetDestination(patrolPoints[0].transform.position);
     }
@@ -34,8 +59,8 @@ public class EnemyPatrolState : EnemyStateWithVision
     public override void OnEnter()
     {
         base.OnEnter();
-
         agent.isStopped = false;
+        enemy.VisionCone.SetActive(true);
     }
 
     /// <summary>
@@ -47,7 +72,7 @@ public class EnemyPatrolState : EnemyStateWithVision
     {
         if (playerTarget == null) playerTarget = enemy.PlayerTarget;
 
-        // Moves the agent
+        CastVisionCone();
         Movement();
 
         // Search for player every searchCheckDelay seconds inside a vision cone
@@ -69,6 +94,7 @@ public class EnemyPatrolState : EnemyStateWithVision
     {
         base.OnExit();
         agent.isStopped = true;
+        enemy.VisionCone.SetActive(false);
     }
 
     /// <summary>
@@ -90,5 +116,60 @@ public class EnemyPatrolState : EnemyStateWithVision
                     patrolPoints[patrolIndex].transform.position);
             } 
         }
+    }
+
+    /// <summary>
+    /// Calculates vision cone's mesh vertices.
+    /// </summary>
+    private void CastVisionCone()
+    {
+        Quaternion angle = enemy.transform.rotation * startingAngle;
+        Vector3 direction = angle * Vector3.forward;
+        Vector3 currentPos = enemy.transform.position;
+        Vector3 offset = new Vector3(0, 0.5f, 0);
+
+        vertices[0] = Vector3.zero + offset;
+
+        for (var i = 0; i < vertices.Length; i++)
+        {
+            // If it hits something
+            if (Physics.Raycast(currentPos, direction, out RaycastHit hit,
+                coneRange, collisionLayers))
+            {
+                if (i != 0)
+                {
+                    vertices[i] =
+                        enemy.transform.InverseTransformPoint(hit.point) + offset;
+                    uv[i] = enemy.transform.InverseTransformPoint(hit.point) + offset;
+                }
+
+            }
+            // Else if it doesn't hit anything
+            else
+            {
+                if (i != 0)
+                {
+                    vertices[i] =
+                        enemy.transform.InverseTransformPoint(
+                            currentPos + direction * coneRange) + offset;
+                    uv[i] = enemy.transform.InverseTransformPoint(
+                            currentPos + direction * coneRange) + offset;
+                }
+            }
+            direction = stepAngle * direction;
+
+            if (i < vertices.Length - 2)
+            {
+                triangles[i * 3] = 0;
+                triangles[i * 3 + 1] = i + 1;
+                triangles[i * 3 + 2] = i + 2;
+            }
+        }
+
+        mesh.Clear();
+        mesh.vertices = vertices;
+        mesh.uv = uv;
+        mesh.triangles = triangles;
+        mesh.RecalculateNormals();
     }
 }
