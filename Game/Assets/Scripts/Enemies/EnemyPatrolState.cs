@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 
 /// <summary>
 /// Scriptable object responsible for controlling enemy patrol state.
@@ -12,23 +11,17 @@ public class EnemyPatrolState : EnemyStateWithVision
     [SerializeField] private float waitingDelay;
 
     // Movement
-    private NavMeshAgent agent;
     private Transform[] patrolPoints;
     private byte patrolIndex;
 
     private float pathTimer;
 
     /// <summary>
-    /// Runs once on start and when the player spawns.
+    /// Runs once on start.
     /// Sets agent's initial destination.
     /// </summary>
-    /// <param name="enemy">Enemy to get variables from.</param>
-    public override void Initialize(Enemy enemy)
+    public override void Start()
     {
-        // Gets enemy target and player target
-        base.Initialize(enemy);
-
-        agent = enemy.Agent;
         patrolPoints = enemy.PatrolPoints;
 
         patrolIndex = 0;
@@ -36,13 +29,24 @@ public class EnemyPatrolState : EnemyStateWithVision
     }
 
     /// <summary>
+    /// Runs when entering this state. Turns back agent's movement.
+    /// </summary>
+    public override void OnEnter()
+    {
+        base.OnEnter();
+
+        agent.isStopped = false;
+    }
+
+    /// <summary>
     /// Searches for player in a vision cone.
     /// Executes enemy's movement. Runs on fixed update.
     /// </summary>
-    /// <param name="enemy">Enemy to move.</param>
-    /// <returns>Returns IEnemy state.</returns>
-    public override IEnemyState Execute(Enemy enemy)
+    /// <returns>Returns an IState.</returns>
+    public override IState FixedUpdate()
     {
+        if (playerTarget == null) playerTarget = enemy.PlayerTarget;
+
         // Moves the agent
         Movement();
 
@@ -52,11 +56,19 @@ public class EnemyPatrolState : EnemyStateWithVision
             // If it found the player, triggers defense state
             if (PlayerInRange())
             {
-                agent.isStopped = true;
                 return enemy.DefenseState;
             }
         }
         return enemy.PatrolState;
+    }
+
+    /// <summary>
+    /// Runs once when leaving this state. Stops agent.
+    /// </summary>
+    public override void OnExit()
+    {
+        base.OnExit();
+        agent.isStopped = true;
     }
 
     /// <summary>

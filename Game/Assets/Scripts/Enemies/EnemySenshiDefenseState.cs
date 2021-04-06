@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 
 /// <summary>
 /// Scriptable object responsible for controlling enemy movement state.
@@ -21,31 +20,36 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     [SerializeField] private float turnSmooth;
     private float smoothTimeRotation;
 
-    // Components
-    private NavMeshAgent agent;
-
     // Movement variables
     private float randomDistance;
 
     /// <summary>
-    /// Runs once on start and when the player spawns.
+    /// Happens once on start. Sets a random distance to mantain while defending.
     /// </summary>
-    /// <param name="enemy">Enemy to get variables from.</param>
-    public override void Initialize(Enemy enemy)
+    public override void Start()
     {
-        // Gets enemy target and player target
-        base.Initialize(enemy);
-
-        kunaiLastTimeChecked = 0f;
-        agent = enemy.Agent;
-
-        randomDistance = Random.Range(6f, 8f);
+        randomDistance = Random.Range(6f, 9f);
     }
 
-    public override IEnemyState Execute(Enemy enemy)
+    /// <summary>
+    /// Happens once when this state is enabled. Sets a kunai timer.
+    /// </summary>
+    public override void OnEnter()
     {
+        kunaiLastTimeChecked = Time.time;
+        agent.isStopped = false;
+    }
+
+    /// <summary>
+    /// Goes to defense position. If the player is fighting an enemy,
+    /// it keeps throwing kunais.
+    /// </summary>
+    /// <returns>An IState.</returns>
+    public override IState FixedUpdate()
+    {
+        if (playerTarget == null) playerTarget = enemy.PlayerTarget;
+
         // Only if the player isn't fighting an enemy yet
-        // Changes state to aggresive state
         if (enemy.PlayerCurrentlyFighting == false)
         {
             enemy.PlayerCurrentlyFighting = true;
@@ -58,23 +62,30 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
             // If the enemy can see and is facing the player
             if (PlayerInRange() && FacingPlayer())
             {
-                ThrowKunai(enemy);
+                ThrowKunai();
             }
             // If the enemy can NOT see and is facing the player
             else if (PlayerInRange() == false && FacingPlayer())
             {
-                // If the enemy can't see the player
-                // Changes the state to lost player state
-                enemy.PlayerLastKnownPosition = playerTarget.position;
                 return enemy.LostPlayerState;
             }
 
             // Keeps rotating the enemy towards the player
-            RotateEnemy(enemy.transform);
+            RotateEnemy();
         }
         // Else it moves to the enemy without rotating towards the player
 
         return enemy.DefenseState;
+    }
+
+    /// <summary>
+    /// Happens once when leaving this state.
+    /// Sets player's last known position.
+    /// </summary>
+    public override void OnExit()
+    {
+        base.OnExit();
+        enemy.PlayerLastKnownPosition = playerTarget.position;
     }
 
     /// <summary>
@@ -85,6 +96,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     private bool MoveToDefensiveRange()
     {
         bool inFinalDestination;
+        
         float distance = 
             Vector3.Distance(myTarget.position, playerTarget.position);
 
@@ -107,14 +119,14 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
             agent.isStopped = true;
             inFinalDestination = false;
         }
+
         return inFinalDestination;
     }
 
     /// <summary>
     /// Throws a kunai towards the player future position.
     /// </summary>
-    /// <param name="enemy">This enemy (kunai's enemy parent).</param>
-    private void ThrowKunai(Enemy enemy)
+    private void ThrowKunai()
     {
         if (playerTarget != null)
         {
@@ -136,12 +148,10 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     }
 
     /// <summary>
-    /// Rotates enemy towards the player
+    /// Rotates enemy towards the player.
     /// </summary>
-    /// <param name="enemy"></param>
-    private void RotateEnemy(Transform enemy)
+    private void RotateEnemy()
     {
-        // Rotates the enemy towards the player
         Vector3 dir = playerTarget.transform.position - myTarget.position;
         float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
         float angle = Mathf.SmoothDampAngle(
@@ -153,9 +163,9 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     }
 
     /// <summary>
-    /// Checks if the enemy is facing the player
+    /// Checks if the enemy is facing the player.
     /// </summary>
-    /// <returns>Returns true if the enemy is facing the player,</returns>
+    /// <returns>Returns true if the enemy is facing the player.</returns>
     private bool FacingPlayer()
     {
         Vector3 dir = playerTarget.position - myTarget.position;
@@ -163,6 +173,5 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
         if (Vector3.Angle(dir, myTarget.forward) < 10)
             return true;
         return false;
-
     }
 }

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using UnityEngine;
 
 /// <summary>
 /// Scriptable object for controlling enemy aggressive state.
@@ -12,23 +9,23 @@ public class EnemyAggressiveState : EnemyState
     [SerializeField] private float sphereRange;
     [SerializeField] private LayerMask playerLayer;
 
-    // Components
-    private NavMeshAgent agent;
-    private Transform myTarget;
-    private Transform playerTarget;
 
-    public override void Initialize(Enemy enemy)
+    public override void OnEnter()
     {
-        agent = enemy.Agent;
-        myTarget = enemy.MyTarget;
-        playerTarget = enemy.PlayerTarget;
+        base.OnEnter();
+
+        if (playerTarget == null) playerTarget = enemy.PlayerTarget;
+        if (playerTarget != null ) 
+            agent.SetDestination(playerTarget.transform.position);
     }
 
-    public override IEnemyState Execute(Enemy enemy)
+    public override IState FixedUpdate()
     {
-        if (ApproachPlayer(enemy))
+        if (playerTarget == null) playerTarget = enemy.PlayerTarget;
+
+        if (ApproachPlayer())
         {
-            //Debug.Log("fighting");
+            Debug.Log("fighting");
         }
         else
         {
@@ -41,10 +38,9 @@ public class EnemyAggressiveState : EnemyState
     /// <summary>
     /// Moves towards the player.
     /// </summary>
-    /// <param name="enemy">Enemy to approach.</param>
     /// <returns>Returns true if it's near the player.
     /// Returns false if it's still moving towards the player.</returns>
-    private bool ApproachPlayer(Enemy enemy)
+    private bool ApproachPlayer()
     {
         bool nearPlayer = true;
 

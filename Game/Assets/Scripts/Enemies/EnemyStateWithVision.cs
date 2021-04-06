@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Abstract Scriptable object responsible for controlling enemy states with vision.
+/// Abstract Scriptable object responsible for controlling enemy states with
+/// vision.
 /// </summary>
 public abstract class EnemyStateWithVision : EnemyState
 {
@@ -11,20 +12,6 @@ public abstract class EnemyStateWithVision : EnemyState
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private LayerMask collisionLayers;
     protected float lastTimeChecked;
-
-    // Targets
-    protected Transform playerTarget;
-    protected Transform myTarget;
-
-    /// <summary>
-    /// Method that defines what happens when this state is initialized.
-    /// </summary>
-    /// <param name="enemy">Enemy to get variables from.</param>
-    public override void Initialize(Enemy enemy)
-    {
-        myTarget = enemy.MyTarget;
-        playerTarget = enemy.PlayerTarget;
-    }
 
     /// <summary>
     /// Search for player every searchCheckDelay seconds inside a cone vision.

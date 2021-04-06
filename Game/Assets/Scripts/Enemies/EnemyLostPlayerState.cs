@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 using System.Collections;
 
 /// <summary>
@@ -13,38 +12,36 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     [Header("Rotation speed while looking for player")]
     [Range(1,5)][SerializeField] private float rotationSpeed;
 
-    // Components
-    private NavMeshAgent agent;
-
     private bool lookForPlayerCoroutine;
     private bool breakState;
 
     /// <summary>
-    /// Runs once on start and when the player spawns.
+    /// Happens once when this state is enabled.
+    /// Sets a path to player's last known position.
     /// </summary>
-    /// <param name="enemy">Enemy to get variables from.</param>
-    public override void Initialize(Enemy enemy)
+    public override void OnEnter()
     {
-        // Gets enemy target and player target
-        base.Initialize(enemy);
-        agent = enemy.Agent;
-
+        base.OnEnter();
         lookForPlayerCoroutine = false;
         breakState = false;
+        agent.isStopped = false;
+
+        agent.SetDestination(enemy.PlayerLastKnownPosition);
     }
 
-    public override IEnemyState Execute(Enemy enemy)
+    /// <summary>
+    /// Runs on fixed update.
+    /// Moves the enemy towards player's last known position. When the enemy
+    /// reaches that position, it starts a coroutine to look for the player.
+    /// </summary>
+    /// <returns>An IState.</returns>
+    public override IState FixedUpdate()
     {
-        GoToLastKnownPosition(enemy);
+        if (playerTarget == null) playerTarget = enemy.PlayerTarget;
 
         // If enemy is in range, it stops looking for player coroutine
         if (PlayerInRange())
-        {
-            lookForPlayerCoroutine = false;
-            breakState = false;
-            agent.isStopped = true;
             return enemy.DefenseState;
-        }
 
         // If the enemy reached the player last known position
         // starts looking for him
@@ -53,36 +50,30 @@ public class EnemyLostPlayerState : EnemyStateWithVision
             if (lookForPlayerCoroutine == false)
             {
                 lookForPlayerCoroutine = true;
-                enemy.StartCoroutine(LookForPlayer(enemy));
+                enemy.StartCoroutine(LookForPlayer());
             }
         }
 
         // Breaks from this state back to patrol state
+        // Happens if the enemy didn't find the player
         if (breakState)
-        {
-            lookForPlayerCoroutine = false;
-            breakState = false;
             return enemy.PatrolState;
-        }
 
         return enemy.LostPlayerState;
     }
 
     /// <summary>
-    /// Method that sets agent's path to player's last known position.
-    /// Happens once after the enemy transits to this state.
+    /// Happens when leaving this state.
+    /// 
     /// </summary>
-    /// <param name="enemy"></param>
-    private void GoToLastKnownPosition(Enemy enemy)
+    public override void OnExit()
     {
-        if (agent.isStopped)
-        {
-            lookForPlayerCoroutine = false;
-            breakState = false;
-            agent.SetDestination(enemy.PlayerLastKnownPosition);
-            agent.isStopped = false;
-        }
+        base.OnExit();
+        // Cancels rotation coroutine
+        lookForPlayerCoroutine = false;
+        agent.isStopped = false;
     }
+
 
     /// <summary>
     /// Method to check if the enemy is at player's last known position.
@@ -97,9 +88,8 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     /// <summary>
     /// Rotates every x seconds, looking for the player.
     /// </summary>
-    /// <param name="enemy">Enemy to rotate.</param>
     /// <returns>Returns null.</returns>
-    private IEnumerator LookForPlayer(Enemy enemy)
+    private IEnumerator LookForPlayer()
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
         YieldInstruction wfs = new WaitForSeconds(Random.Range(1f, 3f));

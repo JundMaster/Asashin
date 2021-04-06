@@ -14,5 +14,5 @@ public interface IEnemyState
     /// </summary>
     /// <param name="enemy">Enemy parent of this state.</param>
     /// <returns>Returns an IEnemyState.</returns>
-    IEnemyState Execute(Enemy enemy);
+    IState Execute(Enemy enemy);
 }

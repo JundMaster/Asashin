@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -39,12 +40,14 @@ public class Enemy : MonoBehaviour, IFindPlayer
     [SerializeField] private EnemyState aggressiveStateOriginal;
 
     // State getters
-    public IEnemyState PatrolState { get; private set; }
-    public IEnemyState DefenseState { get; private set; }
-    public IEnemyState LostPlayerState { get; private set; }
-    public IEnemyState AggressiveState { get; private set; }
+    public IState PatrolState { get; private set; }
+    public IState DefenseState { get; private set; }
+    public IState LostPlayerState { get; private set; }
+    public IState AggressiveState { get; private set; }
 
-    private IEnemyState currentBehaviourState;
+
+    private IEnumerable<IState> states;
+    private StateMachine stateMachine;
 
     // Components
     public NavMeshAgent Agent { get; private set; }
@@ -67,30 +70,21 @@ public class Enemy : MonoBehaviour, IFindPlayer
 
         if (aggressiveStateOriginal != null)
             AggressiveState = Instantiate(aggressiveStateOriginal);
-    }
 
-    private void Start()
-    {
-        // States are also initialized once the player spawns.
-        InitializeStates();
+        states = new List<IState>
+        {
+            PatrolState,
+            DefenseState,
+            LostPlayerState,
+            AggressiveState,
+        };
 
-        currentBehaviourState = PatrolState;
+        stateMachine = new StateMachine(states, this);
     }
 
     private void FixedUpdate()
     {
-        currentBehaviourState = currentBehaviourState?.Execute(this);
-    }
-
-    /// <summary>
-    /// Spawns all states.
-    /// </summary>
-    private void InitializeStates()
-    {
-        PatrolState?.Initialize(this);
-        DefenseState?.Initialize(this);
-        LostPlayerState?.Initialize(this);
-        AggressiveState?.Initialize(this);
+        stateMachine.FixedUpdate();
     }
 
     /// <summary>
@@ -103,8 +97,6 @@ public class Enemy : MonoBehaviour, IFindPlayer
             GameObject.FindGameObjectWithTag("playerTarget").transform;
 
         player = FindObjectOfType<Player>();
-
-        InitializeStates();
     }
 
     /// <summary>
