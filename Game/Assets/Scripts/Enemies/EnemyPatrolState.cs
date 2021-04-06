@@ -17,7 +17,6 @@ public class EnemyPatrolState : EnemyStateWithVision
     // Cone Mesh components
     private Mesh mesh;
     private Vector3[] vertices;
-    private Vector2[] uv;
     private int[] triangles;
 
     // Movement
@@ -38,7 +37,6 @@ public class EnemyPatrolState : EnemyStateWithVision
         mesh = new Mesh();
         enemy.EnemyMeshFilter.mesh = mesh;
         vertices = new Vector3[amountOfVertices];
-        uv = new Vector2[amountOfVertices];
         triangles = new int[vertices.Length * 3];
 
         // Cone angles setup
@@ -128,7 +126,7 @@ public class EnemyPatrolState : EnemyStateWithVision
         Vector3 currentPos = enemy.transform.position;
         Vector3 offset = new Vector3(0, 0.5f, 0);
 
-        vertices[0] = Vector3.zero + offset;
+        vertices[0] = Vector3.zero;
 
         for (var i = 0; i < vertices.Length; i++)
         {
@@ -139,8 +137,7 @@ public class EnemyPatrolState : EnemyStateWithVision
                 if (i != 0)
                 {
                     vertices[i] =
-                        enemy.transform.InverseTransformPoint(hit.point) + offset;
-                    uv[i] = enemy.transform.InverseTransformPoint(hit.point) + offset;
+                        enemy.transform.InverseTransformPoint(hit.point);
                 }
 
             }
@@ -151,9 +148,7 @@ public class EnemyPatrolState : EnemyStateWithVision
                 {
                     vertices[i] =
                         enemy.transform.InverseTransformPoint(
-                            currentPos + direction * coneRange) + offset;
-                    uv[i] = enemy.transform.InverseTransformPoint(
-                            currentPos + direction * coneRange) + offset;
+                            currentPos + direction * coneRange);
                 }
             }
             direction = stepAngle * direction;
@@ -168,7 +163,6 @@ public class EnemyPatrolState : EnemyStateWithVision
 
         mesh.Clear();
         mesh.vertices = vertices;
-        mesh.uv = uv;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
     }
