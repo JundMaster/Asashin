@@ -22,10 +22,6 @@ public class Enemy : MonoBehaviour, IFindPlayer
     [SerializeField] private GameObject visionCone;
     public GameObject VisionCone => visionCone;
 
-    [SerializeField] private MeshFilter meshFilter;
-    public MeshFilter EnemyMeshFilter 
-    { get => meshFilter; set => meshFilter = value; }
-
     [Header("Enemy animator")]
     [SerializeField] private Animator anim;
     public Animator Anim => anim;

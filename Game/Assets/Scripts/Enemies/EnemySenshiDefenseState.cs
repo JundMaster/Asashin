@@ -47,14 +47,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     /// <returns>An IState.</returns>
     public override IState FixedUpdate()
     {
-        if (playerTarget == null) playerTarget = enemy.PlayerTarget;
-
-        // Only if the player isn't fighting an enemy yet
-        if (enemy.PlayerCurrentlyFighting == false)
-        {
-            enemy.PlayerCurrentlyFighting = true;
-            return enemy.AggressiveState;
-        }
+        base.FixedUpdate();
 
         // If the enemy is not moving towards the end position
         if (MoveToDefensiveRange() == false)
@@ -74,6 +67,13 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
             RotateEnemy();
         }
         // Else it moves to the enemy without rotating towards the player
+
+        // Only if the player isn't fighting an enemy yet
+        if (enemy.PlayerCurrentlyFighting == false)
+        {
+            enemy.PlayerCurrentlyFighting = true;
+            return enemy.AggressiveState;
+        }
 
         return enemy.DefenseState;
     }

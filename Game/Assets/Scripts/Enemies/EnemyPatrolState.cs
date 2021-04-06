@@ -12,18 +12,14 @@ public class EnemyPatrolState : EnemyStateWithVision
 
     [Header("Enemy cone render variables")]
     [SerializeField] private byte amountOfVertices;
-    private Quaternion startingAngle;
-    private Quaternion stepAngle;
-    // Cone Mesh components
-    private Mesh mesh;
-    private Vector3[] vertices;
-    private int[] triangles;
+    [SerializeField] private Material coneMaterial;
+    private VisionCone visionCone;
 
     // Movement
     private Transform[] patrolPoints;
     private byte patrolIndex;
-
     private float pathTimer;
+
 
     /// <summary>
     /// Runs once on start.
@@ -31,22 +27,15 @@ public class EnemyPatrolState : EnemyStateWithVision
     /// </summary>
     public override void Start()
     {
-        patrolPoints = enemy.PatrolPoints;
-
-        // Mesh setup
-        mesh = new Mesh();
-        enemy.EnemyMeshFilter.mesh = mesh;
-        vertices = new Vector3[amountOfVertices];
-        triangles = new int[vertices.Length * 3];
-
-        // Cone angles setup
-        startingAngle = Quaternion.AngleAxis(-desiredConeAngle, Vector3.up);
-        stepAngle = Quaternion.AngleAxis(
-            (desiredConeAngle + desiredConeAngle) /
-            vertices.Length,
-            Vector3.up);
+        // Vision cone setup
+        MeshFilter meshFilter = enemy.VisionCone.GetComponent<MeshFilter>();
+        MeshRenderer meshRenderer = enemy.VisionCone.GetComponent<MeshRenderer>();
+        visionCone = new VisionCone(
+            meshFilter, meshRenderer, coneMaterial, amountOfVertices,
+            desiredConeAngle, coneRange, collisionLayers, enemy.transform);
 
         // Agent destination setup
+        patrolPoints = enemy.PatrolPoints;
         patrolIndex = 0;
         agent.SetDestination(patrolPoints[0].transform.position);
     }
@@ -68,9 +57,9 @@ public class EnemyPatrolState : EnemyStateWithVision
     /// <returns>Returns an IState.</returns>
     public override IState FixedUpdate()
     {
-        if (playerTarget == null) playerTarget = enemy.PlayerTarget;
+        base.FixedUpdate();
 
-        CastVisionCone();
+        visionCone.Calculate();
         Movement();
 
         // Search for player every searchCheckDelay seconds inside a vision cone
@@ -114,56 +103,5 @@ public class EnemyPatrolState : EnemyStateWithVision
                     patrolPoints[patrolIndex].transform.position);
             } 
         }
-    }
-
-    /// <summary>
-    /// Calculates vision cone's mesh vertices.
-    /// </summary>
-    private void CastVisionCone()
-    {
-        Quaternion angle = enemy.transform.rotation * startingAngle;
-        Vector3 direction = angle * Vector3.forward;
-        Vector3 currentPos = enemy.transform.position;
-        Vector3 offset = new Vector3(0, 0.5f, 0);
-
-        vertices[0] = Vector3.zero;
-
-        for (var i = 0; i < vertices.Length; i++)
-        {
-            // If it hits something
-            if (Physics.Raycast(currentPos, direction, out RaycastHit hit,
-                coneRange, collisionLayers))
-            {
-                if (i != 0)
-                {
-                    vertices[i] =
-                        enemy.transform.InverseTransformPoint(hit.point);
-                }
-
-            }
-            // Else if it doesn't hit anything
-            else
-            {
-                if (i != 0)
-                {
-                    vertices[i] =
-                        enemy.transform.InverseTransformPoint(
-                            currentPos + direction * coneRange);
-                }
-            }
-            direction = stepAngle * direction;
-
-            if (i < vertices.Length - 2)
-            {
-                triangles[i * 3] = 0;
-                triangles[i * 3 + 1] = i + 1;
-                triangles[i * 3 + 2] = i + 2;
-            }
-        }
-
-        mesh.Clear();
-        mesh.vertices = vertices;
-        mesh.triangles = triangles;
-        mesh.RecalculateNormals();
     }
 }

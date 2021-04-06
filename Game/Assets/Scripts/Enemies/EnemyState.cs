@@ -36,7 +36,7 @@ public abstract class EnemyState: ScriptableObject, IState
     /// </summary>
     public virtual void OnEnter()
     {
-        // Left blank on purpose
+        if (playerTarget == null) playerTarget = enemy.PlayerTarget;
     }
 
     /// <summary>
@@ -51,6 +51,10 @@ public abstract class EnemyState: ScriptableObject, IState
     /// Method that defines what this state does. Runs on fixed update.
     /// </summary>
     /// <returns>Returns an IState.</returns>
-    public abstract IState FixedUpdate();
+    public virtual IState FixedUpdate()
+    {
+        if (playerTarget == null) playerTarget = enemy.PlayerTarget;
+        return null;
+    }
 
 }

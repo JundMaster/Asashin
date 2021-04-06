@@ -37,7 +37,7 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     /// <returns>An IState.</returns>
     public override IState FixedUpdate()
     {
-        if (playerTarget == null) playerTarget = enemy.PlayerTarget;
+        base.FixedUpdate();
 
         // If enemy is in range, it stops looking for player coroutine
         if (PlayerInRange())

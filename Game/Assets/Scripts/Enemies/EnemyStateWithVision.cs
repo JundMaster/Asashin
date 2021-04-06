@@ -8,8 +8,8 @@ public abstract class EnemyStateWithVision : EnemyState
 {
     // Vision
     [Header("Vision Cone Attributes")]
-    [SerializeField] protected float coneRange;
-    [Range(0, 90)] [SerializeField] protected float desiredConeAngle;
+    [SerializeField] protected byte coneRange;
+    [Range(0, 90)] [SerializeField] protected byte desiredConeAngle;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] protected LayerMask collisionLayers;
     protected float lastTimeChecked;
