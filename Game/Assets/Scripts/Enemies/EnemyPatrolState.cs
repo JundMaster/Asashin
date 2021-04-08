@@ -7,11 +7,12 @@
 public class EnemyPatrolState : EnemyStateWithVision
 {
     [Header("Checks if player is in cone range every X seconds")]
-    [SerializeField] private float searchCheckDelay;
-    [SerializeField] private float waitingDelay;
+    [Range(0.01f,2f)][SerializeField] private float searchCheckDelay;
+    [Tooltip("Time to search for the player after reaching final destination")]
+    [Range(0.01f, 10f)] [SerializeField] private float waitingDelay;
 
     [Header("Enemy cone render variables")]
-    [SerializeField] private byte amountOfVertices;
+    [Range(0,255)][SerializeField] private byte amountOfVertices;
     [SerializeField] private Material coneMaterial;
     private VisionCone visionCone;
 

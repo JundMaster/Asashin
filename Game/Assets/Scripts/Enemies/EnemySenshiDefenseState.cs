@@ -10,15 +10,15 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     [SerializeField] private GameObject kunai;
 
     [Header("Kunai spawn delay")]
-    [SerializeField] private float kunaiDelay;
+    [Range(1f, 10f)][SerializeField] private float kunaiDelay;
     private float kunaiLastTimeChecked;
 
-    [Header("Search for player delay")]
-    [SerializeField] private float checkDelay;
-
     [Header("Rotation smooth time")]
-    [SerializeField] private float turnSmooth;
+    [Range(0.1f,1)][SerializeField] private float turnSmooth;
     private float smoothTimeRotation;
+
+    [Header("Distance from player. X => min. distance, Y => max. distance")]
+    [SerializeField] private Vector2 randomDistanceFromPlayer;
 
     // Movement variables
     private float randomDistance;
@@ -28,7 +28,13 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     /// </summary>
     public override void Start()
     {
-        randomDistance = Random.Range(6f, 9f);
+        if (randomDistanceFromPlayer.y < randomDistanceFromPlayer.x)
+            randomDistanceFromPlayer.y = randomDistanceFromPlayer.x;
+        if (randomDistanceFromPlayer.x > randomDistanceFromPlayer.y)
+            randomDistanceFromPlayer.x = randomDistanceFromPlayer.y;
+
+        randomDistance = Random.Range(
+            randomDistanceFromPlayer.x, randomDistanceFromPlayer.y);
     }
 
     /// <summary>

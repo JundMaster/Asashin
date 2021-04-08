@@ -8,9 +8,9 @@ using System.Collections;
 public class EnemyLostPlayerState : EnemyStateWithVision
 {
     [Header("Time the enemy will spend looking for player")]
-    [SerializeField] private float timeToLookForPlayer;
+    [Range(0.1f,15)][SerializeField] private float timeToLookForPlayer;
     [Header("Rotation speed while looking for player")]
-    [Range(1,5)][SerializeField] private float rotationSpeed;
+    [Range(0.1f,1)][SerializeField] private float rotationSpeed;
 
     // State variables
     private bool lookForPlayerCoroutine;
@@ -106,15 +106,17 @@ public class EnemyLostPlayerState : EnemyStateWithVision
         YieldInstruction wfs = new WaitForSeconds(Random.Range(1f, 3f));
         float timePassed = Time.time;
 
-        float yRotationCurrent = Mathf.Abs(enemy.transform.eulerAngles.y);
-        float yRotationMax = yRotationCurrent + 45f;
-        float yRotationMin = Mathf.Clamp(yRotationCurrent - 45f, 0, yRotationMax);
+        float yRotationCurrent = enemy.transform.eulerAngles.y;
+        float yRotationMax = Mathf.Clamp(yRotationCurrent + 45f, 1, 359);
+        float yRotationMin = Mathf.Clamp(yRotationCurrent - 45f, 1, 359);
         float multiplier = 1;
 
         enemy.VisionCone.SetActive(true);
 
         // While the enemy can't see the player or while the time is less than
-        // the time allowed searching for the player
+        // the time allowed searching for the player.
+        // As soon as the enemy leaves this state, is this coroutine is turned
+        // to false.
         while (PlayerInRange() == false && 
             Time.time - timePassed < timeToLookForPlayer &&
             lookForPlayerCoroutine == true)
@@ -122,7 +124,8 @@ public class EnemyLostPlayerState : EnemyStateWithVision
             // Triggers rotation to right
             if (enemy.transform.eulerAngles.y >= yRotationMax)
             {
-                yRotationMax = enemy.transform.eulerAngles.y;
+                yRotationMax = 
+                    Mathf.Clamp(enemy.transform.eulerAngles.y, 1, 359);
                 multiplier *= -1;
                 yield return wfs;
             }
@@ -130,7 +133,8 @@ public class EnemyLostPlayerState : EnemyStateWithVision
             // Triggers rotation to left
             else if (enemy.transform.eulerAngles.y <= yRotationMin)
             {
-                yRotationMin = enemy.transform.eulerAngles.y;
+                yRotationMin =
+                    Mathf.Clamp(enemy.transform.eulerAngles.y, 1, 359);
                 multiplier *= -1;
                 yield return wfs;
             }

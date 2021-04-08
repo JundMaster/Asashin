@@ -7,12 +7,12 @@
 public class EnemyAggressiveState : EnemyState
 {
     [Header("Player check ranges")]
-    [SerializeField] private float checkForPlayerRange;
-    [SerializeField] private float closeToPlayerRange;
+    [Range(1,30)][SerializeField] private float checkForPlayerRange;
+    [Range(0.5f, 2)] [SerializeField] private float closeToPlayerRange;
     [SerializeField] private LayerMask playerLayer;
 
     [Header("Rotation smooth time")]
-    [SerializeField] private float turnSmooth;
+    [Range(0.1f, 1)][SerializeField] private float turnSmooth;
     private float smoothTimeRotation;
 
     private float currentDistanceFromPlayer;

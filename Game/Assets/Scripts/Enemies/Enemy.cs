@@ -48,7 +48,6 @@ public class Enemy : MonoBehaviour, IFindPlayer
     public IState LostPlayerState { get; private set; }
     public IState AggressiveState { get; private set; }
 
-
     private IEnumerable<IState> states;
     private StateMachine stateMachine;
     public StateMachine StateMachineGet => stateMachine;
