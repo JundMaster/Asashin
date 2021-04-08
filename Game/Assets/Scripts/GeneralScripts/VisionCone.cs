@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Struct responsible for creating a vision cone.
+/// Class responsible for creating a vision cone.
 /// </summary>
-public struct VisionCone
+public class VisionCone
 {
     // Cone angles variables
     private readonly Quaternion startingAngle;
@@ -13,7 +13,7 @@ public struct VisionCone
     private readonly Mesh mesh;
     private readonly Vector3[] vertices;
     private readonly int[] triangles;
-    private readonly float coneRange;
+    private readonly byte coneRange;
     private readonly LayerMask collisionLayers;
 
     // Vision cone parent

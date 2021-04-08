@@ -15,11 +15,14 @@ public class EnemyPatrolState : EnemyStateWithVision
     [SerializeField] private Material coneMaterial;
     private VisionCone visionCone;
 
+    [Header("Exclamation mark prefab")]
+    [SerializeField] private GameObject exclamationMarkPrefab;
+    [SerializeField] private Vector3 offset;
+
     // Movement
     private Transform[] patrolPoints;
     private byte patrolIndex;
     private float pathTimer;
-
 
     /// <summary>
     /// Runs once on start.
@@ -33,6 +36,7 @@ public class EnemyPatrolState : EnemyStateWithVision
         visionCone = new VisionCone(
             meshFilter, meshRenderer, coneMaterial, amountOfVertices,
             desiredConeAngle, coneRange, collisionLayers, enemy.transform);
+        enemy.EnemyVisionCone = visionCone;
 
         // Agent destination setup
         patrolPoints = enemy.PatrolPoints;
@@ -82,6 +86,13 @@ public class EnemyPatrolState : EnemyStateWithVision
         base.OnExit();
         agent.isStopped = true;
         enemy.VisionCone.SetActive(false);
+
+        // Instantiates an exclamation mark
+        GameObject exclMark = Instantiate(
+            exclamationMarkPrefab, 
+            enemy.transform.position + offset, 
+            Quaternion.identity);
+        exclMark.transform.parent = enemy.transform;
     }
 
     /// <summary>

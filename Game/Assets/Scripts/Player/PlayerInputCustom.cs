@@ -186,7 +186,7 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     /// <param name="context"></param>
     public void HandleTargetChangeRight(InputAction.CallbackContext context)
     {
-        if (context.started) OnTargetChange(LeftOrRight.Right);
+        if (context.started) OnTargetChange(Direction.Right);
     }
 
     /// <summary>
@@ -195,15 +195,15 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     /// <param name="context"></param>
     public void HandleTargetChangeLeft(InputAction.CallbackContext context)
     {
-        if (context.started) OnTargetChange(LeftOrRight.Left);
+        if (context.started) OnTargetChange(Direction.Left);
     }
 
-    protected virtual void OnTargetChange(LeftOrRight dir) => TargetChange?.Invoke(dir);
+    protected virtual void OnTargetChange(Direction dir) => TargetChange?.Invoke(dir);
 
     /// <summary>
     /// Registered on CinemachineTarget.
     /// </summary>
-    public event Action<LeftOrRight> TargetChange;
+    public event Action<Direction> TargetChange;
 
     /// <summary>
     /// Handles item use.
@@ -227,7 +227,7 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     /// <param name="context"></param>
     public void HandleItemChangeLeft(InputAction.CallbackContext context)
     {
-        if (context.started) OnItemChange(LeftOrRight.Left);
+        if (context.started) OnItemChange(Direction.Left);
     }
 
     /// <summary>
@@ -236,15 +236,15 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     /// <param name="context"></param>
     public void HandleItemChangeRight(InputAction.CallbackContext context)
     {
-        if (context.started) OnItemChange(LeftOrRight.Right);
+        if (context.started) OnItemChange(Direction.Right);
     }
 
-    protected virtual void OnItemChange(LeftOrRight dir) => ItemChange?.Invoke(dir);
+    protected virtual void OnItemChange(Direction dir) => ItemChange?.Invoke(dir);
 
     /// <summary>
     /// Registered on Item Control.
     /// </summary>
-    public event Action<LeftOrRight> ItemChange;
+    public event Action<Direction> ItemChange;
 
     /// <summary>
     /// Handles pause game.
@@ -276,16 +276,16 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     /// <param name="context"></param>
     public void HandleBlock(InputAction.CallbackContext context)
     {
-        if (context.started) OnBlock(YesOrNo.Yes);
-        if (context.canceled) OnBlock(YesOrNo.No);
+        if (context.started) OnBlock(true);
+        if (context.canceled) OnBlock(false);
     }
 
-    protected virtual void OnBlock(YesOrNo condition) => Block?.Invoke(condition);
+    protected virtual void OnBlock(bool condition) => Block?.Invoke(condition);
 
     /// <summary>
     /// Event registered on PauseSystem.
     /// </summary>
-    public event Action<YesOrNo> Block;
+    public event Action<bool> Block;
 
 
     /// <summary>
@@ -311,11 +311,16 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     /// <param name="context"></param>
     public void HandleSprint(InputAction.CallbackContext context)
     {
-        if (context.started) OnSprint(YesOrNo.Yes);
-        if (context.canceled) OnSprint(YesOrNo.No);
+        if (context.started) OnSprint(true);
+        if (context.canceled) OnSprint(false);
     }
 
-    protected virtual void OnSprint(YesOrNo condition) => Sprint?.Invoke(condition);
+    protected virtual void OnSprint(bool condition) => Sprint?.Invoke(condition);
+
+    /// <summary>
+    /// Event registered on PauseSystem.
+    /// </summary>
+    public event Action<bool> Sprint;
 
     public void FindPlayer()
     {
@@ -341,9 +346,4 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
         deathBehaviour.PlayerDied -= () =>
             controls.SwitchCurrentActionMap("Death");
     }
-
-    /// <summary>
-    /// Event registered on PauseSystem.
-    /// </summary>
-    public event Action<YesOrNo> Sprint;
 }

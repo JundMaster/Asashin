@@ -55,6 +55,7 @@ public class Enemy : MonoBehaviour, IFindPlayer
 
     // Components
     public NavMeshAgent Agent { get; private set; }
+    public VisionCone EnemyVisionCone { get; set; }
 
     private void Awake()
     {

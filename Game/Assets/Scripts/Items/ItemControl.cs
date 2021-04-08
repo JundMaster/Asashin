@@ -57,10 +57,10 @@ public class ItemControl : MonoBehaviour
     /// Switches to the next item or to the item before.
     /// </summary>
     /// <param name="direction">Right or left item.</param>
-    private void HandleItemSwitch(LeftOrRight direction)
+    private void HandleItemSwitch(Direction direction)
     {
         // Switches current activated item to the next one
-        if (direction == LeftOrRight.Right)
+        if (direction == Direction.Right)
         {
             if (index < allItemsInventory.Count - 1)
             {

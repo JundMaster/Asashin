@@ -225,7 +225,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// <summary>
     /// Switches to target on the left or right.
     /// </summary>
-    public void SwitchTarget(LeftOrRight leftOrRight)
+    public void SwitchTarget(Direction leftOrRight)
     {
         Vector3 definitiveTarget = default;
         float shortestDistance = Mathf.Infinity;
@@ -240,7 +240,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             float distanceFromTarget =
                 Vector3.Distance(currentTarget.transform.position, allEnemies[i].transform.position);
 
-            if (leftOrRight == LeftOrRight.Left)
+            if (leftOrRight == Direction.Left)
             {
                 if (directionAngle < 0 && distanceFromTarget < shortestDistance)
                 {
@@ -256,7 +256,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                     }
                 }
             }
-            else if (leftOrRight == LeftOrRight.Right)
+            else if (leftOrRight == Direction.Right)
             {
                 if (directionAngle > 0 && distanceFromTarget < shortestDistance)
                 {
@@ -509,12 +509,10 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         if (player != null)
         {
             thirdPersonCamera.Follow = player.transform;
-            Transform playerSpineTransform =
-                GameObject.FindGameObjectWithTag("playerSpine").transform;
-            thirdPersonCamera.LookAt = playerSpineTransform;
-            targetCamera.Follow = playerSpineTransform;
-            pauseMenuCamera.Follow = playerSpineTransform;
-            pauseMenuCamera.LookAt = playerSpineTransform;
+            thirdPersonCamera.LookAt = player.transform;
+            targetCamera.Follow = player.transform;
+            pauseMenuCamera.Follow = player.transform;
+            pauseMenuCamera.LookAt = player.transform;
         }
     }
 

@@ -153,9 +153,9 @@ public class PlayerMovement : MonoBehaviour, IAction
         }
     }
 
-    private void HandleSprint (YesOrNo condition)
+    private void HandleSprint (bool condition)
     {
-        if (condition == YesOrNo.Yes) Sprinting = true;
+        if (condition == true) Sprinting = true;
         else Sprinting = false;
     }
 

@@ -12,8 +12,18 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     [Header("Rotation speed while looking for player")]
     [Range(1,5)][SerializeField] private float rotationSpeed;
 
+    // State variables
     private bool lookForPlayerCoroutine;
     private bool breakState;
+
+    // Components
+    private VisionCone visionCone;
+
+    public override void Start()
+    {
+        base.Start();
+        visionCone = enemy.EnemyVisionCone;
+    }
 
     /// <summary>
     /// Happens once when this state is enabled.
@@ -72,6 +82,7 @@ public class EnemyLostPlayerState : EnemyStateWithVision
         // Cancels rotation coroutine
         lookForPlayerCoroutine = false;
         agent.isStopped = false;
+        enemy.VisionCone.SetActive(false);
     }
 
 
@@ -100,6 +111,8 @@ public class EnemyLostPlayerState : EnemyStateWithVision
         float yRotationMin = Mathf.Clamp(yRotationCurrent - 45f, 0, yRotationMax);
         float multiplier = 1;
 
+        enemy.VisionCone.SetActive(true);
+
         // While the enemy can't see the player or while the time is less than
         // the time allowed searching for the player
         while (PlayerInRange() == false && 
@@ -125,6 +138,8 @@ public class EnemyLostPlayerState : EnemyStateWithVision
             // Rotates
             enemy.transform.eulerAngles += 
                 new Vector3(0, rotationSpeed * multiplier, 0);
+
+            visionCone.Calculate();
 
             yield return wffu;
         }

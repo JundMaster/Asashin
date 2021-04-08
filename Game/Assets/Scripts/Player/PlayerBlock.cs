@@ -45,9 +45,9 @@ public class PlayerBlock : MonoBehaviour, IAction
     /// </summary>
     /// <param name="condition">Parameter to check if the player
     /// pressed block or released block.</param>
-    private void Block(YesOrNo condition)
+    private void Block(bool condition)
     {
-        if (condition == YesOrNo.Yes)
+        if (condition == true)
         {
             if (attack.Performing == false && jump.Performing == false &&
                 roll.Performing == false && useItem.Performing == false)
