@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(SpawnItemBehaviour))]
 /// <summary>
@@ -27,12 +28,20 @@ public class TreasureBox : MonoBehaviour, IFindPlayer, IInterectable
     public void Execute()
     {
         anim.SetTrigger("OpenBox");
-        // Removes current interaction item from player
-        playerInteract.InterectableObject = null;
+        
         // Disables treasure collider
         sphereCollider.enabled = false;
 
         spawnItemsBehaviour.ExecuteBehaviour();
+
+        StartCoroutine(AfterExecute());
+    }
+
+    private IEnumerator AfterExecute()
+    {
+        yield return new WaitForFixedUpdate();
+        // Removes current interaction item from player
+        playerInteract.InterectableObject = null;
     }
 
     /// <summary>
