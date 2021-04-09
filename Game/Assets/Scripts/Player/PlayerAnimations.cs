@@ -13,7 +13,6 @@ public class PlayerAnimations : MonoBehaviour
     private PlayerJump jump;
     private PlayerRoll roll;
     private PlayerMeleeAttack attack;
-    private PauseSystem pauseSystem;
     private PlayerBlock block;
     private PlayerDeathBehaviour death;
 
@@ -24,7 +23,6 @@ public class PlayerAnimations : MonoBehaviour
         jump = GetComponent<PlayerJump>();
         roll = GetComponent<PlayerRoll>();
         attack = GetComponent<PlayerMeleeAttack>();
-        pauseSystem = FindObjectOfType<PauseSystem>();
         block = GetComponent<PlayerBlock>();
         death = GetComponent<PlayerDeathBehaviour>();
     }
@@ -33,7 +31,6 @@ public class PlayerAnimations : MonoBehaviour
     {
         roll.Roll += TriggerRollAnimation;
         attack.LightMeleeAttack += TriggerLightMeleeAttack;
-        attack.StrongMeleeAttack += TriggerStrongMeleeAttack;
         attack.AirAttack += TriggerAirAttack;
         death.PlayerDied += TriggerDeath;
     }
@@ -42,7 +39,6 @@ public class PlayerAnimations : MonoBehaviour
     {
         roll.Roll -= TriggerRollAnimation;
         attack.LightMeleeAttack -= TriggerLightMeleeAttack;
-        attack.StrongMeleeAttack -= TriggerStrongMeleeAttack;
         attack.AirAttack -= TriggerAirAttack;
         death.PlayerDied -= TriggerDeath;
     }
@@ -95,13 +91,6 @@ public class PlayerAnimations : MonoBehaviour
     private void TriggerLightMeleeAttack()
     {
         anim.SetTrigger("MeleeLightAttack");
-        anim.ResetTrigger("MeleeStrongAttack");
-    }
-
-    private void TriggerStrongMeleeAttack()
-    {
-        anim.SetTrigger("MeleeStrongAttack");
-        anim.ResetTrigger("MeleeLightAttack");
     }
 
     /// <summary>

@@ -53,17 +53,13 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private void OnEnable()
     {
         input.MeleeLightAttack += MeleeLightAttack;
-        input.MeleeStrongAttack += MeleeStrongAttack;
         input.MeleeLightAttack += MeleeAirAttack;
-        input.MeleeStrongAttack += MeleeAirAttack;
     }
 
     private void OnDisable()
     {
         input.MeleeLightAttack -= MeleeLightAttack;
-        input.MeleeStrongAttack -= MeleeStrongAttack;
         input.MeleeLightAttack -= MeleeAirAttack;
-        input.MeleeStrongAttack -= MeleeAirAttack;
     }
 
     public void ComponentUpdate()
@@ -113,28 +109,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     }
 
     /// <summary>
-    /// Handles strong attack.
-    /// </summary>
-    private void MeleeStrongAttack()
-    {
-        if (roll.Performing == false && useItem.Performing == false &&
-            block.Performing == false)
-        {
-            if (target.Targeting)
-            {
-                transform.LookAt(target.CurrentTarget);
-                transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
-            }
-
-            Performing = true;
-
-            anim.applyRootMotion = true;
-
-            OnStrongMeleeAttack();
-        }
-    }
-
-    /// <summary>
     /// Turns trail to false. Runs on animation event.
     /// </summary>
     private void TurnTrailToTrue()
@@ -160,12 +134,9 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     {
         // If next animation is not an attack it removes root motion
         if (anim.GetNextAnimatorStateInfo(0).IsName("BotLightMelee2") == false &&
-            anim.GetNextAnimatorStateInfo(0).IsName("BotLightMelee3") == false &&
-            anim.GetNextAnimatorStateInfo(0).IsName("BotStrongMelee1") == false &&
-            anim.GetNextAnimatorStateInfo(0).IsName("BotStrongMelee2") == false)
+            anim.GetNextAnimatorStateInfo(0).IsName("BotLightMelee3") == false)
         {
             anim.ResetTrigger("MeleeLightAttack");
-            anim.ResetTrigger("MeleeStrongAttack");
 
             Performing = false;
 
@@ -208,37 +179,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// <summary>
     /// Checks attack collision through animation event.
     /// </summary>
-    public void CheckStrongAttackCollision()
-    {
-        Collider[] swordCol =
-            Physics.OverlapSphere(
-                sword.transform.position + sword.center, sword.radius * 1.5f, hittableLayers);
-
-        if (swordCol.Length > 0)
-        {
-            for (int i = 0; i < swordCol.Length; i++)
-            {
-                if (swordCol[i].transform.parent != null)
-                {
-                    if (swordCol[i].transform.parent.gameObject.TryGetComponent(out IDamageable enemy))
-                    {
-                        enemy?.TakeDamage(stats.LightDamage);
-                        break;
-                    }
-                }
-                else if (swordCol[0].TryGetComponent(out IBreakable breakable))
-                {
-                    breakable?.Execute();
-                    break;
-                }
-            }
-            Instantiate(swordHitPrefab, sword.transform.position + sword.center, Quaternion.identity);
-        }
-    }
-
-    /// <summary>
-    /// Checks attack collision through animation event.
-    /// </summary>
     public void CheckAirAttackCollision()
     {
         Collider[] swordCol =
@@ -270,8 +210,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     protected virtual void OnLightMeleeAttack() => LightMeleeAttack?.Invoke();
 
-    protected virtual void OnStrongMeleeAttack() => StrongMeleeAttack?.Invoke();
-
     protected virtual void OnAirAttack() => AirAttack?.Invoke();
 
     /// <summary>
@@ -279,12 +217,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// Event registered on PlayerMovement.
     /// </summary>
     public event Action LightMeleeAttack;
-
-    /// <summary>
-    /// Event registered on PlayerAnimations.
-    /// Event registered on PlayerMovement.
-    /// </summary>
-    public event Action StrongMeleeAttack;
 
     /// <summary>
     /// Event registered on PlayerAnimations.
