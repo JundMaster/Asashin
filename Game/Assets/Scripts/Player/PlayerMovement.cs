@@ -153,8 +153,15 @@ public class PlayerMovement : MonoBehaviour, IAction
 
     private void HandleSprint (bool condition)
     {
-        if (condition == true) Sprinting = true;
-        else Sprinting = false;
+        if (condition == true)
+        {
+            Walking = false;
+            Sprinting = true;
+        }
+        else
+        {
+            Sprinting = false;
+        }
     }
 
     /// <summary>
