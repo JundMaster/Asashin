@@ -151,28 +151,33 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     {
         Collider[] swordCol = 
             Physics.OverlapSphere(
-                sword.transform.position + sword.center, sword.radius, hittableLayers);
+                sword.transform.position + sword.center, 
+                sword.radius, 
+                hittableLayers);
 
+        // Checks if this object or parent has a damageable body
+        GameObject body = null;
         if (swordCol.Length > 0)
+            body = GetDamageableBody(swordCol[0].gameObject);
+
+        // If this object can receive damage
+        if (body != null)
         {
-            for (int i = 0; i < swordCol.Length; i++)
+            if (body.TryGetComponent(out IDamageable damageableBody) &&
+                body.TryGetComponent(out Enemy en))
             {
-                if (swordCol[i].transform.parent != null)
-                {
-                    if (swordCol[i].transform.parent.gameObject.TryGetComponent(out IDamageable enemy))
-                    {
-                        enemy?.TakeDamage(stats.LightDamage);
-                        break;
-                    }
-                }
-                else if (swordCol[0].TryGetComponent(out IBreakable breakable))
-                {
-                    breakable?.Execute();
-                    break;
-                }
+                damageableBody?.TakeDamage(stats.LightDamage);
+                Debug.Log(body.gameObject.name);
+            }
+            else if (swordCol[0].TryGetComponent(out IBreakable breakable))
+            {
+                breakable?.Execute();
             }
 
-            Instantiate(swordHitPrefab, swordCol[0].ClosestPoint(sword.transform.position), Quaternion.identity);
+            Instantiate(
+                swordHitPrefab, 
+                sword.transform.position + sword.center, 
+                Quaternion.identity);
         }
     }
 
@@ -183,29 +188,52 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     {
         Collider[] swordCol =
             Physics.OverlapSphere(
-                sword.transform.position + sword.center, sword.radius * 2.5f, hittableLayers);
+                sword.transform.position + sword.center, 
+                sword.radius * 2.5f, 
+                hittableLayers);
 
+        // Checks if this object or parent has a damageable body
+        GameObject body = null;
         if (swordCol.Length > 0)
-        {
-            for (int i = 0; i < swordCol.Length; i++)
-            {
-                if (swordCol[i].transform.parent != null)
-                {
-                    if (swordCol[i].transform.parent.gameObject.TryGetComponent(out IDamageable enemy))
-                    {
-                        enemy?.TakeDamage(stats.LightDamage);
-                        break;
-                    }
-                }
-                else if (swordCol[0].TryGetComponent(out IBreakable breakable))
-                {
-                    breakable?.Execute();
-                    break;
-                }
+            body = GetDamageableBody(swordCol[0].gameObject);
 
-                Instantiate(swordHitPrefab, sword.transform.position + sword.center, Quaternion.identity);
+        // If this object can receive damage
+        if (body != null)
+        {
+            if (body.TryGetComponent(out IDamageable damageableBody) &&
+                body.TryGetComponent(out Enemy en))
+            {
+                damageableBody?.TakeDamage(stats.LightDamage);
+                Debug.Log(body.gameObject.name);
             }
+            else if (swordCol[0].TryGetComponent(out IBreakable breakable))
+            {
+                breakable?.Execute();
+            }
+
+            Instantiate(
+                swordHitPrefab, 
+                sword.transform.position + sword.center, 
+                Quaternion.identity);
         }
+    }
+
+    /// <summary>
+    /// Checks if this object has a damgeable body, if it doesn't it will check
+    /// its parent until parent is null.
+    /// </summary>
+    /// <param name="col">Gameobject to check.</param>
+    /// <returns>Returns a gameobject with IDamageable interface.</returns>
+    private GameObject GetDamageableBody(GameObject col)
+    {
+        col.TryGetComponent(out IDamageable damageableBody);
+        if (damageableBody != null) return col.gameObject;
+
+        else if (col.gameObject.transform.parent != null)
+        {
+            GetDamageableBody(col.transform.parent.gameObject);
+        }
+        return null;
     }
 
     protected virtual void OnLightMeleeAttack() => LightMeleeAttack?.Invoke();

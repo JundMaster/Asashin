@@ -111,7 +111,7 @@ public class Kunai : ItemBehaviour, IFindPlayer
 
     /// <summary>
     /// Checks if this object has a damgeable body, if it doesn't it will check
-    /// its parent until there is not parent.
+    /// its parent until parent is null.
     /// </summary>
     /// <param name="col">Gameobject to check.</param>
     /// <returns>Returns a gameobject with IDamageable interface.</returns>

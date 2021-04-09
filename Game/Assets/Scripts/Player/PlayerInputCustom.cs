@@ -149,22 +149,6 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     public event Action MeleeLightAttack;
 
     /// <summary>
-    /// Handles MeleeStrongAttack.
-    /// </summary>
-    /// <param name="context"></param>
-    public void HandleMeleeStrongAttack(InputAction.CallbackContext context)
-    {
-        if (context.started) OnMeleeStrongAttack();
-    }
-
-    protected virtual void OnMeleeStrongAttack() => MeleeStrongAttack?.Invoke();
-
-    /// <summary>
-    /// Registered on Player Attack.
-    /// </summary>
-    public event Action MeleeStrongAttack;
-
-    /// <summary>
     /// Handles targeting.
     /// </summary>
     /// <param name="context"></param>

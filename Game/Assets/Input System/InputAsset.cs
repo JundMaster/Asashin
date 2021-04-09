@@ -59,14 +59,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""MeleeStrongAttack"",
-                    ""type"": ""Button"",
-                    ""id"": ""82997286-c894-4325-85df-2f65c9eb2e2e"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""Target"",
                     ""type"": ""Button"",
                     ""id"": ""74ee5ea7-3319-4eb6-853d-56147609d105"",
@@ -299,28 +291,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MeleeLightAttack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b68f94b1-5091-4118-853d-7580a4c7f611"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MeleeStrongAttack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4bf42146-e3c5-4815-a6da-ad91707abc22"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MeleeStrongAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -819,7 +789,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Roll = m_Gameplay.FindAction("Roll", throwIfNotFound: true);
         m_Gameplay_MeleeLightAttack = m_Gameplay.FindAction("MeleeLightAttack", throwIfNotFound: true);
-        m_Gameplay_MeleeStrongAttack = m_Gameplay.FindAction("MeleeStrongAttack", throwIfNotFound: true);
         m_Gameplay_Target = m_Gameplay.FindAction("Target", throwIfNotFound: true);
         m_Gameplay_ChangeTargetLeft = m_Gameplay.FindAction("ChangeTargetLeft", throwIfNotFound: true);
         m_Gameplay_ChangeTargetRight = m_Gameplay.FindAction("ChangeTargetRight", throwIfNotFound: true);
@@ -893,7 +862,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Roll;
     private readonly InputAction m_Gameplay_MeleeLightAttack;
-    private readonly InputAction m_Gameplay_MeleeStrongAttack;
     private readonly InputAction m_Gameplay_Target;
     private readonly InputAction m_Gameplay_ChangeTargetLeft;
     private readonly InputAction m_Gameplay_ChangeTargetRight;
@@ -913,7 +881,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Roll => m_Wrapper.m_Gameplay_Roll;
         public InputAction @MeleeLightAttack => m_Wrapper.m_Gameplay_MeleeLightAttack;
-        public InputAction @MeleeStrongAttack => m_Wrapper.m_Gameplay_MeleeStrongAttack;
         public InputAction @Target => m_Wrapper.m_Gameplay_Target;
         public InputAction @ChangeTargetLeft => m_Wrapper.m_Gameplay_ChangeTargetLeft;
         public InputAction @ChangeTargetRight => m_Wrapper.m_Gameplay_ChangeTargetRight;
@@ -948,9 +915,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @MeleeLightAttack.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeLightAttack;
                 @MeleeLightAttack.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeLightAttack;
                 @MeleeLightAttack.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeLightAttack;
-                @MeleeStrongAttack.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeStrongAttack;
-                @MeleeStrongAttack.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeStrongAttack;
-                @MeleeStrongAttack.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMeleeStrongAttack;
                 @Target.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTarget;
                 @Target.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTarget;
                 @Target.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTarget;
@@ -1000,9 +964,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @MeleeLightAttack.started += instance.OnMeleeLightAttack;
                 @MeleeLightAttack.performed += instance.OnMeleeLightAttack;
                 @MeleeLightAttack.canceled += instance.OnMeleeLightAttack;
-                @MeleeStrongAttack.started += instance.OnMeleeStrongAttack;
-                @MeleeStrongAttack.performed += instance.OnMeleeStrongAttack;
-                @MeleeStrongAttack.canceled += instance.OnMeleeStrongAttack;
                 @Target.started += instance.OnTarget;
                 @Target.performed += instance.OnTarget;
                 @Target.canceled += instance.OnTarget;
@@ -1134,7 +1095,6 @@ public class @InputAsset : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
         void OnMeleeLightAttack(InputAction.CallbackContext context);
-        void OnMeleeStrongAttack(InputAction.CallbackContext context);
         void OnTarget(InputAction.CallbackContext context);
         void OnChangeTargetLeft(InputAction.CallbackContext context);
         void OnChangeTargetRight(InputAction.CallbackContext context);
