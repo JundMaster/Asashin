@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Animations.Rigging;
 
 /// <summary>
 /// Class responsible for constraining the player's head.
@@ -28,7 +27,8 @@ public class PlayerRigHeadConstrainPosition : MonoBehaviour
         else
         {
             currentTarget.position = cameraTarget.position;
-            cameraTarget.position = mainCam.transform.forward * 50;
+            cameraTarget.position = 
+                mainCam.transform.position + mainCam.transform.forward * 50;
         }
     }
 }
