@@ -4,7 +4,6 @@ public class SmokeGrenade : ItemBehaviour
 {
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private GameObject smokePrefab;
-    [SerializeField] private float secondsToBlindEnemies;
     [SerializeField] private float smokeRange;
 
     public override void Execute()
@@ -25,9 +24,8 @@ public class SmokeGrenade : ItemBehaviour
             // Only applies if it's an an enemy
             if (col.gameObject.TryGetComponent(out Enemy en))
             {
-                // Blinds enemies for x seconds
-
-
+                // Blinds enemies
+                en.BlindEnemy();
             }
         }
 

@@ -11,6 +11,22 @@ public class StateMachine
     private IState currentState;
 
     /// <summary>
+    /// Getter for currentState.
+    /// Triggers current state OnExit, changes current state, triggers
+    /// current state OnEnter.
+    /// </summary>
+    public IState CurrentState
+    {
+        private get => currentState;
+        set
+        {
+            currentState.OnExit();
+            currentState = value;
+            currentState.OnEnter();
+        }
+    }
+
+    /// <summary>
     /// Constructor for StateMachine.
     /// </summary>
     /// <param name="states">States to intialize.</param>
@@ -24,8 +40,8 @@ public class StateMachine
         // Initializes and starts all states
         foreach (IState state in states)
         {
-            state.Initialize(obj);
-            state.Start();
+            state?.Initialize(obj);
+            state?.Start();
         }
     }
 
@@ -53,8 +69,6 @@ public class StateMachine
     /// <param name="nextState">IState to switch to.</param>
     private void SwitchToNewState(IState nextState)
     {
-        currentState.OnExit();
-        currentState = nextState;
-        currentState.OnEnter();
+        CurrentState = nextState;
     }
 }

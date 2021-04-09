@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 /// <summary>
 /// Class responsible for handling enemy script.
@@ -41,16 +42,17 @@ public class Enemy : MonoBehaviour, IFindPlayer
     [SerializeField] private EnemyState defenseStateOriginal;
     [SerializeField] private EnemyState lostPlayerStateOriginal;
     [SerializeField] private EnemyState aggressiveStateOriginal;
+    [SerializeField] private EnemyState temporaryBlindnessOriginal;
 
     // State getters
     public IState PatrolState { get; private set; }
     public IState DefenseState { get; private set; }
     public IState LostPlayerState { get; private set; }
     public IState AggressiveState { get; private set; }
+    public IState TemporaryBlindnessState { get; private set; }
 
     private IEnumerable<IState> states;
     private StateMachine stateMachine;
-    public StateMachine StateMachineGet => stateMachine;
 
     // Components
     public NavMeshAgent Agent { get; private set; }
@@ -75,12 +77,16 @@ public class Enemy : MonoBehaviour, IFindPlayer
         if (aggressiveStateOriginal != null)
             AggressiveState = Instantiate(aggressiveStateOriginal);
 
+        if (temporaryBlindnessOriginal != null)
+            TemporaryBlindnessState = Instantiate(temporaryBlindnessOriginal);
+
         states = new List<IState>
         {
             PatrolState,
             DefenseState,
             LostPlayerState,
             AggressiveState,
+            TemporaryBlindnessState,
         };
 
         stateMachine = new StateMachine(states, this);
@@ -88,7 +94,7 @@ public class Enemy : MonoBehaviour, IFindPlayer
 
     private void FixedUpdate()
     {
-        stateMachine.FixedUpdate();
+        stateMachine?.FixedUpdate();
     }
 
     /// <summary>
@@ -111,4 +117,9 @@ public class Enemy : MonoBehaviour, IFindPlayer
         PlayerTarget = null;
         PlayerCurrentlyFighting = false;
     }
+
+    /// <summary>
+    /// Method that changes current state to TemporaryBlindnessState.
+    /// </summary>
+    public void BlindEnemy() => stateMachine.CurrentState = TemporaryBlindnessState;
 }

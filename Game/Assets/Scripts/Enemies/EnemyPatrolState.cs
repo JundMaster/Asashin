@@ -64,7 +64,7 @@ public class EnemyPatrolState : EnemyStateWithVision
     {
         base.FixedUpdate();
 
-        visionCone.Calculate();
+        visionCone?.Calculate();
         Movement();
 
         // Search for player every searchCheckDelay seconds inside a vision cone
@@ -73,7 +73,8 @@ public class EnemyPatrolState : EnemyStateWithVision
             // If it found the player, triggers defense state
             if (PlayerInRange())
             {
-                return enemy.DefenseState;
+                if (enemy.DefenseState != null) return enemy.DefenseState;
+                return enemy.AggressiveState;
             }
         }
         return enemy.PatrolState;
