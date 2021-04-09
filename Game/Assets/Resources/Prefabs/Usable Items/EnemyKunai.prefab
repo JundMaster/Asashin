@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 902033329439678696}
   - component: {fileID: 7717529404047678966}
   - component: {fileID: 8157942154732289833}
-  m_Layer: 15
+  m_Layer: 0
   m_Name: Strap_LowPoly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 3330601449490326288}
   - component: {fileID: 6161529812006692202}
   - component: {fileID: 1155544975271738058}
-  m_Layer: 15
+  m_Layer: 0
   m_Name: Kunai_LowPoly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 5395256005923483459}
   - component: {fileID: 8522175340256914823}
   - component: {fileID: 8522175340256914820}
-  m_Layer: 15
+  m_Layer: 22
   m_Name: EnemyKunai
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,9 +231,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78726ee6289910c49ad8776dc3ad16cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerLayer:
+  hitAll:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 8388608
+  ignoreEnemies:
+    serializedVersion: 2
+    m_Bits: 4194304
 --- !u!54 &8522175340256914823
 Rigidbody:
   m_ObjectHideFlags: 0

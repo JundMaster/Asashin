@@ -2,8 +2,9 @@
 
 /// <summary>
 /// Handles Kenshusei death behaviour.
-/// </summary>
-public class KenshuseiDeathBehaviour : DeathBehaviour
+/// </summary
+[RequireComponent(typeof(SpawnItemBehaviour))]
+public class EnemyCommonDeathBehaviour : DeathBehaviour
 {
     // Components
     private CinemachineTarget cinemachineTarget;

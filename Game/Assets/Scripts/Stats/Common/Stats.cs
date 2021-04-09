@@ -4,6 +4,7 @@ using System;
 /// <summary>
 /// Class responsible for common stats.
 /// </summary>
+[RequireComponent(typeof(DeathBehaviour))]
 public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
 {
     // Stats

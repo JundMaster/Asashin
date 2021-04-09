@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using System;
 
 /// <summary>
 /// Class responsible for handling enemy script.
 /// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(EnemyStats))]
-[RequireComponent(typeof(DeathBehaviour))]
+[RequireComponent(typeof(EnemyCommonDeathBehaviour))]
+[RequireComponent(typeof(SpawnItemBehaviour))]
+[RequireComponent(typeof(CapsuleCollider))]
 public class Enemy : MonoBehaviour, IFindPlayer
 {
     [Header("Enemy Target")]
@@ -121,5 +122,6 @@ public class Enemy : MonoBehaviour, IFindPlayer
     /// <summary>
     /// Method that changes current state to TemporaryBlindnessState.
     /// </summary>
-    public void BlindEnemy() => stateMachine.CurrentState = TemporaryBlindnessState;
+    public void BlindEnemy() => 
+        stateMachine.CurrentState = TemporaryBlindnessState;
 }
