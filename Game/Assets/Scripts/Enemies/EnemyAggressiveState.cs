@@ -8,12 +8,10 @@ public class EnemyAggressiveState : EnemyState
 {
     [Header("Player check ranges")]
     [Range(1,30)][SerializeField] private float checkForPlayerRange;
-    [Range(0.5f, 2)] [SerializeField] private float closeToPlayerRange;
+    [Range(1f, 3)][SerializeField] private float closeToPlayerRange;
+    [Tooltip("Distance to stay from player while atacking")]
+    [Range(1f, 1.5f)][SerializeField] private float distanceFromPlayer;
     [SerializeField] private LayerMask playerLayer;
-
-    [Header("Rotation smooth time")]
-    [Range(0.1f, 1)][SerializeField] private float turnSmooth;
-    private float smoothTimeRotation;
 
     private float currentDistanceFromPlayer;
 
@@ -23,7 +21,9 @@ public class EnemyAggressiveState : EnemyState
 
         agent.isStopped = false;
         if (playerTarget != null ) 
-            agent.SetDestination(playerTarget.transform.position);
+            agent.SetDestination(playerTarget.position);
+
+        enemy.PlayerCurrentlyFighting = true;
     }
 
     public override IState FixedUpdate()
@@ -83,27 +83,18 @@ public class EnemyAggressiveState : EnemyState
     /// Returns false if it's still moving towards the player.</returns>
     private bool IsCloseToPlayer(float distance)
     {
-        bool nearPlayer;
-
         // If the enemy is not close to the player
-        if (distance >= closeToPlayerRange)
+        if (distance > closeToPlayerRange)
         {
-            enemy.PlayerCurrentlyFighting = true;
-            agent.isStopped = false;
+            Vector3 dir = (myTarget.position - playerTarget.position).normalized;
 
-            agent.SetDestination(playerTarget.position);
+            agent.SetDestination(
+                playerTarget.position + dir * distanceFromPlayer);
 
-            nearPlayer = false;
+            return false;
         }
         // Else if the enemy is close to the player
-        else
-        {
-            agent.SetDestination(myTarget.position);
-            agent.isStopped = true;
-            nearPlayer = true;
-        }
-
-        return nearPlayer;
+        return true;
     }
 
     /// <summary>
@@ -113,11 +104,6 @@ public class EnemyAggressiveState : EnemyState
     {
         Vector3 dir = playerTarget.transform.position - myTarget.position;
         float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-        float angle = Mathf.SmoothDampAngle(
-                enemy.transform.eulerAngles.y,
-                targetAngle,
-                ref smoothTimeRotation,
-                turnSmooth);
-        enemy.transform.rotation = Quaternion.Euler(0f, angle, 0f);
+        enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
     }
 }

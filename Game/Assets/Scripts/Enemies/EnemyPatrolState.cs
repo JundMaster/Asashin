@@ -115,6 +115,11 @@ public class EnemyPatrolState : EnemyStateWithVision
                 agent.SetDestination(
                     patrolPoints[patrolIndex].transform.position);
             } 
+            else
+            {
+                agent.SetDestination(
+                    myTarget.position);
+            }
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 /// <summary>
@@ -20,6 +18,7 @@ public class EnemyAnimations : MonoBehaviour
 
     private void Update()
     {
-        anim.SetFloat("Speed", agent.remainingDistance);
+        if (agent.enabled) anim.SetFloat("Speed", agent.velocity.magnitude);
+        else anim.SetFloat("Speed", 0);
     }
 }

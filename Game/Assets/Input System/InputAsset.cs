@@ -462,7 +462,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""4ba93bed-25ff-40f1-b53a-738ee03cf7b2"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

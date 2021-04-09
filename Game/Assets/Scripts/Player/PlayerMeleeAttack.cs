@@ -167,9 +167,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
                 body.TryGetComponent(out Enemy en))
             {
                 damageableBody?.TakeDamage(stats.LightDamage);
-                Debug.Log(body.gameObject.name);
             }
-            else if (swordCol[0].TryGetComponent(out IBreakable breakable))
+            else if (body.TryGetComponent(out IBreakable breakable))
             {
                 breakable?.Execute();
             }
@@ -206,7 +205,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
                 damageableBody?.TakeDamage(stats.LightDamage);
                 Debug.Log(body.gameObject.name);
             }
-            else if (swordCol[0].TryGetComponent(out IBreakable breakable))
+            else if (body.TryGetComponent(out IBreakable breakable))
             {
                 breakable?.Execute();
             }
@@ -227,7 +226,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private GameObject GetDamageableBody(GameObject col)
     {
         col.TryGetComponent(out IDamageable damageableBody);
-        if (damageableBody != null) return col.gameObject;
+        col.TryGetComponent(out IBreakable breakable);
+        if (damageableBody != null || breakable != null) return col.gameObject;
 
         else if (col.gameObject.transform.parent != null)
         {
