@@ -10,4 +10,13 @@ public enum SceneEnum
     Area4 = 4,
     Area5 = 5,
     Area6 = 6,
+
+
+
+
+
+
+
+
+    TESTAREA
 }
