@@ -213,12 +213,12 @@ MonoBehaviour:
   itemType: 1
   behaviour: {fileID: 5395256005923483459}
   speed: 30
-  hitRange: 1
+  hitRange: 1.5
   timeUntilVanish: 5
   hitParticles: {fileID: 3664975949699414532, guid: 0e1f38f4938bdf244b886fcfd61635b5, type: 3}
-  hittableLayers:
+  hittableLayersWithEnemy:
     serializedVersion: 2
-    m_Bits: 64512
+    m_Bits: 21504
 --- !u!114 &5395256005923483459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,12 +231,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78726ee6289910c49ad8776dc3ad16cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitAll:
+  hittableLayersWithPlayer:
     serializedVersion: 2
-    m_Bits: 8388608
-  ignoreEnemies:
-    serializedVersion: 2
-    m_Bits: 4194304
+    m_Bits: 22528
 --- !u!54 &8522175340256914823
 Rigidbody:
   m_ObjectHideFlags: 0

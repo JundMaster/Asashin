@@ -5,6 +5,8 @@
 /// </summary>
 public class EnemyKunaiBehaviour : KunaiBehaviour
 {
+    [SerializeField] protected LayerMask hittableLayersWithPlayer;
+
     public override Transform KunaiCurrentTarget { get; set; }
     private Transform playerTarget;
     private PlayerBlock playerBlock;
@@ -17,8 +19,16 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
     private void Update()
     {
         // Can hit enemies if it's reflected, else it doesn't hit enemies.
-        if (isReflected) gameObject.layer = 23;
-        else gameObject.layer = 22;
+        if (isReflected)
+        {
+            ParentKunai.HittableLayers = ParentKunai.HittableLayersWithEnemy;
+            gameObject.layer = 23;
+        }
+        else
+        {
+            ParentKunai.HittableLayers = hittableLayersWithPlayer;
+            gameObject.layer = 22;
+        }
     }
 
     /// <summary>
@@ -83,7 +93,6 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
                     {
                         damageableBody?.TakeDamage(
                             ParentEnemy.GetComponent<Stats>().RangedDamage);
-
                         Destroy(gameObject);
                     }
                 }

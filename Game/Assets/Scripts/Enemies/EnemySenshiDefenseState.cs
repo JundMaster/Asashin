@@ -91,7 +91,6 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     public override void OnExit()
     {
         base.OnExit();
-        enemy.PlayerLastKnownPosition = playerTarget.position;
     }
 
     /// <summary>

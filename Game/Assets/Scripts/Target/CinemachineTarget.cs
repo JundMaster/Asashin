@@ -586,11 +586,11 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         if (dir == Direction.Left)
         {
-            framingTranspX = Mathf.Lerp(framingTranspX, 0.9f, Time.fixedDeltaTime * 4);
+            framingTranspX = Mathf.Lerp(framingTranspX, 0.8f, Time.fixedDeltaTime * 4);
         }
         else if (dir == Direction.Right)
         {
-            framingTranspX = Mathf.Lerp(framingTranspX, -0.9f, Time.fixedDeltaTime * 4);
+            framingTranspX = Mathf.Lerp(framingTranspX, -0.8f, Time.fixedDeltaTime * 4);
         }
         else
         {

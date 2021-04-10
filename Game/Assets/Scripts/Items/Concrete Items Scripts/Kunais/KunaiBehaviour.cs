@@ -11,6 +11,11 @@ public abstract class KunaiBehaviour : MonoBehaviour, IKunaiBehaviour
     public Enemy ParentEnemy { get; set; }
 
     /// <summary>
+    /// Enemy kunai.
+    /// </summary>
+    public Kunai ParentKunai { get; set; }
+
+    /// <summary>
     /// Current target.
     /// </summary>
     public abstract Transform KunaiCurrentTarget { get; set; }

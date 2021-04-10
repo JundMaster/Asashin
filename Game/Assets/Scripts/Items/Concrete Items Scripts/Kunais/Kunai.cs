@@ -24,19 +24,23 @@ public class Kunai : ItemBehaviour, IFindPlayer
     [SerializeField] private GameObject hitParticles;
 
     // Layers to collide with kunai
-    [SerializeField] private LayerMask hittableLayers;
-    
+    [SerializeField] protected LayerMask hittableLayersWithEnemy;
+    public LayerMask HittableLayersWithEnemy => hittableLayersWithEnemy;
+    public LayerMask HittableLayers { get; set; }
 
     private void Start()
     {
         player = FindObjectOfType<Player>().transform;
         behaviour.KunaiCurrentTarget = null;
+        behaviour.ParentKunai = this;
 
         // Decides direction of kunai
         behaviour.OnStart(player);
 
         rotation = 0;
         timePassed = Time.time;
+
+        HittableLayers = hittableLayersWithEnemy;
 
         behaviour.Execute(this);
     }
@@ -79,7 +83,7 @@ public class Kunai : ItemBehaviour, IFindPlayer
         if (other != null)
         {
             Collider[] collisions =
-                Physics.OverlapSphere(other.transform.position, hitRange, hittableLayers);
+                Physics.OverlapSphere(other.transform.position, hitRange, HittableLayers);
 
             // Checks if this object or parent has a damageable body
             GameObject body = null;
@@ -115,10 +119,10 @@ public class Kunai : ItemBehaviour, IFindPlayer
     /// </summary>
     /// <param name="col">Gameobject to check.</param>
     /// <returns>Returns a gameobject with IDamageable interface.</returns>
-    private GameObject GetDamageableBody(GameObject col)
+    protected GameObject GetDamageableBody(GameObject col)
     {
         col.TryGetComponent(out IDamageable damageableBody);
-        if (damageableBody != null) return col.gameObject;
+        if (damageableBody != null && player != null) return col.gameObject;
 
         else if (col.gameObject.transform.parent != null)
         {

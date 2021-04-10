@@ -51,9 +51,8 @@ public class EnemyAggressiveState : EnemyState
     public override void OnExit()
     {
         base.OnExit();
-        enemy.PlayerLastKnownPosition = playerTarget.position;
         enemy.PlayerCurrentlyFighting = false;
-        agent.isStopped = false;
+        agent.isStopped = false; 
     }
 
     private void AttackPlayer()

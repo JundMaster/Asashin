@@ -33,6 +33,7 @@ public abstract class EnemyState: ScriptableObject, IState
 
     /// <summary>
     /// Runs every time the state machine enters this state.
+    /// Finds playerTarget in case it's null.
     /// </summary>
     public virtual void OnEnter()
     {
@@ -41,9 +42,11 @@ public abstract class EnemyState: ScriptableObject, IState
 
     /// <summary>
     /// Runs every time the state machine leaves this state.
+    /// Sets player's last known position.
     /// </summary>
     public virtual void OnExit()
     {
+        enemy.PlayerLastKnownPosition = playerTarget.position;
         // Left blank on purpose
     }
 

@@ -35,8 +35,11 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     public override void OnEnter()
     {
         base.OnEnter();
+
         lookForPlayerCoroutine = false;
+
         breakState = false;
+
         agent.isStopped = false;
 
         agent.SetDestination(enemy.PlayerLastKnownPosition);
@@ -95,7 +98,7 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     /// <returns>True if it is.</returns>
     private bool ReachedLastKnownPosition()
     {
-        if (agent.remainingDistance < 0.1f) return true;
+        if (agent.remainingDistance < 2f) return true;
         return false;
     }
 

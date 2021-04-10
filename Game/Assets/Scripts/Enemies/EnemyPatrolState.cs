@@ -65,7 +65,13 @@ public class EnemyPatrolState : EnemyStateWithVision
     {
         base.FixedUpdate();
 
-        visionCone?.Calculate();
+        // Calculates vision cone if the player isn't too far
+        if (Vector3.Distance(myTarget.position, playerTarget.position) < 50)
+        {
+            if (!enemy.VisionCone.activeSelf) enemy.VisionCone.SetActive(true);
+            visionCone?.Calculate();
+        }
+
         Movement();
 
         // Search for player every searchCheckDelay seconds inside a vision cone
@@ -106,6 +112,7 @@ public class EnemyPatrolState : EnemyStateWithVision
         if (agent.remainingDistance > 0.1f && agent.remainingDistance < 0.2f)
             pathTimer = Time.time;
 
+
         if (agent.remainingDistance <= 0.1f && agent.pathPending == false)
         {
             if (Time.time - pathTimer >= waitingDelay)
@@ -116,11 +123,14 @@ public class EnemyPatrolState : EnemyStateWithVision
                 agent.SetDestination(
                     patrolPoints[patrolIndex].transform.position);
             } 
-            else
-            {
-                agent.SetDestination(
-                    myTarget.position);
-            }
         }
+
+        if (agent.remainingDistance > 0.1f && 
+            agent.velocity.magnitude < 0.1f && agent.pathPending == false) 
+            agent.SetDestination(enemy.transform.position);
+
+        Debug.Log(agent.remainingDistance);
+
+        Debug.DrawRay(myTarget.position, patrolPoints[patrolIndex].position - enemy.transform.position);
     }
 }

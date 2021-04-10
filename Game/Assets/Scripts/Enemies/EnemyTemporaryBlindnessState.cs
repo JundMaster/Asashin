@@ -31,7 +31,6 @@ public class EnemyTemporaryBlindnessState : EnemyState
 
         if (Blind())
         {
-            Debug.Log("blind");
             return enemy.TemporaryBlindnessState;
         }
         return enemy.LostPlayerState;
@@ -42,7 +41,6 @@ public class EnemyTemporaryBlindnessState : EnemyState
     /// </summary>
     public override void OnExit()
     {
-        base.OnExit();
         agent.isStopped = false;
     }
 
