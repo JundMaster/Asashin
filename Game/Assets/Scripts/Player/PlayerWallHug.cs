@@ -90,27 +90,12 @@ public class PlayerWallHug : MonoBehaviour, IAction
 
             transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
 
-
-
-            // MOVEMENT ////////////////////////////////////////////////////////
-
-
-            Vector3 dir = wallsColliders[0].transform.position + contactDirection;
-            float ang = Vector3.Angle(Vector3.forward, dir);
-
-            float ang2 = 20 + Mathf.Rad2Deg + ang;
-
-            // Sets moving Direction
-            Vector3 moveDirection = Quaternion.Euler(0f, ang2, 0f) *
-                Vector3.forward;
-
+            Vector3 moveDirection = Quaternion.Euler(0f, -90, 0f) * transform.forward;
 
             controller.Move(
                     input.Movement.x * moveDirection * Time.fixedUnscaledDeltaTime);
 
-
             ////////////////////////////////////////////////////////////////////
-
 
             if (wallsColliders.Length == 0)
             {
