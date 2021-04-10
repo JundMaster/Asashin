@@ -53,6 +53,7 @@ public class EnemyPatrolState : EnemyStateWithVision
         base.OnEnter();
         agent.isStopped = false;
         enemy.VisionCone.SetActive(true);
+        agent.SetDestination(patrolPoints[patrolIndex].transform.position);
     }
 
     /// <summary>

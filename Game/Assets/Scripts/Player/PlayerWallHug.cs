@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using UnityEngine;
 
 /// <summary>
@@ -22,6 +22,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
     private Animator anim;
     private PlayerBlock block;
     private CharacterController controller;
+    private CinemachineTarget cinemachineTarget;
 
     private Collider[] wallsColliders;
     private Collider[] wallsCollidersRight;
@@ -39,6 +40,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
         roll = GetComponent<PlayerRoll>();
         block = GetComponent<PlayerBlock>();
         controller = GetComponent<CharacterController>();
+        cinemachineTarget = FindObjectOfType<CinemachineTarget>();
     }
 
     private void Start()
@@ -89,12 +91,17 @@ public class PlayerWallHug : MonoBehaviour, IAction
                     transform.rotation =
                         Quaternion.Euler(0f, targetAngle, 0f);
 
-                    Performing = true;  
+                    cinemachineTarget.CancelCurrentTarget();
+                    Performing = true;
+                    OnWallHug(true);
                 }
             }
         }
         else
+        {
             Performing = false;
+            OnWallHug(false);
+        }
     }
 
     public void ComponentUpdate()
@@ -116,12 +123,11 @@ public class PlayerWallHug : MonoBehaviour, IAction
     {
         if (Performing)
         {
-            controller.radius = 0.3f;
-
             // Move direction perpendicular to player's back
             Vector3 moveDirection =
                 Quaternion.Euler(0f, -90, 0f) * transform.forward;
 
+            // Pressing a direction with walls on the sides
             if ((input.Movement.x > 0 && wallsCollidersLeft.Length > 0) ||
                 (input.Movement.x < 0 && wallsCollidersRight.Length > 0))
             {
@@ -129,6 +135,30 @@ public class PlayerWallHug : MonoBehaviour, IAction
                     input.Movement.x *
                     moveDirection *
                     Time.fixedUnscaledDeltaTime);
+
+                OnBorder(Direction.Default);
+            }
+            // Pressing right with no wall
+            else if (input.Movement.x > 0 && wallsCollidersLeft.Length == 0)
+            {
+                OnBorder(Direction.Right);
+            }
+            // Pressing left with no wall
+            else if (input.Movement.x < 0 && wallsCollidersRight.Length == 0)
+            {
+                OnBorder(Direction.Left);
+            }
+            // Not pressing anything with no walls
+            else if (wallsCollidersLeft.Length == 0 || 
+                wallsCollidersRight.Length == 0 &&
+                input.Movement.x == 0)
+            {
+                OnBorder(Direction.Default);
+            }
+            // Else if the player isn't pressing anything
+            else
+            {
+                OnBorder(Direction.Default);
             }
 
             // If the player leaves the wall, cancels wall hug
@@ -136,11 +166,22 @@ public class PlayerWallHug : MonoBehaviour, IAction
             {
                 anim.applyRootMotion = false;
                 Performing = false;
+                OnWallHug(false);
             }
         }
-        else
-        {
-            controller.radius = 0.3f;
-        }
     }
+
+    protected virtual void OnBorder(Direction dir) => Border?.Invoke(dir);
+
+    /// <summary>
+    /// Event registered on CinemachineTarget.
+    /// </summary>
+    public event Action<Direction> Border;
+
+    protected virtual void OnWallHug(bool condition) => WallHug?.Invoke(condition);
+
+    /// <summary>
+    /// Event registered on CinemachineTarget.
+    /// </summary>
+    public event Action<bool> WallHug;
 }

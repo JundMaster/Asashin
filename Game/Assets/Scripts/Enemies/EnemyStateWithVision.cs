@@ -17,6 +17,10 @@ public abstract class EnemyStateWithVision : EnemyState
 
     private PlayerWallHug playerWallHug;
 
+    /// <summary>
+    /// Gets player wall hugh component.
+    /// </summary>
+    /// <returns></returns>
     public override IState FixedUpdate()
     {
         if (playerWallHug == null) 

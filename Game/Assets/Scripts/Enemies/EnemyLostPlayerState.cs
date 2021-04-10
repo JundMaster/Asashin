@@ -19,6 +19,9 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     // Components
     private VisionCone visionCone;
 
+    /// <summary>
+    /// Runs once on start. Sets vision cone to be the same as the enemy's one.
+    /// </summary>
     public override void Start()
     {
         base.Start();
