@@ -7,28 +7,34 @@ using System.Collections;
 [CreateAssetMenu(fileName = "Enemy Death State")]
 public class EnemyDeathState : EnemyState
 {
+    [Header("Particles to spawn when the enemy dies")]
     [SerializeField] private GameObject smokeParticles;
     private ISpawnItemBehaviour spawnItemBehaviour;
 
+    /// <summary>
+    /// Happens once. Gets ISpawnItemBehaviour of this enemy.
+    /// </summary>
     public override void Start()
     {
         spawnItemBehaviour = enemy.GetComponent<ISpawnItemBehaviour>();
     }
 
+    /// <summary>
+    /// Happens once when the enemy enters this state. Starts death coroutine.
+    /// </summary>
     public override void OnEnter()
     {
         enemy.StartCoroutine(Die());
     }
 
-    public override IState FixedUpdate()
-    {
-        base.FixedUpdate();
-        return enemy.DeathState;
-    }
-
+    /// <summary>
+    /// Happens when the enemy dies. Cancels cinemachine target, spawns loot
+    /// and destroys the enemy.
+    /// </summary>
+    /// <returns>Wait for fixed update.</returns>
     private IEnumerator Die()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForFixedUpdate();
 
         // If the player is targetting this enemy and if there are more enemies 
         // around, it changes target to next enemy

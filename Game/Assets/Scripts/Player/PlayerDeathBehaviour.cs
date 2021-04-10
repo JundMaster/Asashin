@@ -4,9 +4,25 @@ using System;
 /// <summary>
 /// Handles player character's death.
 /// </summary>
-public class PlayerDeathBehaviour : DeathBehaviour
+public class PlayerDeathBehaviour: MonoBehaviour
 {
+    private PlayerStats stats;
     private bool isAlive;
+
+    private void Awake()
+    {
+        stats = GetComponent<PlayerStats>();
+    }
+
+    private void OnEnable()
+    {
+        stats.Die += Die;
+    }
+
+    private void OnDisable()
+    {
+        stats.Die -= Die;
+    }
 
     private void Start()
     {
@@ -17,12 +33,11 @@ public class PlayerDeathBehaviour : DeathBehaviour
     /// This method happens when the player's health reaches 0.
     /// Triggers an event.
     /// </summary>
-    public override void Die()
+    public void Die()
     {
         // Only happens once after the player reached 0 health.
         if (isAlive)
         {
-            Debug.Log("Player died");
             OnPlayerDied();
             isAlive = false;
         }

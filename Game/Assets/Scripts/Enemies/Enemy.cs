@@ -98,6 +98,7 @@ public class Enemy : MonoBehaviour, IFindPlayer
             LostPlayerState,
             AggressiveState,
             TemporaryBlindnessState,
+            DeathState,
         };
 
         stateMachine = new StateMachine(states, this);
