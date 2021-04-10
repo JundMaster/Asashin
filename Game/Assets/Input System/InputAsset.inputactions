@@ -124,6 +124,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "WallHug",
+                    "type": "Button",
+                    "id": "72b4b71b-5c63-463e-ab9e-88651a824d51",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -437,8 +445,8 @@
                 },
                 {
                     "name": "",
-                    "id": "9dff0e23-a906-48d1-be5a-97c707caec69",
-                    "path": "<Mouse>/middleButton",
+                    "id": "4ba93bed-25ff-40f1-b53a-738ee03cf7b2",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -448,8 +456,8 @@
                 },
                 {
                     "name": "",
-                    "id": "4ba93bed-25ff-40f1-b53a-738ee03cf7b2",
-                    "path": "<Gamepad>/rightShoulder",
+                    "id": "68f29e96-897b-47a6-879b-c12a1d5ae7e2",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -498,6 +506,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f60a1a55-f82f-45a9-915e-edace08322e8",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallHug",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "48ecb3e2-c2cc-4ff4-a127-eb1ee7954fdb",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WallHug",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

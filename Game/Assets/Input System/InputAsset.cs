@@ -137,6 +137,14 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""WallHug"",
+                    ""type"": ""Button"",
+                    ""id"": ""72b4b71b-5c63-463e-ab9e-88651a824d51"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -450,8 +458,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9dff0e23-a906-48d1-be5a-97c707caec69"",
-                    ""path"": ""<Mouse>/middleButton"",
+                    ""id"": ""4ba93bed-25ff-40f1-b53a-738ee03cf7b2"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -461,8 +469,8 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""4ba93bed-25ff-40f1-b53a-738ee03cf7b2"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""id"": ""68f29e96-897b-47a6-879b-c12a1d5ae7e2"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -511,6 +519,28 @@ public class @InputAsset : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f60a1a55-f82f-45a9-915e-edace08322e8"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WallHug"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48ecb3e2-c2cc-4ff4-a127-eb1ee7954fdb"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WallHug"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -799,6 +829,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
         m_Gameplay_Block = m_Gameplay.FindAction("Block", throwIfNotFound: true);
         m_Gameplay_Walk = m_Gameplay.FindAction("Walk", throwIfNotFound: true);
         m_Gameplay_Sprint = m_Gameplay.FindAction("Sprint", throwIfNotFound: true);
+        m_Gameplay_WallHug = m_Gameplay.FindAction("WallHug", throwIfNotFound: true);
         // GamePaused
         m_GamePaused = asset.FindActionMap("GamePaused", throwIfNotFound: true);
         m_GamePaused_Submit = m_GamePaused.FindAction("Submit", throwIfNotFound: true);
@@ -872,6 +903,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Block;
     private readonly InputAction m_Gameplay_Walk;
     private readonly InputAction m_Gameplay_Sprint;
+    private readonly InputAction m_Gameplay_WallHug;
     public struct GameplayActions
     {
         private @InputAsset m_Wrapper;
@@ -891,6 +923,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
         public InputAction @Block => m_Wrapper.m_Gameplay_Block;
         public InputAction @Walk => m_Wrapper.m_Gameplay_Walk;
         public InputAction @Sprint => m_Wrapper.m_Gameplay_Sprint;
+        public InputAction @WallHug => m_Wrapper.m_Gameplay_WallHug;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -945,6 +978,9 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @Sprint.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
+                @WallHug.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWallHug;
+                @WallHug.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWallHug;
+                @WallHug.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWallHug;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -994,6 +1030,9 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
+                @WallHug.started += instance.OnWallHug;
+                @WallHug.performed += instance.OnWallHug;
+                @WallHug.canceled += instance.OnWallHug;
             }
         }
     }
@@ -1105,6 +1144,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
         void OnBlock(InputAction.CallbackContext context);
         void OnWalk(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnWallHug(InputAction.CallbackContext context);
     }
     public interface IGamePausedActions
     {

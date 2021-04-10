@@ -388,6 +388,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         if (allEnemies.Count == 0)
         {
             // Switches camera back to third person camera
+            mainCameraBrain.m_DefaultBlend.m_Time = 0.75f;
             targetCamera.Priority = thirdPersonCamera.Priority - 3;
             if (currentTarget) currentTarget.gameObject.SetActive(false);
             Targeting = false;;

@@ -93,8 +93,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         if (roll.Performing == false && useItem.Performing == false &&
             block.Performing == false && interact.InterectableObject == null)
         {
-            Debug.Log("entrou");
-
             if (target.Targeting)
             {
                 // Rotates player to target

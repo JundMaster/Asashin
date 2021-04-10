@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerRoll roll;
     private PlayerBlock block;
     private PlayerJump jump;
+    private PlayerWallHug wallHug;
 
     public bool Walking { get; private set; }
     public bool Sprinting { get; private set; }
@@ -42,6 +43,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         useItem = GetComponent<PlayerUseItem>();
         block = GetComponent<PlayerBlock>();
         jump = GetComponent<PlayerJump>();
+        wallHug = GetComponent<PlayerWallHug>();
     }
 
     private void Start()
@@ -77,7 +79,9 @@ public class PlayerMovement : MonoBehaviour, IAction
     public void ComponentFixedUpdate()
     {
         Movement();
-        Rotation();
+
+        if (wallHug.Performing == false)
+            Rotation();
     }
 
     /// <summary>
@@ -124,7 +128,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private void Movement()
     {
         if (Direction.magnitude > 0.01f && block.Performing == false &&
-            roll.Performing == false)
+            roll.Performing == false && wallHug.Performing == false)
         {
             // Moves controllers towards the moveDirection set on Rotation()
             if (Walking && Sprinting == false)

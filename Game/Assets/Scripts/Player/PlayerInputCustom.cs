@@ -306,6 +306,24 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     /// </summary>
     public event Action<bool> Sprint;
 
+
+    /// <summary>
+    /// Handles wall hug.
+    /// </summary>
+    /// <param name="context"></param>
+    public void HandleWallHug(InputAction.CallbackContext context)
+    {
+        if (context.started) OnWallHug();
+    }
+
+    protected virtual void OnWallHug() => WallHug?.Invoke();
+
+    /// <summary>
+    /// Event registered on PauseSystem.
+    /// </summary>
+    public event Action WallHug;
+
+
     public void FindPlayer()
     {
         deathBehaviour = FindObjectOfType<PlayerDeathBehaviour>();
