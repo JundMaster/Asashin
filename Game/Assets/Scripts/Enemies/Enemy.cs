@@ -7,7 +7,6 @@ using UnityEngine.AI;
 /// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(EnemyStats))]
-[RequireComponent(typeof(EnemyCommonDeathBehaviour))]
 [RequireComponent(typeof(SpawnItemBehaviour))]
 [RequireComponent(typeof(CapsuleCollider))]
 public class Enemy : MonoBehaviour, IFindPlayer
@@ -28,6 +27,8 @@ public class Enemy : MonoBehaviour, IFindPlayer
     [SerializeField] private Animator anim;
     public Animator Anim => anim;
 
+    public CinemachineTarget CineTarget { get; private set; }
+
     // Player variables
     public Player Player { get; private set; }
     public bool PlayerCurrentlyFighting
@@ -43,7 +44,8 @@ public class Enemy : MonoBehaviour, IFindPlayer
     [SerializeField] private EnemyState defenseStateOriginal;
     [SerializeField] private EnemyState lostPlayerStateOriginal;
     [SerializeField] private EnemyState aggressiveStateOriginal;
-    [SerializeField] private EnemyState temporaryBlindnessOriginal;
+    [SerializeField] private EnemyState temporaryBlindnessStateOriginal;
+    [SerializeField] private EnemyState deathStateOriginal;
 
     // State getters
     public IState PatrolState { get; private set; }
@@ -51,6 +53,7 @@ public class Enemy : MonoBehaviour, IFindPlayer
     public IState LostPlayerState { get; private set; }
     public IState AggressiveState { get; private set; }
     public IState TemporaryBlindnessState { get; private set; }
+    public IState DeathState { get; private set; }
 
     private IEnumerable<IState> states;
     private StateMachine stateMachine;
@@ -58,10 +61,13 @@ public class Enemy : MonoBehaviour, IFindPlayer
     // Components
     public NavMeshAgent Agent { get; private set; }
     public VisionCone EnemyVisionCone { get; set; }
+    private Stats enemyStats;
 
     private void Awake()
     {
         Agent = GetComponent<NavMeshAgent>();
+        CineTarget = FindObjectOfType<CinemachineTarget>();
+        enemyStats = GetComponent<Stats>();
 
         PlayerLastKnownPosition = default;
         if (Player != null) PlayerCurrentlyFighting = false;
@@ -78,8 +84,12 @@ public class Enemy : MonoBehaviour, IFindPlayer
         if (aggressiveStateOriginal != null)
             AggressiveState = Instantiate(aggressiveStateOriginal);
 
-        if (temporaryBlindnessOriginal != null)
-            TemporaryBlindnessState = Instantiate(temporaryBlindnessOriginal);
+        if (temporaryBlindnessStateOriginal != null)
+            TemporaryBlindnessState = 
+                Instantiate(temporaryBlindnessStateOriginal);
+
+        if (deathStateOriginal != null)
+            DeathState = Instantiate(deathStateOriginal);
 
         states = new List<IState>
         {
@@ -91,6 +101,16 @@ public class Enemy : MonoBehaviour, IFindPlayer
         };
 
         stateMachine = new StateMachine(states, this);
+    }
+
+    private void OnEnable()
+    {
+        enemyStats.Die += TriggerDeath;
+    }
+
+    private void OnDisable()
+    {
+        enemyStats.Die -= TriggerDeath;
     }
 
     private void FixedUpdate()
@@ -122,6 +142,18 @@ public class Enemy : MonoBehaviour, IFindPlayer
     /// <summary>
     /// Method that changes current state to TemporaryBlindnessState.
     /// </summary>
-    public void BlindEnemy() => 
-        stateMachine.CurrentState = TemporaryBlindnessState;
+    public void BlindEnemy()
+    {
+        if (TemporaryBlindnessState != null) 
+            stateMachine.CurrentState = TemporaryBlindnessState;
+    }
+        
+    /// <summary>
+    /// Method that triggers DeathState.
+    /// </summary>
+    private void TriggerDeath()
+    {
+        if (DeathState != null)
+            stateMachine.CurrentState = DeathState;
+    }   
 }

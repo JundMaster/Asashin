@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// Scriptable object responsible for controlling enemy patrol state.
@@ -23,11 +24,11 @@ public class EnemyPatrolState : EnemyStateWithVision
     // Movement
     private Transform[] patrolPoints;
     private byte patrolIndex;
-    private float pathTimer;
+    private bool breakState;
 
     /// <summary>
     /// Runs once on start.
-    /// Sets agent's initial destination.
+    /// Sets agent's initial destination and starts movement coroutine.
     /// </summary>
     public override void Start()
     {
@@ -40,20 +41,23 @@ public class EnemyPatrolState : EnemyStateWithVision
         enemy.EnemyVisionCone = visionCone;
 
         // Agent destination setup
+        breakState = false;
         patrolPoints = enemy.PatrolPoints;
         patrolIndex = 0;
-        agent.SetDestination(patrolPoints[0].transform.position);
+        enemy.StartCoroutine(MovementCoroutine());
     }
 
     /// <summary>
-    /// Runs when entering this state. Turns back agent's movement.
+    /// Runs when entering this state. Turns back agent's movement and starts
+    /// movement coroutine.
     /// </summary>
     public override void OnEnter()
     {
         base.OnEnter();
+        breakState = false;
         agent.isStopped = false;
         enemy.VisionCone.SetActive(true);
-        agent.SetDestination(patrolPoints[patrolIndex].transform.position);
+        enemy.StartCoroutine(MovementCoroutine());
     }
 
     /// <summary>
@@ -71,8 +75,6 @@ public class EnemyPatrolState : EnemyStateWithVision
             if (!enemy.VisionCone.activeSelf) enemy.VisionCone.SetActive(true);
             visionCone?.Calculate();
         }
-
-        Movement();
 
         // Search for player every searchCheckDelay seconds inside a vision cone
         if (Time.time - lastTimeChecked > searchCheckDelay)
@@ -95,6 +97,7 @@ public class EnemyPatrolState : EnemyStateWithVision
         base.OnExit();
         agent.isStopped = true;
         enemy.VisionCone.SetActive(false);
+        breakState = true;
 
         // Instantiates an exclamation mark
         GameObject exclMark = Instantiate(
@@ -105,32 +108,44 @@ public class EnemyPatrolState : EnemyStateWithVision
     }
 
     /// <summary>
-    /// Moves the agent through patrol points.
+    /// Sets initial destination. If agent reached the destination or is stopped
+    /// it stops the agent and waits for a delay. After the delay is over it
+    /// increments the patrol points value and sets the next destination.
     /// </summary>
-    private void Movement()
+    /// <returns>Null.</returns>
+    private IEnumerator MovementCoroutine()
     {
-        if (agent.remainingDistance > 0.1f && agent.remainingDistance < 0.2f)
-            pathTimer = Time.time;
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        YieldInstruction wfs = new WaitForSeconds(waitingDelay);
 
+        agent.SetDestination(patrolPoints[0].transform.position);
 
-        if (agent.remainingDistance <= 0.1f && agent.pathPending == false)
+        yield return wfs;
+
+        while (breakState == false)
         {
-            if (Time.time - pathTimer >= waitingDelay)
+            Debug.DrawRay(myTarget.position, patrolPoints[patrolIndex].position - enemy.transform.position);
+
+            // If agent reached the destination or is stopped
+            if (agent.remainingDistance <= 0.1f || agent.velocity.magnitude < 0.1f)
             {
+                // Sets destination to where the agent is
+                agent.SetDestination(enemy.transform.position);
+
+                // Waits for the delay
+                yield return wfs;
+
+                // Increments the patrol point
                 if (patrolIndex + 1 > patrolPoints.Length - 1) patrolIndex = 0;
                 else patrolIndex++;
 
+                // Sets the next destination
                 agent.SetDestination(
                     patrolPoints[patrolIndex].transform.position);
-            } 
+
+                yield return wfs;
+            }
+            yield return wffu;
         }
-
-        if (agent.remainingDistance > 0.1f && 
-            agent.velocity.magnitude < 0.1f && agent.pathPending == false) 
-            agent.SetDestination(enemy.transform.position);
-
-        Debug.Log(agent.remainingDistance);
-
-        Debug.DrawRay(myTarget.position, patrolPoints[patrolIndex].position - enemy.transform.position);
     }
 }

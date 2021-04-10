@@ -61,8 +61,6 @@ public class StateMachine
         {
             SwitchToNewState(nextState);
         }
-
-        UnityEngine.Debug.Log(CurrentState);
     }
 
     /// <summary>

@@ -4,14 +4,10 @@ using System;
 /// <summary>
 /// Class responsible for common stats.
 /// </summary>
-[RequireComponent(typeof(DeathBehaviour))]
 public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
 {
     // Stats
     [SerializeField] protected CommonStatsScriptableObj commonStats;
-
-    // Death Behavior
-    [SerializeField] private DeathBehaviour deathBehaviour;
 
     public float Health { get; protected set; }
 
@@ -40,7 +36,7 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
             else
             {
                 Health = 0;
-                deathBehaviour.Die();
+                OnDie();
             }
         }
         OnTookDamage();
@@ -52,4 +48,11 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
     /// Event registered on UIHealthBar.
     /// </summary>
     public event Action TookDamage;
+
+    protected virtual void OnDie() => Die?.Invoke();
+
+    /// <summary>
+    /// Event registered on classes with stats class.
+    /// </summary>
+    public event Action Die;
 }
