@@ -12,7 +12,18 @@ public abstract class EnemyStateWithVision : EnemyState
     [Range(0, 90)] [SerializeField] protected byte desiredConeAngle;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] protected LayerMask collisionLayers;
+    private const byte PLAYERLAYERNUMBER = 11;
     protected float lastTimeChecked;
+
+    private PlayerWallHug playerWallHug;
+
+    public override IState FixedUpdate()
+    {
+        if (playerWallHug == null) 
+            playerWallHug = enemy.Player.GetComponent<PlayerWallHug>();
+
+        return base.FixedUpdate();
+    }
 
     /// <summary>
     /// Search for player every searchCheckDelay seconds inside a cone vision.
@@ -44,9 +55,29 @@ public abstract class EnemyStateWithVision : EnemyState
                         collisionLayers))
                     {
                         // If it's player layer
-                        if (hit.collider.gameObject.layer == 11)
+                        if (hit.collider.gameObject.layer == PLAYERLAYERNUMBER)
                         {
-                            playerFound = true;
+                            // If player is performing wall hug
+                            if (playerWallHug != null &&
+                                playerWallHug.Performing)
+                            {
+                                // If the player is facing the enemy's forward
+                                // (enemy only sees the player if they are
+                                // basically facing or perpendicular to
+                                // each other)
+                                if (Vector3.Dot(
+                                    enemy.transform.forward, 
+                                    playerTarget.forward) < 
+                                    0.5f)
+                                {
+                                    playerFound = true;
+                                }
+                            }
+                            else
+                            {
+                                playerFound = true;
+                            }
+                            
                         }
                         else
                         {

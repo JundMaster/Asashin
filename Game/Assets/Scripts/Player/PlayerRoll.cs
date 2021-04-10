@@ -11,6 +11,7 @@ public class PlayerRoll : MonoBehaviour, IAction
     private PlayerUseItem useItem;
     private Animator anim;
     private PlayerBlock block;
+    private PlayerWallHug wallHug;
 
     public bool Performing { get; private set; }
 
@@ -23,6 +24,7 @@ public class PlayerRoll : MonoBehaviour, IAction
         anim = GetComponent<Animator>();
         useItem = GetComponent<PlayerUseItem>();
         block = GetComponent<PlayerBlock>();
+        wallHug = GetComponent<PlayerWallHug>();
     }
 
     private void Start()
@@ -57,7 +59,7 @@ public class PlayerRoll : MonoBehaviour, IAction
     {
         if (Performing == false && attack.Performing == false &&
             jump.IsGrounded() && useItem.Performing == false &&
-            block.Performing == false)
+            block.Performing == false && wallHug.Performing == false)
         {
             anim.applyRootMotion = true;
             Performing = true;

@@ -15,6 +15,9 @@ public class PlayerAnimations : MonoBehaviour
     private PlayerMeleeAttack attack;
     private PlayerBlock block;
     private PlayerDeathBehaviour death;
+    private PlayerWallHug wallHug;
+    private PlayerInputCustom input;
+    private CharacterController controller;
 
     private void Awake()
     {
@@ -25,6 +28,9 @@ public class PlayerAnimations : MonoBehaviour
         attack = GetComponent<PlayerMeleeAttack>();
         block = GetComponent<PlayerBlock>();
         death = GetComponent<PlayerDeathBehaviour>();
+        wallHug = GetComponent<PlayerWallHug>();
+        input = FindObjectOfType<PlayerInputCustom>();
+        controller = GetComponent<CharacterController>();
     }
 
     private void OnEnable()
@@ -50,6 +56,8 @@ public class PlayerAnimations : MonoBehaviour
         anim.SetBool("IsGrounded", jump.IsGrounded());
         anim.SetBool("Block", block.Performing);
         anim.SetBool("Walking", movement.Walking);
+        anim.SetFloat("WallHugSpeed", input.Movement.x * controller.velocity.magnitude);
+        anim.SetBool("BotWallHug", wallHug.Performing);
     }
 
     /// <summary>

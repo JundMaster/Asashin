@@ -29,11 +29,11 @@ public class Enemy : MonoBehaviour, IFindPlayer
     public Animator Anim => anim;
 
     // Player variables
-    private Player player;
+    public Player Player { get; private set; }
     public bool PlayerCurrentlyFighting
     {
-        get => player.PlayerCurrentlyFighting;
-        set => player.PlayerCurrentlyFighting = value;
+        get => Player.PlayerCurrentlyFighting;
+        set => Player.PlayerCurrentlyFighting = value;
     }
     public Transform PlayerTarget { get; private set; }
     public Vector3 PlayerLastKnownPosition { get; set; }
@@ -64,7 +64,7 @@ public class Enemy : MonoBehaviour, IFindPlayer
         Agent = GetComponent<NavMeshAgent>();
 
         PlayerLastKnownPosition = default;
-        if (player != null) PlayerCurrentlyFighting = false;
+        if (Player != null) PlayerCurrentlyFighting = false;
 
         if (patrolStateOriginal != null)
             PatrolState = Instantiate(patrolStateOriginal);
@@ -99,7 +99,7 @@ public class Enemy : MonoBehaviour, IFindPlayer
     }
 
     /// <summary>
-    /// Finds player when the player spawns.
+    /// Finds Player when the Player spawns.
     /// Initializes values for all states.
     /// </summary>
     public void FindPlayer()
@@ -107,11 +107,11 @@ public class Enemy : MonoBehaviour, IFindPlayer
         PlayerTarget = 
             GameObject.FindGameObjectWithTag("playerTarget").transform;
 
-        player = FindObjectOfType<Player>();
+        Player = FindObjectOfType<Player>();
     }
 
     /// <summary>
-    /// Turns playerTarget to null when the player disappears.
+    /// Turns PlayerTarget to null when the Player disappears.
     /// </summary>
     public void PlayerLost()
     {

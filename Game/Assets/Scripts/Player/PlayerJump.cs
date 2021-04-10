@@ -13,6 +13,7 @@ public class PlayerJump : MonoBehaviour, IAction
     private PlayerUseItem useItem;
     private PlayerMeleeAttack attack;
     private PlayerBlock block;
+    private PlayerWallHug wallHug;
 
     // Gravity
     private Vector3 verticalVelocity;
@@ -32,6 +33,7 @@ public class PlayerJump : MonoBehaviour, IAction
         attack = GetComponent<PlayerMeleeAttack>();
         useItem = GetComponent<PlayerUseItem>();
         block = GetComponent<PlayerBlock>();
+        wallHug = GetComponent<PlayerWallHug>();
     }
 
     private void OnEnable()
@@ -68,7 +70,7 @@ public class PlayerJump : MonoBehaviour, IAction
     {
         if (IsGrounded() && attack.Performing == false &&
             roll.Performing == false && useItem.Performing == false &&
-            block.Performing == false)
+            block.Performing == false && wallHug.Performing == false)
         {
             verticalVelocity.y = Mathf.Sqrt(values.JumpForce * values.Gravity);
         }

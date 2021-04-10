@@ -16,6 +16,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private PlayerBlock block;
     private PlayerJump jump;
     private PlayerInteract interact;
+    private PlayerWallHug wallHug;
 
     // Weapon
     [SerializeField] private SphereCollider sword;
@@ -42,6 +43,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         block = GetComponent<PlayerBlock>();
         jump = GetComponent<PlayerJump>();
         interact = GetComponent<PlayerInteract>();
+        wallHug = GetComponent<PlayerWallHug>();
     }
 
     private void Start()
@@ -89,9 +91,9 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// </summary>
     private void MeleeLightAttack()
     {
-        
         if (roll.Performing == false && useItem.Performing == false &&
-            block.Performing == false && interact.InterectableObject == null)
+            block.Performing == false && interact.InterectableObject == null &&
+            wallHug.Performing == false)
         {
             if (target.Targeting)
             {

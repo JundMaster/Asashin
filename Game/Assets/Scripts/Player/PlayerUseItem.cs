@@ -6,6 +6,7 @@ using System;
 /// </summary>
 public class PlayerUseItem : MonoBehaviour, IAction
 {
+    [Header("Transforms with item positions")]
     [SerializeField] private Transform kunaiItemPosition;
     [SerializeField] private Transform leftHandItemPosition;
     [SerializeField] private Transform leftHand;
@@ -26,6 +27,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
     private CinemachineTarget target;
     private PlayerStats stats;
     private PlayerBlock block;
+    private PlayerWallHug wallHug;
 
     public float TimeItemWasUsed { get; private set; }
     private bool canUseItemDelayOver;
@@ -45,6 +47,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
         target = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
         block = GetComponent<PlayerBlock>();
+        wallHug = GetComponent<PlayerWallHug>();
     }
 
     private void Start()
@@ -99,7 +102,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
     {
         if (canUseItemDelayOver && attack.Performing == false && 
             jump.Performing == false && roll.Performing == false &&
-            block.Performing == false)
+            block.Performing == false && wallHug.Performing == false)
         {
             // Plays an animation depending on the item used
             switch (itemControl.CurrentItem.ItemType)
