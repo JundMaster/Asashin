@@ -311,7 +311,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                 Vector3.MoveTowards(
                     currentTarget.transform.position, 
                     aimTowards, 
-                    30f * Time.fixedUnscaledDeltaTime);
+                    45f * Time.fixedUnscaledDeltaTime);
 
             yield return wffup;
         }
