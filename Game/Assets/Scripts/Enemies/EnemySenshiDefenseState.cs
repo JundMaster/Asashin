@@ -6,6 +6,8 @@
 [CreateAssetMenu(fileName = "Enemy Senshi Defense State")]
 public class EnemySenshiDefenseState : EnemyStateWithVision
 {
+    private const byte KUNAILAYER = 15;
+
     [Header("Kunai to spawn")]
     [SerializeField] private GameObject kunai;
 
@@ -14,7 +16,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     private float kunaiLastTimeChecked;
 
     [Header("Rotation smooth time")]
-    [Range(0.1f,1)][SerializeField] private float turnSmooth;
+    [Range(0.1f,1.5f)][SerializeField] private float turnSmooth;
     private float smoothTimeRotation;
 
     [Header("Distance from player. X => min. distance, Y => max. distance")]
@@ -109,32 +111,46 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     /// Returns false if it's in the desired position.</returns>
     private bool MoveToDefensiveRange()
     {
-        bool inFinalDestination;
-        
         float distance = 
             Vector3.Distance(myTarget.position, playerTarget.position);
 
         // If the enemy is NOT in the desired position
-        if (distance > randomDistance + 3 || 
-            distance < randomDistance - 3)
+        if (distance > randomDistance + 2 || 
+            distance < randomDistance - 2)
         {
             agent.isStopped = false;
 
+            // Direction from player to enemy.
             Vector3 desiredDirection =
             (playerTarget.position - myTarget.position).normalized;
 
-            agent.SetDestination(
+            // Ray from player to final destination
+            Ray finalPosition = 
+                new Ray(
+                    playerTarget.position,
+                    -desiredDirection * randomDistance);
+
+            // If there isn't any wall in the way
+            if (Physics.Raycast(
+                finalPosition, randomDistance, collisionLayers) == false)
+            {
+                // Moves the enemy back to keep a random distance from player
+                agent.SetDestination(
                 playerTarget.position - desiredDirection * randomDistance);
-
-            inFinalDestination = true;
+                return true;
+            }
+            // Else if there is a wall
+            else
+            {
+                // Keeps the enemy in the same place and final destination.
+                agent.SetDestination(myTarget.position);
+                agent.isStopped = true;
+                return false;
+            }
         }
-        else
-        {
-            agent.isStopped = true;
-            inFinalDestination = false;
-        }
-
-        return inFinalDestination;
+        // Else if the enemy is in the final destination
+        agent.isStopped = true;
+        return false;
     }
 
     /// <summary>
@@ -153,7 +169,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
                     Quaternion.identity);
 
                 // Sets layer and parent enemy of the kunai
-                thisKunai.layer = 15;
+                thisKunai.layer = KUNAILAYER;
                 thisKunai.GetComponent<Kunai>().Behaviour.ParentEnemy = enemy;
 
                 kunaiLastTimeChecked = Time.time;

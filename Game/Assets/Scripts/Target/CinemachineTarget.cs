@@ -225,7 +225,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                     UpdateTargetCameraLookAt();
                     FindCurrentTargetedEnemy();
 
-                    Targeting = !Targeting;
+                    Targeting = true;
                 }
             }
             else
@@ -380,7 +380,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         // Switches camera back to third person camera
         targetCamera.Priority = thirdPersonCamera.Priority - 3;
         if (currentTarget) currentTarget.gameObject.SetActive(false);
-        Targeting = !Targeting;
+        Targeting = false;
     }
 
     /// <summary>
