@@ -206,7 +206,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
                 body.TryGetComponent(out Enemy en))
             {
                 damageableBody?.TakeDamage(stats.LightDamage, TypeOfDamage.PlayerMelee);
-                Debug.Log(body.gameObject.name);
             }
             else if (body.TryGetComponent(out IBreakable breakable))
             {
