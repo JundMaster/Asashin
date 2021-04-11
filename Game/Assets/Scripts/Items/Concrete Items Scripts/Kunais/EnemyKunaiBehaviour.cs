@@ -92,7 +92,8 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
                     else
                     {
                         damageableBody?.TakeDamage(
-                            ParentEnemy.GetComponent<Stats>().RangedDamage);
+                            ParentEnemy.GetComponent<Stats>().RangedDamage,
+                            TypeOfDamage.EnemyRanged);
                         Destroy(gameObject);
                     }
                 }
@@ -100,7 +101,8 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
                 else
                 {
                     damageableBody?.TakeDamage(
-                        ParentEnemy.GetComponent<Stats>().RangedDamage);
+                        ParentEnemy.GetComponent<Stats>().RangedDamage,
+                        TypeOfDamage.EnemyRanged);
 
                     Destroy(gameObject);
                 }
@@ -109,7 +111,8 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
             else
             {
                 damageableBody?.TakeDamage(
-                    ParentEnemy.GetComponent<Stats>().RangedDamage);
+                    ParentEnemy.GetComponent<Stats>().RangedDamage,
+                    TypeOfDamage.PlayerRanged);
 
                 Destroy(gameObject);
             }

@@ -27,6 +27,7 @@ public class EnemyPatrolState : EnemyStateWithVision
     private bool breakState;
 
     /// <summary>
+    /// * INITIAL ENEMY STATE *
     /// Runs once on start.
     /// Sets agent's initial destination and starts movement coroutine.
     /// </summary>
@@ -48,7 +49,7 @@ public class EnemyPatrolState : EnemyStateWithVision
         patrolIndex = 0;
         enemy.StartCoroutine(MovementCoroutine());
 
-        stats.TookDamage += TakeImpact;
+        stats.AnyDamageOnEnemy += TakeImpact;
     }
 
     /// <summary>
@@ -63,7 +64,7 @@ public class EnemyPatrolState : EnemyStateWithVision
         enemy.VisionCone.SetActive(true);
         enemy.StartCoroutine(MovementCoroutine());
 
-        stats.TookDamage += TakeImpact;
+        stats.AnyDamageOnEnemy += TakeImpact;
     }
 
     /// <summary>
@@ -112,7 +113,7 @@ public class EnemyPatrolState : EnemyStateWithVision
             Quaternion.identity);
         exclMark.transform.parent = enemy.transform;
 
-        stats.TookDamage -= TakeImpact;
+        stats.AnyDamageOnEnemy -= TakeImpact;
     }
 
     /// <summary>
@@ -162,34 +163,7 @@ public class EnemyPatrolState : EnemyStateWithVision
     /// </summary>
     protected override void TakeImpact()
     {
+        breakState = false;
         base.TakeImpact();
-    }
-
-    /// <summary>
-    /// Happens after enemy being hit. Rotates enemy and pushes it back.
-    /// </summary>
-    /// <returns>Null.</returns>
-    protected override IEnumerator ImpactToBack()
-    {
-        YieldInstruction wffu = new WaitForFixedUpdate();
-        float timeEntered = Time.time;
-
-        Vector3 dir =
-            (playerTarget.transform.position - myTarget.position).normalized;
-        float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-        enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-
-        while (Time.time - timeEntered < timeToTravelAfterHit)
-        {
-            agent.isStopped = true;
-
-            enemy.transform.position +=
-                -(dir) *
-                Time.fixedDeltaTime *
-                takeDamageDistancePower;
-
-            yield return wffu;
-        }
-        agent.isStopped = false;
     }
 }

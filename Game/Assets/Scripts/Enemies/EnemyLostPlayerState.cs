@@ -44,7 +44,7 @@ public class EnemyLostPlayerState : EnemyStateWithVision
 
         agent.SetDestination(enemy.PlayerLastKnownPosition);
 
-        stats.TookDamage += TakeImpact;
+        stats.AnyDamageOnEnemy += TakeImpact;
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public class EnemyLostPlayerState : EnemyStateWithVision
         agent.isStopped = false;
         enemy.VisionCone.SetActive(false);
 
-        stats.TookDamage -= TakeImpact;
+        stats.AnyDamageOnEnemy -= TakeImpact;
     }
 
 
@@ -159,41 +159,5 @@ public class EnemyLostPlayerState : EnemyStateWithVision
         }
         breakState = true;
         lookForPlayerCoroutine = false;
-    }
-
-    /// <summary>
-    /// Starts ImpactToBack coroutine.
-    /// </summary>
-    protected override void TakeImpact()
-    {
-        base.TakeImpact();
-    }
-
-    /// <summary>
-    /// Happens after enemy being hit. Rotates enemy and pushes it back.
-    /// </summary>
-    /// <returns>Null.</returns>
-    protected override IEnumerator ImpactToBack()
-    {
-        YieldInstruction wffu = new WaitForFixedUpdate();
-        float timeEntered = Time.time;
-
-        Vector3 dir =
-            (playerTarget.transform.position - myTarget.position).normalized;
-        float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-        enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-
-        while (Time.time - timeEntered < timeToTravelAfterHit)
-        {
-            agent.isStopped = true;
-
-            enemy.transform.position +=
-                -(dir) *
-                Time.fixedDeltaTime *
-                takeDamageDistancePower;
-
-            yield return wffu;
-        }
-        agent.isStopped = false;
     }
 }

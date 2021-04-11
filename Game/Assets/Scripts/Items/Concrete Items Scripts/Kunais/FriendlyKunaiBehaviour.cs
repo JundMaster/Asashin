@@ -61,7 +61,7 @@ public class FriendlyKunaiBehaviour : KunaiBehaviour
     /// <param name="player">Player transform.</param>
     public override void Hit(IDamageable damageableBody, Collider collider, Transform player)
     {
-        damageableBody?.TakeDamage(playerStats.RangedDamage);
+        damageableBody?.TakeDamage(playerStats.RangedDamage, TypeOfDamage.PlayerRanged);
         Destroy(gameObject);
     }
 

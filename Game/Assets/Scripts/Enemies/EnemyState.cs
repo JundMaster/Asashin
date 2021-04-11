@@ -8,8 +8,8 @@ using System.Collections;
 public abstract class EnemyState : StateBase
 {
     [Header("Distance that the enemy travels back after being hit")]
-    [Range(0.1f,2f)][SerializeField] protected float timeToTravelAfterHit;
-    [Range(0.1f,2f)][SerializeField] protected float takeDamageDistancePower;
+    [Range(0.1f,1f)][SerializeField] protected float timeToTravelAfterHit;
+    [Range(0.1f,3f)][SerializeField] protected float takeDamageDistancePower;
     protected Enemy enemy;
     protected EnemyStats stats;
     protected Transform playerTarget;
@@ -77,8 +77,27 @@ public abstract class EnemyState : StateBase
     /// Happens after enemy being hit. Rotates enemy and pushes it back.
     /// </summary>
     /// <returns>Null.</returns>
-    protected virtual IEnumerator ImpactToBack()
+    private IEnumerator ImpactToBack()
     {
-        yield return null;
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        float timeEntered = Time.time;
+
+        Vector3 dir =
+            (playerTarget.transform.position - myTarget.position).normalized;
+        float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+
+        while (Time.time - timeEntered < timeToTravelAfterHit)
+        {
+            agent.isStopped = true;
+
+            enemy.transform.position +=
+                -(dir) *
+                Time.fixedDeltaTime *
+                takeDamageDistancePower;
+
+            yield return wffu;
+        }
+        agent.isStopped = false;
     }
 }

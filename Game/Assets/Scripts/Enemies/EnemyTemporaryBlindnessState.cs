@@ -10,6 +10,14 @@ public class EnemyTemporaryBlindnessState : EnemyState
     [Range(0.5f, 10f)] [SerializeField] private float secondsToBeBlind;
     private float timePassed;
 
+    private bool triggerDeath;
+
+    public override void Start()
+    {
+        base.Start();
+        triggerDeath = false;
+    }
+
     /// <summary>
     /// Happens once when the enemy enters this state. Sets current time passed.
     /// </summary>
@@ -18,6 +26,7 @@ public class EnemyTemporaryBlindnessState : EnemyState
         base.OnEnter();
         timePassed = Time.time;
         agent.isStopped = true;
+        stats.MeleeDamageOnEnemy += Die;
     }
 
     /// <summary>
@@ -31,6 +40,9 @@ public class EnemyTemporaryBlindnessState : EnemyState
 
         if (Blind())
         {
+            if (triggerDeath)
+                return enemy.DeathState;
+
             return enemy.TemporaryBlindnessState;
         }
         return enemy.LostPlayerState;
@@ -42,6 +54,7 @@ public class EnemyTemporaryBlindnessState : EnemyState
     public override void OnExit()
     {
         agent.isStopped = false;
+        stats.MeleeDamageOnEnemy -= Die;
     }
 
     /// <summary>
@@ -54,4 +67,9 @@ public class EnemyTemporaryBlindnessState : EnemyState
             return false;
         return true;
     }
+
+    /// <summary>
+    /// Kills this enemy.
+    /// </summary>
+    private void Die() => triggerDeath = true;
 }

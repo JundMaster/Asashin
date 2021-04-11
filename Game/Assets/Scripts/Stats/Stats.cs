@@ -24,7 +24,8 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
     /// Takes an amount of damage.
     /// </summary>
     /// <param name="damage">Damage to take.</param>
-    public void TakeDamage(float damage)
+    /// <param name="typeOfDamage">Type of this damage.</param>
+    public void TakeDamage(float damage, TypeOfDamage typeOfDamage)
     {
         // If this body receives damage
         if (damage > 0)
@@ -39,16 +40,47 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
                 OnDie();
             }
         }
-        OnTookDamage();
+
+        switch (typeOfDamage)
+        {
+            case TypeOfDamage.EnemyMelee:
+                OnTookDamage();
+                break;
+            case TypeOfDamage.EnemyRanged:
+                OnTookDamage();
+                break;
+            case TypeOfDamage.PlayerMelee:
+                OnAnyDamageOnEnemy();
+                OnMeleeDamageOnEnemy();
+                break;
+            case TypeOfDamage.PlayerRanged:
+                OnAnyDamageOnEnemy();
+                break;
+        }
+        
     }
 
     protected virtual void OnTookDamage() => TookDamage?.Invoke();
 
     /// <summary>
     /// Event registered on UIHealthBar.
-    /// Event registered on EnemyDamaged.
     /// </summary>
     public event Action TookDamage;
+
+    protected virtual void OnMeleeDamageOnEnemy() =>
+        MeleeDamageOnEnemy?.Invoke();
+
+    /// <summary>
+    /// Event registered on enemy temporary blindness state.
+    /// </summary>
+    public event Action MeleeDamageOnEnemy;
+
+    protected virtual void OnAnyDamageOnEnemy() => AnyDamageOnEnemy?.Invoke();
+
+    /// <summary>
+    /// Event registered on enemy states.
+    /// </summary>
+    public event Action AnyDamageOnEnemy;
 
     protected virtual void OnDie() => Die?.Invoke();
 

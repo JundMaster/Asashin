@@ -8,7 +8,7 @@ public class KillPlayerTemp : MonoBehaviour
     [MenuItem("Costume Methods/Kill Player")]
     private static void KillPlayer()
     {
-        FindObjectOfType<PlayerStats>().TakeDamage(100);
+        FindObjectOfType<PlayerStats>().TakeDamage(100, TypeOfDamage.EnemyMelee);
     }
 
     [MenuItem("Costume Methods/LoadScene")]

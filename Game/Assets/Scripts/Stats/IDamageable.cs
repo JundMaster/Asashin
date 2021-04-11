@@ -9,8 +9,9 @@ public interface IDamageable
     float Health { get; }
 
     /// <summary>
-    /// Method responsible for doing damage.
+    /// Takes an amount of damage.
     /// </summary>
-    /// <param name="damage"></param>
-    void TakeDamage(float damage);
+    /// <param name="damage">Damage to take.</param>
+    /// <param name="typeOfDamage">Type of this damage.</param>
+    void TakeDamage(float damage, TypeOfDamage typeOfDamage);
 }

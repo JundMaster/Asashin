@@ -31,7 +31,7 @@ public class FirebombKunaiBehaviour : FriendlyKunaiBehaviour
             if (col.gameObject.TryGetComponent(out IDamageable body) &&
                 col.gameObject.TryGetComponent(out Enemy en))
             {
-                body.TakeDamage(playerStats.FirebombKunaiDamage);
+                body.TakeDamage(playerStats.FirebombKunaiDamage, TypeOfDamage.PlayerRanged);
             }
         }  
 

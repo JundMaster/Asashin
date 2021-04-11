@@ -107,7 +107,7 @@ public class SpawnerController : MonoBehaviour
         // Updates player's hp to the current hp on the last checkpoint
         yield return waitForFixedUpdate;
         if (typeOfSpawn == SpawnTypeEnum.Loadgame)
-            playerStats.TakeDamage(100 - playerSavedStats.SavedHealth);
+            playerStats.TakeDamage(100 - playerSavedStats.SavedHealth, TypeOfDamage.EnemyMelee);
     }
 
     private void OnEnable()
