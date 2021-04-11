@@ -18,6 +18,7 @@ public class EnemyAnimations : MonoBehaviour
 
     private void Update()
     {
+        // Movement animation
         if (agent.enabled) anim.SetFloat("Speed", agent.velocity.magnitude);
         else anim.SetFloat("Speed", 0);
     }

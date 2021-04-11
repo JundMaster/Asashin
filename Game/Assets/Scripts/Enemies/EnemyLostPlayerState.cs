@@ -102,7 +102,7 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     /// <returns>True if it is.</returns>
     private bool ReachedLastKnownPosition()
     {
-        if (agent.remainingDistance < 2f) return true;
+        if (agent.remainingDistance < 1f) return true;
         return false;
     }
 
@@ -120,8 +120,6 @@ public class EnemyLostPlayerState : EnemyStateWithVision
         float yRotationMax = Mathf.Clamp(yRotationCurrent + 45f, 1, 359);
         float yRotationMin = Mathf.Clamp(yRotationCurrent - 45f, 1, 359);
         float multiplier = 1;
-
-        enemy.VisionCone.SetActive(true);
 
         // While the enemy can't see the player or while the time is less than
         // the time allowed searching for the player.
@@ -152,6 +150,9 @@ public class EnemyLostPlayerState : EnemyStateWithVision
             // Rotates
             enemy.transform.eulerAngles += 
                 new Vector3(0, rotationSpeed * multiplier, 0);
+
+            // Activates anc calculates vision cone
+            enemy.VisionCone.SetActive(true);
 
             visionCone.Calculate();
 

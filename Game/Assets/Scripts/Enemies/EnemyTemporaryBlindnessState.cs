@@ -10,11 +10,14 @@ public class EnemyTemporaryBlindnessState : EnemyState
     [Range(0.5f, 10f)] [SerializeField] private float secondsToBeBlind;
     private float timePassed;
 
+    private Animator anim;
+
     private bool triggerDeath;
 
     public override void Start()
     {
         base.Start();
+        anim = enemy.Anim;
         triggerDeath = false;
     }
 
@@ -26,6 +29,7 @@ public class EnemyTemporaryBlindnessState : EnemyState
         base.OnEnter();
         timePassed = Time.time;
         agent.isStopped = true;
+        anim.SetTrigger("Blind");
         stats.MeleeDamageOnEnemy += Die;
     }
 
@@ -54,6 +58,7 @@ public class EnemyTemporaryBlindnessState : EnemyState
     public override void OnExit()
     {
         agent.isStopped = false;
+        anim.SetTrigger("CancelBlind");
         stats.MeleeDamageOnEnemy -= Die;
     }
 

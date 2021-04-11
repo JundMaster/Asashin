@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Scriptable object responsible for controlling enemy movement state.
@@ -13,7 +14,9 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
 
     [Header("Kunai spawn delay")]
     [Range(1f, 10f)][SerializeField] private float kunaiDelay;
-    private float kunaiLastTimeChecked;
+    [Range(0f, 5f)] [SerializeField] private float kunaiSpawnAfterAnimation;
+    private bool kunaiCoroutine;
+    private bool whileThrowingKunai;
 
     [Header("Rotation smooth time")]
     [Range(0.1f,1.5f)][SerializeField] private float turnSmooth;
@@ -25,12 +28,17 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     // Movement variables
     private float randomDistance;
 
+    private Animator anim;
+
     /// <summary>
     /// Happens once on start. Sets a random distance to mantain while defending.
     /// </summary>
     public override void Start()
     {
         base.Start();
+        kunaiCoroutine = false;
+        whileThrowingKunai = false;
+        anim = enemy.Anim;
 
         if (randomDistanceFromPlayer.y < randomDistanceFromPlayer.x)
             randomDistanceFromPlayer.y = randomDistanceFromPlayer.x;
@@ -48,9 +56,13 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     {
         base.OnEnter();
 
-        kunaiLastTimeChecked = Time.time;
+        kunaiCoroutine = false;
+
+        whileThrowingKunai = false;
 
         agent.isStopped = false;
+
+        enemy.VisionCone.SetActive(false);
 
         stats.AnyDamageOnEnemy += TakeImpact;
     }
@@ -70,23 +82,27 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
             // If the enemy can see and is facing the player
             if (PlayerInRange() && FacingPlayer())
             {
-                ThrowKunai();
+                if (kunaiCoroutine == false)
+                {
+                    kunaiCoroutine = true;
+                    enemy.StartCoroutine(ThrowKunaiCoroutine());
+                }
             }
             // If the enemy can NOT see and is facing the player
             else if (PlayerInRange() == false && FacingPlayer())
             {
-                return enemy.LostPlayerState;
+                if (whileThrowingKunai == false)
+                    return enemy.LostPlayerState;
             }
 
             // Keeps rotating the enemy towards the player
-            RotateEnemy();
+            RotateEnemy(true);
         }
         // Else it moves to the enemy without rotating towards the player
 
         // Only if the player isn't fighting an enemy yet
         if (enemy.PlayerCurrentlyFighting == false)
         {
-            enemy.PlayerCurrentlyFighting = true;
             return enemy.AggressiveState;
         }
 
@@ -100,7 +116,8 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     public override void OnExit()
     {
         base.OnExit();
-
+        kunaiCoroutine = false;
+        whileThrowingKunai = false;
         stats.AnyDamageOnEnemy -= TakeImpact;
     }
 
@@ -134,10 +151,21 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
             if (Physics.Raycast(
                 finalPosition, randomDistance, collisionLayers) == false)
             {
-                // Moves the enemy back to keep a random distance from player
-                agent.SetDestination(
-                playerTarget.position - desiredDirection * randomDistance);
-                return true;
+                // Moves the enemy in order to keep a random distance 
+                // from the player
+                // Only happens if the enemy is not throwing a kunai
+                if (whileThrowingKunai == false)
+                {
+                    agent.SetDestination(
+                        playerTarget.position - desiredDirection *
+                        randomDistance);
+                    return true;
+                }
+                // Stops enemy, only happens if the enemy is throwing a kunai
+                else
+                {
+                    agent.SetDestination(myTarget.position);
+                }
             }
             // Else if there is a wall
             else
@@ -156,31 +184,48 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     /// <summary>
     /// Throws a kunai towards the player future position.
     /// </summary>
-    private void ThrowKunai()
+    private IEnumerator ThrowKunaiCoroutine()
     {
-        if (playerTarget != null)
+        YieldInstruction wfd = new WaitForSeconds(kunaiDelay);
+        YieldInstruction wfks = new WaitForSeconds(kunaiSpawnAfterAnimation);
+
+        while(kunaiCoroutine)
         {
-            if (Time.time - kunaiLastTimeChecked > kunaiDelay)
+            yield return wfd;
+
+            whileThrowingKunai = true;
+
+            RotateEnemy(false);
+            anim.SetTrigger("ThrowKunai");
+
+            yield return wfks;
+
+            // Spawns a kunai
+            GameObject thisKunai = Instantiate(
+                kunai,
+                myTarget.position + myTarget.forward,
+                Quaternion.identity);
+
+            // Sets layer and parent enemy of the kunai
+            thisKunai.layer = KUNAILAYER;
+            thisKunai.GetComponent<Kunai>().Behaviour.ParentEnemy = enemy;
+
+            // Waits until throw kunai animation ends
+            while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
             {
-                // Spawns a kunai
-                GameObject thisKunai = Instantiate(
-                    kunai,
-                    myTarget.position + myTarget.forward,
-                    Quaternion.identity);
-
-                // Sets layer and parent enemy of the kunai
-                thisKunai.layer = KUNAILAYER;
-                thisKunai.GetComponent<Kunai>().Behaviour.ParentEnemy = enemy;
-
-                kunaiLastTimeChecked = Time.time;
+                yield return null;
             }
+
+            whileThrowingKunai = false;
+            kunaiCoroutine = false;
         }
     }
 
     /// <summary>
-    /// Starts ImpactToBack coroutine.
+    /// Rotates the enemy. Can rotate smooth or instantly.
     /// </summary>
-    private void RotateEnemy()
+    /// <param name="smooth">True if smooth turn.</param>
+    private void RotateEnemy(bool smooth)
     {
         Vector3 dir = playerTarget.transform.position - myTarget.position;
         float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
@@ -189,7 +234,11 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
                 targetAngle,
                 ref smoothTimeRotation,
                 turnSmooth);
-        enemy.transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+        if (smooth)
+            enemy.transform.rotation = Quaternion.Euler(0f, angle, 0f);
+        else
+            enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
     }
 
     /// <summary>
