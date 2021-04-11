@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 /// <summary>
 /// Class responsible for handling enemy script.
@@ -66,12 +67,14 @@ public class Enemy : MonoBehaviour, IFindPlayer
     public NavMeshAgent Agent { get; private set; }
     public VisionCone EnemyVisionCone { get; set; }
     private Stats enemyStats;
+    private EnemyAnimationEvents animationEvents;
 
     private void Awake()
     {
         Agent = GetComponent<NavMeshAgent>();
         CineTarget = FindObjectOfType<CinemachineTarget>();
         enemyStats = GetComponent<Stats>();
+        animationEvents = GetComponentInChildren<EnemyAnimationEvents>();
 
         PlayerLastKnownPosition = default;
         if (Player != null) PlayerCurrentlyFighting = false;
@@ -110,12 +113,14 @@ public class Enemy : MonoBehaviour, IFindPlayer
 
     private void OnEnable()
     {
-        enemyStats.Die += TriggerDeath;
+        enemyStats.Die += OnDeath;
+        animationEvents.Hit += OnWeaponHit;
     }
 
     private void OnDisable()
     {
-        enemyStats.Die -= TriggerDeath;
+        enemyStats.Die -= OnDeath;
+        animationEvents.Hit -= OnWeaponHit;
     }
 
     private void FixedUpdate()
@@ -156,9 +161,19 @@ public class Enemy : MonoBehaviour, IFindPlayer
     /// <summary>
     /// Method that triggers DeathState.
     /// </summary>
-    private void TriggerDeath()
+    private void OnDeath()
     {
         if (DeathState != null)
             stateMachine.CurrentState = DeathState;
-    }   
+    }
+
+    /// <summary>
+    /// Invokes WeaponHit event.
+    /// </summary>
+    protected virtual void OnWeaponHit() => WeaponHit?.Invoke();
+
+    /// <summary>
+    /// Event registered on Aggressive
+    /// </summary>
+    public event Action WeaponHit;
 }

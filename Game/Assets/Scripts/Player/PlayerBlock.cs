@@ -13,6 +13,7 @@ public class PlayerBlock : MonoBehaviour, IAction
     private PlayerRoll roll;
     private PlayerUseItem useItem;
     private PlayerMovement movement;
+    private CinemachineTarget cineTarget;
 
     public bool Performing { get; private set; }
 
@@ -25,6 +26,7 @@ public class PlayerBlock : MonoBehaviour, IAction
         roll = GetComponent<PlayerRoll>();
         useItem = GetComponent<PlayerUseItem>();
         movement = GetComponent<PlayerMovement>();
+        cineTarget = FindObjectOfType<CinemachineTarget>();
     }
 
     private void OnEnable()
@@ -62,11 +64,27 @@ public class PlayerBlock : MonoBehaviour, IAction
 
     public void ComponentFixedUpdate()
     {
-        
+        if (Performing)
+        {
+            RotationToCurrentTarget();
+        }
     }
 
     public void ComponentUpdate()
     {
+        //
+    }
 
+    /// <summary>
+    /// Rotates the character towards something.
+    /// </summary>
+    private void RotationToCurrentTarget()
+    {
+        if (cineTarget.Targeting)
+        {
+            transform.LookAt(cineTarget.CurrentTarget);
+            transform.eulerAngles = 
+                new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
+        }
     }
 }

@@ -16,7 +16,6 @@ public class EnemyAggressiveState : EnemyState
 
     [Header("Attacking Times")]
     [Range(1, 4)] [SerializeField] private float attackingDelay;
-    [Range(0, 2)] [SerializeField] private float afterAttackCollisionCheckTime;
     private bool attacking;
     private bool attackingAnimation;
 
@@ -54,6 +53,7 @@ public class EnemyAggressiveState : EnemyState
         enemy.PlayerCurrentlyFighting = true;
 
         stats.AnyDamageOnEnemy += TakeImpact;
+        enemy.WeaponHit += WeaponHit;
     }
 
     /// <summary>
@@ -97,6 +97,7 @@ public class EnemyAggressiveState : EnemyState
         enemy.PlayerCurrentlyFighting = false;
         agent.isStopped = false;
         stats.AnyDamageOnEnemy -= TakeImpact;
+        enemy.WeaponHit -= WeaponHit;
     }
 
     /// <summary>
@@ -107,8 +108,6 @@ public class EnemyAggressiveState : EnemyState
     private IEnumerator AttackPlayerCoroutine()
     {
         YieldInstruction wfd = new WaitForSeconds(attackingDelay);
-        YieldInstruction wfac = 
-            new WaitForSeconds(afterAttackCollisionCheckTime);
 
         // While in range with the player
         while (attacking)
@@ -124,59 +123,7 @@ public class EnemyAggressiveState : EnemyState
             attackingAnimation = true;
             anim.SetTrigger("MeleeAttack");
 
-            // After x seconds, checks if there is a collision with the weapon
-            yield return wfac;
-
-            // Collisions of the melee weapon
-            Collider[] swordCollider = Physics.OverlapSphere(
-                weapon.transform.position + weapon.center,
-                weapon.radius, 
-                playerLayer);
-
-            // Checks if this object or parent has a damageable body
-            GameObject body = null;
-            if (swordCollider.Length > 0)
-                body = GetDamageableBody(swordCollider[0].gameObject);
-
-            // If this object can receive damage
-            if (body != null)
-            {
-                if (body.TryGetComponent(out IDamageable damageableBody) &&
-                    body.TryGetComponent(out PlayerBlock playerBlock))
-                {
-                    // If player is blocking
-                    if (playerBlock.Performing)
-                    {
-                        // If the player is facing the enemy's forward
-                        // (player on blocks if he's basically facing
-                        // the enemy)
-                        // This means the player successfully blocked
-                        if (Vector3.Dot(
-                            enemy.transform.forward, playerTarget.forward) >
-                            -0.5f)
-                        {
-                            damageableBody?.TakeDamage(
-                            stats.LightDamage, TypeOfDamage.EnemyMelee);
-                        }
-                        // If the player was NOT able to block
-                        else
-                        {
-                            
-                        }
-                    }
-                    // Player isn't blocking
-                    else
-                    {
-                        damageableBody?.TakeDamage(
-                        stats.LightDamage, TypeOfDamage.EnemyMelee);
-                    }
-
-                    Instantiate(
-                    meleeHitParticles,
-                    playerTarget.position,
-                    Quaternion.identity);
-                } 
-            }
+            // WeaponHit() happens here with animation event
 
             // Waits until melee attack animation ends
             while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
@@ -190,6 +137,66 @@ public class EnemyAggressiveState : EnemyState
         // Also happens if the coroutine is cancelled
         attackingAnimation = false;
         attacking = false;
+    }
+
+    /// <summary>
+    /// Tries to hit something while atacking. Checks collisions, checks if
+    /// the collision has a damgeablebody, damages it if the player isn't
+    /// blocking.
+    /// </summary>
+    private void WeaponHit()
+    {
+        // Collisions of the melee weapon
+        Collider[] swordCollider = Physics.OverlapSphere(
+            weapon.transform.position + weapon.center,
+            weapon.radius,
+            playerLayer);
+
+        // Checks if this object or parent has a damageable body
+        GameObject body = null;
+        if (swordCollider.Length > 0)
+            body = GetDamageableBody(swordCollider[0].gameObject);
+
+        // If this object can receive damage
+        if (body != null)
+        {
+            if (body.TryGetComponent(out IDamageable damageableBody) &&
+                body.TryGetComponent(out PlayerBlock playerBlock))
+            {
+                // If player is blocking
+                if (playerBlock.Performing)
+                {
+                    // If the player is facing the enemy's forward
+                    // (player on blocks if he's basically facing
+                    // the enemy)
+                    // This means the player successfully blocked
+                    if (Vector3.Dot(
+                        enemy.transform.forward, playerTarget.forward) >
+                        -0.5f)
+                    {
+                        damageableBody?.TakeDamage(
+                        stats.LightDamage, TypeOfDamage.EnemyMelee);
+                    }
+                    // If the player was NOT able to block
+                    else
+                    {
+                        // Pushes enemy back
+                        TakeImpact();
+                    }
+                }
+                // Player isn't blocking
+                else
+                {
+                    damageableBody?.TakeDamage(
+                    stats.LightDamage, TypeOfDamage.EnemyMelee);
+                }
+
+                Instantiate(
+                meleeHitParticles,
+                playerTarget.position,
+                Quaternion.identity);
+            }
+        }
     }
 
     /// <summary>
