@@ -23,6 +23,10 @@ public class Enemy : MonoBehaviour, IFindPlayer
     [SerializeField] private GameObject visionCone;
     public GameObject VisionCone => visionCone;
 
+    [Header("Enemy melee weapon")]
+    [SerializeField] private SphereCollider weaponCollider;
+    public SphereCollider WeaponCollider => weaponCollider;
+
     [Header("Enemy animator")]
     [SerializeField] private Animator anim;
     public Animator Anim => anim;

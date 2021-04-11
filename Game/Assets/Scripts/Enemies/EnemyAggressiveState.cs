@@ -20,7 +20,12 @@ public class EnemyAggressiveState : EnemyState
     private bool attacking;
     private bool attackingAnimation;
 
+    [Header("Prefab to spawn on melee attack hit")]
+    [SerializeField] private GameObject meleeHitParticles;
+
+    // Components
     private Animator anim;
+    private SphereCollider weapon;
 
     /// <summary>
     /// Happens once on start.
@@ -31,6 +36,7 @@ public class EnemyAggressiveState : EnemyState
 
         attacking = false;
         anim = enemy.Anim;
+        weapon = enemy.WeaponCollider;
     }
 
     /// <summary>
@@ -76,10 +82,6 @@ public class EnemyAggressiveState : EnemyState
                     enemy.StartCoroutine(AttackPlayerCoroutine());
                 }
             }
-            else
-            {
-                attacking = false;
-            }
             return enemy.AggressiveState;
         }
         return enemy.LostPlayerState;    
@@ -113,16 +115,23 @@ public class EnemyAggressiveState : EnemyState
         {
             yield return wfd;
 
+            // Checks if player is still in range
             if (Vector3.Distance(playerTarget.position, myTarget.position) >
                 closeToPlayerRange)
                 break;
                 
+            // Starts atacking animation
             attackingAnimation = true;
             anim.SetTrigger("MeleeAttack");
 
+            // After x seconds, checks if there is a collision with the weapon
             yield return wfac;
 
-            Collider[] swordCollider = Physics.OverlapSphere(myTarget.position, 1f, playerLayer);
+            // Collisions of the melee weapon
+            Collider[] swordCollider = Physics.OverlapSphere(
+                weapon.transform.position + weapon.center,
+                weapon.radius, 
+                playerLayer);
 
             // Checks if this object or parent has a damageable body
             GameObject body = null;
@@ -133,30 +142,49 @@ public class EnemyAggressiveState : EnemyState
             if (body != null)
             {
                 if (body.TryGetComponent(out IDamageable damageableBody) &&
-                    body.TryGetComponent(out PlayerBlock block))
+                    body.TryGetComponent(out PlayerBlock playerBlock))
                 {
-                    damageableBody?.TakeDamage(
+                    // If player is blocking
+                    if (playerBlock.Performing)
+                    {
+                        // If the player is facing the enemy's forward
+                        // (player on blocks if he's basically facing
+                        // the enemy)
+                        // This means the player successfully blocked
+                        if (Vector3.Dot(
+                            enemy.transform.forward, playerTarget.forward) >
+                            -0.5f)
+                        {
+                            damageableBody?.TakeDamage(
+                            stats.LightDamage, TypeOfDamage.EnemyMelee);
+                        }
+                        // If the player was NOT able to block
+                        else
+                        {
+                            
+                        }
+                    }
+                    // Player isn't blocking
+                    else
+                    {
+                        damageableBody?.TakeDamage(
                         stats.LightDamage, TypeOfDamage.EnemyMelee);
+                    }
 
-                    Debug.Log(body.gameObject.name);
-                }
-
-                /*
-                Instantiate(
-                    swordHitPrefab,
-                    sword.transform.position + sword.center,
+                    Instantiate(
+                    meleeHitParticles,
+                    playerTarget.position,
                     Quaternion.identity);
-                */
+                } 
             }
 
-            // Waits until throw kunai animation ends
+            // Waits until melee attack animation ends
             while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
             {
-                Debug.Log("inside animation");
                 yield return null;
             }
-            attackingAnimation = false;
-            attacking = false;
+
+            break;
         }
 
         // Also happens if the coroutine is cancelled
@@ -191,7 +219,7 @@ public class EnemyAggressiveState : EnemyState
         {
             Vector3 dir = (myTarget.position - playerTarget.position).normalized;
 
-            if (attacking == false)
+            if (attackingAnimation == false)
             {
                 agent.SetDestination(
                     playerTarget.position + dir * distanceFromPlayer);
