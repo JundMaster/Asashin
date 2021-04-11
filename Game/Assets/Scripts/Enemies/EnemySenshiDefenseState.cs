@@ -115,8 +115,8 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
             Vector3.Distance(myTarget.position, playerTarget.position);
 
         // If the enemy is NOT in the desired position
-        if (distance > randomDistance + 0.5f || 
-            distance < randomDistance - 0.5f)
+        if (distance > randomDistance + 3 || 
+            distance < randomDistance - 3)
         {
             agent.isStopped = false;
 

@@ -175,7 +175,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// <returns></returns>
     private IEnumerator ChangeValuesOnBlending()
     {
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame(); // Don't remove <<
         while (mainCameraBrain.IsBlending)
         {
             thirdPersonCamera.m_YAxis.m_MaxSpeed = 0;
@@ -573,7 +573,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         }
         else
         {
-            mainCameraBrain.m_DefaultBlend.m_Time = 0.75f;
+            mainCameraBrain.m_DefaultBlend.m_Time = 0f;
             wallHugCamera.Priority = 0;
         }
     }
@@ -581,20 +581,21 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// <summary>
     /// Adjusts values when the player is on a wall border and huging a wall.
     /// </summary>
-    /// <param name="dir"></param>
+    /// <param name="dir">Direction to push the camera to.</param>
     private void AdjustWallHugCamera(Direction dir)
     {
         if (dir == Direction.Left)
         {
-            framingTranspX = Mathf.Lerp(framingTranspX, 0.8f, Time.fixedDeltaTime * 4);
+            framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault + 0.3f, Time.fixedDeltaTime * 4);
         }
         else if (dir == Direction.Right)
         {
-            framingTranspX = Mathf.Lerp(framingTranspX, -0.8f, Time.fixedDeltaTime * 4);
+            framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault - 0.3f, Time.fixedDeltaTime * 4);
+            Debug.Log(framingTranspX);
         }
         else
         {
-            framingTranspX = 
+            framingTranspX =
                 Mathf.Lerp(framingTranspX, framingTranspXDefault, Time.fixedDeltaTime * 4);
         }
 
