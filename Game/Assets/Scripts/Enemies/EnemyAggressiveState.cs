@@ -51,8 +51,6 @@ public class EnemyAggressiveState : EnemyState
             agent.SetDestination(playerTarget.position);
 
         enemy.PlayerCurrentlyFighting = true;
-
-        stats.AnyDamageOnEnemy += TakeImpact;
         enemy.WeaponHit += WeaponHit;
     }
 
@@ -64,6 +62,9 @@ public class EnemyAggressiveState : EnemyState
     public override IState FixedUpdate()
     {
         base.FixedUpdate();
+
+        if (instantKill)
+            return enemy.DeathState;
 
         float currentDistanceFromPlayer =
             Vector3.Distance(playerTarget.position, myTarget.position);
@@ -96,7 +97,7 @@ public class EnemyAggressiveState : EnemyState
         attacking = false;
         enemy.PlayerCurrentlyFighting = false;
         agent.isStopped = false;
-        stats.AnyDamageOnEnemy -= TakeImpact;
+
         enemy.WeaponHit -= WeaponHit;
     }
 

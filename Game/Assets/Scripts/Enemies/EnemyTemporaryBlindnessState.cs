@@ -26,11 +26,11 @@ public class EnemyTemporaryBlindnessState : EnemyState
     /// </summary>
     public override void OnEnter()
     {
-        base.OnEnter();
+        stats.MeleeDamageOnEnemy += SwitchToDeathState;
+
         timePassed = Time.time;
         agent.isStopped = true;
         anim.SetTrigger("Blind");
-        stats.MeleeDamageOnEnemy += Die;
     }
 
     /// <summary>
@@ -42,11 +42,11 @@ public class EnemyTemporaryBlindnessState : EnemyState
     {
         base.FixedUpdate();
 
+        if (instantKill)
+            return enemy.DeathState;
+
         if (Blind())
         {
-            if (triggerDeath)
-                return enemy.DeathState;
-
             return enemy.TemporaryBlindnessState;
         }
         return enemy.LostPlayerState;
@@ -59,7 +59,7 @@ public class EnemyTemporaryBlindnessState : EnemyState
     {
         agent.isStopped = false;
         anim.SetTrigger("CancelBlind");
-        stats.MeleeDamageOnEnemy -= Die;
+        stats.MeleeDamageOnEnemy -= SwitchToDeathState;
     }
 
     /// <summary>
@@ -72,9 +72,4 @@ public class EnemyTemporaryBlindnessState : EnemyState
             return false;
         return true;
     }
-
-    /// <summary>
-    /// Kills this enemy.
-    /// </summary>
-    private void Die() => triggerDeath = true;
 }

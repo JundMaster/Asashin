@@ -63,8 +63,6 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
         agent.isStopped = false;
 
         enemy.VisionCone.SetActive(false);
-
-        stats.AnyDamageOnEnemy += TakeImpact;
     }
 
     /// <summary>
@@ -75,6 +73,9 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     public override IState FixedUpdate()
     {
         base.FixedUpdate();
+
+        if (instantKill)
+            return enemy.DeathState;
 
         // If the enemy is not moving towards the end position
         if (MoveToDefensiveRange() == false)
@@ -118,7 +119,6 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
         base.OnExit();
         kunaiCoroutine = false;
         whileThrowingKunai = false;
-        stats.AnyDamageOnEnemy -= TakeImpact;
     }
 
     /// <summary>

@@ -43,8 +43,6 @@ public class EnemyLostPlayerState : EnemyStateWithVision
         agent.isStopped = false;
 
         agent.SetDestination(enemy.PlayerLastKnownPosition);
-
-        stats.AnyDamageOnEnemy += TakeImpact;
     }
 
     /// <summary>
@@ -56,6 +54,9 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     public override IState FixedUpdate()
     {
         base.FixedUpdate();
+
+        if (instantKill)
+            return enemy.DeathState;
 
         // If enemy is in range, it stops looking for player coroutine
         if (PlayerInRange())
@@ -82,7 +83,6 @@ public class EnemyLostPlayerState : EnemyStateWithVision
 
     /// <summary>
     /// Happens when leaving this state.
-    /// 
     /// </summary>
     public override void OnExit()
     {
@@ -91,8 +91,6 @@ public class EnemyLostPlayerState : EnemyStateWithVision
         lookForPlayerCoroutine = false;
         agent.isStopped = false;
         enemy.VisionCone.SetActive(false);
-
-        stats.AnyDamageOnEnemy -= TakeImpact;
     }
 
 

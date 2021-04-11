@@ -27,7 +27,7 @@ public class EnemyPatrolState : EnemyStateWithVision
     private bool breakState;
 
     /// <summary>
-    /// * INITIAL ENEMY STATE *
+    /// * INITIAL ENEMY STATE * OnEnter won't run on the first state.
     /// Runs once on start.
     /// Sets agent's initial destination and starts movement coroutine.
     /// </summary>
@@ -49,6 +49,8 @@ public class EnemyPatrolState : EnemyStateWithVision
         patrolIndex = 0;
         enemy.StartCoroutine(MovementCoroutine());
 
+        // Must be on start aswell because OnEnter doesn't run on first state
+        stats.MeleeDamageOnEnemy += CheckForInstantKill;
         stats.AnyDamageOnEnemy += TakeImpact;
     }
 
@@ -63,8 +65,6 @@ public class EnemyPatrolState : EnemyStateWithVision
         agent.isStopped = false;
         enemy.VisionCone.SetActive(true);
         enemy.StartCoroutine(MovementCoroutine());
-
-        stats.AnyDamageOnEnemy += TakeImpact;
     }
 
     /// <summary>
@@ -75,6 +75,9 @@ public class EnemyPatrolState : EnemyStateWithVision
     public override IState FixedUpdate()
     {
         base.FixedUpdate();
+
+        if (instantKill)
+            return enemy.DeathState;
 
         // Calculates vision cone if the player isn't too far
         if (Vector3.Distance(myTarget.position, playerTarget.position) < 50)
@@ -112,8 +115,6 @@ public class EnemyPatrolState : EnemyStateWithVision
             enemy.transform.position + offset, 
             Quaternion.identity);
         exclMark.transform.parent = enemy.transform;
-
-        stats.AnyDamageOnEnemy -= TakeImpact;
     }
 
     /// <summary>

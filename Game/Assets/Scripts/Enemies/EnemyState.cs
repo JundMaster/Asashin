@@ -16,6 +16,8 @@ public abstract class EnemyState : StateBase
     protected Transform myTarget;
     protected NavMeshAgent agent;
 
+    protected bool instantKill;
+
     /// <summary>
     /// Method that defines what happens when this state is initialized.
     /// </summary>
@@ -34,16 +36,20 @@ public abstract class EnemyState : StateBase
     /// </summary>
     public override void Start()
     {
-        // Left brank on purpose
+        instantKill = false;
     }
 
     /// <summary>
     /// Runs every time the state machine enters this state.
     /// Finds playerTarget in case it's null.
+    /// Registers to events to check for instant kill or take impact after
+    /// being hit.
     /// </summary>
     public override void OnEnter()
     {
         if (playerTarget == null) playerTarget = enemy.PlayerTarget;
+        stats.MeleeDamageOnEnemy += CheckForInstantKill;
+        stats.AnyDamageOnEnemy += TakeImpact;
     }
 
     /// <summary>
@@ -53,6 +59,8 @@ public abstract class EnemyState : StateBase
     public override void OnExit()
     {
         enemy.PlayerLastKnownPosition = playerTarget.position;
+        stats.MeleeDamageOnEnemy -= CheckForInstantKill;
+        stats.AnyDamageOnEnemy -= TakeImpact;
     }
 
     /// <summary>
@@ -78,17 +86,23 @@ public abstract class EnemyState : StateBase
     /// Happens after enemy being hit. Rotates enemy and pushes it back.
     /// </summary>
     /// <returns>Null.</returns>
-    private IEnumerator ImpactToBack()
+    protected virtual IEnumerator ImpactToBack()
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
         float timeEntered = Time.time;
 
+        // Direction from player to enemy
         Vector3 dir =
             (playerTarget.transform.position - myTarget.position).normalized;
+
+        // Waits for fixed update to check if the enemy died meanwhile
+        yield return wffu;
+
         float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
 
-        while (Time.time - timeEntered < timeToTravelAfterHit)
+        while (Time.time - timeEntered < timeToTravelAfterHit &&
+            instantKill == false)
         {
             agent.isStopped = true;
 
@@ -100,5 +114,29 @@ public abstract class EnemyState : StateBase
             yield return wffu;
         }
         agent.isStopped = false;
+    }
+
+    /// <summary>
+    /// If the enemy has his back turned, it dies instantly.
+    /// </summary>
+    protected void CheckForInstantKill()
+    {
+        // Checks if enemy has his back turned to the player
+        // If the player forward is similiar to the enemy's forward
+        // This means the player successfully instantly killed the enemy
+        if (Vector3.Dot(
+            enemy.transform.forward, playerTarget.forward) >
+            0.5f)
+        {
+            SwitchToDeathState();
+        }
+    }
+
+    /// <summary>
+    /// Instantly switches to DeathState.
+    /// </summary>
+    protected void SwitchToDeathState()
+    {
+        instantKill = true;
     }
 }

@@ -111,18 +111,27 @@ public class Enemy : MonoBehaviour, IFindPlayer
         stateMachine = new StateMachine(states, this);
     }
 
+    /// <summary>
+    /// Happens once on enable, registers to events.
+    /// </summary>
     private void OnEnable()
     {
         enemyStats.Die += OnDeath;
         animationEvents.Hit += OnWeaponHit;
     }
 
+    /// <summary>
+    /// Happens once on disable, unregisters from events.
+    /// </summary>
     private void OnDisable()
     {
         enemyStats.Die -= OnDeath;
         animationEvents.Hit -= OnWeaponHit;
     }
 
+    /// <summary>
+    /// Runs on state machine states.
+    /// </summary>
     private void FixedUpdate()
     {
         stateMachine?.FixedUpdate();
@@ -160,6 +169,7 @@ public class Enemy : MonoBehaviour, IFindPlayer
         
     /// <summary>
     /// Method that triggers DeathState.
+    /// Is triggered when enemy's health reaches 0.
     /// </summary>
     private void OnDeath()
     {
@@ -173,7 +183,8 @@ public class Enemy : MonoBehaviour, IFindPlayer
     protected virtual void OnWeaponHit() => WeaponHit?.Invoke();
 
     /// <summary>
-    /// Event registered on Aggressive
+    /// Event registered on Aggressive State.
+    /// Is triggered after the enemy atacks.
     /// </summary>
     public event Action WeaponHit;
 }
