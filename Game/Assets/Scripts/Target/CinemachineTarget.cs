@@ -591,7 +591,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         else if (dir == Direction.Right)
         {
             framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault - 0.3f, Time.fixedDeltaTime * 4);
-            Debug.Log(framingTranspX);
         }
         else
         {

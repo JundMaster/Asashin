@@ -91,7 +91,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
             // If the enemy can NOT see and is facing the player
             else if (PlayerInRange() == false && FacingPlayer())
             {
-                if (whileThrowingKunai == false)
+                if (kunaiCoroutine == false)
                     return enemy.LostPlayerState;
             }
 
