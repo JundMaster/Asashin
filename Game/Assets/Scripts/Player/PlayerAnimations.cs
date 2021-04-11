@@ -96,9 +96,22 @@ public class PlayerAnimations : MonoBehaviour
 
     private void TriggerAirAttack() => anim.SetTrigger("AirAttack");
 
-    private void TriggerLightMeleeAttack()
+    /// <summary>
+    /// Triggers light melee attack. Normal or instant kill animation
+    /// depending on the condition.
+    /// </summary>
+    /// <param name="condition">If true, it triggers normal attacks, else
+    /// it triggers instant kill animation.</param>
+    private void TriggerLightMeleeAttack(bool condition)
     {
-        anim.SetTrigger("MeleeLightAttack");
+        if (condition == true)
+        {
+            anim.SetTrigger("MeleeLightAttack");
+        }
+        else
+        {
+            anim.SetTrigger("InstantKill");
+        }
     }
 
     /// <summary>

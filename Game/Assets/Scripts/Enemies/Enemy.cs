@@ -163,8 +163,8 @@ public class Enemy : MonoBehaviour, IFindPlayer
     /// </summary>
     public void BlindEnemy()
     {
-        if (TemporaryBlindnessState != null) 
-            stateMachine.CurrentState = TemporaryBlindnessState;
+        if (TemporaryBlindnessState != null)
+            stateMachine.SwitchToNewState(TemporaryBlindnessState);
     }
         
     /// <summary>
@@ -174,7 +174,7 @@ public class Enemy : MonoBehaviour, IFindPlayer
     private void OnDeath()
     {
         if (DeathState != null)
-            stateMachine.CurrentState = DeathState;
+            stateMachine.SwitchToNewState(DeathState);
     }
 
     /// <summary>

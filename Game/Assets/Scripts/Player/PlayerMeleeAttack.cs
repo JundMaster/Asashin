@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// Class responsible for handling player attack.
 /// </summary>
 public class PlayerMeleeAttack : MonoBehaviour, IAction
 {
+    [SerializeField] private LayerMask enemyLayers;
+
     // Components
     private PlayerInputCustom input;
     private Animator anim;
@@ -17,6 +21,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private PlayerJump jump;
     private PlayerInteract interact;
     private PlayerWallHug wallHug;
+    private PlayerMovement movement;
 
     // Weapon
     [SerializeField] private SphereCollider sword;
@@ -44,6 +49,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         jump = GetComponent<PlayerJump>();
         interact = GetComponent<PlayerInteract>();
         wallHug = GetComponent<PlayerWallHug>();
+        movement = GetComponent<PlayerMovement>();
     }
 
     private void Start()
@@ -238,15 +244,81 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         return null;
     }
 
-    protected virtual void OnLightMeleeAttack() => LightMeleeAttack?.Invoke();
+    /// <summary>
+    /// Triggers light melee attack. Normal or instant kill animation
+    /// depending on the condition.
+    /// </summary>
+    /// <param name="condition">If true, it triggers normal attacks, else
+    /// it triggers instant kill animation.</param>
+    protected virtual void OnLightMeleeAttack()
+    {
+        if (movement.Walking == false)
+        {
+            // Normal attack anim
+            LightMeleeAttack?.Invoke(true);
+            return;
+        }
+        // ELSE
+        // happens if the player is walking or an enemy is in blindness state
+
+        // Creates a list with all enemies around the player
+        List<Transform> allEnemies = new List<Transform>();
+        Collider[] enemies =
+                Physics.OverlapSphere(transform.position, 2f, enemyLayers);
+
+        // If there are enemies
+        if (enemies.Length > 0)
+        {
+            // If enemy has an Enemy script
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if (enemies[i].gameObject.TryGetComponent<Enemy>(out Enemy allens))
+                {
+                    allEnemies.Add(enemies[i].transform);
+                }
+            }
+
+            // Orders array with all VISIBLE enemies by distance
+            Transform[] organizedEnemiesByDistance =
+                allEnemies.OrderBy(i => (i.position - transform.position).magnitude).ToArray();
+
+            // If the player is facing the enemy's forward
+            // (player on blocks if he's basically facing
+            // the enemy)
+            // This means the player successfully blocked
+            if (Vector3.Dot(organizedEnemiesByDistance[0].forward, transform.forward) > 0.5f)
+            {
+                // Instant kill anim.
+                LightMeleeAttack?.Invoke(false);
+                return;
+            }
+            else
+            {
+                // Normal attack anim
+                LightMeleeAttack?.Invoke(true);
+                return;
+            }
+        }
+        else
+        {
+            // Normal attack anim
+            LightMeleeAttack?.Invoke(true);
+        }
+    }
 
     protected virtual void OnAirAttack() => AirAttack?.Invoke();
 
     /// <summary>
     /// Event registered on PlayerAnimations.
     /// Event registered on PlayerMovement.
+    /// /// <summary>
+    /// Triggers light melee attack. Normal or instant kill animation
+    /// depending on the condition.
     /// </summary>
-    public event Action LightMeleeAttack;
+    /// <param name="condition">If true, it triggers normal attacks, else
+    /// it triggers instant kill animation.</param>
+    /// </summary>
+    public event Action<bool> LightMeleeAttack;
 
     /// <summary>
     /// Event registered on PlayerAnimations.

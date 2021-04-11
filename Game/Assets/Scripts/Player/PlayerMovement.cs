@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Class responsible for handling player movement.
@@ -17,6 +18,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerBlock block;
     private PlayerJump jump;
     private PlayerWallHug wallHug;
+    private Animator anim;
 
     public bool Walking { get; private set; }
     public bool Sprinting { get; private set; }
@@ -44,6 +46,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         block = GetComponent<PlayerBlock>();
         jump = GetComponent<PlayerJump>();
         wallHug = GetComponent<PlayerWallHug>();
+        anim = GetComponent<Animator>();
     }
 
     private void Start()
@@ -60,7 +63,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
         input.Walk += () => Walking = !Walking;
         input.Sprint += HandleSprint;
-        attack.LightMeleeAttack += () => Walking = false;
+        attack.LightMeleeAttack += StopWalkingOnAttack;
         roll.Roll += () => Walking = false;
         useItem.UsedItemDelay += () => Walking = false;
     }
@@ -71,9 +74,32 @@ public class PlayerMovement : MonoBehaviour, IAction
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
         input.Walk -= () => Walking = !Walking;
         input.Sprint -= HandleSprint;
-        attack.LightMeleeAttack -= () => Walking = false;
+        attack.LightMeleeAttack -= StopWalkingOnAttack;
         roll.Roll -= () => Walking = false;
         useItem.UsedItemDelay -= () => Walking = false;
+    }
+
+    /// <summary>
+    /// Starts stop walking coroutine.
+    /// </summary>
+    /// <param name="condition"></param>
+    private void StopWalkingOnAttack(bool condition) =>
+        StartCoroutine(StopWalkingOnAttackCoroutine());
+
+    /// <summary>
+    /// Cancels walking after fixed update, so it can check if it hit an enemy,
+    /// etc. before canceling the walk.
+    /// </summary>
+    /// <returns>Wait for fixed update.</returns>
+    private IEnumerator StopWalkingOnAttackCoroutine()
+    {
+        yield return new WaitForFixedUpdate();
+        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
+        {
+            yield return null;
+            // Waits for animation to end
+        }
+        Walking = false;
     }
 
     public void ComponentFixedUpdate()

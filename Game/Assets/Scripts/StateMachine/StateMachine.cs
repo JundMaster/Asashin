@@ -11,23 +11,6 @@ public class StateMachine
     private IState currentState;
 
     /// <summary>
-    /// Gets currentState.
-    /// Sets currentState.
-    /// Triggers current state OnExit, changes current state, triggers
-    /// current state OnEnter.
-    /// </summary>
-    public IState CurrentState
-    {
-        private get => currentState;
-        set
-        {
-            currentState?.OnExit();
-            currentState = value;
-            currentState?.OnEnter();
-        }
-    }
-
-    /// <summary>
     /// Constructor for StateMachine.
     /// </summary>
     /// <param name="states">States to intialize.</param>
@@ -69,8 +52,10 @@ public class StateMachine
     /// current state OnEnter with property.
     /// </summary>
     /// <param name="nextState">IState to switch to.</param>
-    private void SwitchToNewState(IState nextState)
+    public void SwitchToNewState(IState nextState)
     {
-        CurrentState = nextState;
+        currentState?.OnExit();
+        currentState = nextState;
+        currentState?.OnEnter();
     }
 }

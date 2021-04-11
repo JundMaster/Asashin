@@ -12,13 +12,10 @@ public class EnemyTemporaryBlindnessState : EnemyState
 
     private Animator anim;
 
-    private bool triggerDeath;
-
     public override void Start()
     {
         base.Start();
         anim = enemy.Anim;
-        triggerDeath = false;
     }
 
     /// <summary>

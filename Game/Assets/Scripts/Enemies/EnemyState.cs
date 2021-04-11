@@ -12,9 +12,10 @@ public abstract class EnemyState : StateBase
     [Range(0.1f,3f)][SerializeField] protected float takeDamageDistancePower;
     protected Enemy enemy;
     protected EnemyStats stats;
-    protected Transform playerTarget;
     protected Transform myTarget;
     protected NavMeshAgent agent;
+
+    protected Transform playerTarget;
 
     protected bool instantKill;
 
@@ -48,6 +49,7 @@ public abstract class EnemyState : StateBase
     public override void OnEnter()
     {
         if (playerTarget == null) playerTarget = enemy.PlayerTarget;
+
         stats.MeleeDamageOnEnemy += CheckForInstantKill;
         stats.AnyDamageOnEnemy += TakeImpact;
     }
@@ -70,6 +72,7 @@ public abstract class EnemyState : StateBase
     public override IState FixedUpdate()
     {
         if (playerTarget == null) playerTarget = enemy.PlayerTarget;
+
         return null;
     }
 
@@ -117,18 +120,27 @@ public abstract class EnemyState : StateBase
     }
 
     /// <summary>
-    /// If the enemy has his back turned, it dies instantly.
+    /// If the enemy has his back turned and the player is sneaking,
+    /// the enemy dies instantly.
     /// </summary>
     protected void CheckForInstantKill()
     {
-        // Checks if enemy has his back turned to the player
-        // If the player forward is similiar to the enemy's forward
-        // This means the player successfully instantly killed the enemy
-        if (Vector3.Dot(
-            enemy.transform.forward, playerTarget.forward) >
-            0.5f)
+        PlayerMovement playerMovement = 
+            enemy.Player.GetComponent<PlayerMovement>();
+
+        if (playerMovement != null)
         {
-            SwitchToDeathState();
+            // Checks if enemy has his back turned to the player
+            // If the player forward is similiar to the enemy's forward
+            // This means the player successfully instantly killed the enemy
+            // Only happens if player is sneaking.
+            if (Vector3.Dot(
+                enemy.transform.forward, playerTarget.forward) >
+                0.5f &&
+                playerMovement.Walking)
+            {
+                SwitchToDeathState();
+            }
         }
     }
 
