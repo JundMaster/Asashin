@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c0bcf90f3947174b8c94c8fe9355c82, type: 3}
   m_Name: Enemy Patrol State
   m_EditorClassIdentifier: 
+  timeToTravelAfterHit: 0.3
+  takeDamageDistancePower: 2
   coneRange: 20
   desiredConeAngle: 45
   playerLayer:
@@ -20,7 +22,7 @@ MonoBehaviour:
   collisionLayers:
     serializedVersion: 2
     m_Bits: 22528
-  searchCheckDelay: 0.5
+  searchCheckDelay: 0.15
   waitingDelay: 2
   amountOfVertices: 45
   coneMaterial: {fileID: 2100000, guid: bcb4ce8765b3b5e48a66c59a661c773b, type: 2}

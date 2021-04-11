@@ -905,6 +905,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: f98626ae-10ce-4c10-9220-d7cc99a119a0
     m_ActionName: GamePaused/Left Click[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7432806370071023471}
+        m_TargetAssemblyTypeName: PlayerInputCustom, Assembly-CSharp
+        m_MethodName: HandleWallHug
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 72b4b71b-5c63-463e-ab9e-88651a824d51
+    m_ActionName: Gameplay/WallHug[/Mouse/middleButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
@@ -957,7 +973,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSavedStats: {fileID: 11400000, guid: b1228f2b89d24484bb3fea9101484b32, type: 2}
-  playerPrefab: {fileID: 7391169989582650122, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
+  playerPrefab: {fileID: 7366061340869173852, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
   initialPosition: {fileID: 7432806368875890946}
 --- !u!1 &7432806370263757458
 GameObject:

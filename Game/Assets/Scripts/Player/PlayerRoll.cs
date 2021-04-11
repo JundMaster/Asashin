@@ -4,7 +4,6 @@ using System;
 public class PlayerRoll : MonoBehaviour, IAction
 {
     // Components
-    private PlayerMovement movement;
     private PlayerInputCustom input;
     private PlayerJump jump;
     private PlayerMeleeAttack attack;
@@ -17,7 +16,6 @@ public class PlayerRoll : MonoBehaviour, IAction
 
     private void Awake()
     {
-        movement = GetComponent<PlayerMovement>();
         input = FindObjectOfType<PlayerInputCustom>();
         jump = GetComponent<PlayerJump>();
         attack = GetComponent<PlayerMeleeAttack>();

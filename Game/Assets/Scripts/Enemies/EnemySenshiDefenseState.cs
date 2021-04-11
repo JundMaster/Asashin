@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// Scriptable object responsible for controlling enemy movement state.
@@ -28,6 +29,8 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     /// </summary>
     public override void Start()
     {
+        base.Start();
+
         if (randomDistanceFromPlayer.y < randomDistanceFromPlayer.x)
             randomDistanceFromPlayer.y = randomDistanceFromPlayer.x;
         if (randomDistanceFromPlayer.x > randomDistanceFromPlayer.y)
@@ -42,8 +45,13 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     /// </summary>
     public override void OnEnter()
     {
+        base.OnEnter();
+
         kunaiLastTimeChecked = Time.time;
+
         agent.isStopped = false;
+
+        stats.TookDamage += TakeImpact;
     }
 
     /// <summary>
@@ -91,6 +99,8 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     public override void OnExit()
     {
         base.OnExit();
+
+        stats.TookDamage -= TakeImpact;
     }
 
     /// <summary>
@@ -153,7 +163,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     }
 
     /// <summary>
-    /// Rotates enemy towards the player.
+    /// Starts ImpactToBack coroutine.
     /// </summary>
     private void RotateEnemy()
     {
@@ -178,5 +188,41 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
         if (Vector3.Angle(dir, myTarget.forward) < 10)
             return true;
         return false;
+    }
+
+    /// <summary>
+    /// Rotates enemy towards the player.
+    /// </summary>
+    protected override void TakeImpact()
+    {
+        base.TakeImpact();
+    }
+
+    /// <summary>
+    /// Happens after enemy being hit. Rotates enemy and pushes it back.
+    /// </summary>
+    /// <returns>Null.</returns>
+    protected override IEnumerator ImpactToBack()
+    {
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        float timeEntered = Time.time;
+
+        Vector3 dir =
+            (playerTarget.transform.position - myTarget.position).normalized;
+        float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+
+        while (Time.time - timeEntered < timeToTravelAfterHit)
+        {
+            agent.isStopped = true;
+
+            enemy.transform.position +=
+                -(dir) *
+                Time.fixedDeltaTime *
+                takeDamageDistancePower;
+
+            yield return wffu;
+        }
+        agent.isStopped = false;
     }
 }

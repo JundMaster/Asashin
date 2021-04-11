@@ -46,6 +46,7 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
 
     /// <summary>
     /// Event registered on UIHealthBar.
+    /// Event registered on EnemyDamaged.
     /// </summary>
     public event Action TookDamage;
 

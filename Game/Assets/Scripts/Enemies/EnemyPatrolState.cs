@@ -32,6 +32,8 @@ public class EnemyPatrolState : EnemyStateWithVision
     /// </summary>
     public override void Start()
     {
+        base.Start();
+
         // Vision cone setup
         MeshFilter meshFilter = enemy.VisionCone.GetComponent<MeshFilter>();
         MeshRenderer meshRenderer = enemy.VisionCone.GetComponent<MeshRenderer>();
@@ -45,6 +47,8 @@ public class EnemyPatrolState : EnemyStateWithVision
         patrolPoints = enemy.PatrolPoints;
         patrolIndex = 0;
         enemy.StartCoroutine(MovementCoroutine());
+
+        stats.TookDamage += TakeImpact;
     }
 
     /// <summary>
@@ -58,6 +62,8 @@ public class EnemyPatrolState : EnemyStateWithVision
         agent.isStopped = false;
         enemy.VisionCone.SetActive(true);
         enemy.StartCoroutine(MovementCoroutine());
+
+        stats.TookDamage += TakeImpact;
     }
 
     /// <summary>
@@ -105,6 +111,8 @@ public class EnemyPatrolState : EnemyStateWithVision
             enemy.transform.position + offset, 
             Quaternion.identity);
         exclMark.transform.parent = enemy.transform;
+
+        stats.TookDamage -= TakeImpact;
     }
 
     /// <summary>
@@ -147,5 +155,41 @@ public class EnemyPatrolState : EnemyStateWithVision
             }
             yield return wffu;
         }
+    }
+
+    /// <summary>
+    /// Starts ImpactToBack coroutine.
+    /// </summary>
+    protected override void TakeImpact()
+    {
+        base.TakeImpact();
+    }
+
+    /// <summary>
+    /// Happens after enemy being hit. Rotates enemy and pushes it back.
+    /// </summary>
+    /// <returns>Null.</returns>
+    protected override IEnumerator ImpactToBack()
+    {
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        float timeEntered = Time.time;
+
+        Vector3 dir =
+            (playerTarget.transform.position - myTarget.position).normalized;
+        float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+
+        while (Time.time - timeEntered < timeToTravelAfterHit)
+        {
+            agent.isStopped = true;
+
+            enemy.transform.position +=
+                -(dir) *
+                Time.fixedDeltaTime *
+                takeDamageDistancePower;
+
+            yield return wffu;
+        }
+        agent.isStopped = false;
     }
 }

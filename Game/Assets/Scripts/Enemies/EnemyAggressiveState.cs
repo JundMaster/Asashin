@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// Scriptable object for controlling enemy aggressive state.
@@ -24,6 +25,8 @@ public class EnemyAggressiveState : EnemyState
             agent.SetDestination(playerTarget.position);
 
         enemy.PlayerCurrentlyFighting = true;
+
+        stats.TookDamage += TakeImpact;
     }
 
     public override IState FixedUpdate()
@@ -52,7 +55,8 @@ public class EnemyAggressiveState : EnemyState
     {
         base.OnExit();
         enemy.PlayerCurrentlyFighting = false;
-        agent.isStopped = false; 
+        agent.isStopped = false;
+        stats.TookDamage -= TakeImpact;
     }
 
     private void AttackPlayer()
@@ -104,5 +108,41 @@ public class EnemyAggressiveState : EnemyState
         Vector3 dir = playerTarget.transform.position - myTarget.position;
         float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+    }
+
+    /// <summary>
+    /// Starts ImpactToBack coroutine.
+    /// </summary>
+    protected override void TakeImpact()
+    {
+        base.TakeImpact();
+    }
+
+    /// <summary>
+    /// Happens after enemy being hit. Rotates enemy and pushes it back.
+    /// </summary>
+    /// <returns>Null.</returns>
+    protected override IEnumerator ImpactToBack()
+    {
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        float timeEntered = Time.time;
+
+        Vector3 dir =
+            (playerTarget.transform.position - myTarget.position).normalized;
+        float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+
+        while (Time.time - timeEntered < timeToTravelAfterHit)
+        {
+            agent.isStopped = true;
+
+            enemy.transform.position +=
+                -(dir) *
+                Time.fixedDeltaTime *
+                takeDamageDistancePower;
+
+            yield return wffu;
+        }
+        agent.isStopped = false;
     }
 }
