@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -29,6 +30,9 @@ public class PlayerMovement : MonoBehaviour, IAction
     private Vector3 moveDirection;
     public float MovementSpeed { get; private set; }
 
+    // Positions to left behind
+    public HashSet<Vector3> PositionsDelayed { get; private set; }
+
     // Rotation Variables
     public float TurnSmooth { get; set; }
     private float smoothTimeRotation;
@@ -47,6 +51,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         jump = GetComponent<PlayerJump>();
         wallHug = GetComponent<PlayerWallHug>();
         anim = GetComponent<Animator>();
+        PositionsDelayed = new HashSet<Vector3>();
     }
 
     private void Start()
@@ -55,6 +60,23 @@ public class PlayerMovement : MonoBehaviour, IAction
         Walking = false;
         Sprinting = false;
         MovementSpeed = 0f;
+        StartCoroutine(SaveDelayedPositions());
+    }
+
+    private IEnumerator SaveDelayedPositions()
+    {
+        YieldInstruction wfs = new WaitForSeconds(1);
+        while (true)
+        {
+            PositionsDelayed.Add(transform.position);
+            yield return wfs;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        foreach (Vector3 pos in PositionsDelayed)
+            Gizmos.DrawSphere(pos, 0.25f);
     }
 
     private void OnEnable()

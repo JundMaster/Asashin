@@ -85,7 +85,11 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
                         player.forward) < 50f)
                     {
                         KunaiCurrentTarget = ParentEnemy.MyTarget;
-                        playerAnim.TriggerBlockReflect();
+
+                        // Also triggers player animation
+                        damageableBody?.TakeDamage(
+                            0f, TypeOfDamage.PlayerBlockDamage);
+
                         isReflected = true;
                     }
                     // If the player is blocking but not facing the enemy
@@ -94,6 +98,7 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
                         damageableBody?.TakeDamage(
                             ParentEnemy.GetComponent<Stats>().RangedDamage,
                             TypeOfDamage.EnemyRanged);
+
                         Destroy(gameObject);
                     }
                 }

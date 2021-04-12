@@ -73,8 +73,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
     {
         if (target.Targeting)
         {
-            transform.LookAt(target.CurrentTarget);
-            transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, transform.eulerAngles.z);
+            transform.RotateTo(target.CurrentTarget.position);
         }
 
         // If the player is pressing any direction

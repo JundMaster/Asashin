@@ -1423,8 +1423,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
-  m_Center: {x: 0.0000019073486, y: 0.0000038146973, z: -0.04}
+  m_Radius: 1.5
+  m_Center: {x: -2.64, y: 0.0000038146973, z: 0.72}
 --- !u!23 &945101713
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3060,73 +3060,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3737182763791360941, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763791360941, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763791360941, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763791360941, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763791360941, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763791360941, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763791360941, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763791360941, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763791360941, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763791360941, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763859079222, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.103000015
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763859079222, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.03800005
-      objectReference: {fileID: 0}
-    - target: {fileID: 3737182763859079222, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.29500002
-      objectReference: {fileID: 0}
-    - target: {fileID: 4292631637754323612, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'mixamorig:Head'\n\tTransform 'mixamorig:Neck'\n\tTransform
-        'mixamorig:Head'\n\tTransform 'mixamorig:Neck'\n\tTransform 'mixamorig:Head'\n\tTransform
-        'mixamorig:Neck'"
+    - target: {fileID: 3737182763745903323, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7366061340869173852, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
       propertyPath: m_Name
       value: Bot
-      objectReference: {fileID: 0}
-    - target: {fileID: 7366061340869173863, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: enemyLayers.m_Bits
-      value: 1024
       objectReference: {fileID: 0}
     - target: {fileID: 7886455437523876070, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
       propertyPath: m_RootOrder

@@ -13,9 +13,11 @@ public class EnemyAggressiveState : EnemyState
     [Tooltip("Distance to stay from player while attacking")]
     [Range(1, 1.5f)][SerializeField] private float distanceFromPlayer;
     [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private LayerMask collisionLayers;
 
     [Header("Attacking Times")]
     [Range(1, 4)] [SerializeField] private float attackingDelay;
+    [Range(1, 4)] [SerializeField] private float afterAttackDelay;
     private bool attacking;
     private bool attackingAnimation;
 
@@ -45,12 +47,12 @@ public class EnemyAggressiveState : EnemyState
     public override void OnEnter()
     {
         base.OnEnter();
+        enemy.PlayerCurrentlyFighting = true;
         attacking = false;
         agent.isStopped = false;
         if (playerTarget != null ) 
             agent.SetDestination(playerTarget.position);
 
-        enemy.PlayerCurrentlyFighting = true;
         enemy.WeaponHit += WeaponHit;
     }
 
@@ -73,19 +75,26 @@ public class EnemyAggressiveState : EnemyState
         if (IsPlayerInMyRange(currentDistanceFromPlayer))
         {
             // Checks and moves enemy close to player
-            if(IsCloseToPlayer(currentDistanceFromPlayer))
+            if (IsCloseToPlayer(currentDistanceFromPlayer))
             {
-                RotateEnemy();
-
-                if (attacking == false)
+                if (myTarget.CanSee(playerTarget, collisionLayers))
                 {
-                    attacking = true;
-                    enemy.StartCoroutine(AttackPlayerCoroutine());
+                    if (attacking == false)
+                    {
+                        attacking = true;
+                        enemy.transform.RotateTo(playerTarget.position);
+                        enemy.StartCoroutine(AttackPlayerCoroutine());
+                    }
                 }
+                else
+                    return enemy.LostPlayerState ?? enemy.DefenseState ?? 
+                        enemy.PatrolState;
+                
             }
             return enemy.AggressiveState;
         }
-        return enemy.LostPlayerState;    
+
+        return enemy.LostPlayerState ?? enemy.PatrolState;    
     }
 
     /// <summary>
@@ -109,6 +118,7 @@ public class EnemyAggressiveState : EnemyState
     private IEnumerator AttackPlayerCoroutine()
     {
         YieldInstruction wfd = new WaitForSeconds(attackingDelay);
+        YieldInstruction wfdaa = new WaitForSeconds(afterAttackDelay);
 
         // While in range with the player
         while (attacking)
@@ -126,11 +136,7 @@ public class EnemyAggressiveState : EnemyState
 
             // WeaponHit() happens here with animation event
 
-            // Waits until melee attack animation ends
-            while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
-            {
-                yield return null;
-            }
+            yield return wfdaa;
 
             break;
         }
@@ -176,11 +182,14 @@ public class EnemyAggressiveState : EnemyState
                         -0.5f)
                     {
                         damageableBody?.TakeDamage(
-                        stats.LightDamage, TypeOfDamage.EnemyMelee);
+                            stats.LightDamage, TypeOfDamage.EnemyMelee);
                     }
                     // If the player was NOT able to block
                     else
                     {
+                        damageableBody?.TakeDamage(
+                            0f, TypeOfDamage.PlayerBlockDamage);
+
                         // Pushes enemy back
                         TakeImpact();
                     }
@@ -189,7 +198,7 @@ public class EnemyAggressiveState : EnemyState
                 else
                 {
                     damageableBody?.TakeDamage(
-                    stats.LightDamage, TypeOfDamage.EnemyMelee);
+                        stats.LightDamage, TypeOfDamage.EnemyMelee);
                 }
 
                 Instantiate(
@@ -225,7 +234,8 @@ public class EnemyAggressiveState : EnemyState
         // If the enemy is not close to the player
         if (distance > closeToPlayerRange)
         {
-            Vector3 dir = (myTarget.position - playerTarget.position).normalized;
+            Vector3 dir = 
+                myTarget.position.InvertedDirection(playerTarget.position);
 
             if (attackingAnimation == false)
             {
@@ -237,16 +247,6 @@ public class EnemyAggressiveState : EnemyState
         }
         // Else if the enemy is close to the player
         return true;
-    }
-
-    /// <summary>
-    /// Rotates enemy towards the player.
-    /// </summary>
-    private void RotateEnemy()
-    {
-        Vector3 dir = playerTarget.transform.position - myTarget.position;
-        float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-        enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
     }
 
     /// <summary>

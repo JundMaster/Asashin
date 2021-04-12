@@ -18,6 +18,7 @@ public class PlayerAnimations : MonoBehaviour
     private PlayerWallHug wallHug;
     private PlayerInputCustom input;
     private CharacterController controller;
+    private PlayerStats stats;
 
     private void Awake()
     {
@@ -31,6 +32,7 @@ public class PlayerAnimations : MonoBehaviour
         wallHug = GetComponent<PlayerWallHug>();
         input = FindObjectOfType<PlayerInputCustom>();
         controller = GetComponent<CharacterController>();
+        stats = GetComponent<PlayerStats>();
     }
 
     private void OnEnable()
@@ -39,6 +41,7 @@ public class PlayerAnimations : MonoBehaviour
         attack.LightMeleeAttack += TriggerLightMeleeAttack;
         attack.AirAttack += TriggerAirAttack;
         death.PlayerDied += TriggerDeath;
+        stats.NoDamageBlock += TriggerBlockReflect;
     }
 
     private void OnDisable()
@@ -47,6 +50,7 @@ public class PlayerAnimations : MonoBehaviour
         attack.LightMeleeAttack -= TriggerLightMeleeAttack;
         attack.AirAttack -= TriggerAirAttack;
         death.PlayerDied -= TriggerDeath;
+        stats.NoDamageBlock -= TriggerBlockReflect;
     }
 
     private void Update()
@@ -90,7 +94,7 @@ public class PlayerAnimations : MonoBehaviour
 
     private void TriggerDeath() => anim.SetTrigger("Death");
 
-    public void TriggerBlockReflect() => anim.SetTrigger("BlockReflect");
+    private void TriggerBlockReflect() => anim.SetTrigger("BlockReflect");
 
     private void TriggerRollAnimation() => anim.SetTrigger("Rolling");
 

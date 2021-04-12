@@ -96,19 +96,19 @@ public abstract class EnemyState : StateBase
 
         // Direction from player to enemy
         Vector3 dir =
-            (playerTarget.transform.position - myTarget.position).normalized;
+            myTarget.position.Direction(playerTarget.position);
 
         // Waits for fixed update to check if the enemy died meanwhile
         yield return wffu;
 
-        float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-        enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+        enemy.transform.RotateTo(playerTarget.position);
 
         while (Time.time - timeEntered < timeToTravelAfterHit &&
             instantKill == false)
         {
             agent.isStopped = true;
 
+            // Pushes enemy back
             enemy.transform.position +=
                 -(dir) *
                 Time.fixedDeltaTime *

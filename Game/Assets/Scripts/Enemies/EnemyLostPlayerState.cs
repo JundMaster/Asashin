@@ -60,7 +60,7 @@ public class EnemyLostPlayerState : EnemyStateWithVision
 
         // If enemy is in range, it stops looking for player coroutine
         if (PlayerInRange())
-            return enemy.DefenseState;
+            return enemy.DefenseState ?? enemy.PatrolState;
 
         // If the enemy reached the player last known position
         // starts looking for him

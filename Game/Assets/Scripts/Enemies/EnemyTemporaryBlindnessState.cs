@@ -46,7 +46,8 @@ public class EnemyTemporaryBlindnessState : EnemyState
         {
             return enemy.TemporaryBlindnessState;
         }
-        return enemy.LostPlayerState;
+
+        return enemy.LostPlayerState ?? enemy.PatrolState;
     }
 
     /// <summary>

@@ -4,5 +4,6 @@
     EnemyRanged,
     PlayerMelee,
     PlayerRanged,
+    PlayerBlockDamage,
     None,
 }

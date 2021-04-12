@@ -19,7 +19,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     private bool whileThrowingKunai;
 
     [Header("Rotation smooth time")]
-    [Range(0.1f,1.5f)][SerializeField] private float turnSmooth;
+    [Range(0.1f,1.5f)][SerializeField] private float turnSpeed;
     private float smoothTimeRotation;
 
     [Header("Distance from player. X => min. distance, Y => max. distance")]
@@ -77,6 +77,13 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
         if (instantKill)
             return enemy.DeathState;
 
+        // Only if the player isn't fighting an enemy yet
+        if (enemy.PlayerCurrentlyFighting == false)
+        {
+            if (enemy.AggressiveState != null)
+                return enemy.AggressiveState;
+        }
+
         // If the enemy is not moving towards the end position
         if (MoveToDefensiveRange() == false)
         {
@@ -90,22 +97,18 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
                 }
             }
             // If the enemy can NOT see and is facing the player
+            // Happens while the enemy is rotating after reaching final path
             else if (PlayerInRange() == false && FacingPlayer())
             {
                 if (kunaiCoroutine == false)
-                    return enemy.LostPlayerState;
+                    return enemy.LostPlayerState ?? enemy.PatrolState;
             }
 
             // Keeps rotating the enemy towards the player
-            RotateEnemy(true);
+            enemy.transform.RotateToSmoothly(
+                playerTarget.position, ref smoothTimeRotation, turnSpeed);
         }
         // Else it moves to the enemy without rotating towards the player
-
-        // Only if the player isn't fighting an enemy yet
-        if (enemy.PlayerCurrentlyFighting == false)
-        {
-            return enemy.AggressiveState;
-        }
 
         return enemy.DefenseState;
     }
@@ -139,7 +142,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
 
             // Direction from player to enemy.
             Vector3 desiredDirection =
-            (playerTarget.position - myTarget.position).normalized;
+                myTarget.position.Direction(playerTarget.position);
 
             // Ray from player to final destination
             Ray finalPosition = 
@@ -195,7 +198,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
 
             whileThrowingKunai = true;
 
-            RotateEnemy(false);
+            enemy.transform.RotateTo(playerTarget.position);
             anim.SetTrigger("ThrowKunai");
 
             yield return wfks;
@@ -222,35 +225,14 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     }
 
     /// <summary>
-    /// Rotates the enemy. Can rotate smooth or instantly.
-    /// </summary>
-    /// <param name="smooth">True if smooth turn.</param>
-    private void RotateEnemy(bool smooth)
-    {
-        Vector3 dir = playerTarget.transform.position - myTarget.position;
-        float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-        float angle = Mathf.SmoothDampAngle(
-                enemy.transform.eulerAngles.y,
-                targetAngle,
-                ref smoothTimeRotation,
-                turnSmooth);
-
-        if (smooth)
-            enemy.transform.rotation = Quaternion.Euler(0f, angle, 0f);
-        else
-            enemy.transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-    }
-
-    /// <summary>
     /// Checks if the enemy is facing the player.
     /// </summary>
     /// <returns>Returns true if the enemy is facing the player.</returns>
     private bool FacingPlayer()
     {
-        Vector3 dir = playerTarget.position - myTarget.position;
-
-        if (Vector3.Angle(dir, myTarget.forward) < 10)
+        if (myTarget.IsLookingTowards(playerTarget.position))
             return true;
+
         return false;
     }
 }

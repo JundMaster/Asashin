@@ -56,9 +56,19 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
             case TypeOfDamage.PlayerRanged:
                 OnAnyDamageOnEnemy();
                 break;
-        }
-        
+            case TypeOfDamage.PlayerBlockDamage:
+                OnNoDamageBlock();
+                break;
+        }  
     }
+
+    protected void OnNoDamageBlock() => NoDamageBlock?.Invoke();
+
+    /// <summary>
+    /// Event registered on PlayerAnimations.
+    /// Triggers block reflect animation.
+    /// </summary>
+    public event Action NoDamageBlock;
 
     protected virtual void OnTookDamage() => TookDamage?.Invoke();
 

@@ -37,10 +37,13 @@ public class EnemyPatrolState : EnemyStateWithVision
 
         // Vision cone setup
         MeshFilter meshFilter = enemy.VisionCone.GetComponent<MeshFilter>();
-        MeshRenderer meshRenderer = enemy.VisionCone.GetComponent<MeshRenderer>();
+        MeshRenderer meshRenderer = 
+            enemy.VisionCone.GetComponent<MeshRenderer>();
+
         visionCone = new VisionCone(
             meshFilter, meshRenderer, coneMaterial, amountOfVertices,
             desiredConeAngle, coneRange, collisionLayers, enemy.transform);
+
         enemy.EnemyVisionCone = visionCone;
 
         // Agent destination setup
@@ -85,6 +88,10 @@ public class EnemyPatrolState : EnemyStateWithVision
             if (!enemy.VisionCone.activeSelf) enemy.VisionCone.SetActive(true);
             visionCone?.Calculate();
         }
+        else
+        {
+            if (enemy.VisionCone.activeSelf) enemy.VisionCone.SetActive(false);
+        }
 
         // Search for player every searchCheckDelay seconds inside a vision cone
         if (Time.time - lastTimeChecked > searchCheckDelay)
@@ -105,7 +112,11 @@ public class EnemyPatrolState : EnemyStateWithVision
     public override void OnExit()
     {
         base.OnExit();
+
+        // Cancels all movement
+        agent.SetDestination(myTarget.position);
         agent.isStopped = true;
+
         enemy.VisionCone.SetActive(false);
         breakState = true;
 
@@ -134,10 +145,9 @@ public class EnemyPatrolState : EnemyStateWithVision
 
         while (breakState == false)
         {
-            Debug.DrawRay(myTarget.position, patrolPoints[patrolIndex].position - enemy.transform.position);
-
             // If agent reached the destination or is stopped
-            if (agent.remainingDistance <= 0.1f || agent.velocity.magnitude < 0.1f)
+            if (agent.remainingDistance <= 0.1f || 
+                agent.velocity.magnitude < 0.1f)
             {
                 // Sets destination to where the agent is
                 agent.SetDestination(enemy.transform.position);
