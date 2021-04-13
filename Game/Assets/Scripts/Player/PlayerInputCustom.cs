@@ -260,7 +260,7 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     /// <param name="context"></param>
     public void HandleBlock(InputAction.CallbackContext context)
     {
-        if (context.started) OnBlock(true);
+        if (context.performed) OnBlock(true);
         if (context.canceled) OnBlock(false);
     }
 

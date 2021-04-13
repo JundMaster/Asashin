@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// Scriptable object responsible for controlling enemy patrol state.
 /// </summary>
-[CreateAssetMenu(fileName = "Enemy Patrol State")]
+[CreateAssetMenu(fileName = "Enemy Common Patrol State")]
 public class EnemyPatrolState : EnemyStateWithVision
 {
     [Header("Checks if player is in cone range every X seconds")]
@@ -25,6 +25,7 @@ public class EnemyPatrolState : EnemyStateWithVision
     private Transform[] patrolPoints;
     private byte patrolIndex;
     private bool breakState;
+    private IEnumerator movementCoroutine;
 
     /// <summary>
     /// * INITIAL ENEMY STATE * OnEnter won't run on the first state.
@@ -50,7 +51,9 @@ public class EnemyPatrolState : EnemyStateWithVision
         breakState = false;
         patrolPoints = enemy.PatrolPoints;
         patrolIndex = 0;
-        enemy.StartCoroutine(MovementCoroutine());
+
+        movementCoroutine = MovementCoroutine();
+        enemy.StartCoroutine(movementCoroutine);
 
         // Must be on start aswell because OnEnter doesn't run on first state
         stats.MeleeDamageOnEnemy += CheckForInstantKill;
@@ -67,7 +70,9 @@ public class EnemyPatrolState : EnemyStateWithVision
         breakState = false;
         agent.isStopped = false;
         enemy.VisionCone.SetActive(true);
-        enemy.StartCoroutine(MovementCoroutine());
+
+        movementCoroutine = MovementCoroutine();
+        enemy.StartCoroutine(movementCoroutine);
     }
 
     /// <summary>
@@ -99,8 +104,10 @@ public class EnemyPatrolState : EnemyStateWithVision
             // If it found the player, triggers defense state
             if (PlayerInRange())
             {
-                if (enemy.DefenseState != null) return enemy.DefenseState;
-                return enemy.AggressiveState;
+                return 
+                    enemy.DefenseState ?? 
+                    enemy.AggressiveState ?? 
+                    enemy.PatrolState;
             }
         }
         return enemy.PatrolState;
@@ -118,7 +125,10 @@ public class EnemyPatrolState : EnemyStateWithVision
         agent.isStopped = true;
 
         enemy.VisionCone.SetActive(false);
-        breakState = true;
+
+        breakState = false;
+        if (movementCoroutine != null)
+            enemy.StopCoroutine(movementCoroutine);
 
         // Instantiates an exclamation mark
         GameObject exclMark = Instantiate(
@@ -158,6 +168,10 @@ public class EnemyPatrolState : EnemyStateWithVision
                 // Increments the patrol point
                 if (patrolIndex + 1 > patrolPoints.Length - 1) patrolIndex = 0;
                 else patrolIndex++;
+
+                // If not in this state anymore
+                if (breakState)
+                    break;
 
                 // Sets the next destination
                 agent.SetDestination(

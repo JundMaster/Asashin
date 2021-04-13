@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// Scriptable object responsible for controlling enemy state after losing the player.
 /// </summary>
-[CreateAssetMenu(fileName = "Enemy Lost Player State")]
+[CreateAssetMenu(fileName = "Enemy Common Lost Player State")]
 public class EnemyLostPlayerState : EnemyStateWithVision
 {
     [Header("Time the enemy will spend looking for player")]
@@ -13,7 +13,8 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     [Range(0.1f,1)][SerializeField] private float rotationSpeed;
 
     // State variables
-    private bool lookForPlayerCoroutine;
+    private IEnumerator lookForPlayerCoroutine;
+    private bool lookingForPlayer;
     private bool breakState;
 
     // Components
@@ -36,7 +37,7 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     {
         base.OnEnter();
 
-        lookForPlayerCoroutine = false;
+        lookingForPlayer = false;
 
         breakState = false;
 
@@ -66,10 +67,11 @@ public class EnemyLostPlayerState : EnemyStateWithVision
         // starts looking for him
         if (ReachedLastKnownPosition())
         {
-            if (lookForPlayerCoroutine == false)
+            if (lookingForPlayer == false)
             {
-                lookForPlayerCoroutine = true;
-                enemy.StartCoroutine(LookForPlayer());
+                lookingForPlayer = true;
+                lookForPlayerCoroutine = LookForPlayer();
+                enemy.StartCoroutine(lookForPlayerCoroutine);
             }
         }
 
@@ -87,8 +89,13 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     public override void OnExit()
     {
         base.OnExit();
-        // Cancels rotation coroutine
-        lookForPlayerCoroutine = false;
+
+        // Resets variables
+        breakState = false;
+        lookingForPlayer = false;
+        if (lookForPlayerCoroutine != null)
+            enemy.StopCoroutine(lookForPlayerCoroutine);
+
         agent.isStopped = false;
         enemy.VisionCone.SetActive(false);
     }
@@ -124,8 +131,7 @@ public class EnemyLostPlayerState : EnemyStateWithVision
         // As soon as the enemy leaves this state, is this coroutine is turned
         // to false.
         while (PlayerInRange() == false && 
-            Time.time - timePassed < timeToLookForPlayer &&
-            lookForPlayerCoroutine == true)
+            Time.time - timePassed < timeToLookForPlayer)
         {
             // Triggers rotation to right
             if (enemy.transform.eulerAngles.y >= yRotationMax)
@@ -149,14 +155,14 @@ public class EnemyLostPlayerState : EnemyStateWithVision
             enemy.transform.eulerAngles += 
                 new Vector3(0, rotationSpeed * multiplier, 0);
 
-            // Activates anc calculates vision cone
-            enemy.VisionCone.SetActive(true);
+            // Activates and calculates vision cone
+            if (enemy.VisionCone.activeSelf == false)
+                enemy.VisionCone.SetActive(true);
 
             visionCone.Calculate();
 
             yield return wffu;
         }
         breakState = true;
-        lookForPlayerCoroutine = false;
     }
 }

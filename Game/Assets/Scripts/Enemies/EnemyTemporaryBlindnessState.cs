@@ -3,7 +3,7 @@
 /// <summary>
 /// Scriptable object for controlling enemy temporary blindness state.
 /// </summary>
-[CreateAssetMenu(fileName = "Enemy Temporary Blindness State")]
+[CreateAssetMenu(fileName = "Enemy Common Temporary Blindness State")]
 public class EnemyTemporaryBlindnessState : EnemyState
 {
     [Header("Enemy gets blind for x seconds")]

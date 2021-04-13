@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// Scriptable object responsible for controlling enemy state after dying.
 /// </summary>
-[CreateAssetMenu(fileName = "Enemy Death State")]
+[CreateAssetMenu(fileName = "Enemy Common Death State")]
 public class EnemyDeathState : EnemyState
 {
     [Header("Particles to spawn when the enemy dies")]

@@ -66,13 +66,13 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
 
     private void OnEnable()
     {
-        if (playerRoll != null) playerRoll.Roll += TriggerSlowMotion;
+        if (playerRoll != null) playerRoll.Dodge += TriggerSlowMotion;
         if (playerDeath != null) playerDeath.PlayerDied += StopSlowMotion;
     }
 
     private void OnDisable()
     {
-        if (playerRoll != null) playerRoll.Roll -= TriggerSlowMotion;
+        if (playerRoll != null) playerRoll.Dodge -= TriggerSlowMotion;
         if (playerDeath != null) playerDeath.PlayerDied -= StopSlowMotion;
     }
 
@@ -213,21 +213,23 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
         }
     }
 
-    protected virtual void OnSlowMotionEvent(SlowMotionEnum condition) => SlowMotionEvent?.Invoke(condition);
 
     public void FindPlayer()
     {
         playerRoll = FindObjectOfType<PlayerRoll>();
         playerDeath = FindObjectOfType<PlayerDeathBehaviour>();
-        playerRoll.Roll += TriggerSlowMotion;
+        playerRoll.Dodge += TriggerSlowMotion;
         playerDeath.PlayerDied += StopSlowMotion;
     }
 
     public void PlayerLost()
     {
-        playerRoll.Roll -= TriggerSlowMotion;
+        playerRoll.Dodge -= TriggerSlowMotion;
         playerDeath.PlayerDied -= StopSlowMotion;
     }
+
+    protected virtual void OnSlowMotionEvent(SlowMotionEnum condition) => 
+        SlowMotionEvent?.Invoke(condition);
 
     /// <summary>
     /// Event registered on CinemachineTarget. Event registered on PlayerMovement

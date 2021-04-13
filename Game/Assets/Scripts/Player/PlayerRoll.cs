@@ -74,11 +74,24 @@ public class PlayerRoll : MonoBehaviour, IAction
         anim.applyRootMotion = false;
     }
 
+    /// <summary>
+    /// Invokes Roll event.
+    /// </summary>
     protected virtual void OnRoll() => Roll?.Invoke();
 
     /// <summary>
-    /// Event registered on SlowMotionBehaviour, PlayerAnimations.
+    /// Event registered on PlayerAnimations.
     /// Event registered on PlayerMovement.
     /// </summary>
     public event Action Roll;
+
+    /// <summary>
+    /// Invokes Dodge event.
+    /// </summary>
+    public virtual void OnDodge() => Dodge?.Invoke();
+
+    /// <summary>
+    /// Event registered on SlowMotionBehaviour.
+    /// </summary>
+    public event Action Dodge;
 }

@@ -12,11 +12,13 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     [Header("Kunai to spawn")]
     [SerializeField] private GameObject kunai;
 
-    [Header("Kunai spawn delay")]
+    [Header("Kunai attack spawn delay")]
     [Range(1f, 10f)][SerializeField] private float kunaiDelay;
+    [Header("Waits this time in order to spawn kunai in the right time")]
     [Range(0f, 5f)] [SerializeField] private float kunaiSpawnAfterAnimation;
-    private bool kunaiCoroutine;
+    //private bool kunaiCoroutine;
     private bool whileThrowingKunai;
+    private IEnumerator kunaiCoroutine;
 
     [Header("Rotation smooth time")]
     [Range(0.1f,1.5f)][SerializeField] private float turnSpeed;
@@ -28,6 +30,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     // Movement variables
     private float randomDistance;
 
+    // Components
     private Animator anim;
 
     /// <summary>
@@ -36,8 +39,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     public override void Start()
     {
         base.Start();
-        kunaiCoroutine = false;
-        whileThrowingKunai = false;
+
         anim = enemy.Anim;
 
         if (randomDistanceFromPlayer.y < randomDistanceFromPlayer.x)
@@ -56,7 +58,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     {
         base.OnEnter();
 
-        kunaiCoroutine = false;
+        kunaiCoroutine = null;
 
         whileThrowingKunai = false;
 
@@ -87,20 +89,28 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
         // If the enemy is not moving towards the end position
         if (MoveToDefensiveRange() == false)
         {
+            // If the enemy loses sight of the player it instantly
+            // stops kunai coroutine
+            if (myTarget.CanSee(playerTarget, collisionLayers) == false)
+            {
+                return enemy.LostPlayerState;
+            }
+
             // If the enemy can see and is facing the player
             if (PlayerInRange() && FacingPlayer())
             {
-                if (kunaiCoroutine == false)
+                if (kunaiCoroutine == null)
                 {
-                    kunaiCoroutine = true;
-                    enemy.StartCoroutine(ThrowKunaiCoroutine());
+                    kunaiCoroutine = ThrowKunaiCoroutine();
+                    enemy.StartCoroutine(kunaiCoroutine);
                 }
             }
             // If the enemy can NOT see and is facing the player
             // Happens while the enemy is rotating after reaching final path
             else if (PlayerInRange() == false && FacingPlayer())
             {
-                if (kunaiCoroutine == false)
+                // Meaning it's not inside throw kunai coroutine
+                if (kunaiCoroutine == null)
                     return enemy.LostPlayerState ?? enemy.PatrolState;
             }
 
@@ -109,7 +119,6 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
                 playerTarget.position, ref smoothTimeRotation, turnSpeed);
         }
         // Else it moves to the enemy without rotating towards the player
-
         return enemy.DefenseState;
     }
 
@@ -120,7 +129,13 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     public override void OnExit()
     {
         base.OnExit();
-        kunaiCoroutine = false;
+
+        if (kunaiCoroutine != null)
+        {
+            enemy.StopCoroutine(kunaiCoroutine);
+            kunaiCoroutine = null;
+        }
+
         whileThrowingKunai = false;
     }
 
@@ -192,7 +207,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
         YieldInstruction wfd = new WaitForSeconds(kunaiDelay);
         YieldInstruction wfks = new WaitForSeconds(kunaiSpawnAfterAnimation);
 
-        while(kunaiCoroutine)
+        while(true)
         {
             yield return wfd;
 
@@ -201,6 +216,8 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
             enemy.transform.RotateTo(playerTarget.position);
             anim.SetTrigger("ThrowKunai");
 
+            // Waits this time in order to spawn kunai in the right time
+            // inside the kunai animation
             yield return wfks;
 
             // Spawns a kunai
@@ -220,8 +237,10 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
             }
 
             whileThrowingKunai = false;
-            kunaiCoroutine = false;
+
+            break;
         }
+        kunaiCoroutine = null;
     }
 
     /// <summary>

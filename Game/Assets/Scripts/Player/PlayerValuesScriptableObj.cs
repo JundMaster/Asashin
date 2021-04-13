@@ -11,7 +11,6 @@ public class PlayerValuesScriptableObj : ScriptableObject
     [Header("Rotation")]
     [SerializeField] private float turnSmooth;
     [SerializeField] private float turnSmoothInSlowMotion;
-    [SerializeField] private float smoothTimeVelocity;
     [Header("Jump")]
     [SerializeField] private float jumpForce;
     [SerializeField] private float gravity;
@@ -22,7 +21,6 @@ public class PlayerValuesScriptableObj : ScriptableObject
     public float SprintSpeed => sprintSpeed;
     public float TurnSmooth => turnSmooth;
     public float TurnSmoothInSlowMotion => turnSmoothInSlowMotion;
-    public float SmoothTimeVelocity => smoothTimeVelocity;
     public float JumpForce => jumpForce;
     public float Gravity => gravity;
     public float IsGroundedCheckSize => isGroundedCheckSize;
