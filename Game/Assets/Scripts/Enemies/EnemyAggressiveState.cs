@@ -202,6 +202,14 @@ public class EnemyAggressiveState : EnemyState
     /// </summary>
     private void WeaponHit()
     {
+        // If player is rolling, while the enemy is attacking, it means the
+        // player was able to dodge, so it will trigger slow motion.
+        if (playerRoll.Performing)
+        {
+            playerRoll.OnDodge();
+            return;
+        }
+
         // Collisions of the melee weapon
         Collider[] swordCollider = Physics.OverlapSphere(
             weapon.transform.position,
@@ -211,16 +219,8 @@ public class EnemyAggressiveState : EnemyState
         // Checks if this object or parent has a damageable body
         GameObject body = null;
         if (swordCollider.Length > 0)
-        {
             body = GetDamageableBody(swordCollider[0].gameObject);
-        }
-        // Else if it didn't collide (meaning the player was able to dodge)
-        else
-        {
-            // If player is rolling, it will trigger slow motion.
-            if (playerRoll.Performing) playerRoll.OnDodge();
-        }
-
+  
         // If this object can receive damage
         if (body != null)
         {

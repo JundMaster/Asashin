@@ -286,7 +286,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             // This means the player successfully blocked
             if (Vector3.Dot(organizedEnemiesByDistance[0].forward, transform.forward) > 0.5f)
             {
-                Debug.Log(Vector3.Dot(organizedEnemiesByDistance[0].forward, transform.forward));
                 // Instant kill anim.
                 OnLightMeleeAttack(false);
                 return;
