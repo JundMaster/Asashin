@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using System.Collections;
 
 /// <summary>
 /// Class responsible for handling enemy script.
@@ -39,7 +40,11 @@ public class Enemy : MonoBehaviour, IFindPlayer
     public bool PlayerCurrentlyFighting
     {
         get => Player.PlayerCurrentlyFighting;
-        set => Player.PlayerCurrentlyFighting = value;
+        set
+        {
+            if (Player != null)
+                Player.PlayerCurrentlyFighting = value;
+        }
     }
     public Transform PlayerTarget { get; private set; }
     public Vector3 PlayerLastKnownPosition { get; set; }
@@ -75,9 +80,6 @@ public class Enemy : MonoBehaviour, IFindPlayer
         CineTarget = FindObjectOfType<CinemachineTarget>();
         enemyStats = GetComponent<Stats>();
         animationEvents = GetComponentInChildren<EnemyAnimationEvents>();
-
-        PlayerLastKnownPosition = default;
-        if (Player != null) PlayerCurrentlyFighting = false;
 
         if (patrolStateOriginal != null)
             PatrolState = Instantiate(patrolStateOriginal);
@@ -130,6 +132,17 @@ public class Enemy : MonoBehaviour, IFindPlayer
     }
 
     /// <summary>
+    /// Runs once on start. Initializes states.
+    /// </summary>
+    private void Start()
+    {
+        PlayerLastKnownPosition = default;
+        PlayerCurrentlyFighting = false;
+
+        stateMachine?.Initialize();
+    }
+
+    /// <summary>
     /// Runs on state machine states.
     /// </summary>
     private void FixedUpdate()
@@ -143,18 +156,22 @@ public class Enemy : MonoBehaviour, IFindPlayer
     /// </summary>
     public void FindPlayer()
     {
-        PlayerTarget = 
-            GameObject.FindGameObjectWithTag("playerTarget").transform;
-
         Player = FindObjectOfType<Player>();
+        if (Player != null)
+        {
+            PlayerTarget =
+                GameObject.FindGameObjectWithTag("playerTarget").transform;
+            PlayerCurrentlyFighting = false;
+        }
     }
+
 
     /// <summary>
     /// Turns PlayerTarget to null when the Player disappears.
     /// </summary>
     public void PlayerLost()
     {
-        PlayerTarget = null;
+        PlayerTarget = myTarget;
         PlayerCurrentlyFighting = false;
     }
 
@@ -166,6 +183,19 @@ public class Enemy : MonoBehaviour, IFindPlayer
         if (TemporaryBlindnessState != null)
             stateMachine.SwitchToNewState(TemporaryBlindnessState);
     }
+
+    /// <summary>
+    /// In case this enemy finds the player, it alerts the surrounding enemies.
+    /// </summary>
+    public void AlertSurroundings()
+    {
+        Debug.Log("TEMP");
+        /*
+        if (DefenseState != null)
+        {
+            stateMachine?.SwitchToNewState(DefenseState);
+        }*/
+    } 
         
     /// <summary>
     /// Method that triggers DeathState.
@@ -174,7 +204,7 @@ public class Enemy : MonoBehaviour, IFindPlayer
     private void OnDeath()
     {
         if (DeathState != null)
-            stateMachine.SwitchToNewState(DeathState);
+            stateMachine?.SwitchToNewState(DeathState);
     }
 
     /// <summary>

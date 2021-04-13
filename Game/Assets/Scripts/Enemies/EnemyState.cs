@@ -28,7 +28,7 @@ public abstract class EnemyState : StateBase
         enemy = obj as Enemy;
         stats = enemy.GetComponent<EnemyStats>();
         myTarget = enemy.MyTarget;
-        playerTarget = enemy.PlayerTarget;
+        playerTarget = enemy.PlayerTarget != null? enemy.PlayerTarget : myTarget;
         agent = enemy.Agent;
     }
 
@@ -72,7 +72,6 @@ public abstract class EnemyState : StateBase
     public override IState FixedUpdate()
     {
         if (playerTarget == null) playerTarget = enemy.PlayerTarget;
-
         return null;
     }
 
@@ -80,10 +79,8 @@ public abstract class EnemyState : StateBase
     /// Starts ImapctToBackCoroutine.
     /// Pushes enemy back.
     /// </summary>
-    protected virtual void TakeImpact()
-    {
+    protected virtual void TakeImpact() => 
         enemy.StartCoroutine(ImpactToBack());
-    }
 
     /// <summary>
     /// Happens after enemy being hit. Rotates enemy and pushes it back.
@@ -147,8 +144,6 @@ public abstract class EnemyState : StateBase
     /// <summary>
     /// Instantly switches to DeathState.
     /// </summary>
-    protected void SwitchToDeathState()
-    {
+    protected void SwitchToDeathState() =>
         instantKill = true;
-    }
 }

@@ -47,7 +47,8 @@ public class EnemyAggressiveState : EnemyState
         base.Start();
 
         visionCone = enemy.VisionCone;
-        playerRoll = enemy.Player.GetComponent<PlayerRoll>();
+        if (enemy.Player != null)
+            playerRoll = enemy.Player.GetComponent<PlayerRoll>();
         anim = enemy.Anim;
         weapon = enemy.WeaponCollider;
     }

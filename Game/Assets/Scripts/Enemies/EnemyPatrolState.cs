@@ -136,6 +136,8 @@ public class EnemyPatrolState : EnemyStateWithVision
             enemy.transform.position + offset, 
             Quaternion.identity);
         exclMark.transform.parent = enemy.transform;
+
+        CheckForEnemiesAroundThisEnemy();
     }
 
     /// <summary>
@@ -180,6 +182,28 @@ public class EnemyPatrolState : EnemyStateWithVision
                 yield return wfs;
             }
             yield return wffu;
+        }
+    }
+
+    [SerializeField] private LayerMask myLayer;
+    /// <summary>
+    /// Checks this enemy's surround for another enemies so it can alert them.
+    /// </summary>
+    private void CheckForEnemiesAroundThisEnemy()
+    {
+        Collider[] enemiesAround =
+            Physics.OverlapSphere(myTarget.position, 20f, enemy.gameObject.layer);
+
+        if (enemiesAround.Length > 0)
+        {
+            foreach (Collider enemyCollider in enemiesAround)
+            {
+                if (enemyCollider.TryGetComponent(out Enemy otherEnemy))
+                {
+                    if (otherEnemy.gameObject != enemy.gameObject)
+                        otherEnemy.AlertSurroundings();
+                }
+            }
         }
     }
 

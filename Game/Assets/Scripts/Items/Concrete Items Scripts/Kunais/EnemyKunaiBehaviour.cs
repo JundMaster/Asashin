@@ -7,10 +7,12 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
 {
     [SerializeField] protected LayerMask hittableLayersWithPlayer;
 
+    private const int HITTABLELAYERWITHENEMIES = 23;
+    private const int HITTABLELAYERWITHPLAYER = 22;
+
     public override Transform KunaiCurrentTarget { get; set; }
     private Transform playerTarget;
     private PlayerBlock playerBlock;
-    private PlayerAnimations playerAnim;
 
     // Variables that checks if the kunai was reflected, so it doesn't
     // damage the enemy before being reflected
@@ -22,12 +24,12 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
         if (isReflected)
         {
             ParentKunai.HittableLayers = ParentKunai.HittableLayersWithEnemy;
-            gameObject.layer = 23;
+            gameObject.layer = HITTABLELAYERWITHENEMIES;
         }
         else
         {
             ParentKunai.HittableLayers = hittableLayersWithPlayer;
-            gameObject.layer = 22;
+            gameObject.layer = HITTABLELAYERWITHPLAYER;
         }
     }
 
@@ -38,13 +40,12 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
     public override void OnStart(Transform player)
     {
         playerBlock = player.GetComponent<PlayerBlock>();
-        playerAnim = player.GetComponent<PlayerAnimations>();
         playerTarget = GameObject.FindGameObjectWithTag("playerTarget").transform;
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
 
         // If the player is moving, the enemy will throw the kunai to the
         // front of the player, else, it will throw it to the player's position
-        if (movement.MovementSpeed > 0)
+        if (movement.MovementSpeed > 0 && playerBlock.Performing == false)
         {
             if (Vector3.Distance(transform.position, playerTarget.transform.position) > 15)
                 transform.LookAt(playerTarget.transform.position + playerTarget.forward * 3f);

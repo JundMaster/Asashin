@@ -23,8 +23,13 @@ public abstract class EnemyStateWithVision : EnemyState
     /// <returns></returns>
     public override IState FixedUpdate()
     {
-        if (playerWallHug == null) 
-            playerWallHug = enemy.Player.GetComponent<PlayerWallHug>();
+        if (playerWallHug == null)
+        {
+            if (enemy.Player != null)
+            {
+                playerWallHug = enemy.Player.GetComponent<PlayerWallHug>();
+            }
+        }
 
         return base.FixedUpdate();
     }

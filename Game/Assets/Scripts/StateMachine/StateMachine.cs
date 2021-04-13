@@ -7,24 +7,31 @@ using System.Linq;
 public class StateMachine
 {
     private readonly IEnumerable<IState> states;
-
+    private readonly object parentObject;
     private IState currentState;
 
     /// <summary>
     /// Constructor for StateMachine.
     /// </summary>
     /// <param name="states">States to intialize.</param>
-    /// <param name="obj">Parent object of this state machine.</param>
-    public StateMachine (IEnumerable<IState> states, object obj)
+    /// <param name="parentObject">Parent object of this state machine.</param>
+    public StateMachine (IEnumerable<IState> states, object parentObject)
     {
         this.states = states;
+        this.parentObject = parentObject;
+    }
 
+    /// <summary>
+    /// Initializes states.
+    /// </summary>
+    public void Initialize()
+    {
         currentState = states.First();
 
         // Initializes and starts all states
         foreach (IState state in states)
         {
-            state?.Initialize(obj);
+            state?.Initialize(parentObject);
             state?.Start();
         }
     }
@@ -35,7 +42,7 @@ public class StateMachine
     /// </summary>
     public void FixedUpdate()
     {
-        if (currentState == null) currentState = states.First();
+        if (currentState == null) currentState = states?.First();
 
         IState nextState = currentState?.FixedUpdate();
 
