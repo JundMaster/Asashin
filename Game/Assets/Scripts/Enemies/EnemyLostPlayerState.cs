@@ -14,7 +14,6 @@ public class EnemyLostPlayerState : EnemyStateWithVision
 
     // State variables
     private IEnumerator lookForPlayerCoroutine;
-    private bool lookingForPlayer;
     private bool breakState;
 
     // Components
@@ -37,7 +36,7 @@ public class EnemyLostPlayerState : EnemyStateWithVision
     {
         base.OnEnter();
 
-        lookingForPlayer = false;
+        lookForPlayerCoroutine = null;
 
         breakState = false;
 
@@ -67,9 +66,8 @@ public class EnemyLostPlayerState : EnemyStateWithVision
         // starts looking for him
         if (ReachedLastKnownPosition())
         {
-            if (lookingForPlayer == false)
+            if (lookForPlayerCoroutine == null)
             {
-                lookingForPlayer = true;
                 lookForPlayerCoroutine = LookForPlayer();
                 enemy.StartCoroutine(lookForPlayerCoroutine);
             }
@@ -92,9 +90,11 @@ public class EnemyLostPlayerState : EnemyStateWithVision
 
         // Resets variables
         breakState = false;
-        lookingForPlayer = false;
         if (lookForPlayerCoroutine != null)
+        {
             enemy.StopCoroutine(lookForPlayerCoroutine);
+            lookForPlayerCoroutine = null;
+        }
 
         agent.isStopped = false;
         enemy.VisionCone.SetActive(false);

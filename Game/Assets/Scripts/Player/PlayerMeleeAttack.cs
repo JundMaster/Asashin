@@ -172,8 +172,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         // If this object can receive damage
         if (body != null)
         {
-            if (body.TryGetComponent(out IDamageable damageableBody) &&
-                body.TryGetComponent(out Enemy en))
+            if (body.TryGetComponent(out IDamageable damageableBody))
             {
                 damageableBody?.TakeDamage(stats.LightDamage, TypeOfDamage.PlayerMelee);
             }
@@ -184,7 +183,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
             Instantiate(
                 swordHitPrefab, 
-                sword.transform.position + sword.center, 
+                sword.transform.position, 
                 Quaternion.identity);
         }
     }
@@ -197,7 +196,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         Collider[] swordCol =
             Physics.OverlapSphere(
                 sword.transform.position + sword.center, 
-                sword.radius * 2.5f, 
+                sword.radius * 2.5f,
                 hittableLayers);
 
         // Checks if this object or parent has a damageable body
@@ -208,8 +207,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         // If this object can receive damage
         if (body != null)
         {
-            if (body.TryGetComponent(out IDamageable damageableBody) &&
-                body.TryGetComponent(out Enemy en))
+            if (body.TryGetComponent(out IDamageable damageableBody))
             {
                 damageableBody?.TakeDamage(stats.LightDamage, TypeOfDamage.PlayerMelee);
             }
@@ -255,7 +253,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         if (movement.Walking == false)
         {
             // Normal attack anim
-            LightMeleeAttack?.Invoke(true);
+            OnLightMeleeAttack(true);
             return;
         }
         // ELSE
@@ -264,7 +262,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         // Creates a list with all enemies around the player
         List<Transform> allEnemies = new List<Transform>();
         Collider[] enemies =
-                Physics.OverlapSphere(transform.position, 2f, enemyLayers);
+                Physics.OverlapSphere(transform.position, 2.5f, enemyLayers);
 
         // If there are enemies
         if (enemies.Length > 0)
@@ -288,25 +286,27 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             // This means the player successfully blocked
             if (Vector3.Dot(organizedEnemiesByDistance[0].forward, transform.forward) > 0.5f)
             {
+                Debug.Log(Vector3.Dot(organizedEnemiesByDistance[0].forward, transform.forward));
                 // Instant kill anim.
-                LightMeleeAttack?.Invoke(false);
+                OnLightMeleeAttack(false);
                 return;
             }
             else
             {
                 // Normal attack anim
-                LightMeleeAttack?.Invoke(true);
+                OnLightMeleeAttack(true);
                 return;
             }
         }
         else
         {
             // Normal attack anim
-            LightMeleeAttack?.Invoke(true);
+            OnLightMeleeAttack(true);
         }
     }
 
-    protected virtual void OnAirAttack() => AirAttack?.Invoke();
+    protected virtual void OnLightMeleeAttack(bool condition) =>
+        LightMeleeAttack?.Invoke(condition);
 
     /// <summary>
     /// Event registered on PlayerAnimations.
@@ -319,6 +319,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// it triggers instant kill animation.</param>
     /// </summary>
     public event Action<bool> LightMeleeAttack;
+
+    protected virtual void OnAirAttack() => AirAttack?.Invoke();
 
     /// <summary>
     /// Event registered on PlayerAnimations.

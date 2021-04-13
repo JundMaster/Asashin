@@ -920,7 +920,7 @@ MonoBehaviour:
   patrolStateOriginal: {fileID: 11400000, guid: e8ad508ac0433ff408b8e23fab14757e, type: 2}
   defenseStateOriginal: {fileID: 11400000, guid: b7ba3b8eebd3fc24aaf660a6464df918, type: 2}
   lostPlayerStateOriginal: {fileID: 11400000, guid: f82794c25393a5c44b6d8deec17f415d, type: 2}
-  aggressiveStateOriginal: {fileID: 11400000, guid: 3908e6f7b137ef24ca3aef8da3588e7b, type: 2}
+  aggressiveStateOriginal: {fileID: 0}
   temporaryBlindnessStateOriginal: {fileID: 11400000, guid: e266a82e891245e40a73440544b3861e, type: 2}
   deathStateOriginal: {fileID: 11400000, guid: 6426dea4efe0b2c48a00b7676d9f5d44, type: 2}
 --- !u!136 &552201769
@@ -3060,13 +3060,29 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3737182763745903323, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-      propertyPath: m_Layer
-      value: 11
+    - target: {fileID: 3737182763791360940, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
+      propertyPath: m_Radius
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3737182763791360940, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3737182763791360940, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3737182763791360940, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
+      propertyPath: m_Center.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7366061340869173852, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
       propertyPath: m_Name
       value: Bot
+      objectReference: {fileID: 0}
+    - target: {fileID: 7366061340869173863, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
+      propertyPath: hittableLayers.m_Bits
+      value: 1049600
       objectReference: {fileID: 0}
     - target: {fileID: 7886455437523876070, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
       propertyPath: m_RootOrder
