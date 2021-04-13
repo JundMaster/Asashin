@@ -5,7 +5,7 @@ using System.Collections;
 /// Scriptable object responsible for controlling enemy patrol state.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Common Patrol State")]
-public class EnemyPatrolState : EnemyStateWithVision
+public class EnemyPatrolState : EnemyAbstractStateWithVision
 {
     [Header("Checks if player is in cone range every X seconds")]
     [Range(0.01f,2f)][SerializeField] private float searchCheckDelay;
@@ -58,6 +58,7 @@ public class EnemyPatrolState : EnemyStateWithVision
         // Must be on start aswell because OnEnter doesn't run on first state
         stats.MeleeDamageOnEnemy += CheckForInstantKill;
         stats.AnyDamageOnEnemy += TakeImpact;
+        enemy.Alert += AlertEnemies;
     }
 
     /// <summary>
@@ -86,6 +87,9 @@ public class EnemyPatrolState : EnemyStateWithVision
 
         if (instantKill)
             return enemy.DeathState;
+
+        if (alert)
+            return enemy.DefenseState;
 
         // Calculates vision cone if the player isn't too far
         if (Vector3.Distance(myTarget.position, playerTarget.position) < 50)
@@ -120,13 +124,14 @@ public class EnemyPatrolState : EnemyStateWithVision
     {
         base.OnExit();
 
+        breakState = false;
+
         // Cancels all movement
         agent.SetDestination(myTarget.position);
         agent.isStopped = true;
 
         enemy.VisionCone.SetActive(false);
 
-        breakState = false;
         if (movementCoroutine != null)
             enemy.StopCoroutine(movementCoroutine);
 
@@ -136,8 +141,6 @@ public class EnemyPatrolState : EnemyStateWithVision
             enemy.transform.position + offset, 
             Quaternion.identity);
         exclMark.transform.parent = enemy.transform;
-
-        CheckForEnemiesAroundThisEnemy();
     }
 
     /// <summary>
@@ -182,28 +185,6 @@ public class EnemyPatrolState : EnemyStateWithVision
                 yield return wfs;
             }
             yield return wffu;
-        }
-    }
-
-    [SerializeField] private LayerMask myLayer;
-    /// <summary>
-    /// Checks this enemy's surround for another enemies so it can alert them.
-    /// </summary>
-    private void CheckForEnemiesAroundThisEnemy()
-    {
-        Collider[] enemiesAround =
-            Physics.OverlapSphere(myTarget.position, 20f, enemy.gameObject.layer);
-
-        if (enemiesAround.Length > 0)
-        {
-            foreach (Collider enemyCollider in enemiesAround)
-            {
-                if (enemyCollider.TryGetComponent(out Enemy otherEnemy))
-                {
-                    if (otherEnemy.gameObject != enemy.gameObject)
-                        otherEnemy.AlertSurroundings();
-                }
-            }
         }
     }
 

@@ -43,7 +43,6 @@ public class StateMachine
     public void FixedUpdate()
     {
         if (currentState == null) currentState = states?.First();
-
         IState nextState = currentState?.FixedUpdate();
 
         if (nextState != null &&

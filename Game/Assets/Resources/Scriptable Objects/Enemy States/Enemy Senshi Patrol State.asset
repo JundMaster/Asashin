@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c0bcf90f3947174b8c94c8fe9355c82, type: 3}
+  m_Name: Enemy Senshi Patrol State
+  m_EditorClassIdentifier: 
+  timeToTravelAfterHit: 0.3
+  takeDamageDistancePower: 2
+  coneRange: 20
+  desiredConeAngle: 45
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 22528
+  searchCheckDelay: 0.15
+  waitingDelay: 2
+  amountOfVertices: 45
+  coneMaterial: {fileID: 2100000, guid: bcb4ce8765b3b5e48a66c59a661c773b, type: 2}
+  exclamationMarkPrefab: {fileID: 6000884739750298489, guid: bfe5833cecd003443878bb399176af7d, type: 3}
+  offset: {x: 0, y: 2.5, z: 0}
+  myLayer:
+    serializedVersion: 2
+    m_Bits: 1024

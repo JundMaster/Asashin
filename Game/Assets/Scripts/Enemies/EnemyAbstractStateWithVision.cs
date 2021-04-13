@@ -4,7 +4,7 @@
 /// Abstract Scriptable object responsible for controlling enemy states with
 /// vision.
 /// </summary>
-public abstract class EnemyStateWithVision : EnemyState
+public abstract class EnemyAbstractStateWithVision : EnemyAbstractState
 {
     // Vision
     [Header("Vision Cone Attributes")]
@@ -77,13 +77,16 @@ public abstract class EnemyStateWithVision : EnemyState
                                 if (Vector3.Dot(
                                     enemy.transform.forward, 
                                     playerTarget.forward) < 
-                                    0.5f)
+                                    0f)
                                 {
+                                    enemy.AlertSurroundings();
                                     playerFound = true;
                                 }
                             }
+                            // if player is not performing wall hug
                             else
                             {
+                                enemy.AlertSurroundings();
                                 playerFound = true;
                             }
                             

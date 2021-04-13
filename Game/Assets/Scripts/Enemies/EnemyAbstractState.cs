@@ -5,7 +5,7 @@ using System.Collections;
 /// <summary>
 /// Abstract Scriptable object responsible for controlling enemy states.
 /// </summary>
-public abstract class EnemyState : StateBase
+public abstract class EnemyAbstractState : StateBase
 {
     [Header("Distance that the enemy travels back after being hit")]
     [Range(0.1f,1f)][SerializeField] protected float timeToTravelAfterHit;
@@ -18,6 +18,7 @@ public abstract class EnemyState : StateBase
     protected Transform playerTarget;
 
     protected bool instantKill;
+    protected bool alert;
 
     /// <summary>
     /// Method that defines what happens when this state is initialized.
@@ -28,7 +29,7 @@ public abstract class EnemyState : StateBase
         enemy = obj as Enemy;
         stats = enemy.GetComponent<EnemyStats>();
         myTarget = enemy.MyTarget;
-        playerTarget = enemy.PlayerTarget != null? enemy.PlayerTarget : myTarget;
+        playerTarget = enemy.PlayerTarget;
         agent = enemy.Agent;
     }
 
@@ -38,6 +39,7 @@ public abstract class EnemyState : StateBase
     public override void Start()
     {
         instantKill = false;
+        alert = false;
     }
 
     /// <summary>
@@ -49,20 +51,11 @@ public abstract class EnemyState : StateBase
     public override void OnEnter()
     {
         if (playerTarget == null) playerTarget = enemy.PlayerTarget;
+        alert = false;
 
+        enemy.Alert += AlertEnemies;
         stats.MeleeDamageOnEnemy += CheckForInstantKill;
         stats.AnyDamageOnEnemy += TakeImpact;
-    }
-
-    /// <summary>
-    /// Runs every time the state machine leaves this state.
-    /// Sets player's last known position.
-    /// </summary>
-    public override void OnExit()
-    {
-        enemy.PlayerLastKnownPosition = playerTarget.position;
-        stats.MeleeDamageOnEnemy -= CheckForInstantKill;
-        stats.AnyDamageOnEnemy -= TakeImpact;
     }
 
     /// <summary>
@@ -74,6 +67,19 @@ public abstract class EnemyState : StateBase
         if (playerTarget == null) playerTarget = enemy.PlayerTarget;
         return null;
     }
+
+    /// <summary>
+    /// Runs every time the state machine leaves this state.
+    /// Sets player's last known position.
+    /// </summary>
+    public override void OnExit()
+    {
+        enemy.PlayerLastKnownPosition = playerTarget.position;
+
+        enemy.Alert -= AlertEnemies;
+        stats.MeleeDamageOnEnemy -= CheckForInstantKill;
+        stats.AnyDamageOnEnemy -= TakeImpact;
+    }    
 
     /// <summary>
     /// Starts ImapctToBackCoroutine.
@@ -140,6 +146,9 @@ public abstract class EnemyState : StateBase
             }
         }
     }
+
+    protected void AlertEnemies() => 
+        alert = true;
 
     /// <summary>
     /// Instantly switches to DeathState.

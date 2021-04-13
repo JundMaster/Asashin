@@ -5,7 +5,7 @@ using System.Collections;
 /// Scriptable object responsible for controlling enemy state after losing the player.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Common Lost Player State")]
-public class EnemyLostPlayerState : EnemyStateWithVision
+public class EnemyLostPlayerState : EnemyAbstractStateWithVision
 {
     [Header("Time the enemy will spend looking for player")]
     [Range(0.1f,15)][SerializeField] private float timeToLookForPlayer;
@@ -57,6 +57,9 @@ public class EnemyLostPlayerState : EnemyStateWithVision
 
         if (instantKill)
             return enemy.DeathState;
+
+        if (alert)
+            return enemy.DefenseState;
 
         // If enemy is in range, it stops looking for player coroutine
         if (PlayerInRange())

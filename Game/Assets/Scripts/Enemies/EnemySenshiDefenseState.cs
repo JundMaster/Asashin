@@ -2,10 +2,10 @@
 using UnityEngine;
 
 /// <summary>
-/// Scriptable object responsible for controlling enemy movement state.
+/// Scriptable object responsible for controlling senshi movement state.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Senshi Defense State")]
-public class EnemySenshiDefenseState : EnemyStateWithVision
+public class EnemySenshiDefenseState : EnemyAbstractDefenseState
 {
     private const byte KUNAILAYER = 15;
 
@@ -20,16 +20,6 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     private bool whileThrowingKunai;
     private IEnumerator kunaiCoroutine;
 
-    [Header("Rotation smooth time")]
-    [Range(0.1f,1.5f)][SerializeField] private float turnSpeed;
-    private float smoothTimeRotation;
-
-    [Header("Distance from player. X => min. distance, Y => max. distance")]
-    [SerializeField] private Vector2 randomDistanceFromPlayer;
-
-    // Movement variables
-    private float randomDistance;
-
     // Components
     private Animator anim;
 
@@ -39,16 +29,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     public override void Start()
     {
         base.Start();
-
         anim = enemy.Anim;
-
-        if (randomDistanceFromPlayer.y < randomDistanceFromPlayer.x)
-            randomDistanceFromPlayer.y = randomDistanceFromPlayer.x;
-        if (randomDistanceFromPlayer.x > randomDistanceFromPlayer.y)
-            randomDistanceFromPlayer.x = randomDistanceFromPlayer.y;
-
-        randomDistance = Random.Range(
-            randomDistanceFromPlayer.x, randomDistanceFromPlayer.y);
     }
 
     /// <summary>
@@ -61,10 +42,6 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
         kunaiCoroutine = null;
 
         whileThrowingKunai = false;
-
-        agent.isStopped = false;
-
-        enemy.VisionCone.SetActive(false);
     }
 
     /// <summary>
@@ -90,7 +67,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
         if (MoveToDefensiveRange() == false)
         {
             // If the enemy loses sight of the player it instantly
-            // stops kunai coroutine
+            // stops kunai coroutine and goes to another state
             if (myTarget.CanSee(playerTarget, collisionLayers) == false)
             {
                 return enemy.LostPlayerState;
@@ -144,7 +121,7 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
     /// </summary>
     /// <returns>Returns true if it needs to move. 
     /// Returns false if it's in the desired position.</returns>
-    private bool MoveToDefensiveRange()
+    protected override bool MoveToDefensiveRange()
     {
         float distance = 
             Vector3.Distance(myTarget.position, playerTarget.position);
@@ -241,17 +218,5 @@ public class EnemySenshiDefenseState : EnemyStateWithVision
             break;
         }
         kunaiCoroutine = null;
-    }
-
-    /// <summary>
-    /// Checks if the enemy is facing the player.
-    /// </summary>
-    /// <returns>Returns true if the enemy is facing the player.</returns>
-    private bool FacingPlayer()
-    {
-        if (myTarget.IsLookingTowards(playerTarget.position))
-            return true;
-
-        return false;
     }
 }

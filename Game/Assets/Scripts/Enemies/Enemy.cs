@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System;
-using System.Collections;
 
 /// <summary>
 /// Class responsible for handling enemy script.
@@ -13,6 +12,9 @@ using System.Collections;
 [RequireComponent(typeof(CapsuleCollider))]
 public class Enemy : MonoBehaviour, IFindPlayer
 {
+    [SerializeField] private LayerMask myLayer;
+    [SerializeField] private float sizeOfAlert;
+
     [Header("Enemy Target")]
     [SerializeField] private Transform myTarget;
     public Transform MyTarget => myTarget;
@@ -50,12 +52,12 @@ public class Enemy : MonoBehaviour, IFindPlayer
     public Vector3 PlayerLastKnownPosition { get; set; }
 
     [Header("EnemyStates")]
-    [SerializeField] private EnemyState patrolStateOriginal;
-    [SerializeField] private EnemyState defenseStateOriginal;
-    [SerializeField] private EnemyState lostPlayerStateOriginal;
-    [SerializeField] private EnemyState aggressiveStateOriginal;
-    [SerializeField] private EnemyState temporaryBlindnessStateOriginal;
-    [SerializeField] private EnemyState deathStateOriginal;
+    [SerializeField] private EnemyAbstractState patrolStateOriginal;
+    [SerializeField] private EnemyAbstractState defenseStateOriginal;
+    [SerializeField] private EnemyAbstractState lostPlayerStateOriginal;
+    [SerializeField] private EnemyAbstractState aggressiveStateOriginal;
+    [SerializeField] private EnemyAbstractState temporaryBlindnessStateOriginal;
+    [SerializeField] private EnemyAbstractState deathStateOriginal;
 
     // State getters
     public IState PatrolState { get; private set; }
@@ -181,22 +183,9 @@ public class Enemy : MonoBehaviour, IFindPlayer
     public void BlindEnemy()
     {
         if (TemporaryBlindnessState != null)
-            stateMachine.SwitchToNewState(TemporaryBlindnessState);
+            stateMachine?.SwitchToNewState(TemporaryBlindnessState);
     }
 
-    /// <summary>
-    /// In case this enemy finds the player, it alerts the surrounding enemies.
-    /// </summary>
-    public void AlertSurroundings()
-    {
-        Debug.Log("TEMP");
-        /*
-        if (DefenseState != null)
-        {
-            stateMachine?.SwitchToNewState(DefenseState);
-        }*/
-    } 
-        
     /// <summary>
     /// Method that triggers DeathState.
     /// Is triggered when enemy's health reaches 0.
@@ -206,6 +195,39 @@ public class Enemy : MonoBehaviour, IFindPlayer
         if (DeathState != null)
             stateMachine?.SwitchToNewState(DeathState);
     }
+
+    /// <summary>
+    /// In case this enemy finds the player, it alerts the surrounding enemies.
+    /// </summary>
+    public void AlertSurroundings()
+    {
+        Collider[] enemiesAround =
+            Physics.OverlapSphere(myTarget.position, sizeOfAlert, myLayer);
+
+        if (enemiesAround.Length > 0)
+        {
+            foreach (Collider enemyCollider in enemiesAround)
+            {
+                if (enemyCollider.TryGetComponent(out Enemy otherEnemy))
+                {
+                    if (otherEnemy.gameObject != gameObject)
+                    {
+                        otherEnemy.OnAlert();
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Method called from enemy states in order to invoke Alert event.
+    /// </summary>
+    public virtual void OnAlert() => Alert?.Invoke();
+
+    /// <summary>
+    /// Event registered on enemy states in order to alert all enemies.
+    /// </summary>
+    public event Action Alert;
 
     /// <summary>
     /// Invokes WeaponHit event.

@@ -3,8 +3,8 @@
 /// <summary>
 /// Scriptable object for controlling enemy temporary blindness state.
 /// </summary>
-[CreateAssetMenu(fileName = "Enemy Common Temporary Blindness State")]
-public class EnemyTemporaryBlindnessState : EnemyState
+[CreateAssetMenu(fileName = "Enemy Common Blindness State")]
+public class EnemyTemporaryBlindnessState : EnemyAbstractState
 {
     [Header("Enemy gets blind for x seconds")]
     [Range(0.5f, 10f)] [SerializeField] private float secondsToBeBlind;
