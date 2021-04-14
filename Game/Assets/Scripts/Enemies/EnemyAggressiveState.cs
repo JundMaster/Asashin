@@ -95,13 +95,12 @@ public class EnemyAggressiveState : EnemyAbstractState
         // Checks if player is in max range
         if (IsPlayerInMyRange(currentDistanceFromPlayer))
         {
+            // If there are no obstacles between the enemy and the player
             if (myTarget.CanSee(playerTarget, collisionLayers))
             {
                 // Checks and moves enemy close to player
                 if (IsCloseToPlayer(currentDistanceFromPlayer))
-                {
-                // If there are no obstacles between the enemy and the player
-                
+                { 
                     // If the enemy is not inside attacking anim, it rotates
                     if (attackingAnimation == false)
                         enemy.transform.RotateToSmoothly(
@@ -203,9 +202,9 @@ public class EnemyAggressiveState : EnemyAbstractState
     /// </summary>
     private void WeaponHit()
     {
-        // If player is rolling, while the enemy is attacking, it means the
-        // player was able to dodge, so it will trigger slow motion.
-        if (playerRoll.Performing)
+        // If player just started rolling , while the enemy is attacking, it 
+        // means the player was able to dodge, so it will trigger slow motion.
+        if (playerRoll.PerformingTime > 0 && playerRoll.PerformingTime < 0.5f)
         {
             playerRoll.OnDodge();
             return;

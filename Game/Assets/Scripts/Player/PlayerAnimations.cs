@@ -10,7 +10,6 @@ public class PlayerAnimations : MonoBehaviour
     // Components
     private Animator anim;
     private PlayerMovement movement;
-    private PlayerJump jump;
     private PlayerRoll roll;
     private PlayerMeleeAttack attack;
     private PlayerBlock block;
@@ -25,7 +24,6 @@ public class PlayerAnimations : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
-        jump = GetComponent<PlayerJump>();
         roll = GetComponent<PlayerRoll>();
         attack = GetComponent<PlayerMeleeAttack>();
         block = GetComponent<PlayerBlock>();
@@ -41,7 +39,6 @@ public class PlayerAnimations : MonoBehaviour
     {
         roll.Roll += TriggerRollAnimation;
         attack.LightMeleeAttack += TriggerLightMeleeAttack;
-        attack.AirAttack += TriggerAirAttack;
         death.PlayerDied += TriggerDeath;
         stats.NoDamageBlock += TriggerBlockReflect;
         stats.TookDamage += TriggerOnHitAnimation;
@@ -51,7 +48,6 @@ public class PlayerAnimations : MonoBehaviour
     {
         roll.Roll -= TriggerRollAnimation;
         attack.LightMeleeAttack -= TriggerLightMeleeAttack;
-        attack.AirAttack -= TriggerAirAttack;
         death.PlayerDied -= TriggerDeath;
         stats.NoDamageBlock -= TriggerBlockReflect;
         stats.TookDamage -= TriggerOnHitAnimation;
@@ -60,8 +56,7 @@ public class PlayerAnimations : MonoBehaviour
     private void Update()
     {
         anim.SetFloat("MovementSpeed", movement.MovementSpeed);
-        anim.SetFloat("VerticalVelocity", jump.VerticalVelocity.y);
-        anim.SetBool("IsGrounded", jump.IsGrounded());
+        anim.SetBool("IsGrounded", movement.IsGrounded());
         anim.SetBool("Block", block.Performing);
         anim.SetBool("Walking", movement.Walking);
         anim.SetFloat("WallHugSpeed", input.Movement.x * controller.velocity.magnitude);

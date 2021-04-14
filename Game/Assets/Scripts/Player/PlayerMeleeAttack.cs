@@ -18,7 +18,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private CinemachineTarget target;
     private PlayerStats stats;
     private PlayerBlock block;
-    private PlayerJump jump;
     private PlayerInteract interact;
     private PlayerWallHug wallHug;
     private PlayerMovement movement;
@@ -46,7 +45,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         target = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
         block = GetComponent<PlayerBlock>();
-        jump = GetComponent<PlayerJump>();
         interact = GetComponent<PlayerInteract>();
         wallHug = GetComponent<PlayerWallHug>();
         movement = GetComponent<PlayerMovement>();
@@ -61,13 +59,11 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private void OnEnable()
     {
         input.MeleeLightAttack += MeleeLightAttack;
-        input.MeleeLightAttack += MeleeAirAttack;
     }
 
     private void OnDisable()
     {
         input.MeleeLightAttack -= MeleeLightAttack;
-        input.MeleeLightAttack -= MeleeAirAttack;
     }
 
     public void ComponentUpdate()
@@ -78,16 +74,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     public void ComponentFixedUpdate()
     {
         
-    }
-
-    private void MeleeAirAttack()
-    {
-        if (jump.IsGrounded() == false)
-        {
-            OnAirAttack();
-            Performing = true;
-            anim.applyRootMotion = true;
-        }
     }
 
     /// <summary>
@@ -189,41 +175,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     }
 
     /// <summary>
-    /// Checks attack collision through animation event.
-    /// </summary>
-    public void CheckAirAttackCollision()
-    {
-        Collider[] swordCol =
-            Physics.OverlapSphere(
-                sword.transform.position + sword.center, 
-                sword.radius * 2.5f,
-                hittableLayers);
-
-        // Checks if this object or parent has a damageable body
-        GameObject body = null;
-        if (swordCol.Length > 0)
-            body = GetDamageableBody(swordCol[0].gameObject);
-
-        // If this object can receive damage
-        if (body != null)
-        {
-            if (body.TryGetComponent(out IDamageable damageableBody))
-            {
-                damageableBody?.TakeDamage(stats.LightDamage, TypeOfDamage.PlayerMelee);
-            }
-            else if (body.TryGetComponent(out IBreakable breakable))
-            {
-                breakable?.Execute();
-            }
-
-            Instantiate(
-                swordHitPrefab, 
-                sword.transform.position + sword.center, 
-                Quaternion.identity);
-        }
-    }
-
-    /// <summary>
     /// Checks if this object has a damgeable body, if it doesn't it will check
     /// its parent until parent is null.
     /// </summary>
@@ -318,11 +269,4 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// it triggers instant kill animation.</param>
     /// </summary>
     public event Action<bool> LightMeleeAttack;
-
-    protected virtual void OnAirAttack() => AirAttack?.Invoke();
-
-    /// <summary>
-    /// Event registered on PlayerAnimations.
-    /// </summary>
-    public event Action AirAttack;
 }

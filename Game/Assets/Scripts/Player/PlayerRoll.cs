@@ -5,24 +5,25 @@ public class PlayerRoll : MonoBehaviour, IAction
 {
     // Components
     private PlayerInputCustom input;
-    private PlayerJump jump;
     private PlayerMeleeAttack attack;
     private PlayerUseItem useItem;
     private Animator anim;
     private PlayerBlock block;
     private PlayerWallHug wallHug;
+    private PlayerMovement movement;
 
     public bool Performing { get; private set; }
+    public float PerformingTime { get; private set; }
 
     private void Awake()
     {
         input = FindObjectOfType<PlayerInputCustom>();
-        jump = GetComponent<PlayerJump>();
         attack = GetComponent<PlayerMeleeAttack>();
         anim = GetComponent<Animator>();
         useItem = GetComponent<PlayerUseItem>();
         block = GetComponent<PlayerBlock>();
         wallHug = GetComponent<PlayerWallHug>();
+        movement = GetComponent<PlayerMovement>();
     }
 
     private void Start()
@@ -42,7 +43,10 @@ public class PlayerRoll : MonoBehaviour, IAction
 
     public void ComponentUpdate()
     {
-
+        if (Performing)
+            PerformingTime = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+        else
+            PerformingTime = 0;
     }
 
     public void ComponentFixedUpdate()
@@ -56,7 +60,7 @@ public class PlayerRoll : MonoBehaviour, IAction
     private void HandleRoll()
     {
         if (Performing == false && attack.Performing == false &&
-            jump.IsGrounded() && useItem.Performing == false &&
+            movement.IsGrounded() && useItem.Performing == false &&
             block.Performing == false && wallHug.Performing == false)
         {
             anim.applyRootMotion = true;

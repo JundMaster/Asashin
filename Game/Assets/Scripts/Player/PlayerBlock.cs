@@ -8,7 +8,6 @@ public class PlayerBlock : MonoBehaviour, IAction
     // Components
     private PlayerInputCustom input;
     private Animator anim;
-    private PlayerJump jump;
     private PlayerRoll roll;
     private PlayerUseItem useItem;
     private CinemachineTarget cineTarget;
@@ -19,7 +18,6 @@ public class PlayerBlock : MonoBehaviour, IAction
     {
         input = FindObjectOfType<PlayerInputCustom>();
         anim = GetComponent<Animator>();
-        jump = GetComponent<PlayerJump>();
         roll = GetComponent<PlayerRoll>();
         useItem = GetComponent<PlayerUseItem>();
         cineTarget = FindObjectOfType<CinemachineTarget>();
@@ -44,8 +42,7 @@ public class PlayerBlock : MonoBehaviour, IAction
     {
         if (condition == true)
         {
-            if (jump.Performing == false &&
-                roll.Performing == false && useItem.Performing == false)
+            if (roll.Performing == false && useItem.Performing == false)
             {
                 Performing = true;
                 anim.applyRootMotion = true;

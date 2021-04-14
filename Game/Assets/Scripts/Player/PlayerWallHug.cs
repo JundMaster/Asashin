@@ -15,7 +15,6 @@ public class PlayerWallHug : MonoBehaviour, IAction
 
     // Components
     private PlayerInputCustom input;
-    private PlayerJump jump;
     private PlayerMeleeAttack attack;
     private PlayerUseItem useItem;
     private PlayerRoll roll;
@@ -24,6 +23,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
     private CharacterController controller;
     private CinemachineTarget cinemachineTarget;
     private PlayerStats stats;
+    private PlayerMovement movement;
 
     private Collider[] wallsColliders;
     private Collider[] wallsCollidersRight;
@@ -38,7 +38,6 @@ public class PlayerWallHug : MonoBehaviour, IAction
     private void Awake()
     {
         input = FindObjectOfType<PlayerInputCustom>();
-        jump = GetComponent<PlayerJump>();
         attack = GetComponent<PlayerMeleeAttack>();
         anim = GetComponent<Animator>();
         useItem = GetComponent<PlayerUseItem>();
@@ -47,6 +46,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
         controller = GetComponent<CharacterController>();
         cinemachineTarget = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
+        movement = GetComponent<PlayerMovement>();
     }
 
     private void Start()
@@ -89,7 +89,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
         {
             // If the player isn't performing any of these actions
             if (attack.Performing == false &&
-                jump.IsGrounded() &&
+                movement.IsGrounded() &&
                 useItem.Performing == false &&
                 block.Performing == false &&
                 roll.Performing == false)
@@ -157,7 +157,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
         {
             // If the player isn't performing any of these actions
             if (attack.Performing == false &&
-                jump.IsGrounded() &&
+                movement.IsGrounded() &&
                 useItem.Performing == false &&
                 block.Performing == false &&
                 roll.Performing == false)

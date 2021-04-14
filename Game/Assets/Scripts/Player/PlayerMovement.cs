@@ -18,7 +18,6 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerUseItem useItem;
     private PlayerRoll roll;
     private PlayerBlock block;
-    private PlayerJump jump;
     private PlayerWallHug wallHug;
     private Animator anim;
     private CinemachineTarget cineTarget;
@@ -28,6 +27,12 @@ public class PlayerMovement : MonoBehaviour, IAction
     public bool Sprinting { get; private set; }
     public bool Performing { get; private set; }
     public bool Hidden { get; private set; }
+
+    // Gravity
+    public Vector3 VerticalVelocity;
+
+    // Ground variables
+    [SerializeField] private LayerMask groundLayer;
 
     // Movement Variables
     public Vector3 Direction { get; private set; }
@@ -55,7 +60,6 @@ public class PlayerMovement : MonoBehaviour, IAction
         roll = GetComponent<PlayerRoll>();
         useItem = GetComponent<PlayerUseItem>();
         block = GetComponent<PlayerBlock>();
-        jump = GetComponent<PlayerJump>();
         wallHug = GetComponent<PlayerWallHug>();
         anim = GetComponent<Animator>();
         cineTarget = FindObjectOfType<CinemachineTarget>();
@@ -76,7 +80,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     {
         input.StopMoving += HandleStopMovement;
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
-        input.Walk += () => Walking = !Walking;
+        input.Walk += HandleSneak;
         input.Sprint += HandleSprint;
         attack.LightMeleeAttack += StopWalkingOnAttack;
         roll.Roll += () => Walking = false;
@@ -89,7 +93,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     {
         input.StopMoving -= HandleStopMovement;
         slowMotion.SlowMotionEvent -= ChangeTurnSmoothValue;
-        input.Walk -= () => Walking = !Walking;
+        input.Walk -= HandleSneak;
         input.Sprint -= HandleSprint;
         attack.LightMeleeAttack -= StopWalkingOnAttack;
         roll.Roll -= () => Walking = false;
@@ -156,12 +160,32 @@ public class PlayerMovement : MonoBehaviour, IAction
         Walking = false;
     }
 
+    /// <summary>
+    /// Turns sneak on or off.
+    /// </summary>
+    private void HandleSneak(bool condition)
+    {
+        if (condition == true)
+            Walking = true;
+        else
+            Walking = false;
+    }
+
     public void ComponentFixedUpdate()
     {
         Movement();
 
         if (wallHug.Performing == false)
             Rotation();
+
+        // Gravity
+        if (IsGrounded() && VerticalVelocity.y < 0)
+        {
+            VerticalVelocity.y = -0.5f;
+        }
+
+        VerticalVelocity.y += values.Gravity * Time.fixedUnscaledDeltaTime;
+        controller.Move(VerticalVelocity * Time.fixedUnscaledDeltaTime);
     }
 
     /// <summary>
@@ -189,7 +213,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         }
 
         // Cancels sneak
-        if (block.Performing || !jump.IsGrounded())
+        if (wallHug.Performing || block.Performing || !IsGrounded())
             Walking = false;
 
         // Cancels sneaking if player is fighting
@@ -280,6 +304,21 @@ public class PlayerMovement : MonoBehaviour, IAction
             moveDirection = Quaternion.Euler(0f, targetAngle, 0f) *
                 Vector3.forward;
         }
+    }
+
+    /// <summary>
+    /// Checks if the character is grounded.
+    /// </summary>
+    public bool IsGrounded()
+    {
+        Collider[] isGrounded =
+            Physics.OverlapSphere(
+                transform.position, values.IsGroundedCheckSize, groundLayer);
+
+        if (isGrounded.Length > 0)
+            return true;
+
+        return false;
     }
 
     private void OnTriggerStay(Collider other)

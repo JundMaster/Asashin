@@ -20,7 +20,6 @@ public class PlayerUseItem : MonoBehaviour, IAction
     private PlayerInputCustom input;
     private PlayerAnimations playerAnims;
     private PlayerMeleeAttack attack;
-    private PlayerJump jump;
     private PlayerRoll roll;
     private Animator anim;
     private PlayerMovement movement;
@@ -40,7 +39,6 @@ public class PlayerUseItem : MonoBehaviour, IAction
         input = FindObjectOfType<PlayerInputCustom>();
         playerAnims = GetComponent<PlayerAnimations>();
         attack = GetComponent<PlayerMeleeAttack>();
-        jump = GetComponent<PlayerJump>();
         roll = GetComponent<PlayerRoll>();
         anim = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
@@ -100,7 +98,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
     private void HandleItemUse()
     {
         if (canUseItemDelayOver && attack.Performing == false && 
-            jump.Performing == false && roll.Performing == false &&
+            roll.Performing == false &&
             block.Performing == false && wallHug.Performing == false)
         {
             // Plays an animation depending on the item used

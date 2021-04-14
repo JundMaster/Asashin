@@ -98,22 +98,6 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     /// </summary>
     public event Action StopMoving;
 
-    /// <summary>
-    /// Handles Jump.
-    /// </summary>
-    /// <param name="context"></param>
-    public void HandleJump(InputAction.CallbackContext context)
-    {
-        if (context.started) OnJump();
-    }
-
-    protected virtual void OnJump() => Jump?.Invoke();
-
-    /// <summary>
-    /// Registered on Player Jump.
-    /// </summary>
-    public event Action Jump;
-
 
     /// <summary>
     /// Handles Player Roll.
@@ -278,15 +262,16 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     /// <param name="context"></param>
     public void HandleWalk(InputAction.CallbackContext context)
     {
-        if (context.started) OnWalk();
+        if (context.started) OnWalk(true);
+        if (context.canceled) OnWalk(false);
     }
 
-    protected virtual void OnWalk() => Walk?.Invoke();
+    protected virtual void OnWalk(bool condition) => Walk?.Invoke(condition);
 
     /// <summary>
     /// Event registered on PlayerMovement.
     /// </summary>
-    public event Action Walk;
+    public event Action<bool> Walk;
 
 
     /// <summary>
