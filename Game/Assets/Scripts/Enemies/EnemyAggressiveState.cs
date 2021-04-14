@@ -26,8 +26,8 @@ public class EnemyAggressiveState : EnemyAbstractState
     private bool attackingAnimation;
     private IEnumerator attackingCoroutine;
 
-    [Header("Rotation speed")]
-    [Range(0.01f, 2)] [SerializeField] private float turnSpeed;
+    [Header("Rotation speed when close to the player (less means faster)")]
+    [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
     private float smoothTimeRotation;
 
     [Header("Prefab to spawn on melee attack hit")]

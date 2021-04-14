@@ -17,13 +17,13 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
     [SerializeField] private Material coneMaterial;
     private VisionCone visionCone;
 
-    [Header("Rotation speed after reaching a point (less means faster)")]
-    [Range(0, 2)] [SerializeField] private float turnSpeed;
-    private float smoothTimeRotation;
-
     [Header("Exclamation mark prefab")]
     [SerializeField] private GameObject exclamationMarkPrefab;
     [SerializeField] private Vector3 offset;
+
+    [Header("Rotation speed after reaching final point (less means faster)")]
+    [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
+    private float smoothTimeRotation;
 
     // Movement
     private Transform[] patrolPoints;
@@ -114,14 +114,20 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
             return enemy.DefenseState;
 
         // Calculates vision cone if the player isn't too far
-        if (Vector3.Distance(myTarget.position, playerTarget.position) < 50)
+        if (playerTarget != null)
         {
-            if (!enemy.VisionCone.activeSelf) enemy.VisionCone.SetActive(true);
-            visionCone?.Calculate();
-        }
-        else
-        {
-            if (enemy.VisionCone.activeSelf) enemy.VisionCone.SetActive(false);
+            if (Vector3.Distance(myTarget.position, playerTarget.position) < 50)
+            {
+                if (!enemy.VisionCone.activeSelf) 
+                    enemy.VisionCone.SetActive(true);
+
+                visionCone?.Calculate();
+            }
+            else
+            {
+                if (enemy.VisionCone.activeSelf) 
+                    enemy.VisionCone.SetActive(false);
+            }
         }
 
         // Rotates enemy towards patrol point forward when it reaches its 

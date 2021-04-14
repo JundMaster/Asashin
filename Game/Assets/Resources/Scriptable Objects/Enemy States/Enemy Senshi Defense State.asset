@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeToTravelAfterHit: 0.3
   takeDamageDistancePower: 2
+  turnSpeedAfterBeingHit: 0.1
   coneRange: 20
   desiredConeAngle: 45
   playerLayer:
@@ -22,8 +23,8 @@ MonoBehaviour:
   collisionLayers:
     serializedVersion: 2
     m_Bits: 22528
+  turnSpeed: 0.25
+  randomDistanceFromPlayer: {x: 6, y: 13}
   kunai: {fileID: 8828656709029744851, guid: 7eb2e6810ee58df4881990ee266d00c8, type: 3}
   kunaiDelay: 3
   kunaiSpawnAfterAnimation: 0.5
-  turnSpeed: 0.25
-  randomDistanceFromPlayer: {x: 6, y: 13}

@@ -19,6 +19,7 @@ public class PlayerAnimations : MonoBehaviour
     private PlayerInputCustom input;
     private CharacterController controller;
     private PlayerStats stats;
+    private PlayerUseItem useItem;
 
     private void Awake()
     {
@@ -33,6 +34,7 @@ public class PlayerAnimations : MonoBehaviour
         input = FindObjectOfType<PlayerInputCustom>();
         controller = GetComponent<CharacterController>();
         stats = GetComponent<PlayerStats>();
+        useItem = GetComponent<PlayerUseItem>();
     }
 
     private void OnEnable()
@@ -42,6 +44,7 @@ public class PlayerAnimations : MonoBehaviour
         attack.AirAttack += TriggerAirAttack;
         death.PlayerDied += TriggerDeath;
         stats.NoDamageBlock += TriggerBlockReflect;
+        stats.TookDamage += TriggerOnHitAnimation;
     }
 
     private void OnDisable()
@@ -51,6 +54,7 @@ public class PlayerAnimations : MonoBehaviour
         attack.AirAttack -= TriggerAirAttack;
         death.PlayerDied -= TriggerDeath;
         stats.NoDamageBlock -= TriggerBlockReflect;
+        stats.TookDamage -= TriggerOnHitAnimation;
     }
 
     private void Update()
@@ -62,6 +66,15 @@ public class PlayerAnimations : MonoBehaviour
         anim.SetBool("Walking", movement.Walking);
         anim.SetFloat("WallHugSpeed", input.Movement.x * controller.velocity.magnitude);
         anim.SetBool("BotWallHug", wallHug.Performing);
+    }
+
+    /// <summary>
+    /// Triggers on hit animation.
+    /// </summary>
+    private void TriggerOnHitAnimation()
+    {
+        if (useItem.Performing == false && roll.Performing == false)
+            anim.SetTrigger("OnHit");
     }
 
     /// <summary>

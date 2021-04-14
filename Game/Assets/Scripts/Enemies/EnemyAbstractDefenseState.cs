@@ -5,8 +5,8 @@
 /// </summary>
 public abstract class EnemyAbstractDefenseState : EnemyAbstractStateWithVision
 {
-    [Header("Rotation smooth time")]
-    [Range(0.1f, 1.5f)] [SerializeField] protected float turnSpeed;
+    [Header("Rotation speed after reaching destination (less means faster)")]
+    [Range(0.1f, 1f)] [SerializeField] protected float turnSpeed;
     protected float smoothTimeRotation;
 
     [Header("Distance from player. X => min. distance, Y => max. distance")]

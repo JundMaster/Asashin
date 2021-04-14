@@ -10,6 +10,9 @@ public abstract class EnemyAbstractState : StateBase
     [Header("Distance that the enemy travels back after being hit")]
     [Range(0.1f,1f)][SerializeField] protected float timeToTravelAfterHit;
     [Range(0.1f,3f)][SerializeField] protected float takeDamageDistancePower;
+    [Header("Rotation speed after being hit (less means faster)")]
+    [Range(0.1f, 1f)] [SerializeField] private float turnSpeedAfterBeingHit;
+    private float smoothTimeRotationAfterBeingHit;
     protected Enemy enemy;
     protected EnemyStats stats;
     protected Transform myTarget;
@@ -104,11 +107,12 @@ public abstract class EnemyAbstractState : StateBase
         // Waits for fixed update to check if the enemy died meanwhile
         yield return wffu;
 
-        enemy.transform.RotateTo(playerTarget.position);
-
         while (Time.time - timeEntered < timeToTravelAfterHit &&
             instantKill == false)
         {
+            enemy.transform.RotateToSmoothly(playerTarget.position, 
+                ref smoothTimeRotationAfterBeingHit, turnSpeedAfterBeingHit);
+
             agent.isStopped = true;
 
             // Pushes enemy back

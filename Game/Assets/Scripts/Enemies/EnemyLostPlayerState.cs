@@ -9,8 +9,9 @@ public class EnemyLostPlayerState : EnemyAbstractStateWithVision
 {
     [Header("Time the enemy will spend looking for player")]
     [Range(0.1f,15)][SerializeField] private float timeToLookForPlayer;
-    [Header("Rotation speed after reaching a point (less means faster)")]
-    [Range(0.1f,1)][SerializeField] private float rotationSpeed;
+
+    [Header("Rotation speed after reaching final point (less means faster)")]
+    [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
 
     // State variables
     private IEnumerator lookForPlayerCoroutine;
@@ -156,7 +157,7 @@ public class EnemyLostPlayerState : EnemyAbstractStateWithVision
 
             // Rotates
             enemy.transform.eulerAngles += 
-                new Vector3(0, rotationSpeed * multiplier, 0);
+                new Vector3(0, turnSpeed * multiplier, 0);
 
             // Activates and calculates vision cone
             if (enemy.VisionCone.activeSelf == false)

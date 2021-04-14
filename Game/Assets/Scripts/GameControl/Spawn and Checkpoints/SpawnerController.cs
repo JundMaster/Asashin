@@ -33,6 +33,8 @@ public class SpawnerController : MonoBehaviour
 
     private void Start()
     {
+        PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Respawn.ToString());
+
         if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Respawn.ToString())
         {
             StartCoroutine(SpawnPlayer(SpawnTypeEnum.Respawn));
@@ -55,7 +57,7 @@ public class SpawnerController : MonoBehaviour
     /// <summary>
     /// Happens after first fixed update.
     /// </summary>
-    /// <param name="typeOfSpawn">Respawn or loadgame.</param>
+    /// <param name="typeOfSpawn">Type of player spawn.</param>
     /// <returns>Null.</returns>
     private IEnumerator SpawnPlayer(SpawnTypeEnum typeOfSpawn)
     {
@@ -118,7 +120,7 @@ public class SpawnerController : MonoBehaviour
 
     private void OnDisable()
     {
-        if (uiRespawn) uiRespawn.RespawnButtonPressed -= RespawnPlayer;
+        if (uiRespawn != null) uiRespawn.RespawnButtonPressed -= RespawnPlayer;
         if (uiMainMenu != null) uiMainMenu.MainMenuSpawn -= RespawnPlayer;
     }
 
@@ -191,12 +193,4 @@ public class SpawnerController : MonoBehaviour
     /// Deletes all save files. Happens when the player presses new game on main menu.
     /// </summary>
     public void DeleteFiles() => gameState.DeleteFiles();
-
-    /// <summary>
-    /// Resets playerprefs TypeOfSpawn when the game closes.
-    /// </summary>
-    private void OnApplicationQuit()
-    {
-        //PlayerPrefs.DeleteKey("TypeOfSpawn");
-    }
 }
