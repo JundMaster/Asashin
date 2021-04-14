@@ -600,12 +600,12 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         if (dir == Direction.Left)
         {
-            framingDampingX = Mathf.Lerp(framingDampingX, 0, Time.fixedDeltaTime * 5f);
+            framingDampingX = Mathf.Lerp(framingDampingX, 0, Time.fixedDeltaTime * 10f);
             framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault + 0.3f, Time.fixedDeltaTime * 4);
         }
         else if (dir == Direction.Right)
         {
-            framingDampingX = Mathf.Lerp(framingDampingX, 0, Time.fixedDeltaTime * 5f);
+            framingDampingX = Mathf.Lerp(framingDampingX, 0, Time.fixedDeltaTime * 10f);
             framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault - 0.3f, Time.fixedDeltaTime * 4);
         }
         else

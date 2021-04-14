@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerInputCustom input;
     private Transform mainCamera;
     private SlowMotionBehaviour slowMotion;
+    private Player player;
     private PlayerValuesScriptableObj values;
     private PlayerMeleeAttack attack;
     private PlayerUseItem useItem;
@@ -25,12 +26,17 @@ public class PlayerMovement : MonoBehaviour, IAction
     public bool Walking { get; private set; }
     public bool Sprinting { get; private set; }
     public bool Performing { get; private set; }
+    public bool Hidden { get; private set; }
 
     // Movement Variables
     public Vector3 Direction { get; private set; }
     private Vector3 moveDirection;
     public float MovementSpeed { get; private set; }
     private bool stopMovementAfterWallHug;
+
+    // Layers
+    private const byte PLAYERLAYER = 11;
+    private const byte PLAYERHIDDENLAYER = 15;
 
     // Rotation Variables
     public float TurnSmooth { get; set; }
@@ -43,6 +49,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         mainCamera = Camera.main.transform;
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         values = GetComponent<Player>().Values;
+        player = GetComponent<Player>();
         attack = GetComponent<PlayerMeleeAttack>();
         roll = GetComponent<PlayerRoll>();
         useItem = GetComponent<PlayerUseItem>();
@@ -58,6 +65,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         TurnSmooth = values.TurnSmooth;
         Walking = false;
         Sprinting = false;
+        Hidden = false;
         MovementSpeed = 0f;
         stopMovementAfterWallHug = false;
     }
@@ -113,7 +121,7 @@ public class PlayerMovement : MonoBehaviour, IAction
             while (cineTarget.IsBlending())
             {
                 Direction = Vector3.zero;
-                MovementSpeed = 0;
+                HandleStopMovement();
                 stopMovementAfterWallHug = true;
                 yield return null;
             }
@@ -178,18 +186,24 @@ public class PlayerMovement : MonoBehaviour, IAction
 
         // Cancels sneak
         if (block.Performing || !jump.IsGrounded())
-        {
             Walking = false;
-        }
+
+        // Cancels sneaking if player is fighting
+        if (player.PlayerCurrentlyFighting)
+            Hidden = false;
+
+        // Changes layer layers
+        if (Hidden)
+            gameObject.layer = PLAYERHIDDENLAYER;
+        else
+            gameObject.layer = PLAYERLAYER;
     }
 
     /// <summary>
     /// Stops movement speed float.
     /// </summary>
-    private void HandleStopMovement()
-    {
+    private void HandleStopMovement() =>
         MovementSpeed = 0f;
-    }
 
     /// <summary>
     /// Handles movement.
@@ -262,5 +276,17 @@ public class PlayerMovement : MonoBehaviour, IAction
             moveDirection = Quaternion.Euler(0f, targetAngle, 0f) *
                 Vector3.forward;
         }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("highGrass"))
+            Hidden = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("highGrass"))
+            Hidden = false;
     }
 }
