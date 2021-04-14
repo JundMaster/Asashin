@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerJump jump;
     private PlayerWallHug wallHug;
     private Animator anim;
+    private CinemachineTarget cineTarget;
 
     public bool Walking { get; private set; }
     public bool Sprinting { get; private set; }
@@ -29,6 +30,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     public Vector3 Direction { get; private set; }
     private Vector3 moveDirection;
     public float MovementSpeed { get; private set; }
+    private bool stopMovementAfterWallHug;
 
     // Rotation Variables
     public float TurnSmooth { get; set; }
@@ -36,7 +38,6 @@ public class PlayerMovement : MonoBehaviour, IAction
 
     private void Awake()
     {
-        
         controller = GetComponent<CharacterController>();
         input = FindObjectOfType<PlayerInputCustom>();
         mainCamera = Camera.main.transform;
@@ -49,6 +50,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         jump = GetComponent<PlayerJump>();
         wallHug = GetComponent<PlayerWallHug>();
         anim = GetComponent<Animator>();
+        cineTarget = FindObjectOfType<CinemachineTarget>();
     }
 
     private void Start()
@@ -57,6 +59,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         Walking = false;
         Sprinting = false;
         MovementSpeed = 0f;
+        stopMovementAfterWallHug = false;
     }
 
     private void OnEnable()
@@ -68,6 +71,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         attack.LightMeleeAttack += StopWalkingOnAttack;
         roll.Roll += () => Walking = false;
         useItem.UsedItemDelay += () => Walking = false;
+        wallHug.WallHug += StopMovementAfterWallHug;
     }
 
     private void OnDisable()
@@ -79,6 +83,42 @@ public class PlayerMovement : MonoBehaviour, IAction
         attack.LightMeleeAttack -= StopWalkingOnAttack;
         roll.Roll -= () => Walking = false;
         useItem.UsedItemDelay -= () => Walking = false;
+        wallHug.WallHug -= StopMovementAfterWallHug;
+    }
+
+    /// <summary>
+    /// Stops movement after wall hugging while the camera is blending.
+    /// </summary>
+    /// <param name="condition">False if cancelled wall hug.</param>
+    private void StopMovementAfterWallHug(bool condition)
+    {
+        if (condition == false) StartCoroutine(StopMovementAfterWallHugCoroutine());
+    }
+
+    /// <summary>
+    /// Stops movement after wall hugging.
+    /// </summary>
+    private IEnumerator StopMovementAfterWallHugCoroutine()
+    {
+        float currentTime = Time.time;
+        // Has this timer to confirm it canceled movement for at least these seconds
+        while (Time.time - currentTime < 0.5f)
+        {
+            Direction = Vector3.zero;
+            MovementSpeed = 0;
+            stopMovementAfterWallHug = true;
+            yield return null;
+
+            // Has to contain this while too to confirm the camera stopped blending
+            while (cineTarget.IsBlending())
+            {
+                Direction = Vector3.zero;
+                MovementSpeed = 0;
+                stopMovementAfterWallHug = true;
+                yield return null;
+            }
+        }
+        stopMovementAfterWallHug = false;
     }
 
     /// <summary>
@@ -126,7 +166,8 @@ public class PlayerMovement : MonoBehaviour, IAction
 
     public void ComponentUpdate()
     {
-        if (attack.Performing == false && useItem.Performing == false )
+        if (attack.Performing == false && useItem.Performing == false &&
+            wallHug.Performing == false && stopMovementAfterWallHug == false)
         {
             Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
         }
@@ -156,7 +197,8 @@ public class PlayerMovement : MonoBehaviour, IAction
     private void Movement()
     {
         if (Direction.magnitude > 0.01f && block.Performing == false &&
-            roll.Performing == false && wallHug.Performing == false)
+            roll.Performing == false && wallHug.Performing == false &&
+            stopMovementAfterWallHug == false)
         {
             // Moves controllers towards the moveDirection set on Rotation()
             if (Walking && Sprinting == false)

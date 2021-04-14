@@ -25,6 +25,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     private CinemachineFramingTransposer wallHugCameraTransposer;
     private float framingTranspX;
     private float framingTranspXDefault;
+    private float framingDampingX;
+    private float framingDampingXDefault;
 
     // Current target from player
     [SerializeField] private Transform currentTarget;
@@ -69,6 +71,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         isLerpingTargetCoroutine = null;
         framingTranspXDefault = 0.5f;
         framingTranspX = framingTranspXDefault;
+        framingDampingXDefault = 25f;
+        framingDampingX = framingDampingXDefault;
 
         allEnemies = new List<Enemy>();
 
@@ -567,15 +571,25 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         if (condition)
         {
-            mainCameraBrain.m_DefaultBlend.m_Time = 0.75f;
+            mainCameraBrain.m_DefaultBlend.m_Time = 0.5f;
             wallHugCamera.Priority = 50;
-            return;
         }
         else
         {
-            mainCameraBrain.m_DefaultBlend.m_Time = 0f;
+            mainCameraBrain.m_DefaultBlend.m_Time = 0.5f;
             wallHugCamera.Priority = 0;
         }
+    }
+
+
+    /// <summary>
+    /// Checks if camera is blending.
+    /// </summary>
+    /// <returns>Returns true if camera is blending.</returns>
+    public bool IsBlending()
+    {
+        if (mainCameraBrain.IsBlending) return true;
+        return false;
     }
 
     /// <summary>
@@ -586,18 +600,22 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         if (dir == Direction.Left)
         {
+            framingDampingX = Mathf.Lerp(framingDampingX, 0, Time.fixedDeltaTime * 5f);
             framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault + 0.3f, Time.fixedDeltaTime * 4);
         }
         else if (dir == Direction.Right)
         {
+            framingDampingX = Mathf.Lerp(framingDampingX, 0, Time.fixedDeltaTime * 5f);
             framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault - 0.3f, Time.fixedDeltaTime * 4);
         }
         else
         {
+            framingDampingX = Mathf.Lerp(framingDampingX, framingDampingXDefault, Time.fixedDeltaTime * 5f);
             framingTranspX =
                 Mathf.Lerp(framingTranspX, framingTranspXDefault, Time.fixedDeltaTime * 4);
         }
 
+        wallHugCameraTransposer.m_XDamping = framingDampingX;
         wallHugCameraTransposer.m_ScreenX = framingTranspX;
     }
 

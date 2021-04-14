@@ -31,6 +31,10 @@ public class PlayerWallHug : MonoBehaviour, IAction
 
     public bool Performing { get; private set; }
 
+    // Rotation variables
+    private float smoothTimeRotation;
+    private float turnSpeed;
+
     private void Awake()
     {
         input = FindObjectOfType<PlayerInputCustom>();
@@ -48,6 +52,9 @@ public class PlayerWallHug : MonoBehaviour, IAction
     private void Start()
     {
         Performing = false;
+
+        // Value for rotation when wall hughing (lest means faster)
+        turnSpeed = 0.15f;
     }
 
     private void OnEnable()
@@ -70,6 +77,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
         anim.applyRootMotion = false;
         Performing = false;
         OnWallHug(false);
+ 
     }
 
     /// <summary>
@@ -88,26 +96,25 @@ public class PlayerWallHug : MonoBehaviour, IAction
             {
                 if (wallsColliders.Length > 0)
                 {
+                    cinemachineTarget.CancelCurrentTarget();
+                    Performing = true;
+                    OnWallHug(true);
+
                     // Finds closest point between collisions
                     Vector3 closesestPoint
                         = wallsColliders[0].ClosestPoint(transform.position);
 
                     // Gets direction with that same closest point
-                    Vector3 contactDirection = 
-                        transform.position - closesestPoint;
+                    Vector3 contactDirection =
+                        closesestPoint.Direction(transform.position);
 
                     // Rotation angle with that direction
                     float targetAngle =
                         Mathf.Atan2(contactDirection.x, contactDirection.z) *
                         Mathf.Rad2Deg;
 
-                    // Rotates player agaisnt that direction
-                    transform.rotation =
-                        Quaternion.Euler(0f, targetAngle, 0f);
-
-                    cinemachineTarget.CancelCurrentTarget();
-                    Performing = true;
-                    OnWallHug(true);
+                    // Rotates player agaisnt target angle direction
+                    transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
                 }
             }
         }
@@ -117,6 +124,9 @@ public class PlayerWallHug : MonoBehaviour, IAction
         }
     }
 
+    /// <summary>
+    /// Creates colliders needed to wall hug.
+    /// </summary>
     public void ComponentUpdate()
     {
         // Creates main collider
@@ -137,13 +147,51 @@ public class PlayerWallHug : MonoBehaviour, IAction
         }
     }
 
+    /// <summary>
+    /// If wall hugging, gets closest point to wall, rotates player against it,
+    /// gives new movement to player (horizontal relative to wall)
+    /// </summary>
     public void ComponentFixedUpdate()
     {
         if (Performing)
         {
+            // If the player isn't performing any of these actions
+            if (attack.Performing == false &&
+                jump.IsGrounded() &&
+                useItem.Performing == false &&
+                block.Performing == false &&
+                roll.Performing == false)
+            {
+                if (wallsColliders.Length > 0)
+                {
+                    // Finds closest point between collisions
+                    Vector3 closesestPoint
+                        = wallsColliders[0].ClosestPoint(transform.position);
+
+                    // Gets direction with that same closest point
+                    Vector3 contactDirection =
+                        closesestPoint.Direction(transform.position);
+
+                    // Rotation angle with that direction
+                    float targetAngle =
+                        Mathf.Atan2(contactDirection.x, contactDirection.z) *
+                        Mathf.Rad2Deg;
+
+                    float angle = Mathf.SmoothDampAngle(
+                        transform.eulerAngles.y,
+                        targetAngle,
+                        ref smoothTimeRotation,
+                        turnSpeed);
+
+                    // Rotates player agaisnt that direction
+                    transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+                }
+            }
+
             // Move direction perpendicular to player's back
             Vector3 moveDirection =
-                Quaternion.Euler(0f, -90, 0f) * transform.forward;
+            Quaternion.Euler(0f, -90, 0f) * transform.forward;
 
             // Pressing a direction with walls on the sides
             if ((input.Movement.x > 0 && wallsCollidersLeft.Length > 0) ||
