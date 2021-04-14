@@ -13,6 +13,7 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
     public override Transform KunaiCurrentTarget { get; set; }
     private Transform playerTarget;
     private PlayerBlock playerBlock;
+    private PlayerRoll playerRoll;
 
     // Variables that checks if the kunai was reflected, so it doesn't
     // damage the enemy before being reflected
@@ -42,6 +43,7 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
         playerBlock = player.GetComponent<PlayerBlock>();
         playerTarget = GameObject.FindGameObjectWithTag("playerTarget").transform;
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
+        playerRoll = player.GetComponent<PlayerRoll>();
 
         // If the player is moving, the enemy will throw the kunai to the
         // front of the player, else, it will throw it to the player's position
@@ -104,6 +106,10 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
                     }
                 }
                 // Else if the player isn't blocking
+                else if (playerRoll.Performing)
+                {
+                    // left brank on purpose
+                }
                 else
                 {
                     damageableBody?.TakeDamage(
