@@ -99,7 +99,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
             anim.applyRootMotion = true;
 
-            OnLightMeleeAttack();
+            Debug.Log("attackou");
+            OnMeleeAttack();
         }
     }
 
@@ -197,9 +198,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// Triggers light melee attack. Normal or instant kill animation
     /// depending on the condition.
     /// </summary>
-    /// <param name="condition">If true, it triggers normal attacks, else
-    /// it triggers instant kill animation.</param>
-    protected virtual void OnLightMeleeAttack()
+    protected virtual void OnMeleeAttack()
     {
         if (movement.Walking == false)
         {
@@ -238,6 +237,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             if (Vector3.Dot(organizedEnemiesByDistance[0].forward, transform.forward) > 0.5f)
             {
                 // Instant kill anim.
+
                 OnLightMeleeAttack(false);
                 return;
             }
