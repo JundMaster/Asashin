@@ -99,6 +99,7 @@ public class Options : MonoBehaviour
         options.MotionBlur = value.MotionBlur;
         options.Lightness = value.Lightness;
         options.Contrast = value.Contrast;
+        //options.MasterVolume = value.MasterVolume;
         options.SoundVolume = value.SoundVolume;
         options.MusicVolume = value.MusicVolume;
         options.HorizontalSensibility = value.HorizontalSensibility;
@@ -107,6 +108,7 @@ public class Options : MonoBehaviour
         // Copies the script received
         SavedValues = value;
         options.SaveConfig();
+        Debug.Log("config " + options.SoundVolume);
         UpdateWindowMode();
         UpdateScreenResolution();
         UpdateQualitySettings();

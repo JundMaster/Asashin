@@ -178,34 +178,11 @@ public class OptionsScriptableObj : ScriptableObject
         MotionBlur = bool.Parse(PlayerPrefs.GetString(GameOptionsEnum.MotionBlur.ToString(), defaultMotionBlur.ToString()));
         Lightness = PlayerPrefs.GetFloat(GameOptionsEnum.Lightness.ToString(), defaultLightness);
         Contrast = PlayerPrefs.GetFloat(GameOptionsEnum.Contrast.ToString(), defaultContrast);
-        SoundVolume = PlayerPrefs.GetFloat(GameOptionsEnum.MasterVolume.ToString(), defaultMasterVolume);
+        MasterVolume = PlayerPrefs.GetFloat(GameOptionsEnum.MasterVolume.ToString(), defaultMasterVolume);
         SoundVolume = PlayerPrefs.GetFloat(GameOptionsEnum.SoundVolume.ToString(), defaultSoundVolume);
         MusicVolume = PlayerPrefs.GetFloat(GameOptionsEnum.MusicVolume.ToString(), defaultMusicVolume);
         HorizontalSensibility = PlayerPrefs.GetFloat(GameOptionsEnum.HorizontalSensibility.ToString(), defaultHorizontalSensibility);
         VerticalSensibility = PlayerPrefs.GetFloat(GameOptionsEnum.VerticalSensibility.ToString(), defaultVerticalSensibility);
-    }
-
-    /// <summary>
-    /// Resets all options.
-    /// </summary>
-    public void ResetOptions()
-    {
-        AutoLock = defaultAutoLock;
-        ScreenMode = defaultScreenMode;
-        ScreenResolution = defaultScreenResolution;
-        Difficulty = defaultDifficulty;
-        GraphicsQuality = defaultGraphicsQuality;
-        ShadowQuality = defaultShadowQuality;
-        Shadows = defaultShadows;
-        AfterImages = defaultAfterImages;
-        MotionBlur = defaultMotionBlur;
-        Lightness = defaultLightness;
-        Contrast = defaultContrast;
-        MasterVolume = defaultMasterVolume;
-        SoundVolume = defaultSoundVolume;
-        MusicVolume = defaultMusicVolume;
-        HorizontalSensibility = defaultHorizontalSensibility;
-        VerticalSensibility = defaultVerticalSensibility;
     }
 
     public void ResetGeneralOptions()

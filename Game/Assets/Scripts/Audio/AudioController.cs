@@ -19,12 +19,19 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     private float ambience;
     private float sfx;
 
+    private Options optionsScript;
+
     private void Awake()
     {
         masterVolume.SetFloat("masterVolume", options.MinMasterVolume);
         masterVolume.SetFloat("musicVolume", options.MinMusicVolume);
         masterVolume.SetFloat("soundVolume", options.MinSoundVolume);
+
+        optionsScript = FindObjectOfType<Options>();
     }
+
+    private void OnEnable() => optionsScript.UpdatedValues += UpdateValues;
+    private void OnDisable() => optionsScript.UpdatedValues -= UpdateValues;
 
     /// <summary>
     /// Only happens after configuration's awake (after loading all values)

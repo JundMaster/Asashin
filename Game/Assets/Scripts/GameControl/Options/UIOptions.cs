@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 using System.Collections;
-using System;
 
 /// <summary>
 /// Class responsible for controlling UIOptions. Updates values on ui
