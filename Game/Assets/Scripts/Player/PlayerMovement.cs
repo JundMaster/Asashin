@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerWallHug wallHug;
     private Animator anim;
     private CinemachineTarget cineTarget;
+    private PlayerStats stats;
 
     public bool Walking { get; private set; }
     public bool Sprinting { get; private set; }
@@ -58,6 +59,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         wallHug = GetComponent<PlayerWallHug>();
         anim = GetComponent<Animator>();
         cineTarget = FindObjectOfType<CinemachineTarget>();
+        stats = GetComponent<PlayerStats>();
     }
 
     private void Start()
@@ -80,18 +82,20 @@ public class PlayerMovement : MonoBehaviour, IAction
         roll.Roll += () => Walking = false;
         useItem.UsedItemDelay += () => Walking = false;
         wallHug.WallHug += StopMovementAfterWallHug;
+        stats.TookDamage += () => Walking = false;
     }
 
     private void OnDisable()
     {
         input.StopMoving -= HandleStopMovement;
-        slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
+        slowMotion.SlowMotionEvent -= ChangeTurnSmoothValue;
         input.Walk -= () => Walking = !Walking;
         input.Sprint -= HandleSprint;
         attack.LightMeleeAttack -= StopWalkingOnAttack;
         roll.Roll -= () => Walking = false;
         useItem.UsedItemDelay -= () => Walking = false;
         wallHug.WallHug -= StopMovementAfterWallHug;
+        stats.TookDamage -= () => Walking = false;
     }
 
     /// <summary>
