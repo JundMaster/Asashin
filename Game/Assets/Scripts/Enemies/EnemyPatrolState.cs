@@ -17,6 +17,10 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
     [SerializeField] private Material coneMaterial;
     private VisionCone visionCone;
 
+    [Header("Rotation speed after reaching a point (less means faster)")]
+    [Range(0, 2)] [SerializeField] private float turnSpeed;
+    private float smoothTimeRotation;
+
     [Header("Exclamation mark prefab")]
     [SerializeField] private GameObject exclamationMarkPrefab;
     [SerializeField] private Vector3 offset;
@@ -52,8 +56,17 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
         patrolPoints = enemy.PatrolPoints;
         patrolIndex = 0;
 
-        movementCoroutine = MovementCoroutine();
-        enemy.StartCoroutine(movementCoroutine);
+        // Only starts movement coroutine if the enemy has more than 1 patroi
+        // point (meaning the enemy is not static)
+        if (enemy.PatrolPoints.Length > 1)
+        {
+            movementCoroutine = MovementCoroutine();
+            enemy.StartCoroutine(movementCoroutine);
+        }
+        else
+        {
+            agent.SetDestination(patrolPoints[patrolIndex].transform.position);
+        }
 
         // Must be on start aswell because OnEnter doesn't run on first state
         stats.MeleeDamageOnEnemy += CheckForInstantKill;
@@ -72,8 +85,17 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
         agent.isStopped = false;
         enemy.VisionCone.SetActive(true);
 
-        movementCoroutine = MovementCoroutine();
-        enemy.StartCoroutine(movementCoroutine);
+        // Only starts movement coroutine if the enemy has more than 1 patroi
+        // point (meaning the enemy is not static)
+        if (enemy.PatrolPoints.Length > 1)
+        {
+            movementCoroutine = MovementCoroutine();
+            enemy.StartCoroutine(movementCoroutine);
+        }
+        else
+        {
+            agent.SetDestination(patrolPoints[patrolIndex].transform.position);
+        }
     }
 
     /// <summary>
@@ -102,10 +124,21 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
             if (enemy.VisionCone.activeSelf) enemy.VisionCone.SetActive(false);
         }
 
+        // Rotates enemy towards patrol point forward when it reaches its 
+        // final destination
+        if (agent.remainingDistance <= 0.1f || agent.velocity.magnitude < 0.1f)
+        {
+            enemy.transform.RotateToSmoothly(
+                    patrolPoints[patrolIndex].position + 
+                    patrolPoints[patrolIndex].forward , 
+                    ref smoothTimeRotation, turnSpeed);
+        }
+
         // Search for player every searchCheckDelay seconds inside a vision cone
         if (Time.time - lastTimeChecked > searchCheckDelay)
         {
-            // If it found the player, triggers defense state
+            // If it found the player, triggers defense or aggressive state
+            // in case the enemy doesn't have defense
             if (PlayerInRange())
             {
                 return 
@@ -154,7 +187,7 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
         YieldInstruction wffu = new WaitForFixedUpdate();
         YieldInstruction wfs = new WaitForSeconds(waitingDelay);
 
-        agent.SetDestination(patrolPoints[0].transform.position);
+        agent.SetDestination(patrolPoints[patrolIndex].transform.position);
 
         yield return wfs;
 

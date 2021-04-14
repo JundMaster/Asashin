@@ -23,6 +23,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
     private PlayerBlock block;
     private CharacterController controller;
     private CinemachineTarget cinemachineTarget;
+    private PlayerStats stats;
 
     private Collider[] wallsColliders;
     private Collider[] wallsCollidersRight;
@@ -41,6 +42,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
         block = GetComponent<PlayerBlock>();
         controller = GetComponent<CharacterController>();
         cinemachineTarget = FindObjectOfType<CinemachineTarget>();
+        stats = GetComponent<PlayerStats>();
     }
 
     private void Start()
@@ -51,11 +53,23 @@ public class PlayerWallHug : MonoBehaviour, IAction
     private void OnEnable()
     {
         input.WallHug += HandleWallHug;
+        stats.TookDamage += CancelWallHug;
     }
 
     private void OnDisable()
     {
         input.WallHug -= HandleWallHug;
+        stats.TookDamage -= CancelWallHug;
+    }
+
+    /// <summary>
+    /// Cancels wall hug.
+    /// </summary>
+    private void CancelWallHug()
+    {
+        anim.applyRootMotion = false;
+        Performing = false;
+        OnWallHug(false);
     }
 
     /// <summary>
@@ -99,24 +113,28 @@ public class PlayerWallHug : MonoBehaviour, IAction
         }
         else
         {
-            Performing = false;
-            OnWallHug(false);
+            CancelWallHug();
         }
     }
 
     public void ComponentUpdate()
     {
+        // Creates main collider
         wallsColliders =
             Physics.OverlapSphere(
                     mainCol.transform.position, mainCol.radius, walls);
 
-        wallsCollidersLeft =
-                Physics.OverlapSphere(
-                    leftCol.transform.position, leftCol.radius, walls);
+        // Checks colliders on sides
+        if (Performing)
+        {     
+            wallsCollidersLeft =
+                    Physics.OverlapSphere(
+                        leftCol.transform.position, leftCol.radius, walls);
 
-        wallsCollidersRight =
-                Physics.OverlapSphere(
-                    rightCol.transform.position, rightCol.radius, walls);
+            wallsCollidersRight =
+                    Physics.OverlapSphere(
+                        rightCol.transform.position, rightCol.radius, walls);
+        }
     }
 
     public void ComponentFixedUpdate()
@@ -164,9 +182,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
             // If the player leaves the wall, cancels wall hug
             if (wallsColliders.Length == 0)
             {
-                anim.applyRootMotion = false;
-                Performing = false;
-                OnWallHug(false);
+                CancelWallHug();
             }
         }
     }

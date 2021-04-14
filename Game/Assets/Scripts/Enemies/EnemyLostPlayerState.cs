@@ -9,7 +9,7 @@ public class EnemyLostPlayerState : EnemyAbstractStateWithVision
 {
     [Header("Time the enemy will spend looking for player")]
     [Range(0.1f,15)][SerializeField] private float timeToLookForPlayer;
-    [Header("Rotation speed while looking for player")]
+    [Header("Rotation speed after reaching a point (less means faster)")]
     [Range(0.1f,1)][SerializeField] private float rotationSpeed;
 
     // State variables

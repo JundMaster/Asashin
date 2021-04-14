@@ -239,4 +239,28 @@ public class Enemy : MonoBehaviour, IFindPlayer
     /// Is triggered after the enemy atacks.
     /// </summary>
     public event Action WeaponHit;
+
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Vector3 offset = new Vector3(0, 0.15f, 0);
+        foreach(Transform patrolPoint in PatrolPoints)
+        {
+            Gizmos.DrawSphere(patrolPoint.position + offset, 0.25f);
+            Gizmos.DrawLine(patrolPoint.position + offset, patrolPoint.position + patrolPoint.forward);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Vector3 offset = new Vector3(0, 0.15f, 0);
+        foreach (Transform patrolPoint in PatrolPoints)
+        {
+            Gizmos.DrawSphere(patrolPoint.position + offset, 0.25f);
+            Gizmos.DrawLine(patrolPoint.position + offset, patrolPoint.position + patrolPoint.forward);
+        }
+    }
 }
