@@ -99,7 +99,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
             anim.applyRootMotion = true;
 
-            Debug.Log("attackou");
             OnMeleeAttack();
         }
     }
@@ -237,7 +236,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             if (Vector3.Dot(organizedEnemiesByDistance[0].forward, transform.forward) > 0.5f)
             {
                 // Instant kill anim.
-
                 OnLightMeleeAttack(false);
                 return;
             }

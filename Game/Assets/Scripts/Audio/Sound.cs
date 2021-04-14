@@ -17,4 +17,6 @@ public enum Sound
     SneakingStep,
     GrassStep,
     WaterStep,
+    TookDamage,
+    BlockReflect,
 }
