@@ -1,12 +1,18 @@
-﻿public enum SceneEnum
+﻿using System;
+
+/// <summary>
+/// If you add scenes, add to the Delete method on SpawnerController.
+/// </summary>
+[Flags]
+public enum SceneEnum
 {
-    MainMenu,
-    Area1,
-    Area2,
-    Area3,
-    Area4,
-    Area5,
-    Area6,
+    MainMenu = 0,
+    Area1 = 1,
+    Area2 = 2,
+    Area3 = 3,
+    Area4 = 4,
+    Area5 = 5,
+    Area6 = 6,
 
 
 
@@ -14,6 +20,6 @@
 
 
 
-    ProgrammingTests,
-    TESTAREA
+    ProgrammingTests = 7,
+    TESTAREA = 8,
 }

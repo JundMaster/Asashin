@@ -76,10 +76,9 @@ sealed public class GameState : FileIO
     }
 
     /// <summary>
-    /// Saves current checkpoint and current scene.
+    /// Saves current checkpoint.
     /// </summary>
-    /// <param name="condition">Type of save.</param>
-    /// <param name="numberToSave">Number of checkpoint or scene.</param>
+    /// <param name="numberToSave">Number of checkpoint.</param>
     public void SaveCheckpoint(byte numberToSave)
     {
         using (GZipStream gzs = new GZipStream(
@@ -93,10 +92,9 @@ sealed public class GameState : FileIO
     }
 
     /// <summary>
-    /// Saves current checkpoint and current scene.
+    /// Saves current scene.
     /// </summary>
-    /// <param name="condition">Type of save.</param>
-    /// <param name="numberToSave">Number of checkpoint or scene.</param>
+    /// <param name="scene">Scene to save.</param>
     public void SaveCheckpointScene(SceneEnum scene)
     {
         using (GZipStream gzs = new GZipStream(
@@ -110,36 +108,37 @@ sealed public class GameState : FileIO
     }
 
     /// <summary>
-    /// Saves current checkpoint and current scene.
+    /// Loads a checkpoint number.
     /// </summary>
-    /// <param name="condition">Type of save.</param>
-    /// <param name="numberToSave">Number of checkpoint or scene.</param>
-    public T LoadCheckpoint<T>(SaveAndLoadEnum condition)
+    /// <returns>Number of checkpoint.</returns>
+    public byte LoadCheckpoint()
     {
-        switch (condition)
+        using (GZipStream gzs = new GZipStream(
+            File.OpenRead(FilePath.SAVEFILECHECKPOINT), CompressionMode.Decompress))
         {
-            case SaveAndLoadEnum.Checkpoint:
-                using (GZipStream gzs = new GZipStream(
-                    File.OpenRead(FilePath.SAVEFILECHECKPOINT), CompressionMode.Decompress))
-                {
-                    using (StreamReader fr = new StreamReader(gzs))
-                    {
-                        return (T)Convert.ChangeType(fr.ReadLine(), typeof(T));
-                    }
-                }
-            case SaveAndLoadEnum.CheckpointScene:
-                using (GZipStream gzs = new GZipStream(
-                    File.OpenRead(FilePath.SAVEFILESCENE), CompressionMode.Decompress))
-                {
-                    using (StreamReader fr = new StreamReader(gzs))
-                    {
-                        if (Enum.TryParse(fr.ReadLine(), out SceneEnum savedVal))
-                        { };
-                        return (T)Convert.ChangeType(savedVal, typeof(T));
-                    }
-                }
-            default:
-                return default;
+            using (StreamReader fr = new StreamReader(gzs))
+            {
+                return (byte)Convert.ChangeType(fr.ReadLine(), typeof(byte));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Loads a scene enum.
+    /// </summary>
+    /// <returns>Scene to load.</returns>
+    public SceneEnum LoadCheckpointScene()
+    {
+        using (GZipStream gzs = new GZipStream(
+            File.OpenRead(FilePath.SAVEFILESCENE), CompressionMode.Decompress))
+        {
+            using (StreamReader fr = new StreamReader(gzs))
+            {
+                if (Enum.TryParse(fr.ReadLine(), out SceneEnum savedVal))
+                    return (SceneEnum)Convert.ChangeType(savedVal, typeof(SceneEnum));
+
+                return SceneEnum.MainMenu;
+            }
         }
     }
 }

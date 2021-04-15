@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using System;
 
 /// <summary>
 /// Class responsible for controlling scenes.
@@ -23,6 +24,9 @@ public class SceneControl : MonoBehaviour
     }
 
     public Scene CurrentScene() => SceneManager.GetActiveScene();
+
+    public SceneEnum CurrentSceneEnum() =>
+        (SceneEnum)Enum.Parse(typeof(SceneEnum), CurrentScene().name);
 
     /// <summary>
     /// Loads a scene.
