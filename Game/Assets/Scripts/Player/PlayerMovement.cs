@@ -1,6 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Concurrent;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// Class responsible for handling player movement.
@@ -23,10 +25,24 @@ public class PlayerMovement : MonoBehaviour, IAction
     private CinemachineTarget cineTarget;
     private PlayerStats stats;
 
-    public bool Walking { get; private set; }
     public bool Sprinting { get; private set; }
     public bool Performing { get; private set; }
-    public bool Hidden { get; private set; }
+
+    // Hidden variables
+    public bool Walking { get; set; }
+    private bool hidden;
+    public bool Hidden 
+    {
+        get => hidden;
+        private set
+        {
+            hidden = value;
+            OnHide(Hidden);
+        }
+    }
+    private IEnumerator startHiddenCoroutine;
+    private IEnumerator stopHiddenCoroutine;
+    private Volume postProcessing;
 
     // Gravity
     public Vector3 VerticalVelocity;
@@ -64,6 +80,8 @@ public class PlayerMovement : MonoBehaviour, IAction
         anim = GetComponent<Animator>();
         cineTarget = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
+        postProcessing =
+            GameObject.FindGameObjectWithTag("postProcessing").GetComponent<Volume>();
     }
 
     private void Start()
@@ -80,27 +98,71 @@ public class PlayerMovement : MonoBehaviour, IAction
     {
         input.StopMoving += HandleStopMovement;
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
-        input.Walk += HandleSneak;
+        input.Walk += HandleWalk;
         input.Sprint += HandleSprint;
         attack.LightMeleeAttack += StopWalkingOnAttack;
         roll.Roll += () => Walking = false;
         useItem.UsedItemDelay += () => Walking = false;
         wallHug.WallHug += StopMovementAfterWallHug;
         stats.TookDamage += () => Walking = false;
+        Hide += HandleHidden;
     }
 
     private void OnDisable()
     {
         input.StopMoving -= HandleStopMovement;
         slowMotion.SlowMotionEvent -= ChangeTurnSmoothValue;
-        input.Walk -= HandleSneak;
+        input.Walk -= HandleWalk;
         input.Sprint -= HandleSprint;
         attack.LightMeleeAttack -= StopWalkingOnAttack;
         roll.Roll -= () => Walking = false;
         useItem.UsedItemDelay -= () => Walking = false;
         wallHug.WallHug -= StopMovementAfterWallHug;
         stats.TookDamage -= () => Walking = false;
+        Hide -= HandleHidden;
     }
+
+    public void ComponentFixedUpdate()
+    {
+        Movement();
+
+        if (wallHug.Performing == false)
+            Rotation();
+
+        // Gravity
+        if (IsGrounded() && VerticalVelocity.y < 0)
+        {
+            VerticalVelocity.y = -0.5f;
+        }
+
+        VerticalVelocity.y += values.Gravity * Time.fixedUnscaledDeltaTime;
+        controller.Move(VerticalVelocity * Time.fixedUnscaledDeltaTime);
+    }
+
+    public void ComponentUpdate()
+    {
+        if (attack.Performing == false && useItem.Performing == false &&
+            wallHug.Performing == false && stopMovementAfterWallHug == false)
+        {
+            Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
+        }
+        else
+        {
+            Direction = Vector3.zero;
+        }
+
+        // Cancels sneak
+        if (wallHug.Performing || block.Performing || !IsGrounded())
+        {
+            Walking = false;
+            OnHide(false);
+        }
+
+        // Cancels sneaking if player is fighting
+        if (player.PlayerCurrentlyFighting)
+            Hidden = false;
+    }
+
 
     /// <summary>
     /// Stops movement after wall hugging while the camera is blending.
@@ -158,34 +220,24 @@ public class PlayerMovement : MonoBehaviour, IAction
             // Waits for animation to end
         }
         Walking = false;
+        OnHide(false);
     }
 
     /// <summary>
     /// Turns sneak on or off.
     /// </summary>
-    private void HandleSneak(bool condition)
+    private void HandleWalk(bool condition)
     {
         if (condition == true)
-            Walking = true;
-        else
-            Walking = false;
-    }
-
-    public void ComponentFixedUpdate()
-    {
-        Movement();
-
-        if (wallHug.Performing == false)
-            Rotation();
-
-        // Gravity
-        if (IsGrounded() && VerticalVelocity.y < 0)
         {
-            VerticalVelocity.y = -0.5f;
+            Walking = true;
+            return;
         }
-
-        VerticalVelocity.y += values.Gravity * Time.fixedUnscaledDeltaTime;
-        controller.Move(VerticalVelocity * Time.fixedUnscaledDeltaTime);
+        else
+        {
+            Walking = false;
+            OnHide(false);
+        }
     }
 
     /// <summary>
@@ -200,31 +252,81 @@ public class PlayerMovement : MonoBehaviour, IAction
             TurnSmooth = values.TurnSmooth;
     }
 
-    public void ComponentUpdate()
+    /// <summary>
+    /// Starts and stops hidden coroutines for post processing.
+    /// </summary>
+    /// <param name="hiddenCondition">Hidden condition.</param>
+    private void HandleHidden(bool hiddenCondition)
     {
-        if (attack.Performing == false && useItem.Performing == false &&
-            wallHug.Performing == false && stopMovementAfterWallHug == false)
+        if (hiddenCondition == true)
         {
-            Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
+            if (stopHiddenCoroutine != null)
+            {
+                StopCoroutine(stopHiddenCoroutine);
+                stopHiddenCoroutine = null;
+            }
+            if (startHiddenCoroutine == null)
+            {
+                startHiddenCoroutine = StartHiddenCoroutine();
+                StartCoroutine(startHiddenCoroutine);
+            }
+            return;
         }
-        else
+        // else if not hidden
+        if (startHiddenCoroutine != null)
         {
-            Direction = Vector3.zero;
+            StopCoroutine(startHiddenCoroutine);
+            startHiddenCoroutine = null;
         }
+        if (stopHiddenCoroutine == null)
+        {
+            stopHiddenCoroutine = StopHiddenCoroutine();
+            StartCoroutine(stopHiddenCoroutine);
+        }
+    }
 
-        // Cancels sneak
-        if (wallHug.Performing || block.Performing || !IsGrounded())
-            Walking = false;
+    /// <summary>
+    /// Changes player's layer.
+    /// Increments vignette value.
+    /// </summary>
+    /// <returns>Wait for fixed update.</returns>
+    private IEnumerator StartHiddenCoroutine()
+    {
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        gameObject.layer = PLAYERHIDDENLAYER;
 
-        // Cancels sneaking if player is fighting
-        if (player.PlayerCurrentlyFighting)
-            Hidden = false;
+        // Post process variables
+        if (postProcessing.profile.TryGet(out Vignette vignette))
+        {
+            vignette.active = true;
+            while (vignette.intensity.value < 0.3f)
+            {
+                vignette.intensity.value += Time.fixedUnscaledDeltaTime;
+                yield return wffu;
+            }
+        }
+    }
 
-        // Changes layer layers
-        if (Hidden)
-            gameObject.layer = PLAYERHIDDENLAYER;
-        else
-            gameObject.layer = PLAYERLAYER;
+    /// <summary>
+    /// Changes player's layer.
+    /// Decrements vignette value.
+    /// </summary>
+    /// <returns>Wait for fixed update.</returns>
+    private IEnumerator StopHiddenCoroutine()
+    {
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        gameObject.layer = PLAYERLAYER;
+
+        // Post process variables
+        if (postProcessing.profile.TryGet(out Vignette vignette))
+        {
+            while (vignette.intensity.value > 0)
+            {
+                vignette.intensity.value -= Time.fixedUnscaledDeltaTime;
+                yield return wffu;
+            }
+            vignette.active = false;
+        }
     }
 
     /// <summary>
@@ -273,6 +375,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         {
             Walking = false;
             Sprinting = true;
+            OnHide(false);
         }
         else
         {
@@ -324,7 +427,8 @@ public class PlayerMovement : MonoBehaviour, IAction
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("highGrass"))
-            Hidden = true;
+            if (Walking)
+                Hidden = true;
     }
 
     private void OnTriggerExit(Collider other)
@@ -332,4 +436,12 @@ public class PlayerMovement : MonoBehaviour, IAction
         if (other.CompareTag("highGrass"))
             Hidden = false;
     }
+
+    protected virtual void OnHide(bool hiddenCondition) => 
+        Hide?.Invoke(hiddenCondition);
+
+    /// <summary>
+    /// Event registered on PlayerMovement.
+    /// </summary>
+    public event Action<bool> Hide;
 }

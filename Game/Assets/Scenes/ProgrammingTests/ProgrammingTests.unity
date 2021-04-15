@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 11480539}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1548157988}
@@ -711,25 +711,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 217278728}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &232624528 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1009517688832808618, guid: ceb4a91bc2a786f4b88b40f4f5ecfee2, type: 3}
-  m_PrefabInstance: {fileID: 1009517689375537290}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &232624537
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 232624528}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.6
-  m_Height: 2.28
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &252668946
 GameObject:
   m_ObjectHideFlags: 0
@@ -958,25 +939,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282768886}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &506691714 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 962524041467204857, guid: ae099e138a9deb94e8e0c7efc92fc5ac, type: 3}
-  m_PrefabInstance: {fileID: 962524042595489653}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &506691723
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 506691714}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.6
-  m_Height: 2.28
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &624146357
 GameObject:
   m_ObjectHideFlags: 0
@@ -2039,25 +2001,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 962524041426243526, guid: ae099e138a9deb94e8e0c7efc92fc5ac, type: 3}
   m_PrefabInstance: {fileID: 962524042595489653}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1211905839 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7366061340869173852, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
-  m_PrefabInstance: {fileID: 1620872791}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &1211905860
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1211905839}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2.124051
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.96147513, z: 0}
 --- !u!1 &1223017244
 GameObject:
   m_ObjectHideFlags: 0
@@ -3177,10 +3120,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kenshusei Parent
       objectReference: {fileID: 0}
-    - target: {fileID: 962524041467204859, guid: ae099e138a9deb94e8e0c7efc92fc5ac, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae099e138a9deb94e8e0c7efc92fc5ac, type: 3}
 --- !u!1001 &1009517689375537290
@@ -3236,10 +3175,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1009517688641600686, guid: ceb4a91bc2a786f4b88b40f4f5ecfee2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1009517688832808611, guid: ceb4a91bc2a786f4b88b40f4f5ecfee2, type: 3}
-      propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
