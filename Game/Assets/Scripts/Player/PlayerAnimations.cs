@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
 
 /// <summary>
 /// Class responsible for playing player's animations, uses a kind of sandbox pattern.
@@ -105,8 +106,6 @@ public class PlayerAnimations : MonoBehaviour
     private void TriggerBlockReflect() => anim.SetTrigger("BlockReflect");
 
     private void TriggerRollAnimation() => anim.SetTrigger("Rolling");
-
-    private void TriggerAirAttack() => anim.SetTrigger("AirAttack");
 
     /// <summary>
     /// Triggers light melee attack. Normal or instant kill animation

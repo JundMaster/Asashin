@@ -2278,12 +2278,6 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: AirAttack
-    m_Type: 9
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
   - m_Name: ThrowKunai
     m_Type: 9
     m_DefaultFloat: 0
@@ -3253,6 +3247,9 @@ AnimatorStateMachine:
   m_EntryTransitions:
   - {fileID: 3483839157944379247}
   m_StateMachineTransitions:
+  - first: {fileID: -4676869286271322892}
+    second:
+    - {fileID: 6043984497293150123}
   - first: {fileID: -1258299829067526005}
     second:
     - {fileID: 2726004589442068939}
@@ -3265,9 +3262,6 @@ AnimatorStateMachine:
     - {fileID: 8805859990269856697}
     - {fileID: -2417195645048526759}
     - {fileID: 940679617463965873}
-  - first: {fileID: -4676869286271322892}
-    second:
-    - {fileID: 6043984497293150123}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -440, y: 240, z: 0}
   m_EntryPosition: {x: -260, y: 290, z: 0}

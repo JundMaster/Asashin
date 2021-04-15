@@ -24,14 +24,22 @@ public class UIHealthBar : MonoBehaviour, IFindPlayer
 
     private void OnEnable()
     {
-        if (playerStats != null) playerStats.TookDamage += UpdateHealthBar;
-        if (playerStats != null) playerStats.HealedDamage += UpdateHealthBar;
+        if (playerStats != null)
+        {
+            playerStats.TookDamage += UpdateHealthBar;
+            playerStats.HealedDamage += UpdateHealthBar;
+            playerStats.Die += UpdateHealthBar;
+        }
     }
 
     private void OnDisable()
     {
-        if (playerStats != null) playerStats.TookDamage -= UpdateHealthBar;
-        if (playerStats != null) playerStats.HealedDamage -= UpdateHealthBar;
+        if (playerStats != null)
+        {
+            playerStats.TookDamage -= UpdateHealthBar;
+            playerStats.HealedDamage -= UpdateHealthBar;
+            playerStats.Die -= UpdateHealthBar;
+        }
     }
 
     private void UpdateHealthBar() => StartCoroutine(UpdateHealthBarCoroutine());
@@ -69,11 +77,13 @@ public class UIHealthBar : MonoBehaviour, IFindPlayer
         playerStats = FindObjectOfType<PlayerStats>();
         playerStats.TookDamage += UpdateHealthBar;
         playerStats.HealedDamage += UpdateHealthBar;
+        playerStats.Die += UpdateHealthBar;
     }
 
     public void PlayerLost()
     {
         playerStats.TookDamage -= UpdateHealthBar;
         playerStats.HealedDamage -= UpdateHealthBar;
+        playerStats.Die -= UpdateHealthBar;
     }
 }

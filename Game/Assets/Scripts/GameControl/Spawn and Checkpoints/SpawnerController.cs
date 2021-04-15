@@ -95,7 +95,7 @@ public class SpawnerController : MonoBehaviour
             {
                 // Loads the scene connected to the last saved checkpoint
                 sceneControl.LoadScene(
-                    gameState.LoadCheckpoint<SceneEnum>(SaveAndLoadEnum.CheckpointScene));
+                    gameState.LoadCheckpoint<SceneEnum>(SaveAndLoadEnum.CheckpointScene));         
             }
             else
             {
@@ -128,6 +128,7 @@ public class SpawnerController : MonoBehaviour
                 if (checkpoint.CheckpointNumber == 
                     gameState.LoadCheckpoint<byte>(SaveAndLoadEnum.Checkpoint))
                 {
+
                     // Instantiates the player on that checkpoint's position
                     if (FindObjectOfType<Player>() == null)
                         Instantiate(

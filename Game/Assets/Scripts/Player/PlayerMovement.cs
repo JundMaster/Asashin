@@ -129,14 +129,16 @@ public class PlayerMovement : MonoBehaviour, IAction
         if (wallHug.Performing == false)
             Rotation();
 
+        /*
         // Gravity
-        if (IsGrounded() && VerticalVelocity.y < 0)
+        if (IsGrounded())
         {
             VerticalVelocity.y = -0.5f;
         }
 
         VerticalVelocity.y += values.Gravity * Time.fixedUnscaledDeltaTime;
         controller.Move(VerticalVelocity * Time.fixedUnscaledDeltaTime);
+        */
     }
 
     public void ComponentUpdate()
@@ -344,25 +346,28 @@ public class PlayerMovement : MonoBehaviour, IAction
             roll.Performing == false && wallHug.Performing == false &&
             stopMovementAfterWallHug == false)
         {
+            Vector3 movement = new Vector3(moveDirection.x, -1, moveDirection.z).normalized;
+            //movement.y = -1;
+
             // Moves controllers towards the moveDirection set on Rotation()
             if (Walking && Sprinting == false)
             {
                 controller.Move(
-                    moveDirection.normalized * values.WalkingSpeed * Time.fixedUnscaledDeltaTime);
+                    movement * values.WalkingSpeed * Time.fixedUnscaledDeltaTime);
 
                 MovementSpeed = values.WalkingSpeed;
             }
             else if (Walking == false && Sprinting)
             {
                 controller.Move(
-                    moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
+                    movement * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
 
                 MovementSpeed = values.SprintSpeed;
             }
             else
             {
                 controller.Move(
-                    moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
+                    movement * values.Speed * Time.fixedUnscaledDeltaTime);
 
                 MovementSpeed = values.Speed;
             }

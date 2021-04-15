@@ -38,9 +38,11 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
             {
                 Health = 0;
                 OnDie();
+                return;
             }
         }
 
+        // If the player didn't die
         switch (typeOfDamage)
         {
             case TypeOfDamage.EnemyMelee:
