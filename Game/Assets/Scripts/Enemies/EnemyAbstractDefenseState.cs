@@ -14,6 +14,10 @@ public abstract class EnemyAbstractDefenseState : EnemyAbstractStateWithVision
 
     // Movement variables
     protected float randomDistance;
+    protected bool runningBack;
+
+    // Components
+    protected Animator anim;
 
     /// <summary>
     /// Happens once on start. Sets a random distance to mantain while defending.
@@ -29,6 +33,9 @@ public abstract class EnemyAbstractDefenseState : EnemyAbstractStateWithVision
 
         randomDistance = Random.Range(
             randomDistanceFromPlayer.x, randomDistanceFromPlayer.y);
+
+        anim = enemy.Anim;
+        runningBack = false;
     }
 
     /// <summary>
@@ -40,6 +47,8 @@ public abstract class EnemyAbstractDefenseState : EnemyAbstractStateWithVision
 
         agent.isStopped = false;
 
+        runningBack = false;
+
         enemy.VisionCone.SetActive(false);
     }
 
@@ -50,6 +59,7 @@ public abstract class EnemyAbstractDefenseState : EnemyAbstractStateWithVision
     public override IState FixedUpdate()
     {
         base.FixedUpdate();
+        anim.SetBool("RunningBack", runningBack);
         return null;
     }
 
@@ -60,6 +70,7 @@ public abstract class EnemyAbstractDefenseState : EnemyAbstractStateWithVision
     public override void OnExit()
     {
         base.OnExit();
+        runningBack = false;
     }
 
     /// <summary>

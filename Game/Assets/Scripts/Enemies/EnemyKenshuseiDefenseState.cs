@@ -46,6 +46,10 @@ public class EnemyKenshuseiDefenseState : EnemyAbstractDefenseState
             enemy.transform.RotateToSmoothly(
                 playerTarget.position, ref smoothTimeRotation, turnSpeed);
         }
+
+        // Keeps rotating the enemy towards the player
+        enemy.transform.RotateTo(playerTarget.position);
+
         // Else it moves to the enemy without rotating towards the player
         return enemy.DefenseState;
     }
@@ -64,6 +68,9 @@ public class EnemyKenshuseiDefenseState : EnemyAbstractDefenseState
         if (distance > randomDistance + 2 ||
             distance < randomDistance - 2)
         {
+            if (distance < randomDistance - 2) runningBack = true;
+            else runningBack = false;
+
             agent.isStopped = false;
 
             // Direction from player to enemy.
@@ -98,6 +105,7 @@ public class EnemyKenshuseiDefenseState : EnemyAbstractDefenseState
         }
         // Else if the enemy is in the final destination
         agent.isStopped = true;
+        runningBack = false;
         return false;
     }
 }

@@ -20,18 +20,6 @@ public class EnemySenshiDefenseState : EnemyAbstractDefenseState
     private bool whileThrowingKunai;
     private IEnumerator kunaiCoroutine;
 
-    // Components
-    private Animator anim;
-
-    /// <summary>
-    /// Happens once on start. Sets a random distance to mantain while defending.
-    /// </summary>
-    public override void Start()
-    {
-        base.Start();
-        anim = enemy.Anim;
-    }
-
     /// <summary>
     /// Happens once when this state is enabled. Sets a kunai timer.
     /// </summary>
@@ -95,6 +83,10 @@ public class EnemySenshiDefenseState : EnemyAbstractDefenseState
             enemy.transform.RotateToSmoothly(
                 playerTarget.position, ref smoothTimeRotation, turnSpeed);
         }
+
+        // Keeps rotating the enemy towards the player
+        enemy.transform.RotateTo(playerTarget.position);
+
         // Else it moves to the enemy without rotating towards the player
         return enemy.DefenseState;
     }
@@ -130,6 +122,10 @@ public class EnemySenshiDefenseState : EnemyAbstractDefenseState
         if (distance > randomDistance + 2 || 
             distance < randomDistance - 2)
         {
+            if (distance < randomDistance - 2) runningBack = true;
+            else runningBack = false;
+            anim.SetBool("RunningBack", runningBack);
+
             agent.isStopped = false;
 
             // Direction from player to enemy.
@@ -173,6 +169,7 @@ public class EnemySenshiDefenseState : EnemyAbstractDefenseState
         }
         // Else if the enemy is in the final destination
         agent.isStopped = true;
+        runningBack = false;
         return false;
     }
 

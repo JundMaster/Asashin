@@ -172,6 +172,8 @@ public class EnemyAggressiveState : EnemyAbstractState
         {
             yield return wfd;
 
+            enemy.AlertSurroundings();
+
             // Checks if player is still in range
             if (Vector3.Distance(playerTarget.position, myTarget.position) >
                 closeToPlayerRange)
