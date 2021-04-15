@@ -35,6 +35,10 @@ public class SpawnerController : MonoBehaviour
     {
         PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Respawn.ToString());
 
+        // Sets current scene to 1, meaning the player visited this area
+        SceneControl sceneControl = FindObjectOfType<SceneControl>();
+        PlayerPrefs.GetInt(sceneControl.CurrentScene().ToString(), 1);
+
         if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Respawn.ToString())
         {
             StartCoroutine(SpawnPlayer(SpawnTypeEnum.Respawn));
@@ -122,23 +126,37 @@ public class SpawnerController : MonoBehaviour
         if (gameState.FileExists(FilePath.SAVEFILECHECKPOINT) &&
             typeOfSpawn != SpawnTypeEnum.Newgame)
         {
-            foreach (Checkpoint checkpoint in childrenCheckpoints)
+            // If player didn't visit this map yet, spawns on initial pos
+            SceneControl sceneControl = FindObjectOfType<SceneControl>();
+            if (PlayerPrefs.GetInt(sceneControl.CurrentScene().ToString()) == 0)
             {
-                // If checkpoint number is  the same as the saved one
-                if (checkpoint.CheckpointNumber == 
-                    gameState.LoadCheckpoint<byte>(SaveAndLoadEnum.Checkpoint))
-                {
-
-                    // Instantiates the player on that checkpoint's position
-                    if (FindObjectOfType<Player>() == null)
-                        Instantiate(
-                            playerPrefab, 
-                            transform.position + checkpoint.transform.position, 
-                            checkpoint.transform.rotation);
-                }
+                if (FindObjectOfType<Player>() == null)
+                    Instantiate(
+                        playerPrefab,
+                        transform.position + initialPosition.transform.position,
+                        initialPosition.transform.rotation);
             }
+            // Else if player already visited this map, spawns on a checkpoint
+            else
+            {
+                Debug.Log("temp");
+                foreach (Checkpoint checkpoint in childrenCheckpoints)
+                {
+                    // If checkpoint number is  the same as the saved one
+                    if (checkpoint.CheckpointNumber ==
+                        gameState.LoadCheckpoint<byte>(SaveAndLoadEnum.Checkpoint))
+                    {
+                        // Instantiates the player on that checkpoint's position
+                        if (FindObjectOfType<Player>() == null)
+                            Instantiate(
+                                playerPrefab,
+                                transform.position + checkpoint.transform.position,
+                                checkpoint.transform.rotation);
+                    }
+                }
+            }      
         }
-        // else if the player is playing for the first time
+        // else if the player is playing for the first time ( new game )
         else
         {
             if (FindObjectOfType<Player>() == null)

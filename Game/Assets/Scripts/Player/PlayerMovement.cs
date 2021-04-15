@@ -346,28 +346,25 @@ public class PlayerMovement : MonoBehaviour, IAction
             roll.Performing == false && wallHug.Performing == false &&
             stopMovementAfterWallHug == false)
         {
-            Vector3 movement = new Vector3(moveDirection.x, -1, moveDirection.z).normalized;
-            //movement.y = -1;
-
             // Moves controllers towards the moveDirection set on Rotation()
             if (Walking && Sprinting == false)
             {
                 controller.Move(
-                    movement * values.WalkingSpeed * Time.fixedUnscaledDeltaTime);
+                    moveDirection.normalized * values.WalkingSpeed * Time.fixedUnscaledDeltaTime);
 
                 MovementSpeed = values.WalkingSpeed;
             }
             else if (Walking == false && Sprinting)
             {
                 controller.Move(
-                    movement * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
+                    moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
 
                 MovementSpeed = values.SprintSpeed;
             }
             else
             {
                 controller.Move(
-                    movement * values.Speed * Time.fixedUnscaledDeltaTime);
+                    moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
 
                 MovementSpeed = values.Speed;
             }

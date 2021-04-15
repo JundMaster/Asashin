@@ -137,20 +137,23 @@ public class ItemUI : MonoBehaviour, IItemUI, IFindPlayer
     /// </summary>
     public void UpdateValue()
     {
-        switch (itemType)
+        if (playerStats != null)
         {
-            case ListOfItems.Kunai:
-                quantityText.text = playerStats.Kunais.ToString();
-                break;
-            case ListOfItems.FirebombKunai:
-                quantityText.text = playerStats.FirebombKunais.ToString();
-                break;
-            case ListOfItems.HealthFlask:
-                quantityText.text = playerStats.HealthFlasks.ToString();
-                break;
-            case ListOfItems.SmokeGrenade:
-                quantityText.text = playerStats.SmokeGrenades.ToString();
-                break;
+            switch (itemType)
+            {
+                case ListOfItems.Kunai:
+                    quantityText.text = playerStats.Kunais.ToString();
+                    break;
+                case ListOfItems.FirebombKunai:
+                    quantityText.text = playerStats.FirebombKunais.ToString();
+                    break;
+                case ListOfItems.HealthFlask:
+                    quantityText.text = playerStats.HealthFlasks.ToString();
+                    break;
+                case ListOfItems.SmokeGrenade:
+                    quantityText.text = playerStats.SmokeGrenades.ToString();
+                    break;
+            }
         }
     }
 

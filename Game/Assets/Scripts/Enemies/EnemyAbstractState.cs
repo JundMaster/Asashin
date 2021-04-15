@@ -77,7 +77,8 @@ public abstract class EnemyAbstractState : StateBase
     /// </summary>
     public override void OnExit()
     {
-        enemy.PlayerLastKnownPosition = playerTarget.position;
+        if (playerTarget != null)
+            enemy.PlayerLastKnownPosition = playerTarget.position;
 
         enemy.Alert -= AlertEnemies;
         stats.AnyDamageOnEnemy -= TakeImpact;
