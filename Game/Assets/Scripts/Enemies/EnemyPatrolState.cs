@@ -26,15 +26,15 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
     private float smoothTimeRotation;
 
     // Movement
+    [SerializeField] private float walkingSpeed;
+    [SerializeField] private float runningSpeed;
     private Transform[] patrolPoints;
     private byte patrolIndex;
     private bool breakState;
     private IEnumerator movementCoroutine;
 
     /// <summary>
-    /// * INITIAL ENEMY STATE * OnEnter won't run on the first state.
     /// Runs once on start.
-    /// Sets agent's initial destination and starts movement coroutine.
     /// </summary>
     public override void Start()
     {
@@ -60,6 +60,7 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
     /// <summary>
     /// Runs when entering this state. Turns back agent's movement and starts
     /// movement coroutine.
+    /// Sets agent's initial destination and starts movement coroutine.
     /// </summary>
     public override void OnEnter()
     {
@@ -79,6 +80,8 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
         {
             agent.SetDestination(patrolPoints[patrolIndex].transform.position);
         }
+
+        agent.speed = walkingSpeed;
 
         enemy.CollisionWithPlayer += TakeImpact;
     }
@@ -165,6 +168,8 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
             enemy.transform.position + offset, 
             Quaternion.identity);
         exclMark.transform.parent = enemy.transform;
+
+        agent.speed = runningSpeed;
 
         enemy.CollisionWithPlayer -= TakeImpact;
     }

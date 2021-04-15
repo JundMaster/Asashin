@@ -129,7 +129,6 @@ public class PlayerMovement : MonoBehaviour, IAction
         if (wallHug.Performing == false)
             Rotation();
 
-        /*
         // Gravity
         if (IsGrounded())
         {
@@ -138,7 +137,6 @@ public class PlayerMovement : MonoBehaviour, IAction
 
         VerticalVelocity.y += values.Gravity * Time.fixedUnscaledDeltaTime;
         controller.Move(VerticalVelocity * Time.fixedUnscaledDeltaTime);
-        */
     }
 
     public void ComponentUpdate()

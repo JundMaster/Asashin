@@ -19,8 +19,5 @@ public abstract class AbstractSoundBase : MonoBehaviour
     /// Plays sounds.
     /// </summary>
     /// <param name="sound">Sound to play.</param>
-    public virtual void PlaySound(Sound sound)
-    {
-        audioSource.pitch = 1f;
-    }
+    public abstract void PlaySound(Sound sound);
 }

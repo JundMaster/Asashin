@@ -17,7 +17,6 @@ public class PlayerSounds : AbstractSoundBase
     {
         float probabilty = Random.Range(0f, 100f);
         int randomNum;
-        base.PlaySound(Sound.Null);
 
         switch(sound)
         {
