@@ -248,8 +248,10 @@ public class Enemy : MonoBehaviour, IFindPlayer
     /// <param name="other">Other collider.</param>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == Player.gameObject.layer)
-            OnCollisionWithPlayer();
+        if (Player != null)
+            if (other.gameObject.layer == Player.gameObject.layer)
+                OnCollisionWithPlayer();
+        
     }
 
     /// <summary>

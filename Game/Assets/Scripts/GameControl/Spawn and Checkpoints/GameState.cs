@@ -11,14 +11,6 @@ sealed public class GameState : FileIO
     private PlayerSavedStatsScriptableObj playerSavedStats;
     private PlayerStats playerStats;
 
-    public GameState(
-        PlayerSavedStatsScriptableObj playerSavedStats,
-        PlayerStats playerStats)
-    {
-        this.playerSavedStats = playerSavedStats;
-        this.playerStats = playerStats;
-    }
-
     public GameState(PlayerSavedStatsScriptableObj playerSavedStats)
     {
         this.playerSavedStats = playerSavedStats;

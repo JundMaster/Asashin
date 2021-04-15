@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 /// <summary>
 /// Class responsible for handling player's stats.
@@ -35,6 +36,10 @@ public sealed class PlayerStats : Stats, IPlayerDamage, IHealable
         {
             Health += health;
         }
-        OnTookDamage();
+        OnHealedDamage();
     }
+
+    private void OnHealedDamage() => HealedDamage?.Invoke();
+
+    public event Action HealedDamage;
 }

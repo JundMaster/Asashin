@@ -24,21 +24,23 @@ public class UIHealthBar : MonoBehaviour, IFindPlayer
 
     private void OnEnable()
     {
-        if (playerStats != null) playerStats.TookDamage += TookDamage;
+        if (playerStats != null) playerStats.TookDamage += UpdateHealthBar;
+        if (playerStats != null) playerStats.HealedDamage += UpdateHealthBar;
     }
 
     private void OnDisable()
     {
-        if (playerStats != null) playerStats.TookDamage -= TookDamage;
+        if (playerStats != null) playerStats.TookDamage -= UpdateHealthBar;
+        if (playerStats != null) playerStats.HealedDamage -= UpdateHealthBar;
     }
 
-    private void TookDamage() => StartCoroutine(UpdateHealthBar());
+    private void UpdateHealthBar() => StartCoroutine(UpdateHealthBarCoroutine());
 
     /// <summary>
     /// Smoothly updates player's health bar.
     /// </summary>
     /// <returns>Null.</returns>
-    private IEnumerator UpdateHealthBar()
+    private IEnumerator UpdateHealthBarCoroutine()
     {
         if (playerStats.Health < 20)
         {
@@ -65,11 +67,13 @@ public class UIHealthBar : MonoBehaviour, IFindPlayer
     public void FindPlayer()
     {
         playerStats = FindObjectOfType<PlayerStats>();
-        playerStats.TookDamage += TookDamage;
+        playerStats.TookDamage += UpdateHealthBar;
+        playerStats.HealedDamage += UpdateHealthBar;
     }
 
     public void PlayerLost()
     {
-        playerStats.TookDamage -= TookDamage;
+        playerStats.TookDamage -= UpdateHealthBar;
+        playerStats.HealedDamage -= UpdateHealthBar;
     }
 }

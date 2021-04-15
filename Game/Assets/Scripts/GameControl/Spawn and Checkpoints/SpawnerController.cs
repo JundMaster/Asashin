@@ -54,6 +54,59 @@ public class SpawnerController : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        if (uiRespawn != null) uiRespawn.RespawnButtonPressed += RespawnPlayer;
+        if (uiMainMenu != null) uiMainMenu.MainMenuSpawn += RespawnPlayer;
+    }
+
+    private void OnDisable()
+    {
+        if (uiRespawn != null) uiRespawn.RespawnButtonPressed -= RespawnPlayer;
+        if (uiMainMenu != null) uiMainMenu.MainMenuSpawn -= RespawnPlayer;
+    }
+
+    /// <summary>
+    /// Loads a scene corresponding to the last checkpoint.
+    /// If there is no checkpoint yet, loads default initial scene.
+    /// </summary>
+    private void RespawnPlayer(SpawnTypeEnum typeOfSpawn)
+    {
+        SceneControl sceneControl = FindObjectOfType<SceneControl>();
+
+        if (typeOfSpawn == SpawnTypeEnum.Respawn)
+        {
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Respawn.ToString());
+        }
+        else if (typeOfSpawn == SpawnTypeEnum.Loadgame)
+        {
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());
+        }
+        else if (typeOfSpawn == SpawnTypeEnum.Newgame)
+        {
+            // left brank on purpose
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString());
+            sceneControl.LoadScene(SceneEnum.Area1);
+        }
+
+        if (PlayerPrefs.GetString("TypeOfSpawn") != SpawnTypeEnum.Newgame.ToString())
+        {
+            if (gameState.FileExists(FilePath.SAVEFILESCENE))
+            {
+                // Loads the scene connected to the last saved checkpoint
+                sceneControl.LoadScene(
+                    gameState.LoadCheckpoint<SceneEnum>(SaveAndLoadEnum.CheckpointScene));
+            }
+            else
+            {
+                // Loads first scene after main menu.
+                // Happens when the player is playing and didn't reach
+                // the first checkpoint yet.
+                sceneControl.LoadScene(SceneEnum.Area1);
+            }
+        }
+    }
+
     /// <summary>
     /// Happens after first fixed update.
     /// </summary>
@@ -112,18 +165,6 @@ public class SpawnerController : MonoBehaviour
             playerStats.TakeDamage(100 - playerSavedStats.SavedHealth, TypeOfDamage.EnemyMelee);
     }
 
-    private void OnEnable()
-    {
-        if (uiRespawn != null) uiRespawn.RespawnButtonPressed += RespawnPlayer;
-        if (uiMainMenu != null) uiMainMenu.MainMenuSpawn += RespawnPlayer;
-    }
-
-    private void OnDisable()
-    {
-        if (uiRespawn != null) uiRespawn.RespawnButtonPressed -= RespawnPlayer;
-        if (uiMainMenu != null) uiMainMenu.MainMenuSpawn -= RespawnPlayer;
-    }
-
     /// <summary>
     /// If the player passes through a checkpoint, the script saves player stats.
     /// </summary>
@@ -145,47 +186,6 @@ public class SpawnerController : MonoBehaviour
             gameState.SaveCheckpoint(numberOfCheckpoint);
             gameState.SaveCheckpointScene(nameOfScene);
             gameState.SavePlayerStats();
-        }
-    }
-
-    /// <summary>
-    /// Loads a scene corresponding to the last checkpoint.
-    /// If there is no checkpoint yet, loads default initial scene.
-    /// </summary>
-    private void RespawnPlayer(SpawnTypeEnum typeOfSpawn)
-    {
-        SceneControl sceneControl = FindObjectOfType<SceneControl>();
-
-        if (typeOfSpawn == SpawnTypeEnum.Respawn)
-        {
-            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Respawn.ToString());
-        }
-        else if (typeOfSpawn == SpawnTypeEnum.Loadgame)
-        {
-            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());
-        }
-        else if (typeOfSpawn == SpawnTypeEnum.Newgame)
-        {
-            // left brank on purpose
-            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString());
-            sceneControl.LoadScene(SceneEnum.Area1);
-        }
-
-        if (PlayerPrefs.GetString("TypeOfSpawn") != SpawnTypeEnum.Newgame.ToString())
-        {
-            if (gameState.FileExists(FilePath.SAVEFILESCENE))
-            {
-                // Loads the scene connected to the last saved checkpoint
-                sceneControl.LoadScene(
-                    gameState.LoadCheckpoint<SceneEnum>(SaveAndLoadEnum.CheckpointScene));
-            }
-            else
-            {
-                // Loads first scene after main menu.
-                // Happens when the player is playing and didn't reach
-                // the first checkpoint yet.
-                sceneControl.LoadScene(SceneEnum.Area1);
-            }
         }
     }
 
