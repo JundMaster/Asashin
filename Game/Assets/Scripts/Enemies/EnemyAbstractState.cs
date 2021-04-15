@@ -56,9 +56,9 @@ public abstract class EnemyAbstractState : StateBase
         if (playerTarget == null) playerTarget = enemy.PlayerTarget;
         alert = false;
 
-        enemy.Alert += AlertEnemies;
         stats.MeleeDamageOnEnemy += CheckForInstantKill;
         stats.AnyDamageOnEnemy += TakeImpact;
+        enemy.Alert += AlertEnemies;
     }
 
     /// <summary>
@@ -80,8 +80,8 @@ public abstract class EnemyAbstractState : StateBase
         enemy.PlayerLastKnownPosition = playerTarget.position;
 
         enemy.Alert -= AlertEnemies;
-        stats.MeleeDamageOnEnemy -= CheckForInstantKill;
         stats.AnyDamageOnEnemy -= TakeImpact;
+        stats.MeleeDamageOnEnemy -= CheckForInstantKill;
     }    
 
     /// <summary>
@@ -143,14 +143,16 @@ public abstract class EnemyAbstractState : StateBase
             // Only happens if player is sneaking.
             if (Vector3.Dot(
                 enemy.transform.forward, playerTarget.forward) >
-                0.5f &&
-                playerMovement.Walking)
+                0 &&playerMovement.Walking)
             {
                 SwitchToDeathState();
             }
         }
     }
 
+    /// <summary>
+    /// Sets alert variable to true, so this enemy is alerted.
+    /// </summary>
     protected void AlertEnemies() => 
         alert = true;
 

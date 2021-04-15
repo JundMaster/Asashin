@@ -214,6 +214,7 @@ GameObject:
   - component: {fileID: 962524041467204837}
   - component: {fileID: 962524041467204858}
   - component: {fileID: 962524041467204859}
+  - component: {fileID: 506691723}
   m_Layer: 10
   m_Name: Kenshusei
   m_TagString: Untagged
@@ -362,6 +363,20 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
+  m_Height: 2.28
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!136 &506691723
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962524041467204857}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.6
   m_Height: 2.28
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
@@ -726,6 +741,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54543be746191b640aed6c711d4f6538, type: 3}
+--- !u!4 &779452559810631377 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 54543be746191b640aed6c711d4f6538, type: 3}
+  m_PrefabInstance: {fileID: 962524042289836346}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &115681085768617067 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 54543be746191b640aed6c711d4f6538, type: 3}
@@ -739,10 +759,5 @@ Transform:
 --- !u!95 &6643098818285259947 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 54543be746191b640aed6c711d4f6538, type: 3}
-  m_PrefabInstance: {fileID: 962524042289836346}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &779452559810631377 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 54543be746191b640aed6c711d4f6538, type: 3}
   m_PrefabInstance: {fileID: 962524042289836346}
   m_PrefabAsset: {fileID: 0}

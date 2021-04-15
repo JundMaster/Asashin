@@ -55,23 +55,6 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
         breakState = false;
         patrolPoints = enemy.PatrolPoints;
         patrolIndex = 0;
-
-        // Only starts movement coroutine if the enemy has more than 1 patroi
-        // point (meaning the enemy is not static)
-        if (enemy.PatrolPoints.Length > 1)
-        {
-            movementCoroutine = MovementCoroutine();
-            enemy.StartCoroutine(movementCoroutine);
-        }
-        else
-        {
-            agent.SetDestination(patrolPoints[patrolIndex].transform.position);
-        }
-
-        // Must be on start aswell because OnEnter doesn't run on first state
-        stats.MeleeDamageOnEnemy += CheckForInstantKill;
-        stats.AnyDamageOnEnemy += TakeImpact;
-        enemy.Alert += AlertEnemies;
     }
 
     /// <summary>
@@ -96,6 +79,8 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
         {
             agent.SetDestination(patrolPoints[patrolIndex].transform.position);
         }
+
+        enemy.CollisionWithPlayer += TakeImpact;
     }
 
     /// <summary>
@@ -180,6 +165,8 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
             enemy.transform.position + offset, 
             Quaternion.identity);
         exclMark.transform.parent = enemy.transform;
+
+        enemy.CollisionWithPlayer -= TakeImpact;
     }
 
     /// <summary>

@@ -12462,6 +12462,7 @@ GameObject:
   - component: {fileID: 7366061340869173851}
   - component: {fileID: 48189607053046117}
   - component: {fileID: 1795074611}
+  - component: {fileID: 1211905860}
   m_Layer: 11
   m_Name: Bot
   m_TagString: cinemachineObstacleIgnore
@@ -12946,6 +12947,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!136 &1211905860
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7366061340869173852}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2.124051
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.96147513, z: 0}
 --- !u!1 &7559233053842398539
 GameObject:
   m_ObjectHideFlags: 0

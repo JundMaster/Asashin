@@ -44,6 +44,8 @@ public class EnemyLostPlayerState : EnemyAbstractStateWithVision
         agent.isStopped = false;
 
         agent.SetDestination(enemy.PlayerLastKnownPosition);
+
+        enemy.CollisionWithPlayer += TakeImpact;
     }
 
     /// <summary>
@@ -102,6 +104,8 @@ public class EnemyLostPlayerState : EnemyAbstractStateWithVision
 
         agent.isStopped = false;
         enemy.VisionCone.SetActive(false);
+
+        enemy.CollisionWithPlayer -= TakeImpact;
     }
 
 

@@ -108,7 +108,6 @@ public class Options : MonoBehaviour
         // Copies the script received
         SavedValues = value;
         options.SaveConfig();
-        Debug.Log("config " + options.SoundVolume);
         UpdateWindowMode();
         UpdateScreenResolution();
         UpdateQualitySettings();

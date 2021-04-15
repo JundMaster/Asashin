@@ -27,13 +27,15 @@ public class StateMachine
     public void Initialize()
     {
         currentState = states.First();
-
+        
         // Initializes and starts all states
         foreach (IState state in states)
         {
             state?.Initialize(parentObject);
             state?.Start();
         }
+
+        currentState.OnEnter();
     }
 
     /// <summary>
@@ -42,7 +44,12 @@ public class StateMachine
     /// </summary>
     public void FixedUpdate()
     {
-        if (currentState == null) currentState = states?.First();
+        if (currentState == null)
+        {
+            currentState = states?.First();
+            currentState.OnEnter();
+        }
+
         IState nextState = currentState?.FixedUpdate();
 
         if (nextState != null &&

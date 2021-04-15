@@ -167,7 +167,6 @@ public class Enemy : MonoBehaviour, IFindPlayer
         }
     }
 
-
     /// <summary>
     /// Turns PlayerTarget to null when the Player disappears.
     /// </summary>
@@ -219,29 +218,6 @@ public class Enemy : MonoBehaviour, IFindPlayer
         }
     }
 
-    /// <summary>
-    /// Method called from enemy states in order to invoke Alert event.
-    /// </summary>
-    public virtual void OnAlert() => Alert?.Invoke();
-
-    /// <summary>
-    /// Event registered on enemy states in order to alert all enemies.
-    /// </summary>
-    public event Action Alert;
-
-    /// <summary>
-    /// Invokes WeaponHit event.
-    /// </summary>
-    protected virtual void OnWeaponHit() => WeaponHit?.Invoke();
-
-    /// <summary>
-    /// Event registered on Aggressive State.
-    /// Is triggered after the enemy atacks.
-    /// </summary>
-    public event Action WeaponHit;
-
-
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -249,7 +225,8 @@ public class Enemy : MonoBehaviour, IFindPlayer
         foreach(Transform patrolPoint in PatrolPoints)
         {
             Gizmos.DrawSphere(patrolPoint.position + offset, 0.25f);
-            Gizmos.DrawLine(patrolPoint.position + offset, patrolPoint.position + patrolPoint.forward);
+            Gizmos.DrawLine(patrolPoint.position + offset, 
+                patrolPoint.position + patrolPoint.forward);
         }
     }
 
@@ -260,7 +237,51 @@ public class Enemy : MonoBehaviour, IFindPlayer
         foreach (Transform patrolPoint in PatrolPoints)
         {
             Gizmos.DrawSphere(patrolPoint.position + offset, 0.25f);
-            Gizmos.DrawLine(patrolPoint.position + offset, patrolPoint.position + patrolPoint.forward);
+            Gizmos.DrawLine(patrolPoint.position + offset, 
+                patrolPoint.position + patrolPoint.forward);
         }
     }
+
+    /// <summary>
+    /// On trigger enter it invokes CollisionWithPlayer event.
+    /// </summary>
+    /// <param name="other">Other collider.</param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == Player.gameObject.layer)
+            OnCollisionWithPlayer();
+    }
+
+    /// <summary>
+    /// Invokes CollisionWithPlayer event.
+    /// </summary>
+    protected virtual void OnCollisionWithPlayer() => 
+        CollisionWithPlayer?.Invoke();
+
+    /// <summary>
+    /// Method called from enemy states in order to invoke Alert event.
+    /// </summary>
+    public virtual void OnAlert() => Alert?.Invoke();
+
+    /// <summary>
+    /// Invokes WeaponHit event.
+    /// </summary>
+    protected virtual void OnWeaponHit() => WeaponHit?.Invoke();
+
+    /// <summary>
+    /// Happens when the enemy collides with player.
+    /// Event registered on PatrolState and LostPlayerState.
+    /// </summary>
+    public event Action CollisionWithPlayer;
+
+    /// <summary>
+    /// Event registered on enemy states in order to alert all enemies.
+    /// </summary>
+    public event Action Alert;
+
+    /// <summary>
+    /// Event registered on Aggressive State.
+    /// Is triggered after the enemy atacks.
+    /// </summary>
+    public event Action WeaponHit;
 }
