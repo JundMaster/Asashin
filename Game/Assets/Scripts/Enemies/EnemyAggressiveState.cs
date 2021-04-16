@@ -212,8 +212,10 @@ public class EnemyAggressiveState : EnemyAbstractState
                 playerRoll.PerformingTime < 0.5f)
             {
                 playerRoll.OnDodge();
-                return;
             }
+
+            if (playerRoll.Performing)
+                return;
         }
         
 
