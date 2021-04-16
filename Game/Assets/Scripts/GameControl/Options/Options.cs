@@ -44,9 +44,9 @@ public class Options : MonoBehaviour
 
             // Initializes a struct with all current values from options
             CreateNewStructWithSavedValues();
-            UpdateWindowMode();
-            UpdateScreenResolution();
             UpdateQualitySettings();
+            UpdateScreenResolution();
+            UpdateWindowMode();
             UpdatePostProcess();
             OnUpdatedValues();
         }

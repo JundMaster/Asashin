@@ -71,7 +71,7 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     public void UpdateValues()
     {
         masterVolume.SetFloat("masterVolume", options.MasterVolume);
-        masterVolume.SetFloat("ambienceVolume", options.MusicVolume);
+        masterVolume.SetFloat("musicVolume", options.MusicVolume);
         masterVolume.SetFloat("soundVolume", options.SoundVolume);
     }
 }
