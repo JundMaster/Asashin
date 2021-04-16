@@ -13,6 +13,7 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     // Components
     [SerializeField] private AudioMixer masterVolume;
     [SerializeField] private OptionsScriptableObj options;
+    private SlowMotionBehaviour slowMotion;
 
     // Audio variables
     private float master;
@@ -26,12 +27,22 @@ public class AudioController : MonoBehaviour, IUpdateOptions
         masterVolume.SetFloat("masterVolume", options.MinMasterVolume);
         masterVolume.SetFloat("musicVolume", options.MinMusicVolume);
         masterVolume.SetFloat("soundVolume", options.MinSoundVolume);
+        masterVolume.SetFloat("soundPitch", 1);
 
         optionsScript = FindObjectOfType<Options>();
+        slowMotion = FindObjectOfType<SlowMotionBehaviour>();
     }
 
-    private void OnEnable() => optionsScript.UpdatedValues += UpdateValues;
-    private void OnDisable() => optionsScript.UpdatedValues -= UpdateValues;
+    private void OnEnable()
+    {
+        optionsScript.UpdatedValues += UpdateValues;
+        slowMotion.SlowMotionEvent += UpdatePitch;
+    }
+    private void OnDisable()
+    {
+        optionsScript.UpdatedValues -= UpdateValues;
+        slowMotion.SlowMotionEvent -= UpdatePitch;
+    }
 
     /// <summary>
     /// Only happens after configuration's awake (after loading all values)
@@ -63,6 +74,20 @@ public class AudioController : MonoBehaviour, IUpdateOptions
             timePassed = Time.timeSinceLevelLoad;
             yield return wfu;
         }
+    }
+
+    /// <summary>
+    /// Updates pitch on slow motion.
+    /// </summary>
+    /// <param name="condition">Condition to know if slow motion started.</param>
+    private void UpdatePitch(SlowMotionEnum condition)
+    {
+        if (condition == SlowMotionEnum.SlowMotion)
+        {
+            masterVolume.SetFloat("soundPitch", 0.5f);
+        }
+        else
+            masterVolume.SetFloat("soundPitch", 1);
     }
 
     /// <summary>
