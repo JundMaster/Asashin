@@ -9,8 +9,6 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
 {
     [Header("Checks if player is in cone range every X seconds")]
     [Range(0.01f,2f)][SerializeField] private float searchCheckDelay;
-    [Tooltip("Time to search for the player after reaching final destination")]
-    [Range(0.01f, 10f)] [SerializeField] private float waitingDelay;
 
     [Header("Enemy cone render variables")]
     [Range(0,255)][SerializeField] private byte amountOfVertices;
@@ -26,7 +24,7 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
     private float smoothTimeRotation;
 
     // Movement
-    private Transform[] patrolPoints;
+    private EnemyPatrolPoint[] patrolPoints;
     private byte patrolIndex;
     private bool breakState;
     private IEnumerator movementCoroutine;
@@ -120,10 +118,21 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
         // final destination
         if (agent.remainingDistance <= 0.1f || agent.velocity.magnitude < 0.1f)
         {
-            enemy.transform.RotateToSmoothly(
-                    patrolPoints[patrolIndex].position + 
-                    patrolPoints[patrolIndex].forward , 
+            // Rotates towards the current point's forward
+            if (patrolIndex + 1 > patrolPoints.Length - 1)
+            {
+                enemy.transform.RotateToSmoothly(
+                    patrolPoints[0].transform.position +
+                    patrolPoints[0].transform.forward,
                     ref smoothTimeRotation, turnSpeed);
+            }
+            else
+            {
+                enemy.transform.RotateToSmoothly(
+                    patrolPoints[patrolIndex + 1].transform.position +
+                    patrolPoints[patrolIndex + 1].transform.forward,
+                    ref smoothTimeRotation, turnSpeed);
+            }
         }
 
         // Search for player every searchCheckDelay seconds inside a vision cone
@@ -183,7 +192,7 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
     private IEnumerator MovementCoroutine()
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
-        YieldInstruction wfs = new WaitForSeconds(waitingDelay);
+        YieldInstruction wfs = new WaitForSeconds(2f);
 
         agent.SetDestination(patrolPoints[patrolIndex].transform.position);
 
@@ -198,12 +207,17 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
                 // Sets destination to where the agent is
                 agent.SetDestination(enemy.transform.position);
 
-                // Waits for the delay
-                yield return wfs;
+                YieldInstruction wfpd = 
+                    new WaitForSeconds(patrolPoints[patrolIndex].WaitingTime);
 
                 // Increments the patrol point
-                if (patrolIndex + 1 > patrolPoints.Length - 1) patrolIndex = 0;
-                else patrolIndex++;
+                if (patrolIndex + 1 > patrolPoints.Length - 1)
+                    patrolIndex = 0;
+                else
+                    patrolIndex++;
+
+                // Waits for the delay of the current patrol point
+                yield return wfpd;
 
                 // If not in this state anymore
                 if (breakState)

@@ -5,6 +5,6 @@
 /// </summary>
 public class EnemyPatrolPoint : MonoBehaviour
 {
-    [SerializeField] private float waitingTime;
+    [Range(0.01f, 10f)][SerializeField] private float waitingTime;
     public float WaitingTime => waitingTime;
 }

@@ -20,8 +20,8 @@ public class Enemy : MonoBehaviour, IFindPlayer
     public Transform MyTarget => myTarget;
 
     [Header("Enemy Patrol path (order is important)")]
-    [SerializeField] private Transform[] patrolPoints;
-    public Transform[] PatrolPoints => patrolPoints;
+    [SerializeField] private EnemyPatrolPoint[] patrolPoints;
+    public EnemyPatrolPoint[] PatrolPoints => patrolPoints;
 
     [Header("Cone Mesh")]
     [SerializeField] private GameObject visionCone;
@@ -222,11 +222,11 @@ public class Enemy : MonoBehaviour, IFindPlayer
     {
         Gizmos.color = Color.red;
         Vector3 offset = new Vector3(0, 0.15f, 0);
-        foreach(Transform patrolPoint in PatrolPoints)
+        foreach(EnemyPatrolPoint patrolPoint in PatrolPoints)
         {
-            Gizmos.DrawSphere(patrolPoint.position + offset, 0.25f);
-            Gizmos.DrawLine(patrolPoint.position + offset, 
-                patrolPoint.position + patrolPoint.forward);
+            Gizmos.DrawSphere(patrolPoint.transform.position + offset, 0.25f);
+            Gizmos.DrawLine(patrolPoint.transform.position + offset, 
+                patrolPoint.transform.position + patrolPoint.transform.forward);
         }
     }
 
@@ -234,12 +234,14 @@ public class Enemy : MonoBehaviour, IFindPlayer
     {
         Gizmos.color = Color.green;
         Vector3 offset = new Vector3(0, 0.15f, 0);
-        foreach (Transform patrolPoint in PatrolPoints)
+        foreach (EnemyPatrolPoint patrolPoint in PatrolPoints)
         {
-            Gizmos.DrawSphere(patrolPoint.position + offset, 0.25f);
-            Gizmos.DrawLine(patrolPoint.position + offset, 
-                patrolPoint.position + patrolPoint.forward);
+            Gizmos.DrawSphere(patrolPoint.transform.position + offset, 0.25f);
+            Gizmos.DrawLine(patrolPoint.transform.position + offset, 
+                patrolPoint.transform.position + patrolPoint.transform.forward);
         }
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, sizeOfAlert);
     }
 
     /// <summary>
