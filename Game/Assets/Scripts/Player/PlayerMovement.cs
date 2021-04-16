@@ -100,7 +100,6 @@ public class PlayerMovement : MonoBehaviour, IAction
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
         input.Walk += HandleWalk;
         input.Sprint += HandleSprint;
-        attack.LightMeleeAttack += StopWalkingOnAttack;
         roll.Roll += () => Walking = false;
         useItem.UsedItemDelay += () => Walking = false;
         wallHug.WallHug += StopMovementAfterWallHug;
@@ -114,7 +113,6 @@ public class PlayerMovement : MonoBehaviour, IAction
         slowMotion.SlowMotionEvent -= ChangeTurnSmoothValue;
         input.Walk -= HandleWalk;
         input.Sprint -= HandleSprint;
-        attack.LightMeleeAttack -= StopWalkingOnAttack;
         roll.Roll -= () => Walking = false;
         useItem.UsedItemDelay -= () => Walking = false;
         wallHug.WallHug -= StopMovementAfterWallHug;
@@ -198,33 +196,6 @@ public class PlayerMovement : MonoBehaviour, IAction
         }
         stopMovementAfterWallHug = false;
     }
-
-    /// <summary>
-    /// Starts stop walking coroutine.
-    /// </summary>
-    /// <param name="condition"></param>
-    private void StopWalkingOnAttack(bool condition) =>
-        StartCoroutine(StopWalkingOnAttackCoroutine());
-
-    /// <summary>
-    /// Cancels walking after fixed update.
-    /// Will only work for normal light attacks, since instant kill is being
-    /// controlelr on InstantKillAnimationBehaviour script.
-    /// </summary>
-    /// <returns>Wait for fixed update.</returns>
-    private IEnumerator StopWalkingOnAttackCoroutine()
-    {
-        yield return new WaitForFixedUpdate();
-        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
-        {
-            yield return null;
-            // Waits for animation to end
-        }
-        Walking = false;
-        OnHide(false);
-    }
-
-
 
     /// <summary>
     /// Turns sneak on or off.
@@ -440,7 +411,7 @@ public class PlayerMovement : MonoBehaviour, IAction
             Hidden = false;
     }
 
-    protected virtual void OnHide(bool hiddenCondition) => 
+    public virtual void OnHide(bool hiddenCondition) => 
         Hide?.Invoke(hiddenCondition);
 
     /// <summary>

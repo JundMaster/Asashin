@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-public class InstantKillAnimationBehaviour : StateMachineBehaviour
+public class PlayerTakingHitAnimationBehaviour : StateMachineBehaviour
 {
-    private PlayerMovement playerMovement;
+    private PlayerInputCustom input;
 
     private void Awake()
     {
-        playerMovement = FindObjectOfType<PlayerMovement>();
+        input = FindObjectOfType<PlayerInputCustom>();
     }
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
@@ -18,13 +18,13 @@ public class InstantKillAnimationBehaviour : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        playerMovement.Walking = true;
+        input.SwitchActionMapToDisable();
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        playerMovement.Walking = false;
+        input.SwitchActionMapToGameplay();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
