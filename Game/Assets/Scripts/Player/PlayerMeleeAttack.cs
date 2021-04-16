@@ -233,7 +233,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             // (player on blocks if he's basically facing
             // the enemy)
             // This means the player successfully blocked
-            if (Vector3.Dot(organizedEnemiesByDistance[0].forward, transform.forward) > 0.5f)
+            if (Vector3.Dot(organizedEnemiesByDistance[0].forward, transform.forward) > 0f)
             {
                 // Instant kill anim.
                 OnLightMeleeAttack(false);

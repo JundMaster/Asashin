@@ -207,8 +207,9 @@ public class PlayerMovement : MonoBehaviour, IAction
         StartCoroutine(StopWalkingOnAttackCoroutine());
 
     /// <summary>
-    /// Cancels walking after fixed update, so it can check if it hit an enemy,
-    /// etc. before canceling the walk.
+    /// Cancels walking after fixed update.
+    /// Will only work for normal light attacks, since instant kill is being
+    /// controlelr on InstantKillAnimationBehaviour script.
     /// </summary>
     /// <returns>Wait for fixed update.</returns>
     private IEnumerator StopWalkingOnAttackCoroutine()
@@ -222,6 +223,8 @@ public class PlayerMovement : MonoBehaviour, IAction
         Walking = false;
         OnHide(false);
     }
+
+
 
     /// <summary>
     /// Turns sneak on or off.

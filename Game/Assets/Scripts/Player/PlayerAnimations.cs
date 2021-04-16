@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 
 /// <summary>
 /// Class responsible for playing player's animations, uses a kind of sandbox pattern.

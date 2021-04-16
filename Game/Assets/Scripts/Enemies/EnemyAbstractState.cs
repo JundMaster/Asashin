@@ -146,8 +146,8 @@ public abstract class EnemyAbstractState : StateBase
             // This means the player successfully instantly killed the enemy
             // Only happens if player is sneaking.
             if (Vector3.Dot(
-                enemy.transform.forward, playerTarget.forward) >
-                0 &&playerMovement.Walking)
+                enemy.transform.forward, playerMovement.transform.forward) > 0 
+                && playerMovement.Walking)
             {
                 SwitchToDeathState();
             }
