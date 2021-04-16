@@ -13,6 +13,9 @@ public abstract class EnemyAbstractState : StateBase
     [Header("Rotation speed after being hit (less means faster)")]
     [Range(0.1f, 1f)] [SerializeField] private float turnSpeedAfterBeingHit;
     private float smoothTimeRotationAfterBeingHit;
+    // Movement
+    [Range(0.1f, 5f)] [SerializeField] protected float walkingSpeed;
+    [Range(0.1f, 5f)] [SerializeField] protected float runningSpeed;
     protected Enemy enemy;
     protected EnemyStats stats;
     protected Transform myTarget;

@@ -26,8 +26,6 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
     private float smoothTimeRotation;
 
     // Movement
-    [SerializeField] private float walkingSpeed;
-    [SerializeField] private float runningSpeed;
     private Transform[] patrolPoints;
     private byte patrolIndex;
     private bool breakState;
@@ -156,6 +154,8 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
         // Cancels all movement
         agent.SetDestination(myTarget.position);
         agent.isStopped = true;
+
+        agent.speed = runningSpeed;
 
         enemy.VisionCone.SetActive(false);
 

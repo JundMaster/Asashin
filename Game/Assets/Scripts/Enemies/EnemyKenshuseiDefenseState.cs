@@ -68,8 +68,16 @@ public class EnemyKenshuseiDefenseState : EnemyAbstractDefenseState
         if (distance > randomDistance + 2 ||
             distance < randomDistance - 2)
         {
-            if (distance < randomDistance - 2) runningBack = true;
-            else runningBack = false;
+            if (distance < randomDistance - 2)
+            {
+                agent.speed = walkingSpeed;
+                runningBack = true;
+            }
+            else
+            {
+                agent.speed = runningSpeed;
+                runningBack = false;
+            }
 
             agent.isStopped = false;
 
