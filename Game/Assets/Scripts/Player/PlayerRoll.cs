@@ -4,22 +4,22 @@ using System;
 public class PlayerRoll : MonoBehaviour, IAction
 {
     // Components
+    public Animator Anim { get; private set; }
     private PlayerInputCustom input;
     private PlayerMeleeAttack attack;
     private PlayerUseItem useItem;
-    private Animator anim;
     private PlayerBlock block;
     private PlayerWallHug wallHug;
     private PlayerMovement movement;
 
-    public bool Performing { get; private set; }
-    public float PerformingTime { get; private set; }
+    public bool Performing { get; set; }
+    public float PerformingTime { get; set; }
 
     private void Awake()
     {
         input = FindObjectOfType<PlayerInputCustom>();
         attack = GetComponent<PlayerMeleeAttack>();
-        anim = GetComponent<Animator>();
+        Anim = GetComponent<Animator>();
         useItem = GetComponent<PlayerUseItem>();
         block = GetComponent<PlayerBlock>();
         wallHug = GetComponent<PlayerWallHug>();
@@ -43,10 +43,7 @@ public class PlayerRoll : MonoBehaviour, IAction
 
     public void ComponentUpdate()
     {
-        if (Performing)
-            PerformingTime = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
-        else
-            PerformingTime = 0;
+
     }
 
     public void ComponentFixedUpdate()
@@ -63,19 +60,8 @@ public class PlayerRoll : MonoBehaviour, IAction
             movement.IsGrounded() && useItem.Performing == false &&
             block.Performing == false && wallHug.Performing == false)
         {
-            anim.applyRootMotion = true;
-            Performing = true;
             OnRoll();
         }
-    }
-
-    /// <summary>
-    /// Called with animation event.
-    /// </summary>
-    private void RollingToFalse()
-    {
-        Performing = false;
-        anim.applyRootMotion = false;
     }
 
     /// <summary>
