@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// Class responsible for handling evfery checkpoint.
@@ -13,6 +14,17 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        StartCoroutine(SaveGame());
+    }
+
+    /// <summary>
+    /// Coroutine waits for fixed update so the player won't be null, instead
+    /// it gives time to load everything.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator SaveGame()
+    {
+        yield return new WaitForSeconds(1);
         checkpointController.SaveCheckpoint(checkpointNumber, checkpointScene);
     }
 

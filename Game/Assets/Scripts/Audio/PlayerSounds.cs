@@ -26,7 +26,7 @@ public class PlayerSounds : AbstractSoundBase
                 break;
             case Sound.VoiceAttack:
                 randomNum = Random.Range(5, 8);
-                if (probabilty < 10) audioSource.PlayOneShot(audioClips[randomNum], 0.5f);
+                if (probabilty < 25) audioSource.PlayOneShot(audioClips[randomNum], 0.5f);
                 break;
             case Sound.RunningStep:
                 randomNum = Random.Range(8, 11);
@@ -48,7 +48,7 @@ public class PlayerSounds : AbstractSoundBase
                 }
                 break;
             case Sound.VoiceLaugh:
-                if (probabilty < 5f)
+                if (probabilty < 20)
                 {
                     randomNum = Random.Range(20, 22);
                     audioSource.PlayOneShot(audioClips[randomNum], 0.6f);

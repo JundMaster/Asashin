@@ -40,7 +40,10 @@ sealed public class GameState : FileIO
                 fw.WriteLine(playerSavedStats.FirebombKunais);
                 fw.WriteLine(playerSavedStats.HealthFlasks);
                 fw.WriteLine(playerSavedStats.SmokeGrenades);
-                fw.WriteLine(playerStats.Health);
+                if (playerStats != null)
+                    fw.WriteLine(playerStats.Health);
+                else
+                    fw.WriteLine(100f);
             }
         }
     }

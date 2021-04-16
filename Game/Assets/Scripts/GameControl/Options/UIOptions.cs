@@ -353,9 +353,6 @@ public class UIOptions : MonoBehaviour
                 screenModeText.text = "Windowed";
                 break;
             case 1:
-                screenModeText.text = "Borderless";
-                break;
-            case 2:
                 screenModeText.text = "Fullscreen";
                 break;
         }

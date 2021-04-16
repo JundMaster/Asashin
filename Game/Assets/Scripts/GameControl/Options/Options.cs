@@ -169,12 +169,6 @@ public class Options : MonoBehaviour
                 else
                     Screen.SetResolution(1600, 900, false);
                 break;
-            case 2:
-                if (options.ScreenMode == 1 || options.ScreenMode == 2)
-                    Screen.SetResolution(1920, 1080, true);
-                else
-                    Screen.SetResolution(1920, 1080, false);
-                break;
         }
     }
 
@@ -191,9 +185,6 @@ public class Options : MonoBehaviour
                 break;
             case 1:
                 windowMode = FullScreenMode.FullScreenWindow;
-                break;
-            case 2:
-                windowMode = FullScreenMode.ExclusiveFullScreen;
                 break;
         }
         Screen.fullScreenMode = windowMode;
