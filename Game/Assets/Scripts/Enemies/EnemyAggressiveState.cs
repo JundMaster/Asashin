@@ -206,11 +206,16 @@ public class EnemyAggressiveState : EnemyAbstractState
     {
         // If player just started rolling , while the enemy is attacking, it 
         // means the player was able to dodge, so it will trigger slow motion.
-        if (playerRoll.PerformingTime > 0 && playerRoll.PerformingTime < 0.5f)
+        if (playerRoll != null)
         {
-            playerRoll.OnDodge();
-            return;
+            if (playerRoll.PerformingTime > 0 && 
+                playerRoll.PerformingTime < 0.5f)
+            {
+                playerRoll.OnDodge();
+                return;
+            }
         }
+        
 
         // Collisions of the melee weapon
         Collider[] swordCollider = Physics.OverlapSphere(
