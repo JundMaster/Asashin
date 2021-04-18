@@ -226,7 +226,8 @@ public class Enemy : MonoBehaviour, IFindPlayer
         {
             Gizmos.DrawSphere(patrolPoint.transform.position + offset, 0.25f);
             Gizmos.DrawLine(patrolPoint.transform.position + offset, 
-                patrolPoint.transform.position + patrolPoint.transform.forward);
+                patrolPoint.transform.position + offset + 
+                patrolPoint.transform.forward);
         }
     }
 
@@ -237,8 +238,9 @@ public class Enemy : MonoBehaviour, IFindPlayer
         foreach (EnemyPatrolPoint patrolPoint in PatrolPoints)
         {
             Gizmos.DrawSphere(patrolPoint.transform.position + offset, 0.25f);
-            Gizmos.DrawLine(patrolPoint.transform.position + offset, 
-                patrolPoint.transform.position + patrolPoint.transform.forward);
+            Gizmos.DrawLine(patrolPoint.transform.position + offset,
+                patrolPoint.transform.position + offset +
+                patrolPoint.transform.forward);
         }
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sizeOfAlert);
