@@ -12,7 +12,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     // Components
     private PlayerInputCustom input;
-    private Animator anim;
+    public Animator Anim { get; private set; }
     private PlayerRoll roll;
     private PlayerUseItem useItem;
     private CinemachineTarget target;
@@ -34,12 +34,15 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     // Swordhit
     [SerializeField] private GameObject swordHitPrefab;
 
-    public bool Performing { get; private set; }
+    public bool Performing { get; set; }
+
+    // Rotation
+    private float smoothTimeRotation;
 
     private void Awake()
     {
         input = FindObjectOfType<PlayerInputCustom>();
-        anim = GetComponent<Animator>();
+        Anim = GetComponent<Animator>();
         useItem = GetComponent<PlayerUseItem>();
         roll = GetComponent<PlayerRoll>();
         target = FindObjectOfType<CinemachineTarget>();
@@ -89,22 +92,21 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         {
             if (target.Targeting)
             {
-                // Rotates player to target
-                transform.LookAt(target.CurrentTarget);
-                transform.eulerAngles = new Vector3(
-                    0f, transform.eulerAngles.y, transform.eulerAngles.z);
+                transform.RotateTo(target.CurrentTarget.position);
             }
-
-            Performing = true;
-
-            anim.applyRootMotion = true;
+            else
+            {
+                // Rotates towards player's pressing direction
+                Vector3 movement = new Vector3(input.Movement.x, 0, input.Movement.y);
+                transform.RotateTo(transform.position + transform.forward + movement);
+            }
 
             OnMeleeAttack();
         }
     }
 
     /// <summary>
-    /// Turns trail to false. Runs on animation event.
+    /// Turns trail to false. Runs on Animation event.
     /// </summary>
     private void TurnTrailToTrue()
     {
@@ -113,7 +115,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     }
 
     /// <summary>
-    /// Turns trail to false. Runs on animation event.
+    /// Turns trail to false. Runs on Animation event.
     /// </summary>
     private void TurnTrailToFalse()
     {
@@ -122,25 +124,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     }
 
     /// <summary>
-    /// Turns of root motion. Runs on animation event.
-    /// Only turns of root motion if the player isn't continuing the combo.
-    /// </summary>
-    private void TurnOffRootMotion()
-    {
-        // If next animation is not an attack it removes root motion
-        if (anim.GetNextAnimatorStateInfo(0).IsName("BotLightMelee2") == false &&
-            anim.GetNextAnimatorStateInfo(0).IsName("BotLightMelee3") == false)
-        {
-            anim.ResetTrigger("MeleeLightAttack");
-
-            Performing = false;
-
-            anim.applyRootMotion = false;
-        }
-    }
-
-    /// <summary>
-    /// Checks attack collision through animation event.
+    /// Checks attack collision through Animation event.
     /// </summary>
     public void CheckLightAttackCollision()
     {
@@ -194,14 +178,14 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     }
 
     /// <summary>
-    /// Triggers light melee attack. Normal or instant kill animation
+    /// Triggers light melee attack. Normal or instant kill Animation
     /// depending on the condition.
     /// </summary>
     protected virtual void OnMeleeAttack()
     {
         if (movement.Walking == false)
         {
-            // Normal attack anim
+            // Normal attack Anim
             OnLightMeleeAttack(true);
             return;
         }
@@ -239,22 +223,22 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
                 // from doing instant kill while the enemy is behind the player
                 if (Vector3.Angle(dir, transform.forward) < 25)
                 {
-                    // Instant kill anim.
+                    // Instant kill Anim.
                     OnLightMeleeAttack(false);
                     return;
                 }
                 // Else
-                // Normal attack anim
+                // Normal attack Anim
                 OnLightMeleeAttack(true);
                 return;
             }
             // Else
-            // Normal attack anim
+            // Normal attack Anim
             OnLightMeleeAttack(true);
             return;
         }
         // Else
-        // Normal attack anim
+        // Normal attack Anim
         OnLightMeleeAttack(true);
     }
 
@@ -265,11 +249,11 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// Event registered on PlayerAnimations.
     /// Event registered on PlayerMovement.
     /// /// <summary>
-    /// Triggers light melee attack. Normal or instant kill animation
+    /// Triggers light melee attack. Normal or instant kill Animation
     /// depending on the condition.
     /// </summary>
     /// <param name="condition">If true, it triggers normal attacks, else
-    /// it triggers instant kill animation.</param>
+    /// it triggers instant kill Animation.</param>
     /// </summary>
     public event Action<bool> LightMeleeAttack;
 }
