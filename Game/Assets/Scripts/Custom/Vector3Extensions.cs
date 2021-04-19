@@ -37,7 +37,7 @@ public static class Vector3Extensions
     /// <returns>Returns true if this vector3 is in the desired position's
     /// range, else it returns false.</returns>
     public static bool Similiar(this Vector3 thisVector,
-        Vector3 desiredPosition, float compensation = 1)
+        Vector3 desiredPosition, float compensation = 0.01f)
     {
         Vector3 finalCompensation = 
             new Vector3(compensation, compensation, compensation);

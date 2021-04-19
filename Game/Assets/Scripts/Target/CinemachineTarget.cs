@@ -314,7 +314,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         YieldInstruction wffup = new WaitForFixedUpdate();
 
         while (currentTarget.transform.position.Similiar(
-            aimTowards.transform.position, 0.01f))
+            aimTowards.transform.position))
         {
             currentTarget.transform.position = 
                 Vector3.MoveTowards(

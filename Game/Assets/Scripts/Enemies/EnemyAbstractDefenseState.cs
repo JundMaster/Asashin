@@ -72,6 +72,7 @@ public abstract class EnemyAbstractDefenseState : EnemyAbstractStateWithVision
         base.OnExit();
         runningBack = false;
         anim.SetBool("RunningBack", runningBack);
+        Debug.Log(runningBack);
         agent.speed = runningSpeed;
     }
 
