@@ -225,7 +225,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
                     // Moves the current target towards the desired target
                     if (isLerpingTargetCoroutine == null)
-                        isLerpingTargetCoroutine = StartCoroutine(LerpingTargetToClosestTarget(aimTowards));
+                        isLerpingTargetCoroutine = StartCoroutine(
+                            LerpingTargetToClosestTarget(organizedEnemiesByDistance[0]));
 
                     // Switches camera
                     targetCamera.Priority = thirdPersonCamera.Priority + 3;
@@ -247,11 +248,11 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// </summary>
     public void SwitchTarget(Direction leftOrRight)
     {
-        Vector3 definitiveTarget = default;
+        Enemy definitiveTarget = default;
         float shortestDistance = Mathf.Infinity;
 
         FindAllEnemiesAroundPlayer();
-      
+
         for (int i = 0; i < allEnemies.Count; i++)
         {
             Vector3 direction = allEnemies[i].transform.position - targetCamera.transform.position;
@@ -270,8 +271,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                         {
                             shortestDistance = distanceFromTarget;
 
-                            definitiveTarget = 
-                                allEnemies[i].transform.position + targetYOffset;
+                            definitiveTarget = allEnemies[i];
+                                //allEnemies[i].transform.position + targetYOffset;
                         }
                     }
                 }
@@ -286,8 +287,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                         {
                             shortestDistance = distanceFromTarget;
 
-                            definitiveTarget = 
-                                allEnemies[i].transform.position + targetYOffset;
+                            definitiveTarget = allEnemies[i];
+                                //allEnemies[i].transform.position + targetYOffset;
                         }
                     }
                 }
@@ -300,7 +301,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             if (isLerpingTargetCoroutine == null)
                 isLerpingTargetCoroutine = 
                     StartCoroutine(LerpingTargetToClosestTarget(definitiveTarget));
-            Debug.Log("entrou");
         }
     }
 
@@ -309,24 +309,23 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// </summary>
     /// <param name="aimTowards"></param>
     /// <returns></returns>
-    private IEnumerator LerpingTargetToClosestTarget(Vector3 aimTowards)
+    private IEnumerator LerpingTargetToClosestTarget(Enemy aimTowards)
     {
         YieldInstruction wffup = new WaitForFixedUpdate();
-        Vector3 compensation = new Vector3(1, 1, 1);
 
-        while (currentTarget.transform.position.Similiar(aimTowards))
+        while (currentTarget.transform.position.Similiar(
+            aimTowards.transform.position, 0.01f))
         {
             currentTarget.transform.position = 
                 Vector3.MoveTowards(
                     currentTarget.transform.position, 
-                    aimTowards, 
-                    45f * Time.fixedUnscaledDeltaTime);
+                    aimTowards.transform.position + targetYOffset, 
+                    45 * Time.fixedUnscaledDeltaTime);
 
             yield return wffup;
         }
         FindCurrentTargetedEnemy();
         UpdateTargetCameraLookAt();
-
         isLerpingTargetCoroutine = null;
     }
 
@@ -454,7 +453,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                 if (isLerpingTargetCoroutine == null)
                     isLerpingTargetCoroutine = 
                         StartCoroutine(LerpingTargetToClosestTarget(
-                            organizedEnemiesByDistance[0].transform.position));
+                            organizedEnemiesByDistance[0]));
 
                 // Switches camera
                 targetCamera.Priority = thirdPersonCamera.Priority + 3;
