@@ -147,9 +147,12 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// </summary>
     private void FixedUpdate()
     {
-        if (FindCurrentTargetedEnemy() != null && isLerpingTargetCoroutine == null) 
-            currentTarget.position = 
+        if (FindCurrentTargetedEnemy() != null && isLerpingTargetCoroutine == null)
+        {
+            currentTarget.position =
                 FindCurrentTargetedEnemy().transform.position + targetYOffset;
+        }
+            
     }
 
     private void Update()
@@ -308,8 +311,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     private IEnumerator LerpingTargetToClosestTarget(Vector3 aimTowards)
     {
         YieldInstruction wffup = new WaitForFixedUpdate();
+        Vector3 compensation = new Vector3(1, 1, 1);
 
-        while(currentTarget.transform.position != aimTowards)
+        while (currentTarget.transform.position.Similiar(aimTowards))
         {
             currentTarget.transform.position = 
                 Vector3.MoveTowards(
@@ -321,6 +325,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         }
         FindCurrentTargetedEnemy();
         UpdateTargetCameraLookAt();
+
         isLerpingTargetCoroutine = null;
     }
 

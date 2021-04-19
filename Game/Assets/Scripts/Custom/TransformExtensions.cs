@@ -20,4 +20,26 @@ public static class TransformExtentions
         if (Vector3.Angle(dir, from.forward) < maximumAngle) return true;
         return false;
     }
+
+    /// <summary>
+    /// Checks if a transform can see another transform.
+    /// </summary>
+    /// <param name="from">From this transform.</param>
+    /// <param name="to">Final transform.</param>
+    /// <param name="layers">Layers to check.</param>
+    /// <returns>Returns true if source transform can see the final 
+    /// transform.</returns>
+    public static bool CanSee(this Transform from, Transform to, LayerMask layers)
+    {
+        Ray rayTo = new Ray(from.position, from.position.Direction(to.position));
+        float distance = Vector3.Distance(from.position, to.position);
+        if (Physics.Raycast(rayTo, out RaycastHit hit, distance, layers))
+        {
+            if (hit.collider.gameObject.layer == to.gameObject.layer)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
