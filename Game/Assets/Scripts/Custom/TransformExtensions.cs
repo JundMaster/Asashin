@@ -42,4 +42,15 @@ public static class TransformExtentions
         }
         return false;
     }
+
+    /// <summary>
+    /// Returns direction to some position.
+    /// </summary>
+    /// <param name="from">Initial transform position.</param>
+    /// <param name="to">Final transform position.</param>
+    /// <returns>Returns a normalized vector3 with direction.</returns>
+    public static Vector3 Direction(this Transform from, Transform to)
+    {
+        return (to.position - from.position).normalized;
+    }
 }

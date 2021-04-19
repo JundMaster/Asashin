@@ -229,28 +229,33 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             Transform[] organizedEnemiesByDistance =
                 allEnemies.OrderBy(i => (i.position - transform.position).magnitude).ToArray();
 
-            // If the player is facing the enemy's forward
-            // (player on blocks if he's basically facing
-            // the enemy)
-            // This means the player successfully blocked
+            Vector3 dir = transform.Direction(organizedEnemiesByDistance[0]);
+
+            // If the player is facing the enemy's forward, meaning it's
+            // looking towards him while he has is back turned
             if (Vector3.Dot(organizedEnemiesByDistance[0].forward, transform.forward) > 0f)
             {
-                // Instant kill anim.
-                OnLightMeleeAttack(false);
-                return;
-            }
-            else
-            {
+                // Only happens if the player is BEHIND the enemy, prevents
+                // from doing instant kill while the enemy is behind the player
+                if(Vector3.Angle(dir, transform.forward) < 25)
+                {
+                    // Instant kill anim.
+                    OnLightMeleeAttack(false);
+                    return;
+                }
+                // Else
                 // Normal attack anim
                 OnLightMeleeAttack(true);
                 return;
             }
-        }
-        else
-        {
+            // Else
             // Normal attack anim
             OnLightMeleeAttack(true);
+            return;
         }
+        // Else
+        // Normal attack anim
+        OnLightMeleeAttack(true);
     }
 
     protected virtual void OnLightMeleeAttack(bool condition) =>
