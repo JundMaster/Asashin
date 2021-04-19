@@ -56,8 +56,7 @@ public class VisionCone
         // Cone angles setup
         startingAngle = Quaternion.AngleAxis(-desiredConeAngle, Vector3.up);
         stepAngle = Quaternion.AngleAxis(
-            (desiredConeAngle + desiredConeAngle) /
-            vertices.Length,
+            (desiredConeAngle + desiredConeAngle) / vertices.Length,
             Vector3.up);
     }
 
@@ -73,7 +72,7 @@ public class VisionCone
         vertices[0] = Vector3.zero;
 
         for (var i = 0; i < vertices.Length; i++)
-        {
+        {       
             // If it hits something
             if (Physics.Raycast(currentPos, direction, out RaycastHit hit,
                 coneRange, collisionLayers))

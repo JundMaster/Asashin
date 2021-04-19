@@ -300,6 +300,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             if (isLerpingTargetCoroutine == null)
                 isLerpingTargetCoroutine = 
                     StartCoroutine(LerpingTargetToClosestTarget(definitiveTarget));
+            Debug.Log("entrou");
         }
     }
 

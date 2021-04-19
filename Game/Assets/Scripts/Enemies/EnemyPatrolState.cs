@@ -11,7 +11,7 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
     [Range(0.01f,2f)][SerializeField] private float searchCheckDelay;
 
     [Header("Enemy cone render variables")]
-    [Range(0,255)][SerializeField] private byte amountOfVertices;
+    [Range(0, 255)][SerializeField] private byte amountOfVertices;
     [SerializeField] private Material coneMaterial;
     private VisionCone visionCone;
 
@@ -37,6 +37,9 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
         base.Start();
 
         // Vision cone setup
+        if (amountOfVertices > desiredConeAngle) 
+            amountOfVertices = desiredConeAngle;
+
         MeshFilter meshFilter = enemy.VisionCone.GetComponent<MeshFilter>();
         MeshRenderer meshRenderer = 
             enemy.VisionCone.GetComponent<MeshRenderer>();
@@ -100,7 +103,7 @@ public class EnemyPatrolState : EnemyAbstractStateWithVision
         // Calculates vision cone if the player isn't too far
         if (playerTarget != null)
         {
-            if (Vector3.Distance(myTarget.position, playerTarget.position) < 50)
+            if (Vector3.Distance(myTarget.position, playerTarget.position) < 75)
             {
                 if (!enemy.VisionCone.activeSelf) 
                     enemy.VisionCone.SetActive(true);
