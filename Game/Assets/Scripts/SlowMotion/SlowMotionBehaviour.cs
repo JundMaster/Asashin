@@ -27,6 +27,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     public bool Performing { get; private set; }
     private ChromaticAberration chromaticA;
     private LensDistortion lensDistor;
+    private ColorAdjustments colorAdj;
 
     // Particles from player's mesh
     [SerializeField] private OptionsScriptableObj options;
@@ -117,6 +118,9 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
             lensDistor.active = true;
             lensDistor.intensity.value = 0;
         }
+
+        if (postProcessing.profile.TryGet(out colorAdj))
+            colorAdj.saturation.value = 0;
             
         slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0.03f); // WaveSize
         slowMotionMaterial.SetFloat("Vector1_34F127BD", -0.2f); // WaveStrength
@@ -130,6 +134,8 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
                 chromaticA.intensity.value += Time.fixedUnscaledDeltaTime;
             if (lensDistor.intensity.value > -0.6f)
                 lensDistor.intensity.value -= Time.fixedUnscaledDeltaTime;
+            if (colorAdj.saturation.value > -100)
+                colorAdj.saturation.value -= Time.fixedUnscaledDeltaTime * 40;
 
             // This variable goes from 0 to 1, growing the wave until the
             // edge of the screen
@@ -160,9 +166,11 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
                 slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
 
                 if (chromaticA.intensity.value > 0)
-                    chromaticA.intensity.value -= 0.025f;
+                    chromaticA.intensity.value -= Time.fixedUnscaledDeltaTime * 10;
                 if (lensDistor.intensity.value < -0)
-                    lensDistor.intensity.value += 0.025f;
+                    lensDistor.intensity.value += Time.fixedUnscaledDeltaTime * 10;
+                if (colorAdj.saturation.value < 0)
+                    colorAdj.saturation.value += Time.fixedUnscaledDeltaTime * 200;
             }
 
             if (pauseSystem.PausedGame)
@@ -192,6 +200,8 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
             chromaticA.active = false;
         if (postProcessing.profile.TryGet(out lensDistor))
             lensDistor.active = false;
+        if (postProcessing.profile.TryGet(out colorAdj))
+            colorAdj.saturation.value = 0;
 
         slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0f); // WaveSize
         slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
