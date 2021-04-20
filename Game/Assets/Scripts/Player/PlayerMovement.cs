@@ -10,7 +10,7 @@ using UnityEngine.Rendering.Universal;
 public class PlayerMovement : MonoBehaviour, IAction
 {
     // Components
-    private CharacterController controller;
+    public CharacterController Controller { get; private set; }
     private PlayerInputCustom input;
     private Transform mainCamera;
     private SlowMotionBehaviour slowMotion;
@@ -21,7 +21,6 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerRoll roll;
     private PlayerBlock block;
     private PlayerWallHug wallHug;
-    private Animator anim;
     private CinemachineTarget cineTarget;
     private PlayerStats stats;
 
@@ -44,8 +43,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private IEnumerator stopHiddenCoroutine;
     private Volume postProcessing;
 
-    // Gravity
-    public Vector3 VerticalVelocity;
+    private Vector3 verticalVelocity;
 
     // Ground variables
     [SerializeField] private LayerMask groundLayer;
@@ -66,7 +64,7 @@ public class PlayerMovement : MonoBehaviour, IAction
 
     private void Awake()
     {
-        controller = GetComponent<CharacterController>();
+        Controller = GetComponent<CharacterController>();
         input = FindObjectOfType<PlayerInputCustom>();
         mainCamera = Camera.main.transform;
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
@@ -77,7 +75,6 @@ public class PlayerMovement : MonoBehaviour, IAction
         useItem = GetComponent<PlayerUseItem>();
         block = GetComponent<PlayerBlock>();
         wallHug = GetComponent<PlayerWallHug>();
-        anim = GetComponent<Animator>();
         cineTarget = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
         postProcessing =
@@ -130,17 +127,18 @@ public class PlayerMovement : MonoBehaviour, IAction
         // Gravity
         if (IsGrounded())
         {
-            VerticalVelocity.y = -0.5f;
+            verticalVelocity.y = -0.5f;
         }
 
-        VerticalVelocity.y += values.Gravity * Time.fixedUnscaledDeltaTime;
-        controller.Move(VerticalVelocity * Time.fixedUnscaledDeltaTime);
+        verticalVelocity.y += values.Gravity * Time.fixedUnscaledDeltaTime;
+        Controller.Move(verticalVelocity * Time.fixedUnscaledDeltaTime);
     }
 
     public void ComponentUpdate()
     {
         if (attack.Performing == false && useItem.Performing == false &&
-            wallHug.Performing == false && stopMovementAfterWallHug == false)
+            wallHug.Performing == false && stopMovementAfterWallHug == false &&
+            input.GetActionMap() == "Gameplay")
         {
             Direction = new Vector3(input.Movement.x, 0f, input.Movement.y);
         }
@@ -316,26 +314,26 @@ public class PlayerMovement : MonoBehaviour, IAction
     {
         if (Direction.magnitude > 0.01f && block.Performing == false &&
             roll.Performing == false && wallHug.Performing == false &&
-            stopMovementAfterWallHug == false)
+            stopMovementAfterWallHug == false && input.GetActionMap() == "Gameplay")
         {
-            // Moves controllers towards the moveDirection set on Rotation()
+            // Moves Controllers towards the moveDirection set on Rotation()
             if (Walking && Sprinting == false)
             {
-                controller.Move(
+                Controller.Move(
                     moveDirection.normalized * values.WalkingSpeed * Time.fixedUnscaledDeltaTime);
 
                 MovementSpeed = values.WalkingSpeed;
             }
             else if (Walking == false && Sprinting)
             {
-                controller.Move(
+                Controller.Move(
                     moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
 
                 MovementSpeed = values.SprintSpeed;
             }
             else
             {
-                controller.Move(
+                Controller.Move(
                     moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
 
                 MovementSpeed = values.Speed;

@@ -62,6 +62,8 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     public void SwitchActionMapToDisable() =>
         controls.SwitchCurrentActionMap("DisableControls");
 
+    public string GetActionMap() => controls.currentActionMap.name;
+
     /// <summary>
     /// Disables or enables input module
     /// </summary>
