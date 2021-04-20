@@ -9,16 +9,7 @@ public class HealthFlaskPickable : Pickable
     /// <param name="playerStats">Player stats variable.</param>
     public override void Execute(PlayerStats playerStats)
     {
-        int quantity = 0;
-        switch (TypeOfDrop)
-        {
-            case TypeOfDropEnum.Treasure:
-                quantity = rand.Next(2, 4); // between 2,3
-                break;
-            case TypeOfDropEnum.Lootbox:
-                quantity = rand.Next(1, 3); // between 1,2
-                break;
-        }
+        base.Execute(playerStats);
         playerStats.HealthFlasks += quantity;
     }
 }

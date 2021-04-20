@@ -8,9 +8,4 @@ public interface IPickable
     /// </summary>
     /// <param name="playerStats">PlayerStats variable.</param>
     void Execute(PlayerStats playerStats);
-
-    /// <summary>
-    /// What dropped this item.
-    /// </summary>
-    TypeOfDropEnum TypeOfDrop { get; }
 }

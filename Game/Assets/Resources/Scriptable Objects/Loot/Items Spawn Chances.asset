@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4415bfa3bd9f39249bf993353e429e4f, type: 3}
+  m_Name: Items Spawn Chances
+  m_EditorClassIdentifier: 
+  enemyLoot:
+  - Prefab: {fileID: 772889320561755001, guid: 4405bc54c6b9eeb4fa449ebb8ac171a0, type: 3}
+    Quantity:
+      x: 1
+      y: 6
+  - Prefab: {fileID: 3720341476399585580, guid: 41cd94c97e850f848a224e6c451653e2, type: 3}
+    Quantity:
+      x: 1
+      y: 1
+  - Prefab: {fileID: 5829304964158241986, guid: 449e78d93384fd84ba0f0320d6e1a04f, type: 3}
+    Quantity:
+      x: 1
+      y: 1
+  enemyFirstItemSpawnChance: 90
+  enemyNextItemsSpawningChance: 20
+  treasureLoot:
+  - Prefab: {fileID: 772889320561755001, guid: 4405bc54c6b9eeb4fa449ebb8ac171a0, type: 3}
+    Quantity:
+      x: 5
+      y: 11
+  - Prefab: {fileID: 3720341476399585580, guid: 41cd94c97e850f848a224e6c451653e2, type: 3}
+    Quantity:
+      x: 3
+      y: 7
+  - Prefab: {fileID: 3370334648341255860, guid: f3b233fc1f43765468bf9370d5bb47f4, type: 3}
+    Quantity:
+      x: 1
+      y: 1
+  - Prefab: {fileID: 3046560142532366806, guid: f04b4747e62d23840bc7a6555e25184e, type: 3}
+    Quantity:
+      x: 2
+      y: 4
+  - Prefab: {fileID: 5829304964158241986, guid: 449e78d93384fd84ba0f0320d6e1a04f, type: 3}
+    Quantity:
+      x: 1
+      y: 4
+  treasureFirstItemSpawnChance: 100
+  treasureNextItemsSpawningChance: 70
+  woodenBoxLoot:
+  - Prefab: {fileID: 772889320561755001, guid: 4405bc54c6b9eeb4fa449ebb8ac171a0, type: 3}
+    Quantity:
+      x: 3
+      y: 7
+  - Prefab: {fileID: 3720341476399585580, guid: 41cd94c97e850f848a224e6c451653e2, type: 3}
+    Quantity:
+      x: 1
+      y: 3
+  - Prefab: {fileID: 3046560142532366806, guid: f04b4747e62d23840bc7a6555e25184e, type: 3}
+    Quantity:
+      x: 1
+      y: 3
+  - Prefab: {fileID: 5829304964158241986, guid: 449e78d93384fd84ba0f0320d6e1a04f, type: 3}
+    Quantity:
+      x: 1
+      y: 1
+  woodenBoxFirstItemSpawnChance: 100
+  woodenBoxNextItemsSpawningChance: 60

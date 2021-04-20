@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -13,7 +12,8 @@ public abstract class Pickable : MonoBehaviour, IPickable
     private LayerMask playerLayer;
     protected System.Random rand;
 
-    public TypeOfDropEnum TypeOfDrop { get; set; }
+    public CustomVector2 Quantity { get; set; }
+    protected int quantity;
 
     private void Awake()
     {
@@ -55,5 +55,9 @@ public abstract class Pickable : MonoBehaviour, IPickable
     /// What happens when the player picks this item.
     /// </summary>
     /// <param name="playerStats">Player stats variable.</param>
-    public abstract void Execute(PlayerStats playerStats);
+    public virtual void Execute(PlayerStats playerStats)
+    {
+        if (Quantity.x <= Quantity.y) quantity = Quantity.x;
+        else quantity = rand.Next(Quantity.x, Quantity.y + 1);
+    }
 }

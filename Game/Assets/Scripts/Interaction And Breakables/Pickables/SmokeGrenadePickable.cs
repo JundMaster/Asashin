@@ -9,19 +9,7 @@ public class SmokeGrenadePickable : Pickable
     /// <param name="playerStats">Player stats variable.</param>
     public override void Execute(PlayerStats playerStats)
     {
-        int quantity = 0;
-        switch (TypeOfDrop)
-        {
-            case TypeOfDropEnum.Treasure:
-                quantity = rand.Next(1, 4); // between 1,3
-                break;
-            case TypeOfDropEnum.Lootbox:
-                quantity = 1; // 1
-                break;
-            case TypeOfDropEnum.Enemy:
-                quantity = 1; // 1
-                break;
-        }
+        base.Execute(playerStats);
         playerStats.SmokeGrenades += quantity;
     }
 }
