@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private const byte PLAYERHIDDENLAYER = 15;
 
     // Rotation Variables
-    public float TurnSmooth { get; set; }
+    private float turnSmooth;
     private float smoothTimeRotation;
 
     private void Awake()
@@ -83,7 +83,7 @@ public class PlayerMovement : MonoBehaviour, IAction
 
     private void Start()
     {
-        TurnSmooth = values.TurnSmooth;
+        turnSmooth = values.TurnSmooth;
         Walking = false;
         Sprinting = false;
         Hidden = false;
@@ -219,9 +219,9 @@ public class PlayerMovement : MonoBehaviour, IAction
     {
         // Changes turn value on player and changes camera update mode
         if (condition == SlowMotionEnum.SlowMotion)
-            TurnSmooth = values.TurnSmoothInSlowMotion;
+            turnSmooth = values.TurnSmoothInSlowMotion;
         else 
-            TurnSmooth = values.TurnSmooth;
+            turnSmooth = values.TurnSmooth;
     }
 
     /// <summary>
@@ -370,7 +370,7 @@ public class PlayerMovement : MonoBehaviour, IAction
                 transform.eulerAngles.y, 
                 targetAngle, 
                 ref smoothTimeRotation, 
-                TurnSmooth);
+                turnSmooth);
 
             // Rotates to that angle
             transform.rotation = Quaternion.Euler(0f, angle, 0f);

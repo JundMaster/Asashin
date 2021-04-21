@@ -21,6 +21,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private PlayerInteract interact;
     private PlayerWallHug wallHug;
     private PlayerMovement movement;
+    private SlowMotionBehaviour slowMotion;
+    private PlayerValuesScriptableObj values;
 
     // Weapon
     [SerializeField] private SphereCollider sword;
@@ -38,6 +40,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     // Rotation
     private float smoothTimeRotation;
+    private float turnSmooth;
 
     private void Awake()
     {
@@ -51,6 +54,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         interact = GetComponent<PlayerInteract>();
         wallHug = GetComponent<PlayerWallHug>();
         movement = GetComponent<PlayerMovement>();
+        slowMotion = FindObjectOfType<SlowMotionBehaviour>();
+        values = GetComponent<Player>().Values;
     }
 
     private void Start()
@@ -62,11 +67,13 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private void OnEnable()
     {
         input.MeleeLightAttack += MeleeLightAttack;
+        slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
     }
 
     private void OnDisable()
     {
         input.MeleeLightAttack -= MeleeLightAttack;
+        slowMotion.SlowMotionEvent -= ChangeTurnSmoothValue;
     }
 
     public void ComponentUpdate()
@@ -76,7 +83,31 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     public void ComponentFixedUpdate()
     {
-        
+        if (Performing && target.Targeting == false)
+        {
+            // Rotates towards player's pressing direction
+            Vector3 movement = new Vector3(input.Movement.x, 0, input.Movement.y);
+            float targetAngle = Mathf.Atan2(movement.x, movement.z) *
+                Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(
+                transform.eulerAngles.y,
+                targetAngle,
+                ref smoothTimeRotation,
+                turnSmooth);
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+        }
+    }
+
+    /// <summary>
+    /// Changes turn smooth value after slow motion.
+    /// </summary>
+    private void ChangeTurnSmoothValue(SlowMotionEnum condition)
+    {
+        // Changes turn value on player and changes camera update mode
+        if (condition == SlowMotionEnum.SlowMotion)
+            turnSmooth = values.TurnSmoothInSlowMotion;
+        else
+            turnSmooth = values.TurnSmooth;
     }
 
     /// <summary>
@@ -93,12 +124,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             if (target.Targeting)
             {
                 transform.RotateTo(target.CurrentTarget.position);
-            }
-            else
-            {
-                // Rotates towards player's pressing direction
-                Vector3 movement = new Vector3(input.Movement.x, 0, input.Movement.y);
-                transform.RotateTo(transform.position + transform.forward + movement);
             }
 
             OnMeleeAttack();
