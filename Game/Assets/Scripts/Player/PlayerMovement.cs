@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     // Movement Variables
     public Vector3 Direction { get; private set; }
     private Vector3 moveDirection;
-    public float MovementSpeed { get; private set; }
+    public float MovementSpeed { get; set; }
     private bool stopMovementAfterWallHug;
 
     // Layers

@@ -9,20 +9,28 @@ public class BossCutsceneControl : MonoBehaviour
     [SerializeField] private GameObject smokeParticles;
     [SerializeField] private Transform bossPosition;
     [SerializeField] private AudioClip bossMusic;
+    private GameObject spawnedBoss;
 
     [Header("Player stuff")]
     [SerializeField] private Transform playerFinalPosition;
     private CharacterController player;
 
+    [Header("Boss camera")]
+    [SerializeField] private CinemachineVirtualCamera bossFloorCamera;
+
     // Components
     private CinemachineBrain cineBrain;
+    private CinemachineTarget cinemachine;
     private PlayerInputCustom input;
+    private PlayerMovement playerMovement;
     private AudioSource musicSource;
 
     private void Awake()
     {
         cineBrain = Camera.main.GetComponent<CinemachineBrain>();
+        cinemachine = FindObjectOfType<CinemachineTarget>();
         input = FindObjectOfType<PlayerInputCustom>();
+        playerMovement = FindObjectOfType<PlayerMovement>();
         musicSource = FindObjectOfType<MusicReferences>().Music;
     }
 
@@ -36,11 +44,13 @@ public class BossCutsceneControl : MonoBehaviour
 
         while(player.transform.position.Similiar(playerFinalPosition.position, 0.1f) == false)
         {
+            playerMovement.MovementSpeed = 4f;
             Vector3 dir = player.transform.Direction(playerFinalPosition); 
-            player.Move(dir * Time.fixedDeltaTime);
+            player.Move((playerMovement.MovementSpeed * 0.75f) * dir * Time.fixedDeltaTime);
             player.transform.RotateTo(bossPosition.position);
             yield return null;          
         }
+        playerMovement.MovementSpeed = 0;
 
         float currentVolume = musicSource.volume * 1.5f;
         YieldInstruction wffu = new WaitForFixedUpdate();
@@ -76,6 +86,14 @@ public class BossCutsceneControl : MonoBehaviour
     public void SpawnBoss()
     {
         Instantiate(smokeParticles, bossPosition.position, Quaternion.identity);
-        Instantiate(boss, bossPosition.position, Quaternion.Euler(0, 90, 0));
+        spawnedBoss = 
+            Instantiate(boss, bossPosition.position, Quaternion.Euler(0, 90, 0));
+    }
+
+    public void EndCutscene()
+    {
+        bossFloorCamera.Priority = -1000;
+        cinemachine.UpdateThirdPersonCameraPosition(
+            spawnedBoss.transform.position + new Vector3(0, 0.5f, 0), 1.5f);
     }
 }

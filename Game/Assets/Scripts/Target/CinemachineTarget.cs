@@ -198,7 +198,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// when the player presses the assigned key. Else it cancels the current
     /// target 
     /// </summary>
-    private void HandleTarget()
+    public void HandleTarget()
     {
         if (mainCameraBrain.IsBlending == false && 
             playerWallHug.Performing == false)
@@ -272,7 +272,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                             shortestDistance = distanceFromTarget;
 
                             definitiveTarget = allEnemies[i];
-                                //allEnemies[i].transform.position + targetYOffset;
                         }
                     }
                 }
@@ -288,7 +287,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                             shortestDistance = distanceFromTarget;
 
                             definitiveTarget = allEnemies[i];
-                                //allEnemies[i].transform.position + targetYOffset;
                         }
                     }
                 }
@@ -352,6 +350,27 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Starts coroutine to update third person camera to player's back.
+    /// </summary>
+    /// <param name="positionToUpdateTo">Position to update camera to.</param>
+    /// <param name="transitionCamSecs">Seconds to wait for transition.</param>
+    public void UpdateThirdPersonCameraPosition(Vector3 positionToUpdateTo, float transitionCamSecs) =>
+        StartCoroutine(UpdateThirdPersonCameraPositionCoroutine(positionToUpdateTo, transitionCamSecs));
+
+    /// <summary>
+    /// Updates third person camera to player's back.
+    /// </summary>
+    /// <param name="positionToUpdateTo">Position to update camera to.</param>
+    /// <returns></returns>
+    private IEnumerator UpdateThirdPersonCameraPositionCoroutine(Vector3 positionToUpdateTo, float transitionCamSecs)
+    {
+        CurrentTarget.position = positionToUpdateTo;
+        targetCamera.Priority = thirdPersonCamera.Priority + 3;
+        yield return new WaitForSeconds(transitionCamSecs);
+        targetCamera.Priority = thirdPersonCamera.Priority - 3;
     }
 
     /// <summary>
