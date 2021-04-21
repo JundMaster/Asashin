@@ -12543,7 +12543,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55dee511360707b45a20c2364974d882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VerticalVelocity: {x: 0, y: 0, z: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -12690,33 +12689,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f3f381561e83249a3b3ee078d245d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClips:
-  - {fileID: 8300000, guid: bb9f43fa5b82ccf4da86a6ec5202addb, type: 3}
-  - {fileID: 8300000, guid: a3da7f631cb843042bcfd2be2f63b877, type: 3}
-  - {fileID: 8300000, guid: 637e85ac487067f4e99c66cfd823be40, type: 3}
-  - {fileID: 8300000, guid: d1286e70cd534334c89a2d230d221ae6, type: 3}
-  - {fileID: 8300000, guid: 290366e0cffe7ef45a8d27a6e7620d34, type: 3}
-  - {fileID: 8300000, guid: 71a032f8e975bd54192970ecff58f236, type: 3}
-  - {fileID: 8300000, guid: 0a6b1bf00335ce04494bc1a54b7e45ff, type: 3}
-  - {fileID: 8300000, guid: 99b810d43b0c4024d942e0d2f126ecfa, type: 3}
-  - {fileID: 8300000, guid: 9726e229928e1a647b4a7ef1a2d9fd1c, type: 3}
-  - {fileID: 8300000, guid: 196ae5fe98514b247ae8e206abe61213, type: 3}
-  - {fileID: 8300000, guid: bae2af6e94c9c7641b9fafdb67190501, type: 3}
-  - {fileID: 8300000, guid: 90fa9cbc2a5f9fc4abac75c5dbb8de43, type: 3}
-  - {fileID: 8300000, guid: 910c9e83bb53eeb4787c5a865515d16e, type: 3}
-  - {fileID: 8300000, guid: d9ebfdc834c6dd143bbe48c4797ff816, type: 3}
-  - {fileID: 8300000, guid: 3a73d96485fe3924982bb9b37d4d97b9, type: 3}
-  - {fileID: 8300000, guid: 31086bcb0f2cab846b3a59705ac21d76, type: 3}
-  - {fileID: 8300000, guid: 4e7080cb7746fdb4e95d3c653e8987fb, type: 3}
-  - {fileID: 8300000, guid: 224c687088a7b6248b98c244c44fe74a, type: 3}
-  - {fileID: 8300000, guid: eb2e988972a0e414eb1a5ac1daf28c6b, type: 3}
-  - {fileID: 8300000, guid: 618bf30c114ee8d40808a7c19881b8a9, type: 3}
-  - {fileID: 8300000, guid: fa920070cf45cf64c8152564325a8320, type: 3}
-  - {fileID: 8300000, guid: dc5b83aba6cf6314aa82f67bb76be429, type: 3}
-  - {fileID: 8300000, guid: e02f06ad250f3d64c88ec0cf77e29d63, type: 3}
-  - {fileID: 8300000, guid: 9440805f92cd0404c94d3a82b57903a3, type: 3}
-  - {fileID: 8300000, guid: 1e657ae34d2cde746a04bb1452a4b2cb, type: 3}
-  - {fileID: 8300000, guid: 535f68b7f9df22e4e91e76cabb5ecdb7, type: 3}
+  runningStep: {fileID: 11400000, guid: 7bb95a1ccbdb73a49b5f6a0c581aaf32, type: 2}
+  walkingStep: {fileID: 11400000, guid: 87a2ae137afa852489e47239c1eab0eb, type: 2}
+  walkingStepGrass: {fileID: 11400000, guid: 5e08c4e006146c04296019ba949dc6ac, type: 2}
+  thinking: {fileID: 11400000, guid: 8a19a9a839550164a949cddf0e5fb4d0, type: 2}
+  swordSlash: {fileID: 11400000, guid: 0d7fcc32a62ed9147b1022bb3e23a16a, type: 2}
+  voiceOnAttack: {fileID: 11400000, guid: 67a0330f6d8b73f47901adef98fd8bd4, type: 2}
+  laugh: {fileID: 11400000, guid: d29ac8b65fd2f09488c27b16e109b35e, type: 2}
+  blockReflect: {fileID: 11400000, guid: a621fbf29e314b74b8eadd3e75fbfa69, type: 2}
 --- !u!114 &48189607121074554
 MonoBehaviour:
   m_ObjectHideFlags: 0

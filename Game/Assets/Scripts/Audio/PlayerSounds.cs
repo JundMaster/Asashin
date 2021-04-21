@@ -5,6 +5,15 @@
 /// </summary>
 public class PlayerSounds : AbstractSoundBase
 {
+    [SerializeField] private AbstractSoundScriptableObject runningStep;
+    [SerializeField] private AbstractSoundScriptableObject walkingStep;
+    [SerializeField] private AbstractSoundScriptableObject walkingStepGrass;
+    [SerializeField] private AbstractSoundScriptableObject thinking;
+    [SerializeField] private AbstractSoundScriptableObject swordSlash;
+    [SerializeField] private AbstractSoundScriptableObject voiceOnAttack;
+    [SerializeField] private AbstractSoundScriptableObject laugh;
+    [SerializeField] private AbstractSoundScriptableObject blockReflect;
+
     private PlayerMovement movement;
 
     private void Start() => movement = GetComponent<PlayerMovement>();
@@ -12,51 +21,36 @@ public class PlayerSounds : AbstractSoundBase
     /// <summary>
     /// Called on animation events.
     /// </summary>
-    /// <param name="sound"></param>
+    /// <param name="sound">Sound to play.</param>
     public override void PlaySound(Sound sound)
     {
-        float probabilty = Random.Range(0f, 100f);
-        int randomNum;
-
         switch(sound)
         {
-            case Sound.SwordSlash:
-                randomNum = Random.Range(0, 5);
-                audioSource.PlayOneShot(audioClips[randomNum], 0.55f);
-                break;
-            case Sound.VoiceAttack:
-                randomNum = Random.Range(5, 8);
-                if (probabilty < 25) audioSource.PlayOneShot(audioClips[randomNum], 0.5f);
-                break;
             case Sound.RunningStep:
-                randomNum = Random.Range(8, 11);
-                audioSource.PlayOneShot(audioClips[randomNum], 0.9f);
+                runningStep.PlaySound(audioSource);
                 break;
             case Sound.SneakingStep:
                 if (movement.Hidden)
                 {
-                    // Plays "thinking sound" (low chance)
-                    if (probabilty < 2f && audioSource.isPlaying == false) 
-                        audioSource.PlayOneShot(audioClips[22], 0.3f);
-                    randomNum = Random.Range(14, 17);
-                    audioSource.PlayOneShot(audioClips[randomNum]);
+                    thinking.PlaySound(audioSource);
+                    walkingStepGrass.PlaySound(audioSource);
                 }
                 else
                 {
-                    randomNum = Random.Range(11, 13);
-                    audioSource.PlayOneShot(audioClips[randomNum], 0.7f);
+                    walkingStep.PlaySound(audioSource);
                 }
+                break;
+            case Sound.SwordSlash:
+                swordSlash.PlaySound(audioSource);
+                break;
+            case Sound.VoiceAttack:
+                voiceOnAttack.PlaySound(audioSource);
                 break;
             case Sound.VoiceLaugh:
-                if (probabilty < 20)
-                {
-                    randomNum = Random.Range(20, 22);
-                    audioSource.PlayOneShot(audioClips[randomNum], 0.6f);
-                }
+                laugh.PlaySound(audioSource);
                 break;
             case Sound.BlockReflect:
-                randomNum = Random.Range(23, 25);
-                audioSource.PlayOneShot(audioClips[randomNum], 1f);
+                blockReflect.PlaySound(audioSource);
                 break;
         }
     }

@@ -25,6 +25,7 @@ public class EnemyDeathState : EnemyAbstractState
     public override void OnEnter()
     {
         enemy.gameObject.layer = 0; // Changes to default layer
+        enemy.StopAllCoroutines();
         enemy.StartCoroutine(Die());
     }
 

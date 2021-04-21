@@ -5,32 +5,30 @@
 /// </summary>
 public class EnemySounds : AbstractSoundBase
 {
+    [SerializeField] private AbstractSoundScriptableObject swordSlash;
+    [SerializeField] private AbstractSoundScriptableObject step;
+    [SerializeField] private AbstractSoundScriptableObject laugh;
+    [SerializeField] private AbstractSoundScriptableObject scream;
+
     /// <summary>
     /// Called on animation events.
     /// </summary>
-    /// <param name="sound"></param>
+    /// <param name="sound">Sound to play.</param>
     public override void PlaySound(Sound sound)
     {
-        float probabilty = Random.Range(0f, 100f);
-        int randomNum;
-
         switch (sound)
         {
             case Sound.SwordSlash:
-                randomNum = Random.Range(0, 5);
-                audioSource.PlayOneShot(audioClips[randomNum]);
+                swordSlash.PlaySound(audioSource);
                 break;
             case Sound.RunningStep:
-                randomNum = Random.Range(5, 8);
-                audioSource.PlayOneShot(audioClips[randomNum]);
+                step.PlaySound(audioSource);
                 break;
             case Sound.VoiceLaugh:
-                randomNum = Random.Range(8, 10);
-                audioSource.PlayOneShot(audioClips[randomNum]);
+                laugh.PlaySound(audioSource);
                 break;
             case Sound.VoiceScream:
-                randomNum = Random.Range(10, 12);
-                audioSource.PlayOneShot(audioClips[randomNum], 0.4f);
+                scream.PlaySound(audioSource);
                 break;
         }
     }

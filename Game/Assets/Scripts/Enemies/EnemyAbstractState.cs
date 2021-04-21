@@ -114,6 +114,9 @@ public abstract class EnemyAbstractState : StateBase
         while (Time.time - timeEntered < timeToTravelAfterHit &&
             instantKill == false)
         {
+            // To be sure the coroutine doesn't run while the enemy is dying
+            if (instantKill) break;
+
             enemy.transform.RotateToSmoothly(playerTarget.position, 
                 ref smoothTimeRotationAfterBeingHit, turnSpeedAfterBeingHit);
 
