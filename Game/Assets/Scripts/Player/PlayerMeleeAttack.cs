@@ -83,7 +83,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     public void ComponentFixedUpdate()
     {
-        if (Performing && target.Targeting == false)
+        if (Performing && target.Targeting == false && input.Movement.magnitude > 0)
         {
             // Rotates towards player's pressing direction
             Vector3 movement = new Vector3(input.Movement.x, 0, input.Movement.y);
