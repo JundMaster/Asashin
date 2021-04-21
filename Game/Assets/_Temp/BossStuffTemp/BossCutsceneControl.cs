@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 using Cinemachine;
 using System.Collections;
+using UnityEngine.AI;
 
 public class BossCutsceneControl : MonoBehaviour
 {
     [Header("Boss stuff")]
     [SerializeField] private GameObject boss;
     [SerializeField] private GameObject smokeParticles;
-    [SerializeField] private Transform bossPosition;
+    [SerializeField] private GameObject bossPosition;
+    [SerializeField] private Transform finalBossPosition;
     [SerializeField] private AudioClip bossMusic;
     private GameObject spawnedBoss;
 
@@ -47,7 +49,7 @@ public class BossCutsceneControl : MonoBehaviour
             playerMovement.MovementSpeed = 4f;
             Vector3 dir = player.transform.Direction(playerFinalPosition); 
             player.Move((playerMovement.MovementSpeed * 0.75f) * dir * Time.fixedDeltaTime);
-            player.transform.RotateTo(bossPosition.position);
+            player.transform.RotateTo(bossPosition.transform.position);
             yield return null;          
         }
         playerMovement.MovementSpeed = 0;
@@ -85,15 +87,41 @@ public class BossCutsceneControl : MonoBehaviour
 
     public void SpawnBoss()
     {
-        Instantiate(smokeParticles, bossPosition.position, Quaternion.identity);
+        Instantiate(smokeParticles, bossPosition.transform.position, Quaternion.identity);
         spawnedBoss = 
-            Instantiate(boss, bossPosition.position, Quaternion.Euler(0, 90, 0));
+            Instantiate(boss, bossPosition.transform.position, Quaternion.Euler(0, 90, 0));
+    }
+
+    public void BossJump() => StartCoroutine(BossJumpCoroutine());
+    private IEnumerator BossJumpCoroutine()
+    {
+        YieldInstruction wffu = new WaitForFixedUpdate();
+
+        // Gets boss enemy
+        spawnedBoss.GetComponentInChildren<Animator>().SetTrigger("Jump");
+        NavMeshAgent agent = spawnedBoss.GetComponentInChildren<NavMeshAgent>();
+        agent.enabled = false;
+
+        // Gets boss position animator
+        Animator bossPos = bossPosition.GetComponentInParent<Animator>();
+        bossPos.SetTrigger("MoveBoss");
+
+        while (!bossPosition.transform.position.Similiar(finalBossPosition.position))
+        {
+            agent.transform.position = bossPosition.transform.position;
+            yield return wffu;
+        }
+
+        spawnedBoss.GetComponentInChildren<NavMeshAgent>().enabled = true;
+        spawnedBoss.GetComponentInChildren<Animator>().SetTrigger("Taunt");
+
+        // Updates camera to boss position
+        cinemachine.UpdateThirdPersonCameraPosition(
+            finalBossPosition.position + new Vector3(0, 0.5f, 0), 1.5f);
     }
 
     public void EndCutscene()
     {
         bossFloorCamera.Priority = -1000;
-        cinemachine.UpdateThirdPersonCameraPosition(
-            spawnedBoss.transform.position + new Vector3(0, 0.5f, 0), 1.5f);
     }
 }
