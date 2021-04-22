@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// </summary>
 public sealed class EnemyBoss : EnemyBase
 {
-    [Header("EnemyStates")]
+    [Header("Enemy Boss States")]
     [SerializeField] private EnemyAbstractState aggressiveStateOriginal;
     [SerializeField] private EnemyAbstractState rangedStateOriginal;
     [SerializeField] private EnemyAbstractState reinforcementsStateOriginal;

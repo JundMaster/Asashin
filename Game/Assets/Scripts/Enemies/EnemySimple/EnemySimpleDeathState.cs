@@ -5,7 +5,7 @@ using System.Collections;
 /// Scriptable object responsible for controlling enemy state after dying.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Common Death State")]
-public class EnemySimpleDeathState : EnemyAbstractState
+public class EnemySimpleDeathState : EnemySimpleAbstractState
 {
     [Header("Particles to spawn when the enemy dies")]
     [SerializeField] private GameObject smokeParticles;
@@ -24,7 +24,10 @@ public class EnemySimpleDeathState : EnemyAbstractState
     /// </summary>
     public override void OnEnter()
     {
+        // Variables to make sure the is no collision while the enemy is dying
+        enemy.GetComponent<CapsuleCollider>().enabled = false;
         enemy.gameObject.layer = 0; // Changes to default layer
+
         enemy.StopAllCoroutines();
         enemy.StartCoroutine(Die());
     }

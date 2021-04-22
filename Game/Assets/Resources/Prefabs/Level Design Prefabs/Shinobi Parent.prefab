@@ -134,7 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1009517688641600686}
   m_Layer: 0
-  m_Name: Boss Parent
+  m_Name: Shinobi Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,6 +164,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1009517688832808619}
+  - component: {fileID: 1945281622026676235}
   - component: {fileID: 1009517688832808621}
   - component: {fileID: 1009517688832808616}
   - component: {fileID: 1009517688832808622}
@@ -192,6 +193,28 @@ Transform:
   m_Father: {fileID: 1009517688641600686}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1945281622026676235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009517688832808618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1543499ac0430984eb775d0984ceb9bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  myTarget: {fileID: 1009517689644205632}
+  weaponCollider: {fileID: 1009517689244656410}
+  anim: {fileID: 6874766086849190488}
+  deathStateOriginal: {fileID: 11400000, guid: 496dcce0ead4ca742ab4a1e6e70dcfe8, type: 2}
+  aggressiveStateOriginal: {fileID: 11400000, guid: b1bd60b94ec228a4898db3c853edf30d, type: 2}
+  rangedStateOriginal: {fileID: 11400000, guid: 02da89aaf370beb4c9444484ed03991e, type: 2}
+  reinforcementsStateOriginal: {fileID: 11400000, guid: 50808d64dcd28734aba25909f1d4f0e8, type: 2}
 --- !u!114 &1009517688832808621
 MonoBehaviour:
   m_ObjectHideFlags: 0

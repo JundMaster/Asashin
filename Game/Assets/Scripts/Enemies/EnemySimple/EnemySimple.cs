@@ -8,17 +8,7 @@ using System;
 [RequireComponent(typeof(SpawnItemBehaviour))]
 public sealed class EnemySimple : EnemyBase
 {
-    [SerializeField] private float sizeOfAlert;
-
-    [Header("Enemy Patrol path (order is important)")]
-    [SerializeField] private EnemyPatrolPoint[] patrolPoints;
-    public EnemyPatrolPoint[] PatrolPoints => patrolPoints;
-
-    [Header("Cone Mesh")]
-    [SerializeField] private GameObject visionCone;
-    public GameObject VisionCone => visionCone;
-
-    [Header("EnemyStates")]
+    [Header("Simple enemy states")]
     [SerializeField] private EnemyAbstractState patrolStateOriginal;
     [SerializeField] private EnemyAbstractState defenseStateOriginal;
     [SerializeField] private EnemyAbstractState lostPlayerStateOriginal;
@@ -31,6 +21,17 @@ public sealed class EnemySimple : EnemyBase
     public IState LostPlayerState { get; private set; }
     public IState AggressiveState { get; private set; }
     public IState TemporaryBlindnessState { get; private set; }
+
+    [Header("Size to alert other enemies when the enemy finds the player")]
+    [SerializeField] private float sizeOfAlert;
+
+    [Header("Enemy patrol path (order is important)")]
+    [SerializeField] private EnemyPatrolPoint[] patrolPoints;
+    public EnemyPatrolPoint[] PatrolPoints => patrolPoints;
+
+    [Header("Cone mesh")]
+    [SerializeField] private GameObject visionCone;
+    public GameObject VisionCone => visionCone;
 
     public Vector3 PlayerLastKnownPosition { get; set; }
 

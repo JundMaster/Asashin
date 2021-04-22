@@ -5,7 +5,7 @@ using UnityEngine;
 /// Scriptable object for controlling enemy aggressive state.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Common Aggressive State")]
-public class EnemySimpleAggressiveState : EnemyAbstractState
+public class EnemySimpleAggressiveState : EnemySimpleAbstractState
 {
     [Header("Player check ranges")]
     [Range(1,30)][SerializeField] private float checkForPlayerRange;

@@ -11,12 +11,14 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(EnemyStats))]
 [RequireComponent(typeof(CapsuleCollider))]
+[RequireComponent(typeof(Rigidbody))]
+
 public abstract class EnemyBase : MonoBehaviour, IFindPlayer
 {
     // Fields and their getters
     [SerializeField] protected LayerMask myLayer;
 
-    [Header("Enemy Target")]
+    [Header("Enemy target")]
     [SerializeField] protected Transform myTarget;
     public Transform MyTarget => myTarget;
 
@@ -34,6 +36,7 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     protected StateMachine stateMachine;
 
     // Common state for every enemies
+    [Header("Enemy death state")]
     [SerializeField] private EnemyAbstractState deathStateOriginal;
     public IState DeathState { get; private set; }
 

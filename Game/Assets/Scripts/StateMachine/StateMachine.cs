@@ -47,7 +47,7 @@ public class StateMachine
         if (currentState == null)
         {
             currentState = states?.First();
-            currentState.OnEnter();
+            currentState?.OnEnter();
         }
 
         IState nextState = currentState?.FixedUpdate();
