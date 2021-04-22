@@ -60,7 +60,9 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     private void Start()
     {
-        foreach(ParticleSystem particle in particles)
+        turnSmooth = values.TurnSmooth;
+
+        foreach (ParticleSystem particle in particles)
             particle.Stop();
     }
 

@@ -61,6 +61,9 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
             case TypeOfDamage.PlayerBlockDamage:
                 OnNoDamageBlock();
                 break;
+            case TypeOfDamage.None:
+                OnOnlyUpdateUI();
+                break;
         }  
     }
 
@@ -79,6 +82,17 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
     /// Event registered on PlayerMovement.
     /// </summary>
     public event Action TookDamage;
+
+    /// <summary>
+    /// Method that calls OnlyUpdateUI event.
+    /// </summary>
+    protected virtual void OnOnlyUpdateUI() => OnlyUpdateUI?.Invoke();
+
+    /// <summary>
+    /// Event registered on UIHealthBar.
+    /// Only happens to update ui health bar.
+    /// </summary>
+    public event Action OnlyUpdateUI;
 
     protected virtual void OnMeleeDamageOnEnemy() =>
         MeleeDamageOnEnemy?.Invoke();

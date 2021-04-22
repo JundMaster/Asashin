@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class BossCutsceneControl : MonoBehaviour
 {
     [Header("Boss stuff")]
-    [SerializeField] private GameObject boss;
+    [SerializeField] private GameObject bossPrefab;
     [SerializeField] private GameObject smokeParticles;
     [SerializeField] private GameObject bossPosition;
     [SerializeField] private Transform finalBossPosition;
@@ -26,6 +26,7 @@ public class BossCutsceneControl : MonoBehaviour
     private PlayerInputCustom input;
     private PlayerMovement playerMovement;
     private AudioSource musicSource;
+    private Enemy boss;
 
     private void Awake()
     {
@@ -89,7 +90,7 @@ public class BossCutsceneControl : MonoBehaviour
     {
         Instantiate(smokeParticles, bossPosition.transform.position, Quaternion.identity);
         spawnedBoss = 
-            Instantiate(boss, bossPosition.transform.position, Quaternion.Euler(0, 90, 0));
+            Instantiate(bossPrefab, bossPosition.transform.position, Quaternion.Euler(0, 90, 0));
     }
 
     public void BossJump() => StartCoroutine(BossJumpCoroutine());
@@ -98,10 +99,12 @@ public class BossCutsceneControl : MonoBehaviour
         YieldInstruction wffu = new WaitForFixedUpdate();
 
         // Gets boss enemy
+        boss = spawnedBoss.GetComponentInChildren<Enemy>();
         Animator agentAnimator = spawnedBoss.GetComponentInChildren<Animator>();
         NavMeshAgent agent = spawnedBoss.GetComponentInChildren<NavMeshAgent>();
         agentAnimator.SetTrigger("Jump");
         agent.enabled = false;
+        boss.enabled = false;
 
         // Gets boss position animator
         Animator bossPos = bossPosition.GetComponentInParent<Animator>();
@@ -125,6 +128,7 @@ public class BossCutsceneControl : MonoBehaviour
 
     public void EndCutscene()
     {
+        boss.enabled = true;
         bossFloorCamera.Priority = -1000;
     }
 }

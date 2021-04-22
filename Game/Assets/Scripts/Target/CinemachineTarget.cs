@@ -169,8 +169,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             }
 
             // If currentTarget is not moving and the enemy can't see the player
-            if (isLerpingTargetCoroutine == null &&
-                FindCurrentTargetedEnemy().transform.CanSee(
+            if (isLerpingTargetCoroutine == null && 
+                FindCurrentTargetedEnemy()?.transform.CanSee(
                     playerTarget, collisionLayers) == false)
             {
                 CancelCurrentTarget();

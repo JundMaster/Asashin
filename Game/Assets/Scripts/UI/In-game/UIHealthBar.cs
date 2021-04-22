@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class UIHealthBar : MonoBehaviour, IFindPlayer
 {
     [SerializeField] private Image healthBarFill;
-    [SerializeField] private Image healthBarShadow;
 
     // Colors
     private readonly Color green = new Color(0.324f, 0.849f, 0.436f, 1);
@@ -26,6 +25,7 @@ public class UIHealthBar : MonoBehaviour, IFindPlayer
     {
         if (playerStats != null)
         {
+            playerStats.OnlyUpdateUI += UpdateHealthBar;
             playerStats.TookDamage += UpdateHealthBar;
             playerStats.HealedDamage += UpdateHealthBar;
             playerStats.Die += UpdateHealthBar;
@@ -36,6 +36,7 @@ public class UIHealthBar : MonoBehaviour, IFindPlayer
     {
         if (playerStats != null)
         {
+            playerStats.OnlyUpdateUI -= UpdateHealthBar;
             playerStats.TookDamage -= UpdateHealthBar;
             playerStats.HealedDamage -= UpdateHealthBar;
             playerStats.Die -= UpdateHealthBar;
@@ -75,6 +76,7 @@ public class UIHealthBar : MonoBehaviour, IFindPlayer
     public void FindPlayer()
     {
         playerStats = FindObjectOfType<PlayerStats>();
+        playerStats.OnlyUpdateUI += UpdateHealthBar;
         playerStats.TookDamage += UpdateHealthBar;
         playerStats.HealedDamage += UpdateHealthBar;
         playerStats.Die += UpdateHealthBar;
@@ -82,6 +84,7 @@ public class UIHealthBar : MonoBehaviour, IFindPlayer
 
     public void PlayerLost()
     {
+        playerStats.OnlyUpdateUI -= UpdateHealthBar;
         playerStats.TookDamage -= UpdateHealthBar;
         playerStats.HealedDamage -= UpdateHealthBar;
         playerStats.Die -= UpdateHealthBar;

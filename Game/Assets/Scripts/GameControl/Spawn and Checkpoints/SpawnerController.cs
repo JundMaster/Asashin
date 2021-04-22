@@ -56,7 +56,7 @@ public class SpawnerController : MonoBehaviour
             PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString());
         }
         else
-            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Respawn.ToString());  
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());  
         // DELETE ON FINAL VERSION //  ////////////////////
 
 
@@ -204,7 +204,7 @@ public class SpawnerController : MonoBehaviour
         // Updates player's hp to the current hp on the last checkpoint
         yield return waitForFixedUpdate;
         if (typeOfSpawn == SpawnTypeEnum.Loadgame)
-            playerStats.TakeDamage(100 - playerSavedStats.SavedHealth, TypeOfDamage.EnemyMelee);
+            playerStats.TakeDamage(100 - playerSavedStats.SavedHealth, TypeOfDamage.None);
     }
 
     /// <summary>
