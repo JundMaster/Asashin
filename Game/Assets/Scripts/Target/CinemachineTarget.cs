@@ -45,6 +45,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     // Enemies
     private Collider[] enemies;
     private List<Enemy> allEnemies;
+    [SerializeField] private LayerMask collisionLayers;
 
     // Layers
     [SerializeField] private LayerMask enemyLayer;
@@ -158,18 +159,21 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
     private void Update()
     {
-        // If distance becames too wide while targetting, it cancels the current target
         if (Targeting)
         {
+            // If distance becames too wide, it cancels the current target
             if (Vector3.Distance(player.transform.position, currentTarget.transform.position) >
                 findTargetSize)
             {
                 CancelCurrentTarget();
             }
 
-            if (isLerpingTargetCoroutine == null)
+            // If currentTarget is not moving and the enemy can't see the player
+            if (isLerpingTargetCoroutine == null &&
+                FindCurrentTargetedEnemy().transform.CanSee(
+                    playerTarget, collisionLayers) == false)
             {
-                Debug.Log("temp");
+                CancelCurrentTarget();
             }
         }
 
@@ -225,11 +229,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
                     currentTarget.gameObject.SetActive(true);
 
-                    // Sets current target to closest enemy
-                    Vector3 aimTowards =
-                        organizedEnemiesByDistance[0].transform.position +
-                        targetYOffset;
-
                     // Moves the current target towards the desired target
                     if (isLerpingTargetCoroutine == null)
                         isLerpingTargetCoroutine = StartCoroutine(
@@ -262,11 +261,11 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
         for (int i = 0; i < allEnemies.Count; i++)
         {
-            Vector3 direction = allEnemies[i].transform.position - targetCamera.transform.position;
+            Vector3 direction = targetCamera.transform.Direction(allEnemies[i].transform);
             float directionAngle = MathCustom.AngleDir(targetCamera.transform.forward, direction, transform.up);
 
             float distanceFromTarget =
-                Vector3.Distance(currentTarget.transform.position, allEnemies[i].transform.position);
+                Vector3.Distance(currentTarget.transform.position, allEnemies[i].transform.position + targetYOffset);
 
             if (leftOrRight == Direction.Left)
             {
@@ -323,7 +322,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         {
             currentTarget.transform.position = 
                 Vector3.MoveTowards(
-                    currentTarget.transform.position, 
+                    currentTarget.transform.position,
                     aimTowards.transform.position + targetYOffset, 
                     45 * Time.fixedUnscaledDeltaTime);
 
@@ -334,7 +333,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         isLerpingTargetCoroutine = null;
     }
 
-    [SerializeField] private LayerMask collisionLayers;
     /// <summary>
     /// Finds all enemies around the player.
     /// </summary>
