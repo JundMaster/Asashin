@@ -98,22 +98,25 @@ public class BossCutsceneControl : MonoBehaviour
         YieldInstruction wffu = new WaitForFixedUpdate();
 
         // Gets boss enemy
-        spawnedBoss.GetComponentInChildren<Animator>().SetTrigger("Jump");
+        Animator agentAnimator = spawnedBoss.GetComponentInChildren<Animator>();
         NavMeshAgent agent = spawnedBoss.GetComponentInChildren<NavMeshAgent>();
+        agentAnimator.SetTrigger("Jump");
         agent.enabled = false;
 
         // Gets boss position animator
         Animator bossPos = bossPosition.GetComponentInParent<Animator>();
+        yield return new WaitForSeconds(0.1f);
         bossPos.SetTrigger("MoveBoss");
 
+        // While boss position isn't similiar to final position updates boss's position
         while (!bossPosition.transform.position.Similiar(finalBossPosition.position))
         {
             agent.transform.position = bossPosition.transform.position;
             yield return wffu;
         }
 
-        spawnedBoss.GetComponentInChildren<NavMeshAgent>().enabled = true;
-        spawnedBoss.GetComponentInChildren<Animator>().SetTrigger("Taunt");
+        agent.enabled = true;
+        agentAnimator.SetTrigger("Taunt");
 
         // Updates camera to boss position
         cinemachine.UpdateThirdPersonCameraPosition(

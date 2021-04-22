@@ -262,7 +262,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         for (int i = 0; i < allEnemies.Count; i++)
         {
             Vector3 direction = targetCamera.transform.Direction(allEnemies[i].transform);
-            float directionAngle = MathCustom.AngleDir(targetCamera.transform.forward, direction, transform.up);
+            float directionAngle = MathCustom.AngleDirection(targetCamera.transform.forward, direction, transform.up);
 
             float distanceFromTarget =
                 Vector3.Distance(currentTarget.transform.position, allEnemies[i].transform.position + targetYOffset);

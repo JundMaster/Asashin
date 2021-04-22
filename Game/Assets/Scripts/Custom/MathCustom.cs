@@ -11,7 +11,8 @@ public static class MathCustom
     /// <returns>Returns -1 if direction is to the left. 
     /// Returns 0 if direction is in the middle.
     /// Returns 1 if direction is to the right.</returns>
-    public static float AngleDir(Vector3 forwardVector, Vector3 direction, Vector3 upVector)
+    public static float AngleDirection(Vector3 forwardVector, Vector3 direction, 
+        Vector3 upVector)
     {
         Vector3 crossProduct = Vector3.Cross(forwardVector, direction);
         float dir = Vector3.Dot(crossProduct, upVector);
