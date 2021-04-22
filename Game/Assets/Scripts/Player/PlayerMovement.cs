@@ -217,12 +217,17 @@ public class PlayerMovement : MonoBehaviour, IAction
     /// </summary>
     private void ChangeTurnSmoothValue(SlowMotionEnum condition)
     {
-        // Changes turn value on player and changes camera update mode
-        if (condition == SlowMotionEnum.SlowMotion)
-            turnSmooth = values.TurnSmoothInSlowMotion;
-        else 
-            turnSmooth = values.TurnSmooth;
+        switch (condition)
+        {
+            case SlowMotionEnum.SlowMotion:
+                turnSmooth = values.TurnSmoothInSlowMotion;
+                break;
+            case SlowMotionEnum.NormalTime:
+                turnSmooth = values.TurnSmooth;
+                break;
+        }
     }
+
 
     /// <summary>
     /// Starts and stops hidden coroutines for post processing.
@@ -323,7 +328,7 @@ public class PlayerMovement : MonoBehaviour, IAction
                     moveDirection.normalized * values.WalkingSpeed * Time.fixedUnscaledDeltaTime);
 
                 // Animator variable
-                MovementSpeed = Mathf.Lerp(MovementSpeed, values.WalkingSpeed, Time.fixedDeltaTime * 5);
+                MovementSpeed = Mathf.Lerp(MovementSpeed, values.WalkingSpeed, Time.fixedUnscaledDeltaTime * 5);
             }
             else if (Walking == false && Sprinting)
             {
@@ -331,7 +336,7 @@ public class PlayerMovement : MonoBehaviour, IAction
                     moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
 
                 // Animator variable
-                MovementSpeed = Mathf.Lerp(MovementSpeed, values.SprintSpeed, Time.fixedDeltaTime * 5);
+                MovementSpeed = Mathf.Lerp(MovementSpeed, values.SprintSpeed, Time.fixedUnscaledDeltaTime * 5);
             }
             else
             {
@@ -339,7 +344,7 @@ public class PlayerMovement : MonoBehaviour, IAction
                     moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
 
                 // Animator variable
-                MovementSpeed = Mathf.Lerp(MovementSpeed, values.Speed, Time.fixedDeltaTime * 5);
+                MovementSpeed = Mathf.Lerp(MovementSpeed, values.Speed, Time.fixedUnscaledDeltaTime * 5);
             }
         }
     }

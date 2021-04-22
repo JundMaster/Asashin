@@ -230,7 +230,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             // If enemy has an Enemy script
             for (int i = 0; i < enemies.Length; i++)
             {
-                if (enemies[i].gameObject.TryGetComponent<Enemy>(out Enemy allens))
+                if (enemies[i].gameObject.TryGetComponent(out EnemyBase allens))
                 {
                     allEnemies.Add(enemies[i].transform);
                 }

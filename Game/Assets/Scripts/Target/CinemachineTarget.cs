@@ -44,7 +44,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
     // Enemies
     private Collider[] enemies;
-    private List<Enemy> allEnemies;
+    private IList<EnemyBase> allEnemies;
     [SerializeField] private LayerMask collisionLayers;
 
     // Layers
@@ -76,7 +76,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         framingDampingXDefault = 25f;
         framingDampingX = framingDampingXDefault;
 
-        allEnemies = new List<Enemy>();
+        allEnemies = new List<EnemyBase>();
 
         // Disables current player's target
         currentTarget.gameObject.SetActive(false);
@@ -105,7 +105,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                 currentTarget.gameObject.activeSelf == false &&
                 mainCameraBrain.IsBlending == false)
             {
-                Enemy[] organizedEnemiesByDistance =
+                EnemyBase[] organizedEnemiesByDistance =
                             allEnemies.OrderBy(i =>
                             (i.transform.position - player.transform.position).magnitude).
                             Where(i => i.MyTarget.CanSee(playerTarget, collisionLayers))
@@ -221,7 +221,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                 if (allEnemies.Count > 0)
                 {
                     // Orders array with all VISIBLE enemies by distance
-                    Enemy[] organizedEnemiesByDistance =
+                    EnemyBase[] organizedEnemiesByDistance =
                         allEnemies.OrderBy(i =>
                         (i.transform.position - player.transform.position).magnitude).
                         Where(i => i.MyTarget.CanSee(playerTarget, collisionLayers))
@@ -254,7 +254,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// </summary>
     public void SwitchTarget(Direction leftOrRight)
     {
-        Enemy definitiveTarget = default;
+        EnemyBase definitiveTarget = default;
         float shortestDistance = Mathf.Infinity;
 
         FindAllEnemiesAroundPlayer();
@@ -313,7 +313,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// </summary>
     /// <param name="aimTowards"></param>
     /// <returns></returns>
-    private IEnumerator LerpingTargetToClosestTarget(Enemy aimTowards)
+    private IEnumerator LerpingTargetToClosestTarget(EnemyBase aimTowards)
     {
         YieldInstruction wffup = new WaitForFixedUpdate();
 
@@ -338,7 +338,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// </summary>
     private void FindAllEnemiesAroundPlayer()
     {
-        allEnemies = new List<Enemy>();
+        allEnemies = new List<EnemyBase>();
 
         // Finds all enemies around
         if (player != null)
@@ -349,7 +349,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             // If enemy has an Enemy script
             for (int i = 0; i < enemies.Length; i++)
             {
-                if (enemies[i].gameObject.TryGetComponent<Enemy>(out Enemy en))
+                if (enemies[i].gameObject.TryGetComponent(out EnemyBase en))
                 {
                     if (en.MyTarget.CanSee(playerTarget, collisionLayers))
                     {
@@ -396,7 +396,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         // If enemy has an Enemy script
         for (int i = 0; i < currentTargetPosition.Length; i++)
         {
-            if (currentTargetPosition[i].gameObject.TryGetComponent<Enemy>(out Enemy en))
+            if (currentTargetPosition[i].gameObject.TryGetComponent(out EnemyBase en))
             {
                 return currentTargetPosition[i].gameObject;
             }
@@ -469,7 +469,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             FindAllEnemiesAroundPlayer();
 
             // Orders array with all VISIBLE enemies by distance
-            Enemy[] organizedEnemiesByDistance =
+            EnemyBase[] organizedEnemiesByDistance =
                 allEnemies.OrderBy(i =>
                 (i.transform.position - player.transform.position).magnitude).
                 Where(i => i.MyTarget.CanSee(playerTarget, collisionLayers)).

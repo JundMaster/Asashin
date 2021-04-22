@@ -22,7 +22,7 @@ public class SmokeGrenade : ItemBehaviour
         foreach (Collider col in collisions)
         {
             // Only applies if it's an an enemy
-            if (col.gameObject.TryGetComponent(out Enemy en))
+            if (col.gameObject.TryGetComponent(out EnemySimple en))
             {
                 // Blinds enemies
                 en.BlindEnemy();

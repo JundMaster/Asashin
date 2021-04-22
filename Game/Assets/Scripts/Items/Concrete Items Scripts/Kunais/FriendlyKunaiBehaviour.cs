@@ -34,7 +34,7 @@ public class FriendlyKunaiBehaviour : KunaiBehaviour
             // If enemy has an Enemy script
             for (int i = 0; i < currentTargetPosition.Length; i++)
             {
-                if (currentTargetPosition[i].gameObject.TryGetComponent<Enemy>(out Enemy en))
+                if (currentTargetPosition[i].gameObject.TryGetComponent(out EnemyBase en))
                 {
                     // Sets kunai target to enemy MyTarget
                     KunaiCurrentTarget = en.MyTarget;

@@ -29,7 +29,7 @@ public class FirebombKunaiBehaviour : FriendlyKunaiBehaviour
             // If it's an enemy, the kundai does damage = to firebombKunaiDamage
             // Only does damage if it hits an enemy
             if (col.gameObject.TryGetComponent(out IDamageable body) &&
-                col.gameObject.TryGetComponent(out Enemy en))
+                col.gameObject.TryGetComponent(out EnemyBase en))
             {
                 body.TakeDamage(playerStats.FirebombKunaiDamage, TypeOfDamage.PlayerRanged);
             }

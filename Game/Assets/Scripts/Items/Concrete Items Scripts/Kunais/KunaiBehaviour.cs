@@ -8,7 +8,7 @@ public abstract class KunaiBehaviour : MonoBehaviour, IKunaiBehaviour
     /// <summary>
     /// Enemy parent.
     /// </summary>
-    public Enemy ParentEnemy { get; set; }
+    public EnemyBase ParentEnemy { get; set; }
 
     /// <summary>
     /// Enemy kunai.

@@ -26,7 +26,7 @@ public class BossCutsceneControl : MonoBehaviour
     private PlayerInputCustom input;
     private PlayerMovement playerMovement;
     private AudioSource musicSource;
-    private Enemy boss;
+    private EnemyBase boss;
 
     private void Awake()
     {
@@ -99,7 +99,7 @@ public class BossCutsceneControl : MonoBehaviour
         YieldInstruction wffu = new WaitForFixedUpdate();
 
         // Gets boss enemy
-        boss = spawnedBoss.GetComponentInChildren<Enemy>();
+        boss = spawnedBoss.GetComponentInChildren<EnemyBase>();
         Animator agentAnimator = spawnedBoss.GetComponentInChildren<Animator>();
         NavMeshAgent agent = spawnedBoss.GetComponentInChildren<NavMeshAgent>();
         agentAnimator.SetTrigger("Jump");

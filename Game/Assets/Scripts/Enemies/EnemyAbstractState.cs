@@ -16,7 +16,7 @@ public abstract class EnemyAbstractState : StateBase
     // Movement
     [Range(0.1f, 5f)] [SerializeField] protected float walkingSpeed;
     [Range(0.1f, 5f)] [SerializeField] protected float runningSpeed;
-    protected Enemy enemy;
+    protected EnemySimple enemy;
     protected EnemyStats stats;
     protected Transform myTarget;
     protected NavMeshAgent agent;
@@ -32,7 +32,7 @@ public abstract class EnemyAbstractState : StateBase
     /// <param name="obj">Parent object of this state.</param>
     public override void Initialize(object obj)
     {
-        enemy = obj as Enemy;
+        enemy = obj as EnemySimple;
         stats = enemy.GetComponent<EnemyStats>();
         myTarget = enemy.MyTarget;
         playerTarget = enemy.PlayerTarget;
