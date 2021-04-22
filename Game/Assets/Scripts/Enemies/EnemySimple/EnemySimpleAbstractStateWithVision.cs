@@ -4,7 +4,7 @@
 /// Abstract Scriptable object responsible for controlling enemy states with
 /// vision.
 /// </summary>
-public abstract class EnemyAbstractStateWithVision : EnemyAbstractState
+public abstract class EnemySimpleAbstractStateWithVision : EnemyAbstractState
 {
     // Vision
     [Header("Vision Cone Attributes")]

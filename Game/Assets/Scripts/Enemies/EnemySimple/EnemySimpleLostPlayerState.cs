@@ -2,10 +2,11 @@
 using System.Collections;
 
 /// <summary>
-/// Scriptable object responsible for controlling enemy state after losing the player.
+/// Scriptable object responsible for controlling enemy state after losing the 
+/// player.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Common Lost Player State")]
-public class EnemyLostPlayerState : EnemyAbstractStateWithVision
+public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision
 {
     [Header("Time the enemy will spend looking for player")]
     [Range(0.1f,15)][SerializeField] private float timeToLookForPlayer;

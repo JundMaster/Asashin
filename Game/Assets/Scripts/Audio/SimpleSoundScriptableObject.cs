@@ -4,7 +4,7 @@
 /// Scriptable object responsible for playing a random sound from a list.
 /// </summary>
 [CreateAssetMenu(fileName = "Simple sound")]
-public class SimpleSound : AbstractSoundScriptableObject
+public class SimpleSoundScriptableObject : AbstractSoundScriptableObject
 {
     [Range(0f, 1f)][SerializeField] private float volume;
     [Range(0f, 1f)][SerializeField] private float pitch;

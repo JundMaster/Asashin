@@ -3,7 +3,8 @@
 /// <summary>
 /// Abstract scriptable object base class for defense states.
 /// </summary>
-public abstract class EnemyAbstractDefenseState : EnemyAbstractStateWithVision
+public abstract class EnemySimpleAbstractDefenseState : 
+    EnemySimpleAbstractStateWithVision
 {
     [Header("Rotation speed after reaching destination (less means faster)")]
     [Range(0.1f, 1f)] [SerializeField] protected float turnSpeed;

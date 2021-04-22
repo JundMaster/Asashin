@@ -5,7 +5,7 @@ using System.Collections;
 /// Scriptable object responsible for controlling enemy patrol state.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Common Patrol State")]
-public class EnemyPatrolState : EnemyAbstractStateWithVision
+public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
 {
     [Header("Checks if player is in cone range every X seconds")]
     [Range(0.01f,2f)][SerializeField] private float searchCheckDelay;

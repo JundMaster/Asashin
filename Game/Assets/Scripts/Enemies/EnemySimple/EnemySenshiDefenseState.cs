@@ -5,7 +5,7 @@ using UnityEngine;
 /// Scriptable object responsible for controlling senshi movement state.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Senshi Defense State")]
-public class EnemySenshiDefenseState : EnemyAbstractDefenseState
+public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
 {
     private const byte KUNAILAYER = 15;
 

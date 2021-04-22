@@ -2,10 +2,11 @@
 
 /// <summary>
 /// Scriptable object responsible for playing a random sound from a list with
-/// a probability.
+/// a determined probability.
 /// </summary>
 [CreateAssetMenu(fileName = "Simple sound with probability")]
-public class SimpleSoundWithProbability : AbstractSoundScriptableObject
+public class SimpleSoundWithProbabilityScriptableObject : 
+    AbstractSoundScriptableObject
 {
     [Range(0f, 1f)] [SerializeField] private float volume;
     [Range(0f, 1f)] [SerializeField] private float pitch;

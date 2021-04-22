@@ -4,7 +4,7 @@
 /// Scriptable object responsible for controlling kensusei defense state.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Kenshusei Defense State")]
-public class EnemyKenshuseiDefenseState : EnemyAbstractDefenseState
+public class EnemyKenshuseiDefenseState : EnemySimpleAbstractDefenseState
 {
     /// <summary>
     /// Goes to defense position. If the player is fighting an enemy,
