@@ -7,7 +7,7 @@ public static class TransformExtentions
 {
     /// <summary>
     /// Checks if a transform forward is looking to a position. 
-    /// Has a maximum angle to look, but 10 is the max. recommended.
+    /// Has a maximum angle to look.
     /// </summary>
     /// <param name="from">This transform.</param>
     /// <param name="finalPosition">Final position to check.</param>
@@ -22,10 +22,29 @@ public static class TransformExtentions
     }
 
     /// <summary>
-    /// Checks if a transform can see another transform.
+    /// Checks if a transform forward is looking to a position. 
+    /// Has a maximum angle to look.
+    /// </summary>
+    /// <param name="from">This transform.</param>
+    /// <param name="finalPosition">Final position to check.</param>
+    /// <returns>Returns true if this transform is looking towards that 
+    /// position.</returns>
+    public static bool IsLookingTowards(this Transform from,
+        Transform finalPosition, float maximumAngle = 10)
+    {
+        Vector3 dir = from.position.Direction(finalPosition.position);
+        if (Vector3.Angle(dir, from.forward) < maximumAngle) return true;
+        return false;
+    }
+
+    /// <summary>
+    /// Checks if a transform can see another transform in any direction. 
+    /// Parameter "to" must have the desired layer to check
+    /// (this layer must be on layers parameter as well).
     /// </summary>
     /// <param name="from">From this transform.</param>
-    /// <param name="to">Final transform.</param>
+    /// <param name="to">Final transform. Must have the desired layer
+    /// to check.</param>
     /// <param name="layers">Layers to check.</param>
     /// <returns>Returns true if source transform can see the final 
     /// transform.</returns>
@@ -36,9 +55,7 @@ public static class TransformExtentions
         if (Physics.Raycast(rayTo, out RaycastHit hit, distance, layers))
         {
             if (hit.collider.gameObject.layer == to.gameObject.layer)
-            {
                 return true;
-            }
         }
         return false;
     }

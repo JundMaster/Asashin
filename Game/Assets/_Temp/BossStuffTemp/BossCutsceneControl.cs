@@ -117,7 +117,7 @@ public class BossCutsceneControl : MonoBehaviour
 
         // Updates camera to boss position
         cinemachine.UpdateThirdPersonCameraPosition(
-            finalBossPosition.position + new Vector3(0, 0.5f, 0), 1.5f);
+            finalBossPosition.position + new Vector3(0, 0.5f, 0), 3f);
     }
 
     public void EndCutscene()

@@ -35,6 +35,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     // Player targets
     private Transform playerFrontTarget;
     private Transform playerBackTarget;
+    private Transform playerTarget;
 
     // Target variables
     [SerializeField] private float findTargetSize;
@@ -106,7 +107,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                 Enemy[] organizedEnemiesByDistance =
                             allEnemies.OrderBy(i =>
                             (i.transform.position - player.transform.position).magnitude).
-                            Where(i => i.gameObject.GetComponentInChildren<Renderer>().isVisible)
+                            Where(i => i.MyTarget.CanSee(playerTarget, collisionLayers))
                             .ToArray();
 
                 // Sets current target to closest enemy
@@ -158,12 +159,18 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     private void Update()
     {
         // If distance becames too wide while targetting, it cancels the current target
-        if (Targeting &&
-            Vector3.Distance(
-            player.transform.position, currentTarget.transform.position) >
-            findTargetSize)
+        if (Targeting)
         {
-            CancelCurrentTarget();
+            if (Vector3.Distance(player.transform.position, currentTarget.transform.position) >
+                findTargetSize)
+            {
+                CancelCurrentTarget();
+            }
+
+            if (isLerpingTargetCoroutine == null)
+            {
+                Debug.Log("temp");
+            }
         }
 
         // While the camera is blending, the player can't move the camera
@@ -213,7 +220,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                     Enemy[] organizedEnemiesByDistance =
                         allEnemies.OrderBy(i =>
                         (i.transform.position - player.transform.position).magnitude).
-                        Where(i => i.gameObject.GetComponentInChildren<Renderer>().isVisible)
+                        Where(i => i.MyTarget.CanSee(playerTarget, collisionLayers))
                         .ToArray();
 
                     currentTarget.gameObject.SetActive(true);
@@ -267,7 +274,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                 {
                     if (allEnemies[i].gameObject != FindCurrentTargetedEnemy())
                     {
-                        if (allEnemies[i].gameObject.GetComponentInChildren<Renderer>().isVisible)
+                        if (allEnemies[i].MyTarget.CanSee(playerTarget, collisionLayers))
                         {
                             shortestDistance = distanceFromTarget;
 
@@ -282,7 +289,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                 {
                     if (allEnemies[i].gameObject != FindCurrentTargetedEnemy())
                     {
-                        if (allEnemies[i].gameObject.GetComponentInChildren<Renderer>().isVisible)
+                        if (allEnemies[i].MyTarget.CanSee(playerTarget, collisionLayers))
                         {
                             shortestDistance = distanceFromTarget;
 
@@ -327,6 +334,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         isLerpingTargetCoroutine = null;
     }
 
+    [SerializeField] private LayerMask collisionLayers;
     /// <summary>
     /// Finds all enemies around the player.
     /// </summary>
@@ -343,10 +351,12 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             // If enemy has an Enemy script
             for (int i = 0; i < enemies.Length; i++)
             {
-                if (enemies[i].gameObject.TryGetComponent<Enemy>(out Enemy en) &&
-                    enemies[i].gameObject.GetComponentInChildren<Renderer>().isVisible)
+                if (enemies[i].gameObject.TryGetComponent<Enemy>(out Enemy en))
                 {
-                    allEnemies.Add(en);
+                    if (en.MyTarget.CanSee(playerTarget, collisionLayers))
+                    {
+                        allEnemies.Add(en);
+                    }
                 }
             }
         }
@@ -365,9 +375,11 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// </summary>
     /// <param name="positionToUpdateTo">Position to update camera to.</param>
     /// <returns></returns>
-    private IEnumerator UpdateThirdPersonCameraPositionCoroutine(Vector3 positionToUpdateTo, float transitionCamSecs)
+    private IEnumerator UpdateThirdPersonCameraPositionCoroutine(
+        Vector3 positionToUpdateTo, float transitionCamSecs)
     {
-        CurrentTarget.position = positionToUpdateTo;
+        currentTarget.transform.position = positionToUpdateTo;
+        UpdateTargetCameraLookAt();
         targetCamera.Priority = thirdPersonCamera.Priority + 3;
         yield return new WaitForSeconds(transitionCamSecs);
         targetCamera.Priority = thirdPersonCamera.Priority - 3;
@@ -462,7 +474,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             Enemy[] organizedEnemiesByDistance =
                 allEnemies.OrderBy(i =>
                 (i.transform.position - player.transform.position).magnitude).
-                Where(i => i.gameObject.GetComponentInChildren<Renderer>().isVisible).
+                Where(i => i.MyTarget.CanSee(playerTarget, collisionLayers)).
                 ToArray();
 
             // If there's a target
@@ -650,6 +662,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         player = FindObjectOfType<Player>();
         playerWallHug = FindObjectOfType<PlayerWallHug>();
+        playerTarget =
+            GameObject.FindGameObjectWithTag("playerTarget").transform;
         playerBackTarget = 
             GameObject.FindGameObjectWithTag("playerBackTarget").transform;
         playerFrontTarget =
