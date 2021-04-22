@@ -322,21 +322,24 @@ public class PlayerMovement : MonoBehaviour, IAction
                 Controller.Move(
                     moveDirection.normalized * values.WalkingSpeed * Time.fixedUnscaledDeltaTime);
 
-                MovementSpeed = values.WalkingSpeed;
+                // Animator variable
+                MovementSpeed = Mathf.Lerp(MovementSpeed, values.WalkingSpeed, Time.fixedDeltaTime * 5);
             }
             else if (Walking == false && Sprinting)
             {
                 Controller.Move(
                     moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
 
-                MovementSpeed = values.SprintSpeed;
+                // Animator variable
+                MovementSpeed = Mathf.Lerp(MovementSpeed, values.SprintSpeed, Time.fixedDeltaTime * 5);
             }
             else
             {
                 Controller.Move(
                     moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
 
-                MovementSpeed = values.Speed;
+                // Animator variable
+                MovementSpeed = Mathf.Lerp(MovementSpeed, values.Speed, Time.fixedDeltaTime * 5);
             }
         }
     }
