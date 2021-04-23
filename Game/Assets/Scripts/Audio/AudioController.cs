@@ -36,12 +36,12 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     private void OnEnable()
     {
         optionsScript.UpdatedValues += UpdateValues;
-        slowMotion.SlowMotionEvent += UpdatePitch;
+        if (slowMotion != null) slowMotion.SlowMotionEvent += UpdatePitch;
     }
     private void OnDisable()
     {
         optionsScript.UpdatedValues -= UpdateValues;
-        slowMotion.SlowMotionEvent -= UpdatePitch;
+        if (slowMotion != null) slowMotion.SlowMotionEvent -= UpdatePitch;
     }
 
     /// <summary>

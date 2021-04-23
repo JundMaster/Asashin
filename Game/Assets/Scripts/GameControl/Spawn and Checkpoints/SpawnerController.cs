@@ -66,30 +66,33 @@ public class SpawnerController : MonoBehaviour
         // Main menu is always visited by default.
         PlayerPrefs.SetInt(SceneEnum.MainMenu.ToString(), 1);
 
-        // If the current scene was already visited
-        if (PlayerPrefs.GetInt(sceneControl.CurrentSceneEnum().ToString()) == 1)
+        if (sceneControl.CurrentSceneEnum() != SceneEnum.MainMenu)
         {
-            if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Respawn.ToString())
+            // If the current scene was already visited
+            if (PlayerPrefs.GetInt(sceneControl.CurrentSceneEnum().ToString()) == 1)
             {
-                StartCoroutine(SpawnPlayer(SpawnTypeEnum.Respawn));
-                return;
+                if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Respawn.ToString())
+                {
+                    StartCoroutine(SpawnPlayer(SpawnTypeEnum.Respawn));
+                    return;
+                }
+                else if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Loadgame.ToString())
+                {
+                    StartCoroutine(SpawnPlayer(SpawnTypeEnum.Loadgame));
+                    return;
+                }
             }
-            else if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Loadgame.ToString())
+            // Else if this scene was NOT visited yet
+            else
             {
-                StartCoroutine(SpawnPlayer(SpawnTypeEnum.Loadgame));
-                return;
-            }
-        }
-        // Else if this scene was NOT visited yet
-        else
-        {
-            // Sets this current scene as visited.
-            PlayerPrefs.SetInt(sceneControl.CurrentSceneEnum().ToString(), 1);
+                // Sets this current scene as visited.
+                PlayerPrefs.SetInt(sceneControl.CurrentSceneEnum().ToString(), 1);
 
-            // If the player just started a new game, else it will ignore this
-            if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Newgame.ToString())
-            {
-                StartCoroutine(SpawnPlayer(SpawnTypeEnum.Newgame));
+                // If the player just started a new game, else it will ignore this
+                if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Newgame.ToString())
+                {
+                    StartCoroutine(SpawnPlayer(SpawnTypeEnum.Newgame));
+                }
             }
         }
     }
