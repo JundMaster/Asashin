@@ -16,7 +16,6 @@ public sealed class EnemyBoss : EnemyBase
     public IState RangedState { get; private set; }
     public IState ReinforcementsState { get; private set; }
 
-
     private new void Awake()
     {
         base.Awake();
@@ -35,13 +34,9 @@ public sealed class EnemyBoss : EnemyBase
             AggressiveState,
             RangedState,
             ReinforcementsState,
+            DeathState,
         };
 
         stateMachine = new StateMachine(states, this);
-    }		
-
-    private new void Start()
-    {
-        
     }
 }

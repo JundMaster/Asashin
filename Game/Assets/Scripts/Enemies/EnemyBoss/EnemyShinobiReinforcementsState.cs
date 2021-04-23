@@ -7,4 +7,11 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
     {
         //
     }
+
+    public override IState FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        return enemy.ReinforcementsState;
+    }
 }

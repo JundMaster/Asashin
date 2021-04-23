@@ -7,4 +7,16 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
     {
         //
     }
+
+    public override void OnEnter()
+    {
+        base.OnEnter();
+    }
+
+    public override IState FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        return enemy.AggressiveState;
+    }
 }

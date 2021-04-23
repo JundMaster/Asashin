@@ -10,8 +10,8 @@ public abstract class EnemyAbstractState : StateBase
     // Movement
     [Range(0.1f, 5f)] [SerializeField] protected float walkingSpeed;
     [Range(0.1f, 5f)] [SerializeField] protected float runningSpeed;
-    [Header("Distance that the enemy travels back after being hit")]
 
+    [Header("Distance that the enemy travels back after being hit")]
     [Range(0.1f, 1f)] [SerializeField] protected float timeToTravelAfterHit;
     [Range(0.1f, 3f)] [SerializeField] protected float takeDamageDistancePower;
 
