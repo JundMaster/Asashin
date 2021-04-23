@@ -324,19 +324,19 @@ MonoBehaviour:
   myLayer:
     serializedVersion: 2
     m_Bits: 1024
-  sizeOfAlert: 20
   myTarget: {fileID: 1009517689644205632}
-  patrolPoints:
-  - {fileID: 1009517689375537292}
-  visionCone: {fileID: 1009517688353685043}
+  sizeOfAlert: 20
   weaponCollider: {fileID: 1009517689244656410}
   anim: {fileID: 6874766086849190488}
+  deathStateOriginal: {fileID: 11400000, guid: 6426dea4efe0b2c48a00b7676d9f5d44, type: 2}
   patrolStateOriginal: {fileID: 11400000, guid: 2446942bb53985e4a828421d95c92422, type: 2}
   defenseStateOriginal: {fileID: 11400000, guid: b7ba3b8eebd3fc24aaf660a6464df918, type: 2}
   lostPlayerStateOriginal: {fileID: 11400000, guid: f3faea43c35e6094e82d7ef6ce2ac8bd, type: 2}
   aggressiveStateOriginal: {fileID: 11400000, guid: 3908e6f7b137ef24ca3aef8da3588e7b, type: 2}
   temporaryBlindnessStateOriginal: {fileID: 11400000, guid: e266a82e891245e40a73440544b3861e, type: 2}
-  deathStateOriginal: {fileID: 11400000, guid: 6426dea4efe0b2c48a00b7676d9f5d44, type: 2}
+  patrolPoints:
+  - {fileID: 1009517689375537292}
+  visionCone: {fileID: 1009517688353685043}
 --- !u!114 &1009517688832808621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,7 +396,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: -0.01
+  m_BaseOffset: -0.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!54 &1009517688832808617

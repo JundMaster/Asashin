@@ -47,6 +47,7 @@ public class SpawnerController : MonoBehaviour
 
     // TEMPORARY VARIABLE DELETE NO FINAL //////////////////////////////////////
     [SerializeField] private bool TRUEIFNEWGAMESPAWN;
+
     private void Start()
     {
         // DELETE ON FINAL VERSION // /////////////////////
@@ -58,9 +59,6 @@ public class SpawnerController : MonoBehaviour
         else
             PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());  
         // DELETE ON FINAL VERSION //  ////////////////////
-
-
-
 
 
         // Main menu is always visited by default.
@@ -138,7 +136,7 @@ public class SpawnerController : MonoBehaviour
             }
         }
     }
-
+    
     /// <summary>
     /// Happens after first fixed update.
     /// </summary>
