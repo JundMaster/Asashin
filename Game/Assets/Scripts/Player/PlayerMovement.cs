@@ -322,6 +322,7 @@ public class PlayerMovement : MonoBehaviour, IAction
             stopMovementAfterWallHug == false && input.GetActionMap() == "Gameplay")
         {
             // Moves Controllers towards the moveDirection set on Rotation()
+            // Transition to walking
             if (Walking && Sprinting == false)
             {
                 Controller.Move(
@@ -330,6 +331,7 @@ public class PlayerMovement : MonoBehaviour, IAction
                 // Animator variable
                 MovementSpeed = Mathf.Lerp(MovementSpeed, values.WalkingSpeed, Time.fixedUnscaledDeltaTime * 5);
             }
+            // Transition to sprinting
             else if (Walking == false && Sprinting)
             {
                 Controller.Move(
@@ -338,13 +340,14 @@ public class PlayerMovement : MonoBehaviour, IAction
                 // Animator variable
                 MovementSpeed = Mathf.Lerp(MovementSpeed, values.SprintSpeed, Time.fixedUnscaledDeltaTime * 5);
             }
+            // If it's stopped and starts moving
             else
             {
                 Controller.Move(
                     moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
 
                 // Animator variable
-                MovementSpeed = Mathf.Lerp(MovementSpeed, values.Speed, Time.fixedUnscaledDeltaTime * 5);
+                MovementSpeed = Mathf.Lerp(MovementSpeed, values.Speed, Time.fixedUnscaledDeltaTime * 8);
             }
         }
     }

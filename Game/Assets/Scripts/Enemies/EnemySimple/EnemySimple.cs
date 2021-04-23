@@ -22,9 +22,6 @@ public sealed class EnemySimple : EnemyBase
     public IState AggressiveState { get; private set; }
     public IState TemporaryBlindnessState { get; private set; }
 
-    [Header("Size to alert other enemies when the enemy finds the player")]
-    [SerializeField] private float sizeOfAlert;
-
     [Header("Enemy patrol path (order is important)")]
     [SerializeField] private EnemyPatrolPoint[] patrolPoints;
     public EnemyPatrolPoint[] PatrolPoints => patrolPoints;
@@ -89,33 +86,11 @@ public sealed class EnemySimple : EnemyBase
     }
 
     /// <summary>
-    /// In case this enemy finds the player, it alerts the surrounding enemies.
-    /// </summary>
-    public void AlertSurroundings()
-    {
-        Collider[] enemiesAround =
-            Physics.OverlapSphere(myTarget.position, sizeOfAlert, myLayer);
-
-        if (enemiesAround.Length > 0)
-        {
-            foreach (Collider enemyCollider in enemiesAround)
-            {
-                if (enemyCollider.TryGetComponent(out EnemySimple otherEnemy))
-                {
-                    if (otherEnemy.gameObject != gameObject)
-                    {
-                        otherEnemy.OnAlert();
-                    }
-                }
-            }
-        }
-    }
-
-    /// <summary>
     /// Method called from AlertSurroundings, called from enemy states,
     /// in order to invoke Alert event.
     /// </summary>
-    private void OnAlert() => Alert?.Invoke();
+    protected override void OnAlert() => 
+        Alert?.Invoke();
 
     /// <summary>
     /// Invokes CollisionWithPlayer event.
@@ -169,9 +144,7 @@ public sealed class EnemySimple : EnemyBase
             Gizmos.DrawLine(patrolPoint.transform.position + offset,
                 patrolPoint.transform.position + offset +
                 patrolPoint.transform.forward);
-        }
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, sizeOfAlert);
+        }  
     }
     #endregion
 }

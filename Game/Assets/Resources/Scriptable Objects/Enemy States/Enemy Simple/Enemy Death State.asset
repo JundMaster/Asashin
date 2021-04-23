@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acedca96775f78b4faf4302bebb557d9, type: 3}
-  m_Name: Enemy Shinobi Aggressive State
+  m_Script: {fileID: 11500000, guid: 3249b7c15fed5b4469554aa59d04bfbb, type: 3}
+  m_Name: Enemy Death State
   m_EditorClassIdentifier: 
-  walkingSpeed: 0
+  timeToTravelAfterHit: 0.3
+  takeDamageDistancePower: 2
   runningSpeed: 0
-  timeToTravelAfterHit: 0
-  takeDamageDistancePower: 0
+  walkingSpeed: 0
+  turnSpeedAfterBeingHit: 0
+  smokeParticles: {fileID: 1129694466352766, guid: 84835b4944c12d646b92e2ad429cf747, type: 3}

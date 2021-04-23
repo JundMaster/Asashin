@@ -9,24 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed0e0abea3bff504682c969569910019, type: 3}
-  m_Name: Enemy Senshi Defense State
+  m_Script: {fileID: 11500000, guid: 28ce590dd75bb97458d80d3f0116a0d5, type: 3}
+  m_Name: Enemy Kenshusei Lost Player State
   m_EditorClassIdentifier: 
   timeToTravelAfterHit: 0.3
   takeDamageDistancePower: 2
-  turnSpeedAfterBeingHit: 0.1
-  walkingSpeed: 2
   runningSpeed: 3.8
-  coneRange: 20
-  desiredConeAngle: 45
+  walkingSpeed: 1
+  turnSpeedAfterBeingHit: 0.1
+  coneRange: 15
+  desiredConeAngle: 30
   playerLayer:
     serializedVersion: 2
     m_Bits: 2048
   collisionLayers:
     serializedVersion: 2
     m_Bits: 22528
-  turnSpeed: 0.25
-  randomDistanceFromPlayer: {x: 6, y: 13}
-  kunai: {fileID: 8828656709029744851, guid: 7eb2e6810ee58df4881990ee266d00c8, type: 3}
-  kunaiDelay: 3
-  kunaiSpawnAfterAnimation: 0.5
+  timeToLookForPlayer: 5
+  turnSpeed: 1

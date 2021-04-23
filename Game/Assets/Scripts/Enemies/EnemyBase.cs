@@ -22,6 +22,9 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     [SerializeField] protected Transform myTarget;
     public Transform MyTarget => myTarget;
 
+    [Header("Size to alert other enemies when the enemy finds the player")]
+    [SerializeField] private float sizeOfAlert;
+
     [Header("Enemy melee weapon")]
     [SerializeField] protected SphereCollider weaponCollider;
     public SphereCollider WeaponCollider => weaponCollider;
@@ -106,6 +109,34 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     }
 
     /// <summary>
+    /// In case this enemy finds the player, it alerts the surrounding enemies.
+    /// </summary>
+    public void AlertSurroundings()
+    {
+        Collider[] enemiesAround =
+            Physics.OverlapSphere(myTarget.position, sizeOfAlert, myLayer);
+
+        if (enemiesAround.Length > 0)
+        {
+            foreach (Collider enemyCollider in enemiesAround)
+            {
+                if (enemyCollider.TryGetComponent(out EnemySimple otherEnemy))
+                {
+                    if (otherEnemy.gameObject != gameObject)
+                    {
+                        otherEnemy.OnAlert();
+                    }
+                }
+            }
+        }
+    }
+
+    protected virtual void OnAlert()
+    {
+        // Left brank on purpose
+    }
+
+    /// <summary>
     /// Method that triggers DeathState.
     /// Is triggered when enemy's health reaches 0.
     /// </summary>
@@ -149,4 +180,12 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     /// Is triggered after the enemy atacks.
     /// </summary>
     public event Action WeaponHit;
+
+    #region Gizmos
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, sizeOfAlert);
+    }
+    #endregion
 }

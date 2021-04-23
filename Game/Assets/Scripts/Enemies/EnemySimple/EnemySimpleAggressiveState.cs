@@ -33,6 +33,10 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     [Header("Prefab to spawn on melee attack hit")]
     [SerializeField] private GameObject meleeHitParticles;
 
+    [Tooltip("Must wait this time to alert enemies again")]
+    [Range(0f, 5f)] [SerializeField] private float delayTimerToInvokeAlert;
+    private float currentTimerToInvokeAlert;
+
     // Components
     private Animator anim;
     private SphereCollider weapon;
@@ -64,6 +68,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         attacking = false;
         attackingAnimation = false;
         agent.isStopped = false;
+        currentTimerToInvokeAlert = 0;
 
         if (playerTarget != null ) 
             agent.SetDestination(playerTarget.position);
@@ -172,7 +177,12 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         {
             yield return wfd;
 
-            enemy.AlertSurroundings();
+            // Only checks this once in a while, so it won't do it every frame
+            if (Time.time - currentTimerToInvokeAlert > delayTimerToInvokeAlert)
+            {
+                enemy.AlertSurroundings();
+                currentTimerToInvokeAlert = Time.time;
+            }
 
             // Checks if player is still in range
             if (Vector3.Distance(playerTarget.position, myTarget.position) >

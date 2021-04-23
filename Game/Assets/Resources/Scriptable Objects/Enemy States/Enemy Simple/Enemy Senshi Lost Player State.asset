@@ -9,12 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24fb39ae7cc1b9249a5b3827d60aa8f2, type: 3}
-  m_Name: Enemy Kenshusei Blindness State
+  m_Script: {fileID: 11500000, guid: 28ce590dd75bb97458d80d3f0116a0d5, type: 3}
+  m_Name: Enemy Senshi Lost Player State
   m_EditorClassIdentifier: 
   timeToTravelAfterHit: 0.3
   takeDamageDistancePower: 2
-  turnSpeedAfterBeingHit: 0.1
-  walkingSpeed: 1
   runningSpeed: 3.8
-  secondsToBeBlind: 7
+  walkingSpeed: 1
+  turnSpeedAfterBeingHit: 0.1
+  coneRange: 20
+  desiredConeAngle: 45
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 22528
+  timeToLookForPlayer: 10
+  turnSpeed: 1
