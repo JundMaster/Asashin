@@ -15,7 +15,6 @@ public class BossCutsceneControl : MonoBehaviour
 
     [Header("Player stuff")]
     [SerializeField] private Transform playerFinalPosition;
-    private CharacterController player;
 
     [Header("Boss camera")]
     [SerializeField] private CinemachineVirtualCamera bossFloorCamera;
@@ -24,26 +23,28 @@ public class BossCutsceneControl : MonoBehaviour
     private CinemachineBrain cineBrain;
     private CinemachineTarget cinemachine;
     private PlayerInputCustom input;
-    private PlayerMovement playerMovement;
-    private AudioSource musicSource;
-    private EnemyBase boss;
+    private MusicReferences musicSource;
+    private EnemyBoss boss;
+
+    public bool OnBossFight { get; private set; }
 
     private void Awake()
     {
         cineBrain = Camera.main.GetComponent<CinemachineBrain>();
         cinemachine = FindObjectOfType<CinemachineTarget>();
         input = FindObjectOfType<PlayerInputCustom>();
-        playerMovement = FindObjectOfType<PlayerMovement>();
-        musicSource = FindObjectOfType<MusicReferences>().Music;
+        musicSource = FindObjectOfType<MusicReferences>();
     }
 
     public void StartCutscene() => StartCoroutine(StartCutsceneCoroutine());
     private IEnumerator StartCutsceneCoroutine()
     {
+        OnBossFight = true;
         SetCameraBlend(0);
         SetPlayerControls(false);
 
-        player = FindObjectOfType<PlayerMovement>().Controller;
+        PlayerMovement playerMovement = FindObjectOfType<PlayerMovement>();
+        CharacterController player = FindObjectOfType<PlayerMovement>().Controller;
 
         while(player.transform.position.Similiar(playerFinalPosition.position, 0.1f) == false)
         {
@@ -55,21 +56,25 @@ public class BossCutsceneControl : MonoBehaviour
         }
         playerMovement.MovementSpeed = 0;
 
-        float currentVolume = musicSource.volume * 1.5f;
+        float currentVolume = musicSource.Music.volume;
         YieldInstruction wffu = new WaitForFixedUpdate();
         while (true)
         {
-            while (musicSource.volume > 0)
+            while (musicSource.Music.volume > 0 && musicSource.CombatMusic.volume > 0)
             {
-                musicSource.volume -= Time.fixedDeltaTime * 0.1f;
+                musicSource.Music.volume -= Time.fixedDeltaTime * 0.25f;
+                musicSource.CombatMusic.volume -= Time.fixedDeltaTime * 0.25f;
                 yield return wffu;
             }
-            musicSource.Stop();
-            musicSource.clip = bossMusic;
-            musicSource.Play();
-            while (musicSource.volume < currentVolume)
+            musicSource.Music.Stop();
+            musicSource.CombatMusic.Stop();
+
+            musicSource.Music.clip = bossMusic;
+            musicSource.Music.Play();
+
+            while (musicSource.Music.volume < currentVolume)
             {
-                musicSource.volume += Time.fixedDeltaTime * 0.1f;
+                musicSource.Music.volume += Time.fixedDeltaTime * 0.25f;
                 yield return wffu;
             }
             yield return wffu;
@@ -99,7 +104,7 @@ public class BossCutsceneControl : MonoBehaviour
         YieldInstruction wffu = new WaitForFixedUpdate();
 
         // Gets boss enemy
-        boss = spawnedBoss.GetComponentInChildren<EnemyBase>();
+        boss = spawnedBoss.GetComponentInChildren<EnemyBoss>();
         Animator agentAnimator = spawnedBoss.GetComponentInChildren<Animator>();
         NavMeshAgent agent = spawnedBoss.GetComponentInChildren<NavMeshAgent>();
         agentAnimator.SetTrigger("Jump");
@@ -129,6 +134,7 @@ public class BossCutsceneControl : MonoBehaviour
     public void EndCutscene()
     {
         boss.enabled = true;
+        boss.InitializeStateMachine();
         bossFloorCamera.Priority = -1000;
     }
 }

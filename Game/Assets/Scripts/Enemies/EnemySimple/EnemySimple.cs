@@ -70,10 +70,10 @@ public sealed class EnemySimple : EnemyBase
     /// <summary>
     /// Runs once on start. Initializes states.
     /// </summary>
-    private new void Start()
+    private void Start()
     {
         PlayerLastKnownPosition = default;
-        base.Start();
+        stateMachine?.Initialize();
     }
 
     /// <summary>

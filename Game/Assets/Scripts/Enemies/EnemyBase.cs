@@ -92,15 +92,6 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     }
 
     /// <summary>
-    /// Runs once on start. Initializes and starts stateMachine.
-    /// </summary>
-    protected void Start()
-    {
-        PlayerCurrentlyFighting = false;
-        stateMachine?.Initialize();
-    }
-
-    /// <summary>
     /// Runs on state machine states.
     /// </summary>
     private void FixedUpdate()
@@ -148,7 +139,6 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
 
     /// <summary>
     /// Finds Player when the Player spawns.
-    /// Initializes values for all states.
     /// </summary>
     public void FindPlayer()
     {
@@ -157,7 +147,6 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
         {
             PlayerTarget =
                 GameObject.FindGameObjectWithTag("playerTarget").transform;
-            PlayerCurrentlyFighting = false;
         }
     }
 
