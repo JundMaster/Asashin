@@ -14,12 +14,14 @@ public class LevelChanger : MonoBehaviour
 
     private SceneControl sceneController;
     private GameState gameState;
+    private PlayerInputCustom input;
 
     private bool changedScene;
 
     private void Awake()
     {
         sceneController = FindObjectOfType<SceneControl>();
+        input = FindObjectOfType<PlayerInputCustom>();
         gameState = new GameState(playerSavedStats);
     }
 
@@ -34,6 +36,7 @@ public class LevelChanger : MonoBehaviour
         if (other.gameObject.layer == 11)
         {
             boxCollider.enabled = false;
+            input.SwitchActionMapToDisable();
             StartCoroutine(ChangeSceneCoroutine());
         }
     }
