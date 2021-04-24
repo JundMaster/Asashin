@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -224,6 +225,7 @@ public class SpawnerController : MonoBehaviour
                 gameState.SaveCheckpoint(numberOfCheckpoint);
                 gameState.SaveCheckpointScene(nameOfScene);
                 gameState.SavePlayerStats();
+                OnCheckPointReached();
             }
             // Else if this scene is the same
             else
@@ -234,6 +236,7 @@ public class SpawnerController : MonoBehaviour
                     gameState.SaveCheckpoint(numberOfCheckpoint);
                     gameState.SaveCheckpointScene(nameOfScene);
                     gameState.SavePlayerStats();
+                    OnCheckPointReached();
                 }
             }
         }
@@ -243,6 +246,7 @@ public class SpawnerController : MonoBehaviour
             gameState.SaveCheckpoint(numberOfCheckpoint);
             gameState.SaveCheckpointScene(nameOfScene);
             gameState.SavePlayerStats();
+            OnCheckPointReached();
         }
     }
 
@@ -261,4 +265,15 @@ public class SpawnerController : MonoBehaviour
         PlayerPrefs.DeleteKey(SceneEnum.TESTAREA.ToString());
         gameState.DeleteFiles();
     }
+
+    /// <summary>
+    /// Invokes checkpoint reached method. This method is called everytime the
+    /// player reaches a new checkpoint.
+    /// </summary>
+    protected virtual void OnCheckPointReached() => CheckpointReached?.Invoke();
+
+    /// <summary>
+    /// Event registered on UISaveIcon.
+    /// </summary>
+    public event Action CheckpointReached;
 }
