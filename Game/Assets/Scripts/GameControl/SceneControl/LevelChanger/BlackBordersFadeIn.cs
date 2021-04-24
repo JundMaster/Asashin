@@ -1,5 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+/// <summary>
+/// Class responsible for showing black borders UI and changing camera when 
+/// the player is entering a scene changer area.
+/// </summary>
 public class BlackBordersFadeIn : MonoBehaviour
 {
     [SerializeField] private BoxCollider boxCollider;
@@ -26,11 +31,20 @@ public class BlackBordersFadeIn : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 11)
+        {
+            OnEnteredArea(true);
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.layer == 11)
         {
             insideArea = false;
+            OnEnteredArea(false);
         }
     }
 
@@ -38,6 +52,14 @@ public class BlackBordersFadeIn : MonoBehaviour
     {
         anim.SetBool("InsideArea", insideArea);
     }
+
+    protected virtual void OnEnteredArea(bool condition) => 
+        EnteredArea?.Invoke(condition);
+
+    /// <summary>
+    /// Event registered on CinemachineTarget.
+    /// </summary>
+    public event Action<bool> EnteredArea;
 
     private void OnDrawGizmos()
     {

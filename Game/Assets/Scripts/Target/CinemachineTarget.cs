@@ -15,12 +15,14 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     private PauseSystem pauseSystem;
     private SlowMotionBehaviour slowMotion;
     private Options optionsScript;
+    private BlackBordersFadeIn blackBordersFadeIn;
 
     // Camera Variables
     [SerializeField] private CinemachineFreeLook thirdPersonCamera;
     [SerializeField] private CinemachineVirtualCamera targetCamera;
     [SerializeField] private CinemachineVirtualCamera pauseMenuCamera;
     [SerializeField] private CinemachineVirtualCamera wallHugCamera;
+    [SerializeField] private CinemachineVirtualCamera sceneChangerCamera;
     [SerializeField] private CinemachineBrain mainCameraBrain;
     private CinemachineFramingTransposer wallHugCameraTransposer;
     private float framingTranspX;
@@ -63,6 +65,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         wallHugCameraTransposer = 
             wallHugCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+        blackBordersFadeIn = FindObjectOfType<BlackBordersFadeIn>();
     }
 
     private void Start()
@@ -124,9 +127,10 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         input.TargetSet += HandleTarget;
         input.TargetChange += SwitchTarget;
-        pauseSystem.GamePaused += SwitchBeetweenPauseCamera;
+        pauseSystem.GamePaused += SwitchBetweenPauseCamera;
         slowMotion.SlowMotionEvent += SlowMotionCamera;
         optionsScript.UpdatedValues += UpdateValues;
+        blackBordersFadeIn.EnteredArea += SwitchToSceneChangerCamera;
     }
 
     private void OnDisable()
@@ -134,9 +138,10 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
         input.TargetSet -= HandleTarget;
         input.TargetChange -= SwitchTarget;
-        pauseSystem.GamePaused -= SwitchBeetweenPauseCamera;
+        pauseSystem.GamePaused -= SwitchBetweenPauseCamera;
         slowMotion.SlowMotionEvent -= SlowMotionCamera;
         optionsScript.UpdatedValues -= UpdateValues;
+        blackBordersFadeIn.EnteredArea -= SwitchToSceneChangerCamera;
         if (playerWallHug != null)
         {
             playerWallHug.Border -= AdjustWallHugCamera;
@@ -502,11 +507,23 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     }
 
     /// <summary>
+    /// Changes to SceneChangerCamera.
+    /// </summary>
+    /// <param name="condition">Condition to check if it should change to
+    /// scene camera or back to previous camera.</param>
+    private void SwitchToSceneChangerCamera(bool condition)
+    {
+        mainCameraBrain.m_DefaultBlend.m_Time = 0.5f;
+        if (condition == true) sceneChangerCamera.Priority = 100;
+        else sceneChangerCamera.Priority = -100;
+    }
+
+    /// <summary>
     /// Switches cameras when the player pauses or unpauses the game.
     /// </summary>
     /// <param name="pauseSystem">Parameter that checks if the player
     /// paused or unpaused the game.</param>
-    private void SwitchBeetweenPauseCamera(PauseSystemEnum pauseSystem)
+    private void SwitchBetweenPauseCamera(PauseSystemEnum pauseSystem)
     {
         if (pauseSystem == PauseSystemEnum.Paused)
         {

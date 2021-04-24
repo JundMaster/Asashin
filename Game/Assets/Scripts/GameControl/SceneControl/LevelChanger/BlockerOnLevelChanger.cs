@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Class responsible for blocking level changer in case the player is currently fighting.
+/// </summary>
 public class BlockerOnLevelChanger : MonoBehaviour, IFindPlayer
 {
     [SerializeField] private BoxCollider boxCollider;
