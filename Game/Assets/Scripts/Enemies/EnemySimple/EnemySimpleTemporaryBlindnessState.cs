@@ -28,6 +28,7 @@ public sealed class EnemySimpleTemporaryBlindnessState :
 
         timePassed = Time.time;
         agent.isStopped = true;
+        anim.ResetTrigger("CancelBlind");
         anim.SetTrigger("Blind");
     }
 
