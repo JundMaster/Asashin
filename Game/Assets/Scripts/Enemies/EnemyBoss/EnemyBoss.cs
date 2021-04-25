@@ -16,9 +16,11 @@ public sealed class EnemyBoss : EnemyBase
     public IState RangedState { get; private set; }
     public IState ReinforcementsState { get; private set; }
 
-    private new void Awake()
+    public void InitializeStateMachine()
     {
         base.Awake();
+
+        FindPlayer();
 
         if (aggressiveStateOriginal != null)
             AggressiveState = Instantiate(aggressiveStateOriginal);
@@ -38,5 +40,7 @@ public sealed class EnemyBoss : EnemyBase
         };
 
         stateMachine = new StateMachine(states, this);
+
+        stateMachine?.Initialize();
     }
 }

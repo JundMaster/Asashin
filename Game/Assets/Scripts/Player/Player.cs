@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Class responsible for running the player components.
@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerValuesScriptableObj values;
     public PlayerValuesScriptableObj Values => values;
 
-    public bool PlayerCurrentlyFighting { get; set; }
+    public byte PlayerCurrentlyFighting { get; set; }
 
     // ILists with components
     private IList<IAction> myIComponents;
@@ -20,14 +20,14 @@ public class Player : MonoBehaviour
     {
         myIComponents = GetComponents<IAction>();
         componentsToRun = new List<IAction>();
-
-        PlayerCurrentlyFighting = false;
     }
 
     private void Start()
     {
         foreach (IAction comp in myIComponents)
             componentsToRun.Add(comp);
+
+        PlayerCurrentlyFighting = 0;
     }
 
     private void Update()

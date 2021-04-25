@@ -7,11 +7,6 @@ using System.Collections;
 [CreateAssetMenu(fileName = "Enemy Shinobi Death State")]
 public sealed class EnemyShinobiDeathState : EnemyBossAbstractState
 {
-    public override void Start()
-    {
-        // Left blank on purpose
-    }
-
     public override void OnEnter()
     {
         // Variables to make sure the is no collision while the enemy is dying

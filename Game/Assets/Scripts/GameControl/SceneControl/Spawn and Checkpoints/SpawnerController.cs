@@ -92,7 +92,7 @@ public class SpawnerController : MonoBehaviour
                 {
                     StartCoroutine(SpawnPlayer(SpawnTypeEnum.Newgame));
                 }
-
+                
                 else if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Loadgame.ToString())
                 {
                     StartCoroutine(SpawnPlayer(SpawnTypeEnum.Loadgame));

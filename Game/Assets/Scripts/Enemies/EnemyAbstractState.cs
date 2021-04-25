@@ -14,12 +14,14 @@ public abstract class EnemyAbstractState : StateBase
     // Movement
     [Range(0.1f, 5f)] [SerializeField] protected float runningSpeed;
 
+    private EnemyBase enemyBase;
     protected EnemyStats stats;
     protected Transform myTarget;
+    protected Animator anim;
     protected NavMeshAgent agent;
     protected Transform playerTarget;
 
-    private EnemyBase enemyBase;
+    protected bool die;
 
     /// <summary>
     /// Method that defines what happens when this state is initialized.
@@ -31,8 +33,17 @@ public abstract class EnemyAbstractState : StateBase
 
         myTarget = enemyBase.MyTarget;
         playerTarget = enemyBase.PlayerTarget;
+        anim = enemyBase.Anim;
+        stats = enemyBase.Stats;
         agent = enemyBase.Agent;
-        stats = enemyBase.GetComponent<EnemyStats>();
+    }
+
+    /// <summary>
+    /// Runs once on start.
+    /// </summary>
+    public override void Start()
+    {
+        die = false;
     }
 
     /// <summary>
@@ -44,6 +55,7 @@ public abstract class EnemyAbstractState : StateBase
     {
         if (playerTarget == null) playerTarget = enemyBase.PlayerTarget;
 
+        stats.Die += SwitchToDeathState;
         stats.AnyDamageOnEnemy += TakeImpact;
     }
 
@@ -54,6 +66,7 @@ public abstract class EnemyAbstractState : StateBase
     public override IState FixedUpdate()
     {
         if (playerTarget == null) playerTarget = enemyBase.PlayerTarget;
+
         return null;
     }
 
@@ -62,11 +75,12 @@ public abstract class EnemyAbstractState : StateBase
     /// </summary>
     public override void OnExit()
     {
+        stats.Die -= SwitchToDeathState;
         stats.AnyDamageOnEnemy -= TakeImpact;
     }
 
     /// <summary>
-    /// Starts ImapctToBackCoroutine.
+    /// Starts ImapactToBackCoroutine.
     /// Pushes enemy back.
     /// </summary>
     protected virtual void TakeImpact() =>
@@ -102,4 +116,10 @@ public abstract class EnemyAbstractState : StateBase
         }
         agent.isStopped = false;
     }
+
+    /// <summary>
+    /// Instantly switches to DeathState.
+    /// </summary>
+    protected void SwitchToDeathState() =>
+        die = true;
 }

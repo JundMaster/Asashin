@@ -34,9 +34,23 @@ public sealed class EnemySimple : EnemyBase
 
     public VisionCone EnemyVisionCone { get; set; }
 
+    private MusicCombatTransition combatMusic;
+
+    private bool inCombat;
+    public bool InCombat
+    {
+        get => inCombat;
+        set
+        {
+            inCombat = value;
+            if (inCombat == false) combatMusic?.SwitchToBackgroundMusic();
+        }
+    }
+
     private new void Awake()
     {
         base.Awake();
+        combatMusic = FindObjectOfType<MusicCombatTransition>();
 
         if (patrolStateOriginal != null)
             PatrolState = Instantiate(patrolStateOriginal);
@@ -70,10 +84,10 @@ public sealed class EnemySimple : EnemyBase
     /// <summary>
     /// Runs once on start. Initializes states.
     /// </summary>
-    private new void Start()
+    private void Start()
     {
         PlayerLastKnownPosition = default;
-        base.Start();
+        stateMachine?.Initialize();
     }
 
     /// <summary>

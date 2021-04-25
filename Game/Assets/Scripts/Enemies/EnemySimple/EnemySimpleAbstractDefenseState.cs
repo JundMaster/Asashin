@@ -17,9 +17,6 @@ public abstract class EnemySimpleAbstractDefenseState :
     protected float randomDistance;
     protected bool runningBack;
 
-    // Components
-    protected Animator anim;
-
     /// <summary>
     /// Happens once on start. Sets a random distance to mantain while defending.
     /// </summary>
@@ -35,7 +32,6 @@ public abstract class EnemySimpleAbstractDefenseState :
         randomDistance = Random.Range(
             randomDistanceFromPlayer.x, randomDistanceFromPlayer.y);
 
-        anim = enemy.Anim;
         runningBack = false;
     }
 
@@ -45,6 +41,8 @@ public abstract class EnemySimpleAbstractDefenseState :
     public override void OnEnter()
     {
         base.OnEnter();
+
+        enemy.InCombat = true;
 
         agent.isStopped = false;
 
