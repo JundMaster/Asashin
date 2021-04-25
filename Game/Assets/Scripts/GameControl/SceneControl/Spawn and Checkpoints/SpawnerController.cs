@@ -5,6 +5,11 @@ using UnityEngine;
 /// <summary>
 /// Class responsible for handling player spawn.
 /// Used in every scenes and main menu.
+/// This class, registered to events and it calls TypeOfRespawn with the
+/// type of respawn desired. After this, the class will load a saved scene
+/// if the player already has a save file, else it will load the first area.
+/// After loading the scene, it will spawn the player in the initial position
+/// or on the last checkpoint visited, and load his saved stats.
 /// </summary>
 public class SpawnerController : MonoBehaviour
 {
@@ -13,11 +18,12 @@ public class SpawnerController : MonoBehaviour
     [SerializeField] private Transform initialPosition;
 
     // Components
-    private GameState gameState;
+    public GameState GameState { get; private set; }
     private Checkpoint[] childrenCheckpoints;
     private UIRespawn uiRespawn;
     private UIMainMenu uiMainMenu;
     private SceneControl sceneControl;
+    private LevelChanger levelChanger;
 
     private void Awake()
     {
@@ -28,9 +34,10 @@ public class SpawnerController : MonoBehaviour
         // Spawner variables
         uiRespawn = FindObjectOfType<UIRespawn>();
         uiMainMenu = FindObjectOfType<UIMainMenu>();
+        levelChanger = FindObjectOfType<LevelChanger>();
 
         // Create a GameState to check if save file exists
-        gameState = new GameState(playerSavedStats);
+        GameState = new GameState(playerSavedStats);
         sceneControl = FindObjectOfType<SceneControl>();
     }
 
@@ -38,33 +45,79 @@ public class SpawnerController : MonoBehaviour
     {
         if (uiRespawn != null) uiRespawn.RespawnButtonPressed += TypeOfRespawn;
         if (uiMainMenu != null) uiMainMenu.MainMenuSpawn += TypeOfRespawn;
+        if (levelChanger != null) levelChanger.LevelChanged += TypeOfRespawn;
     }
 
     private void OnDisable()
     {
         if (uiRespawn != null) uiRespawn.RespawnButtonPressed -= TypeOfRespawn;
         if (uiMainMenu != null) uiMainMenu.MainMenuSpawn -= TypeOfRespawn;
+        if (levelChanger != null) levelChanger.LevelChanged -= TypeOfRespawn;
     }
 
-    // TEMPORARY VARIABLE DELETE NO FINAL //////////////////////////////////////
-    [SerializeField] private bool TRUEIFNEWGAMESPAWN;
+    /// <summary>
+    /// Loads a scene corresponding to the last checkpoint.
+    /// </summary>
+    private void TypeOfRespawn(SpawnTypeEnum typeOfSpawn)
+    {
+        if (typeOfSpawn == SpawnTypeEnum.Respawn)
+        {
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Respawn.ToString());
+        }
+        else if (typeOfSpawn == SpawnTypeEnum.Loadgame)
+        {
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());
+        }
+        else if (typeOfSpawn == SpawnTypeEnum.Newgame)
+        {
+            // left brank on purpose
+            DeleteFiles();
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString());
+            sceneControl.LoadScene(SceneEnum.Area1);
+            return;
+        }
+
+        // If it's respawn or load game
+        if (PlayerPrefs.GetString("TypeOfSpawn") != SpawnTypeEnum.Newgame.ToString())
+        {
+            // If a save file already exists, it loads the scene saved
+            if (GameState.FileExists(FilePath.SAVEFILESCENE))
+            {
+                // Loads the scene connected to the last saved file
+                sceneControl.LoadScene(GameState.LoadCheckpointScene());
+            }
+        }
+    }
+
+    /// <summary>
+    /// Happens when the player goes to next area.
+    /// Loads the next scene.
+    /// </summary>
+    /// <param name="sceneToLoad">Scene to load.</param>
+    private void TypeOfRespawn(SceneEnum sceneToLoad)
+    {
+        PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());
+
+        // Loads the scene connected to the last saved file
+        sceneControl.LoadScene(sceneToLoad);
+    }
 
     private void Start()
     {
-        // DELETE ON FINAL VERSION // /////////////////////
-        if (TRUEIFNEWGAMESPAWN)
-        {
-            DeleteFiles();
-            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString());
-        }
-        else
-            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());  
-        // DELETE ON FINAL VERSION //  ////////////////////
-
+        ///////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
+        //////////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
+        //////////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
+        ///////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
+        PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());
+        ///////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
+        //////////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
+        //////////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
+        //////////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
 
         // Main menu is always visited by default.
         PlayerPrefs.SetInt(SceneEnum.MainMenu.ToString(), 1);
 
+        // NOT in main menu
         if (sceneControl.CurrentSceneEnum() != SceneEnum.MainMenu)
         {
             // If the current scene was already visited
@@ -91,55 +144,13 @@ public class SpawnerController : MonoBehaviour
                 if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Newgame.ToString())
                 {
                     StartCoroutine(SpawnPlayer(SpawnTypeEnum.Newgame));
+                    return;
                 }
                 
                 else if (PlayerPrefs.GetString("TypeOfSpawn") == SpawnTypeEnum.Loadgame.ToString())
                 {
                     StartCoroutine(SpawnPlayer(SpawnTypeEnum.Loadgame));
-                    return;
                 }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Loads a scene corresponding to the last checkpoint.
-    /// If there is no checkpoint yet, loads default initial scene.
-    /// </summary>
-    private void TypeOfRespawn(SpawnTypeEnum typeOfSpawn)
-    {
-        if (typeOfSpawn == SpawnTypeEnum.Respawn)
-        {
-            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Respawn.ToString());
-        }
-        else if (typeOfSpawn == SpawnTypeEnum.Loadgame)
-        {
-            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());
-        }
-        else if (typeOfSpawn == SpawnTypeEnum.Newgame)
-        {
-            // left brank on purpose
-            DeleteFiles();
-            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString());
-            sceneControl.LoadScene(SceneEnum.Area1);
-            return;
-        }
-
-        // If it's not new game
-        if (PlayerPrefs.GetString("TypeOfSpawn") != SpawnTypeEnum.Newgame.ToString())
-        {
-            // If a save file already exists, it losts
-            if (gameState.FileExists(FilePath.SAVEFILESCENE))
-            {
-                // Loads the scene connected to the last saved file
-                sceneControl.LoadScene(gameState.LoadCheckpointScene());
-            }
-            else
-            {
-                // Loads first scene after main menu.
-                // Happens when the player is playing and didn't reach
-                // the first checkpoint yet.
-                sceneControl.LoadScene(SceneEnum.Area1);
             }
         }
     }
@@ -156,11 +167,11 @@ public class SpawnerController : MonoBehaviour
 
         // After fixed update loads variables saved on last checkpoint
         // If the player already played through a checkpoint
-        if (gameState.FileExists(FilePath.SAVEFILECHECKPOINT) &&
+        if (GameState.FileExists(FilePath.SAVEFILECHECKPOINT) &&
             typeOfSpawn != SpawnTypeEnum.Newgame)
         {
             // If player didn't visit this map yet, spawns on initial position of that map
-            if ((byte)gameState.LoadCheckpointScene() < (byte)sceneControl.CurrentSceneEnum())
+            if ((byte)GameState.LoadCheckpointScene() < (byte)sceneControl.CurrentSceneEnum())
             {
                 if (FindObjectOfType<Player>() == null)
                     Instantiate(
@@ -175,7 +186,7 @@ public class SpawnerController : MonoBehaviour
                 {
                     // If checkpoint number is  the same as the saved one
                     if (checkpoint.CheckpointNumber ==
-                        gameState.LoadCheckpoint())
+                        GameState.LoadCheckpoint())
                     {
                         // Instantiates the player on that checkpoint's position
                         if (FindObjectOfType<Player>() == null)
@@ -201,10 +212,10 @@ public class SpawnerController : MonoBehaviour
         PlayerStats playerStats = FindObjectOfType<PlayerStats>();
 
         // Creates FileIO
-        gameState.AddPlayerStats(playerStats);
+        GameState.AddPlayerStats(playerStats);
 
         // Loads saved stats OR default stats, if there's no saved stats yet
-        gameState.LoadPlayerStats();
+        GameState.LoadPlayerStats();
 
         // Refreshes UI
         FindObjectOfType<ItemUIParent>().UpdateAllItemUI();
@@ -223,25 +234,25 @@ public class SpawnerController : MonoBehaviour
     /// <param name="nameOfScene">Current scene.</param>
     public void SaveCheckpoint(byte numberOfCheckpoint, SceneEnum nameOfScene)
     {
-        if (gameState.FileExists(FilePath.SAVEFILECHECKPOINT))
+        if (GameState.FileExists(FilePath.SAVEFILECHECKPOINT))
         {
             // Only saves if the current scene is higher than the current saved one
-            if ((byte)gameState.LoadCheckpointScene() < (byte)sceneControl.CurrentSceneEnum())
+            if ((byte)GameState.LoadCheckpointScene() < (byte)sceneControl.CurrentSceneEnum())
             {
-                gameState.SaveCheckpoint(numberOfCheckpoint);
-                gameState.SaveCheckpointScene(nameOfScene);
-                gameState.SavePlayerStats();
+                GameState.SaveCheckpoint(numberOfCheckpoint);
+                GameState.SaveCheckpointScene(nameOfScene);
+                GameState.SavePlayerStats();
                 OnCheckPointReached();
             }
             // Else if this scene is the same
             else
             {
                 // Only saves if the current checkpoint is higher than the current saved one
-                if (numberOfCheckpoint > gameState.LoadCheckpoint())
+                if (numberOfCheckpoint > GameState.LoadCheckpoint())
                 {
-                    gameState.SaveCheckpoint(numberOfCheckpoint);
-                    gameState.SaveCheckpointScene(nameOfScene);
-                    gameState.SavePlayerStats();
+                    GameState.SaveCheckpoint(numberOfCheckpoint);
+                    GameState.SaveCheckpointScene(nameOfScene);
+                    GameState.SavePlayerStats();
                     OnCheckPointReached();
                 }
             }
@@ -249,9 +260,9 @@ public class SpawnerController : MonoBehaviour
         // Else if save file doesn't exist yet
         else
         {
-            gameState.SaveCheckpoint(numberOfCheckpoint);
-            gameState.SaveCheckpointScene(nameOfScene);
-            gameState.SavePlayerStats();
+            GameState.SaveCheckpoint(numberOfCheckpoint);
+            GameState.SaveCheckpointScene(nameOfScene);
+            GameState.SavePlayerStats();
             OnCheckPointReached();
         }
     }
@@ -269,7 +280,7 @@ public class SpawnerController : MonoBehaviour
         PlayerPrefs.DeleteKey(SceneEnum.Area6.ToString());
         PlayerPrefs.DeleteKey(SceneEnum.ProgrammingTests.ToString());
         PlayerPrefs.DeleteKey(SceneEnum.TESTAREA.ToString());
-        gameState.DeleteFiles();
+        GameState.DeleteFiles();
     }
 
     /// <summary>

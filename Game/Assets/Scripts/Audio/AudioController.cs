@@ -14,14 +14,8 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     // Components
     [SerializeField] private AudioMixer masterVolume;
     [SerializeField] private OptionsScriptableObj options;
-    private SlowMotionBehaviour slowMotion;
-
-    // Audio variables
-    private float master;
-    private float ambience;
-    private float sfx;
-
     private Options optionsScript;
+    private SlowMotionBehaviour slowMotion;
 
     #region Singleton
     public static AudioController instance = null;
@@ -31,11 +25,6 @@ public class AudioController : MonoBehaviour, IUpdateOptions
         {
             instance = this;
             DontDestroyOnLoad(this);
-
-            masterVolume.SetFloat("masterVolume", options.MinMasterVolume);
-            masterVolume.SetFloat("musicVolume", options.MinMusicVolume);
-            masterVolume.SetFloat("soundVolume", options.MinSoundVolume);
-            masterVolume.SetFloat("soundPitch", 1);
 
             optionsScript = FindObjectOfType<Options>();
             slowMotion = FindObjectOfType<SlowMotionBehaviour>();
@@ -47,6 +36,16 @@ public class AudioController : MonoBehaviour, IUpdateOptions
         }
     }
     #endregion
+
+    private IEnumerator Start()
+    {
+        yield return new WaitForFixedUpdate();
+
+        masterVolume.SetFloat("masterVolume", options.MasterVolume);
+        masterVolume.SetFloat("musicVolume", options.MusicVolume);
+        masterVolume.SetFloat("soundVolume", options.SoundVolume);
+        masterVolume.SetFloat("soundPitch", 1);
+    }
 
     private void OnEnable()
     {
@@ -65,38 +64,6 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     {
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         slowMotion.SlowMotionEvent += UpdatePitch;
-    }
-
-    /// <summary>
-    /// Only happens after configuration's awake (after loading all values)
-    /// </summary>
-    private IEnumerator Start()
-    {
-        YieldInstruction wfu = new WaitForFixedUpdate();
-
-        // Current volumes
-        master = options.MinMasterVolume;
-        ambience = options.MinMusicVolume;
-        sfx = options.MinSoundVolume;
-
-        float timePassed = 0;
-        // Scales volumes until they reach the current volume
-        while (timePassed < timeForTransition)
-        {
-            // Lerps volume
-            master = Mathf.Lerp(master, options.MasterVolume, timePassed / timeForTransition);
-            ambience = Mathf.Lerp(ambience, options.MusicVolume, timePassed / timeForTransition);
-            sfx = Mathf.Lerp(sfx, options.SoundVolume, timePassed / timeForTransition);
-
-            // Updates current volumes for audio mixers
-            masterVolume.SetFloat("masterVolume", master);
-            masterVolume.SetFloat("musicVolume", ambience);
-            masterVolume.SetFloat("soundVolume", sfx);
-
-            // Increments timePassed with current time
-            timePassed = Time.timeSinceLevelLoad;
-            yield return wfu;
-        }
     }
 
     /// <summary>

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 /// <summary>
 /// Class responsible for handling a simple enemy script.
@@ -50,7 +51,6 @@ public sealed class EnemySimple : EnemyBase
     private new void Awake()
     {
         base.Awake();
-        combatMusic = FindObjectOfType<MusicCombatTransition>();
 
         if (patrolStateOriginal != null)
             PatrolState = Instantiate(patrolStateOriginal);
@@ -84,10 +84,15 @@ public sealed class EnemySimple : EnemyBase
     /// <summary>
     /// Runs once on start. Initializes states.
     /// </summary>
-    private void Start()
+    private IEnumerator Start()
     {
         PlayerLastKnownPosition = default;
         stateMachine?.Initialize();
+
+        yield return new WaitForFixedUpdate();
+        // Finds combat music after singleton destroys the one that exists
+        // on this scene
+        combatMusic = FindObjectOfType<MusicCombatTransition>();
     }
 
     /// <summary>

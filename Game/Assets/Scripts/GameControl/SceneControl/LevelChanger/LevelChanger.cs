@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Class responsible for triggering level change when the player hits
@@ -10,19 +11,14 @@ public class LevelChanger : MonoBehaviour
     [SerializeField] private SceneEnum changeToLevel;
     [SerializeField] private BoxCollider boxCollider;
     [SerializeField] private Transform playerGoToPosition;
-    [SerializeField] private PlayerSavedStatsScriptableObj playerSavedStats;
-
-    private SceneControl sceneController;
-    private GameState gameState;
+    
     private PlayerInputCustom input;
 
     private bool changedScene;
 
     private void Awake()
     {
-        sceneController = FindObjectOfType<SceneControl>();
         input = FindObjectOfType<PlayerInputCustom>();
-        gameState = new GameState(playerSavedStats);
     }
 
     private void Start()
@@ -50,6 +46,7 @@ public class LevelChanger : MonoBehaviour
     {
         PlayerMovement playerMovement = FindObjectOfType<PlayerMovement>();
         CharacterController playerController = playerMovement.GetComponent<CharacterController>();
+        SpawnerController spawner = FindObjectOfType<SpawnerController>();
 
         while (playerMovement.transform.position.Similiar(playerGoToPosition.position, 0.1f) == false)
         {
@@ -62,8 +59,8 @@ public class LevelChanger : MonoBehaviour
             {
                 if (changedScene == false)
                 {
-                    gameState.SavePlayerStats();
-                    sceneController.LoadScene(changeToLevel);
+                    spawner.GameState.SavePlayerStats();
+                    OnLevelChanged(changeToLevel);
                     changedScene = true;
                 }
             }
@@ -71,6 +68,13 @@ public class LevelChanger : MonoBehaviour
         }
     }
 
+    protected virtual void OnLevelChanged(SceneEnum spawnType) => 
+        LevelChanged?.Invoke(spawnType);
+
+    /// <summary>
+    /// Event registered on SpawnerController.
+    /// </summary>
+    public event Action<SceneEnum> LevelChanged;
 
     private void OnDrawGizmos()
     {
