@@ -38,6 +38,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     private Transform playerFrontTarget;
     private Transform playerBackTarget;
     private Transform playerTarget;
+    private Transform playerTargetForCinemachine;
 
     // Target variables
     [SerializeField] private float findTargetSize;
@@ -577,11 +578,11 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         if (player != null)
         {
-            thirdPersonCamera.Follow = player.transform;
-            thirdPersonCamera.LookAt = player.transform;
-            targetCamera.Follow = player.transform;
-            pauseMenuCamera.Follow = player.transform;
-            pauseMenuCamera.LookAt = player.transform;
+            thirdPersonCamera.Follow = playerTargetForCinemachine;
+            thirdPersonCamera.LookAt = playerTargetForCinemachine;
+            targetCamera.Follow = playerTargetForCinemachine;
+            pauseMenuCamera.Follow = playerTargetForCinemachine;
+            pauseMenuCamera.LookAt = playerTargetForCinemachine;
             wallHugCamera.Follow = playerFrontTarget.transform;
             wallHugCamera.LookAt = playerBackTarget.transform;
         }
@@ -683,6 +684,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             GameObject.FindGameObjectWithTag("playerBackTarget").transform;
         playerFrontTarget =
             GameObject.FindGameObjectWithTag("playerFrontTarget").transform;
+        playerTargetForCinemachine =
+            GameObject.FindGameObjectWithTag("playerTargetForCinemachine").transform;
         SetAllCamerasTargets();
         mainCameraBrain.enabled = true;
 
