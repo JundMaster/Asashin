@@ -27,6 +27,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
     private EnemyPatrolPoint[] patrolPoints;
     private byte patrolIndex;
     private bool breakState;
+    private bool hitFromBehind;
     private IEnumerator movementCoroutine;
 
     /// <summary>
@@ -65,6 +66,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
     {
         base.OnEnter();
         breakState = false;
+        hitFromBehind = false;
         agent.isStopped = false;
         enemy.InCombat = false;
         enemy.VisionCone.SetActive(true);
@@ -100,6 +102,9 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
 
         if (alert)
             return enemy.DefenseState;
+
+        if (hitFromBehind)
+            return enemy.LostPlayerState;
 
         // Calculates vision cone if the player isn't too far
         if (playerTarget != null)
@@ -243,6 +248,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
     protected override void TakeImpact()
     {
         breakState = false;
+        hitFromBehind = true;
         base.TakeImpact();
     }
 }

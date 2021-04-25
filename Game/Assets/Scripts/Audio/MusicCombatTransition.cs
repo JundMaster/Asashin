@@ -37,16 +37,20 @@ public class MusicCombatTransition : MonoBehaviour, IFindPlayer
 
     private void Update()
     {
-        if (bossCutscene == null || bossCutscene?.OnBossFight == false)
+        if (bossCutscene == null || 
+            (bossCutscene != null && bossCutscene.OnBossFight == false))
         {
-            if (player.PlayerCurrentlyFighting > 0)
+            if (player != null)
             {
-                if (currentTrack == MusicTrack.Basetrack)
+                if (player.PlayerCurrentlyFighting > 0)
                 {
-                    currentTrack = MusicTrack.Combattrack;
-                    if (switchTracks != null) StopCoroutine(switchTracks);
-                    switchTracks = SwitchToCombat();
-                    StartCoroutine(switchTracks);
+                    if (currentTrack == MusicTrack.Basetrack)
+                    {
+                        currentTrack = MusicTrack.Combattrack;
+                        if (switchTracks != null) StopCoroutine(switchTracks);
+                        switchTracks = SwitchToCombat();
+                        StartCoroutine(switchTracks);
+                    }
                 }
             }
         }
@@ -58,7 +62,8 @@ public class MusicCombatTransition : MonoBehaviour, IFindPlayer
     /// </summary>
     public void SwitchToBackgroundMusic()
     {
-        if (bossCutscene == null || bossCutscene?.OnBossFight == false)
+        if (bossCutscene == null ||
+            (bossCutscene != null && bossCutscene.OnBossFight == false))
         {
             // Checks if all alive enemies are in patrol state
             byte enemiesNotInCombat = 0;

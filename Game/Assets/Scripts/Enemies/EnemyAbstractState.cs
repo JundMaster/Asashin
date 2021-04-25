@@ -80,7 +80,7 @@ public abstract class EnemyAbstractState : StateBase
     }
 
     /// <summary>
-    /// Starts ImapctToBackCoroutine.
+    /// Starts ImapactToBackCoroutine.
     /// Pushes enemy back.
     /// </summary>
     protected virtual void TakeImpact() =>
