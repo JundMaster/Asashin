@@ -14,7 +14,6 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     
     protected EnemySimple enemy;
 
-    protected bool instantKill;
     protected bool alert;
 
     /// <summary>
@@ -33,7 +32,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     /// </summary>
     public override void Start()
     {
-        instantKill = false;
+        base.Start();
         alert = false;
     }
 
@@ -46,7 +45,6 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     public override void OnEnter()
     {
         base.OnEnter();
-
         alert = false;
 
         stats.MeleeDamageOnEnemy += CheckForInstantKill;
@@ -85,10 +83,10 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
         yield return wffu;
 
         while (Time.time - timeEntered < timeToTravelAfterHit &&
-            instantKill == false)
+            die == false)
         {
             // To be sure the coroutine doesn't run while the enemy is dying
-            if (instantKill) break;
+            if (die) break;
 
             enemy.transform.RotateToSmoothly(playerTarget.position,
                 ref smoothTimeRotationAfterBeingHit, turnSpeedAfterBeingHit);
@@ -135,10 +133,4 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     /// </summary>
     protected void AlertEnemies() => 
         alert = true;
-
-    /// <summary>
-    /// Instantly switches to DeathState.
-    /// </summary>
-    protected void SwitchToDeathState() =>
-        instantKill = true;
 }

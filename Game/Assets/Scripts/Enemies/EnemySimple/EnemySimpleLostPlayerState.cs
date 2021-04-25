@@ -42,6 +42,8 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision
 
         breakState = false;
 
+        enemy.InCombat = true;
+
         agent.isStopped = false;
 
         agent.SetDestination(enemy.PlayerLastKnownPosition);
@@ -59,7 +61,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision
     {
         base.FixedUpdate();
 
-        if (instantKill)
+        if (die)
             return enemy.DeathState;
 
         if (alert)

@@ -24,6 +24,9 @@ public class EnemySimpleDeathState : EnemySimpleAbstractState
     /// </summary>
     public override void OnEnter()
     {
+        if (enemy.InCombat == true)
+            enemy.InCombat = false;
+
         // Variables to make sure the is no collision while the enemy is dying
         enemy.GetComponent<CapsuleCollider>().enabled = false;
         enemy.gameObject.layer = 0; // Changes to default layer

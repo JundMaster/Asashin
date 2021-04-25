@@ -20,18 +20,12 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
 
     [Header("Enemy target")]
     [SerializeField] protected Transform myTarget;
-    public Transform MyTarget => myTarget;
-
+    
     [Header("Size to alert other enemies when the enemy finds the player")]
     [SerializeField] private float sizeOfAlert;
 
     [Header("Enemy melee weapon")]
     [SerializeField] protected SphereCollider weaponCollider;
-    public SphereCollider WeaponCollider => weaponCollider;
-
-    [Header("Enemy animator")]
-    [SerializeField] protected Animator anim;
-    public Animator Anim => anim;
     ////////////////////////////////////////////////////////////////////////////
 
     // State machine variables
@@ -45,7 +39,7 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
 
     // Player variables
     public Player Player { get; private set; }
-    public bool PlayerCurrentlyFighting
+    public byte PlayerCurrentlyFighting
     {
         get => Player.PlayerCurrentlyFighting;
         set
@@ -58,37 +52,21 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     // Components
     public CinemachineTarget CineTarget { get; private set; }
     public Transform PlayerTarget { get; private set; }
+    public Animator Anim { get; private set; }
+    public EnemyStats Stats { get; private set; }
     public NavMeshAgent Agent { get; private set; }
-    protected Stats enemyStats;
-    protected EnemyAnimationEvents animationEvents;
+    public Transform MyTarget => myTarget;
+    public SphereCollider WeaponCollider => weaponCollider;
 
     protected void Awake()
     {
-        Agent = GetComponent<NavMeshAgent>();
         CineTarget = FindObjectOfType<CinemachineTarget>();
-        enemyStats = GetComponent<Stats>();
-        animationEvents = GetComponentInChildren<EnemyAnimationEvents>();
+        Anim = GetComponentInChildren<Animator>();
+        Stats = GetComponent<EnemyStats>();
+        Agent = GetComponent<NavMeshAgent>();
 
         if (deathStateOriginal != null)
             DeathState = Instantiate(deathStateOriginal);
-    }
-
-    /// <summary>
-    /// Happens once on enable, registers to events.
-    /// </summary>
-    private void OnEnable()
-    {
-        enemyStats.Die += OnDeath;
-        animationEvents.Hit += OnWeaponHit;
-    }
-
-    /// <summary>
-    /// Happens once on disable, unregisters from events.
-    /// </summary>
-    private void OnDisable()
-    {
-        enemyStats.Die -= OnDeath;
-        animationEvents.Hit -= OnWeaponHit;
     }
 
     /// <summary>
@@ -128,16 +106,6 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     }
 
     /// <summary>
-    /// Method that triggers DeathState.
-    /// Is triggered when enemy's health reaches 0.
-    /// </summary>
-    private void OnDeath()
-    {
-        if (DeathState != null)
-            stateMachine?.SwitchToNewState(DeathState);
-    }
-
-    /// <summary>
     /// Finds Player when the Player spawns.
     /// </summary>
     public void FindPlayer()
@@ -156,19 +124,8 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     public void PlayerLost()
     {
         PlayerTarget = myTarget;
-        PlayerCurrentlyFighting = false;
+        PlayerCurrentlyFighting = 0;
     }
-
-    /// <summary>
-    /// Invokes WeaponHit event.
-    /// </summary>
-    protected virtual void OnWeaponHit() => WeaponHit?.Invoke();
-
-    /// <summary>
-    /// Event registered on Aggressive State.
-    /// Is triggered after the enemy atacks.
-    /// </summary>
-    public event Action WeaponHit;
 
     #region Gizmos
     private void OnDrawGizmos()

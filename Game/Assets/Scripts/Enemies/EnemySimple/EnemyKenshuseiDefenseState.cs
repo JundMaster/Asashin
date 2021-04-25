@@ -15,11 +15,11 @@ public class EnemyKenshuseiDefenseState : EnemySimpleAbstractDefenseState
     {
         base.FixedUpdate();
 
-        if (instantKill)
+        if (die)
             return enemy.DeathState;
 
         // Only if the player isn't fighting an enemy yet
-        if (enemy.PlayerCurrentlyFighting == false)
+        if (enemy.PlayerCurrentlyFighting < 2)
         {
             if (enemy.AggressiveState != null)
                 return enemy.AggressiveState;

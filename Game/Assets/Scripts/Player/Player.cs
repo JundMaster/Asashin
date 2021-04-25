@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -11,20 +10,8 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerValuesScriptableObj values;
     public PlayerValuesScriptableObj Values => values;
 
-    private bool playerCurrentlyFighting;
-    public bool PlayerCurrentlyFighting
-    {
-        get => playerCurrentlyFighting;
-        set
-        {
-            if (value == true)
-                OnEnteredCombat(true);
-            else if (value == false)
-                OnEnteredCombat(false);
+    public byte PlayerCurrentlyFighting { get; set; }
 
-            playerCurrentlyFighting = value;
-        }
-    }
     // ILists with components
     private IList<IAction> myIComponents;
     private IList<IAction> componentsToRun;
@@ -40,7 +27,7 @@ public class Player : MonoBehaviour
         foreach (IAction comp in myIComponents)
             componentsToRun.Add(comp);
 
-        PlayerCurrentlyFighting = false;
+        PlayerCurrentlyFighting = 0;
     }
 
     private void Update()
@@ -54,9 +41,4 @@ public class Player : MonoBehaviour
         foreach (IAction comp in componentsToRun)
             comp?.ComponentFixedUpdate();
     }
-
-    protected virtual void OnEnteredCombat(bool condition) 
-        => EnteredCombat?.Invoke(condition);
-
-    public event Action<bool> EnteredCombat;
 }

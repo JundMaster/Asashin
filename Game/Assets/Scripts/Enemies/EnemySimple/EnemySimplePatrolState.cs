@@ -66,6 +66,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
         base.OnEnter();
         breakState = false;
         agent.isStopped = false;
+        enemy.InCombat = false;
         enemy.VisionCone.SetActive(true);
 
         // Only starts movement coroutine if the enemy has more than 1 patroi
@@ -94,7 +95,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
     {
         base.FixedUpdate();
 
-        if (instantKill)
+        if (die)
             return enemy.DeathState;
 
         if (alert)

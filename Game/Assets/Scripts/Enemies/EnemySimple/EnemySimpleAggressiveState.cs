@@ -38,10 +38,10 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     private float currentTimerToInvokeAlert;
 
     // Components
-    private Animator anim;
     private SphereCollider weapon;
     private PlayerRoll playerRoll;
     private GameObject visionCone;
+    private EnemyAnimationEvents animationEvents;
 
     /// <summary>
     /// Happens once on start.
@@ -53,7 +53,8 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         visionCone = enemy.VisionCone;
         if (enemy.Player != null)
             playerRoll = enemy.Player.GetComponent<PlayerRoll>();
-        anim = enemy.Anim;
+
+        animationEvents = enemy.GetComponentInChildren<EnemyAnimationEvents>();
         weapon = enemy.WeaponCollider;
     }
 
@@ -64,7 +65,8 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     public override void OnEnter()
     {
         base.OnEnter();
-        enemy.PlayerCurrentlyFighting = true;
+        enemy.PlayerCurrentlyFighting++;
+        enemy.InCombat = true;
         attacking = false;
         attackingAnimation = false;
         agent.isStopped = false;
@@ -79,7 +81,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         if (visionCone.activeSelf)
             visionCone.SetActive(false);
 
-        enemy.WeaponHit += WeaponHit;
+        animationEvents.Hit += WeaponHit;
     }
 
     /// <summary>
@@ -91,7 +93,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     {
         base.FixedUpdate();
 
-        if (instantKill)
+        if (die)
             return enemy.DeathState;
 
         float currentDistanceFromPlayer =
@@ -152,14 +154,14 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     public override void OnExit()
     {
         base.OnExit();
-        enemy.PlayerCurrentlyFighting = false;
+        enemy.PlayerCurrentlyFighting--;
         if (attackingCoroutine != null)
             enemy.StopCoroutine(attackingCoroutine);
         attackingAnimation = false;
         attacking = false;
         agent.isStopped = false;
 
-        enemy.WeaponHit -= WeaponHit;
+        animationEvents.Hit -= WeaponHit;
     }
 
     /// <summary>

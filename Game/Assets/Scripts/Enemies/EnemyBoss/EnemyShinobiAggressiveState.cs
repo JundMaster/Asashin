@@ -25,6 +25,7 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
 
     private SphereCollider weapon;
     private PlayerRoll playerRoll;
+    private EnemyAnimationEvents animationEvents;
 
     [Tooltip("Must wait this time to alert enemies again")]
     [Range(0f, 5f)][SerializeField] private float delayTimerToInvokeAlert;
@@ -32,9 +33,12 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
 
     public override void Start()
     {
+        base.Start();
+
         if (enemy.Player != null)
             playerRoll = enemy.Player.GetComponent<PlayerRoll>();
 
+        animationEvents = enemy.GetComponentInChildren<EnemyAnimationEvents>();
         weapon = enemy.WeaponCollider;
     }
 
@@ -47,12 +51,15 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         if (enemy.Player != null)
             playerRoll = enemy.Player.GetComponent<PlayerRoll>();
 
-        enemy.WeaponHit += WeaponHit;
+        animationEvents.Hit += WeaponHit;
     }
 
     public override IState FixedUpdate()
     {
         base.FixedUpdate();
+
+        if (die)
+            return enemy.DeathState;
 
         float currentDistanceFromPlayer =
             Vector3.Distance(playerTarget.position, myTarget.position);
@@ -100,7 +107,7 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         attacking = false;
         agent.isStopped = false;
 
-        enemy.WeaponHit -= WeaponHit;
+        animationEvents.Hit -= WeaponHit;
     }
 
     /// <summary>

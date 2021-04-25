@@ -155,7 +155,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         }
 
         // Cancels sneaking if player is fighting
-        if (player.PlayerCurrentlyFighting)
+        if (player.PlayerCurrentlyFighting > 0)
             Hidden = false;
     }
 

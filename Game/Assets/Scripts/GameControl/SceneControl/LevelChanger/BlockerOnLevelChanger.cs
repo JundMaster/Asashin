@@ -40,7 +40,7 @@ public class BlockerOnLevelChanger : MonoBehaviour, IFindPlayer
         anim.SetBool("ShowText", showingText);
 
         // If player is fighting, starts a timer and activates box collider
-        if (player?.PlayerCurrentlyFighting == true)
+        if (player?.PlayerCurrentlyFighting > 0)
         {
             timerSincePlayerWasFighting = Time.time;
 

@@ -6,7 +6,6 @@
 public abstract class EnemyBossAbstractState : EnemyAbstractState
 {
     protected EnemyBoss enemy;
-    protected Animator anim;
 
     /// <summary>
     /// Method that defines what happens when this state is initialized.
@@ -17,11 +16,5 @@ public abstract class EnemyBossAbstractState : EnemyAbstractState
         base.Initialize(en);
 
         enemy = en as EnemyBoss;
-        anim = enemy.Anim;
-    }
-
-    public override void Start()
-    {
-        //
     }
 }

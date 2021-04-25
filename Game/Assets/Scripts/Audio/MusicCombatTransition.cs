@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -13,16 +14,14 @@ public class MusicCombatTransition : MonoBehaviour, IFindPlayer
 
     private float baseDefaultVolume;
     private float combatDefaultVolume;
-    private float timeAfterLeavingCombat;
-    private float delayAfterLeavingCombat;
     private enum MusicTrack { Basetrack, Combattrack, };
     private MusicTrack currentTrack;
+    private IEnumerator switchTracks;
 
     // Components
     private Player player;
     private BossCutsceneControl bossCutscene;
-
-    private IEnumerator switchTracks;
+    private EnemySimple[] simpleEnemies;
     
     private void Awake()
     {
@@ -31,103 +30,57 @@ public class MusicCombatTransition : MonoBehaviour, IFindPlayer
 
         baseDefaultVolume = baseBackground.volume;
         combatDefaultVolume = combatBackground.volume;
+
+        simpleEnemies = FindObjectsOfType<EnemySimple>();
     }
 
-    private void OnEnable()
-    {
-        if (player != null) player.EnteredCombat += SwitchMusics;
-    }
-
-    private void OnDisable()
-    {
-        if (player != null) player.EnteredCombat -= SwitchMusics;
-    }
-
-    private void Start()
-    {
-        switchTracks = null;
-        delayAfterLeavingCombat = 2f;
-    }
 
     private void Update()
     {
-        // Keeps time so it won't change to base music immediatly after
-        // leaving the fight
-        if (bossCutscene == null)
+        if (bossCutscene == null || bossCutscene?.OnBossFight == false)
         {
-            if (player.PlayerCurrentlyFighting)
+            if (player.PlayerCurrentlyFighting > 0)
             {
-                timeAfterLeavingCombat = Time.time;
-            }
-            else
-            {
-                if (currentTrack == MusicTrack.Combattrack)
-                    SwitchMusics(false);
-            }
-            return;
-        }
-
-        // Else if the boss cutscene is not null
-        if (bossCutscene.OnBossFight == false)
-        {
-            if (player.PlayerCurrentlyFighting)
-            {
-                timeAfterLeavingCombat = Time.time;
-            }
-            else
-            {
-                if (currentTrack == MusicTrack.Combattrack)
-                    SwitchMusics(false);
+                if (currentTrack == MusicTrack.Basetrack)
+                {
+                    currentTrack = MusicTrack.Combattrack;
+                    if (switchTracks != null) StopCoroutine(switchTracks);
+                    switchTracks = SwitchToCombat();
+                    StartCoroutine(switchTracks);
+                }
             }
         }
     }
 
     /// <summary>
-    /// Switches between 2 musics through an event.
+    /// When an enemy returns back to patrol state, it calls this method.
+    /// Changes msuic back to background music.
     /// </summary>
-    /// <param name="condition">True to change to one music, false to change
-    /// to another one.</param>
-    private void SwitchMusics(bool condition)
+    public void SwitchToBackgroundMusic()
     {
-        if (bossCutscene == null)
+        if (bossCutscene == null || bossCutscene?.OnBossFight == false)
         {
-            if (Time.time - timeAfterLeavingCombat > delayAfterLeavingCombat)
-            {
-                if (condition == true)
-                {
-                    currentTrack = MusicTrack.Combattrack;
-                    switchTracks = SwitchToCombat();
-                    StartCoroutine(switchTracks);
-                    return;
-                }
-                else if (condition == false)
-                {
-                    currentTrack = MusicTrack.Basetrack;
-                    switchTracks = SwitchToBackground();
-                    StartCoroutine(switchTracks);
-                }
-            }
-            return;
-        }
+            // Checks if all alive enemies are in patrol state
+            byte enemiesNotInCombat = 0;
 
-        // Else if the boss cutscene is not null
-        if (bossCutscene.OnBossFight == false)
-        {
-            if (Time.time - timeAfterLeavingCombat > delayAfterLeavingCombat)
+            for (int i = 0; i < simpleEnemies.Length; i++)
             {
-                if (condition == true)
-                {
-                    currentTrack = MusicTrack.Combattrack;
-                    switchTracks = SwitchToCombat();
-                    StartCoroutine(switchTracks);
-                    return;
-                }
-                else if (condition == false)
-                {
-                    currentTrack = MusicTrack.Basetrack;
-                    switchTracks = SwitchToBackground();
-                    StartCoroutine(switchTracks);
-                }
+                if (simpleEnemies[i] == null)
+                    enemiesNotInCombat++;
+
+                else if (simpleEnemies[i] != null &&
+                    simpleEnemies[i].InCombat == false)
+                    enemiesNotInCombat++;
+            }
+
+            // If all alive enemies are in patrol state it changes to normal
+            // music
+            if (enemiesNotInCombat == simpleEnemies.Length)
+            {
+                currentTrack = MusicTrack.Basetrack;
+                if (switchTracks != null) StopCoroutine(switchTracks);
+                switchTracks = SwitchToBackground();
+                StartCoroutine(switchTracks);
             }
         }
     }
@@ -139,8 +92,6 @@ public class MusicCombatTransition : MonoBehaviour, IFindPlayer
     private IEnumerator SwitchToCombat()
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
-
-        yield return wffu;
 
         while (true)
         {
@@ -163,12 +114,8 @@ public class MusicCombatTransition : MonoBehaviour, IFindPlayer
 
             yield return wffu;
 
-            if (player.PlayerCurrentlyFighting == false)
-                StartCoroutine(SwitchToBackground());
-
             break;
         }
-        switchTracks = null;
     }
 
     /// <summary>
@@ -178,8 +125,6 @@ public class MusicCombatTransition : MonoBehaviour, IFindPlayer
     private IEnumerator SwitchToBackground()
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
-
-        yield return wffu;
 
         while (true)
         {
@@ -200,13 +145,11 @@ public class MusicCombatTransition : MonoBehaviour, IFindPlayer
             yield return wffu;
             break;
         }
-        switchTracks = null;
     }
 
     public void FindPlayer()
     {
         player = FindObjectOfType<Player>();
-        player.EnteredCombat += SwitchMusics;
     }
 
     public void PlayerLost()
