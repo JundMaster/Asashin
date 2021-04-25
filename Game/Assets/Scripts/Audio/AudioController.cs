@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Class responsible for handling audio configuration.
@@ -22,26 +23,48 @@ public class AudioController : MonoBehaviour, IUpdateOptions
 
     private Options optionsScript;
 
+    #region Singleton
+    public static AudioController instance = null;
     private void Awake()
     {
-        masterVolume.SetFloat("masterVolume", options.MinMasterVolume);
-        masterVolume.SetFloat("musicVolume", options.MinMusicVolume);
-        masterVolume.SetFloat("soundVolume", options.MinSoundVolume);
-        masterVolume.SetFloat("soundPitch", 1);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
 
-        optionsScript = FindObjectOfType<Options>();
-        slowMotion = FindObjectOfType<SlowMotionBehaviour>();
+            masterVolume.SetFloat("masterVolume", options.MinMasterVolume);
+            masterVolume.SetFloat("musicVolume", options.MinMusicVolume);
+            masterVolume.SetFloat("soundVolume", options.MinSoundVolume);
+            masterVolume.SetFloat("soundPitch", 1);
+
+            optionsScript = FindObjectOfType<Options>();
+            slowMotion = FindObjectOfType<SlowMotionBehaviour>();
+            return;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
+    #endregion
 
     private void OnEnable()
     {
-        optionsScript.UpdatedValues += UpdateValues;
+        if (optionsScript != null) optionsScript.UpdatedValues += UpdateValues;
         if (slowMotion != null) slowMotion.SlowMotionEvent += UpdatePitch;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
     private void OnDisable()
     {
-        optionsScript.UpdatedValues -= UpdateValues;
+        if (optionsScript != null) optionsScript.UpdatedValues -= UpdateValues;
         if (slowMotion != null) slowMotion.SlowMotionEvent -= UpdatePitch;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        slowMotion = FindObjectOfType<SlowMotionBehaviour>();
+        slowMotion.SlowMotionEvent += UpdatePitch;
     }
 
     /// <summary>

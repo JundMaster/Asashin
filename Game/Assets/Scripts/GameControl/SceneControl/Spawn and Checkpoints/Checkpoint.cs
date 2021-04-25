@@ -8,7 +8,12 @@ public class Checkpoint : MonoBehaviour
 {
     [SerializeField] private SpawnerController checkpointController;
     [SerializeField] private byte checkpointNumber;
-    [SerializeField] private SceneEnum checkpointScene;
+    private CurrentLevelDefinitions definitions;
+
+    private void Awake()
+    {
+        definitions = FindObjectOfType<CurrentLevelDefinitions>();
+    }
 
     public byte CheckpointNumber => checkpointNumber;
 
@@ -25,7 +30,7 @@ public class Checkpoint : MonoBehaviour
     private IEnumerator SaveGame()
     {
         yield return new WaitForSeconds(1);
-        checkpointController.SaveCheckpoint(checkpointNumber, checkpointScene);
+        checkpointController.SaveCheckpoint(checkpointNumber, definitions.ThisArea.Name);
     }
 
     private void OnDrawGizmos()

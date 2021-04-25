@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Class responsible for handling music transitions when the player enters or
-/// leaves combat.
+/// leaves combat. Has singleton from audio controller.
 /// </summary>
-public class MusicCombatTransition : MonoBehaviour, IFindPlayer
+public class MusicCombatTransition : MonoBehaviour
 {
     [SerializeField] private AudioSource baseBackground;
     [SerializeField] private AudioSource combatBackground;
     [Range(0.1f, 1f)][SerializeField] private float transitionTimeBetweenSongs;
 
+    // Music management
     private float baseDefaultVolume;
     private float combatDefaultVolume;
     private enum MusicTrack { Basetrack, Combattrack, };
@@ -22,18 +24,49 @@ public class MusicCombatTransition : MonoBehaviour, IFindPlayer
     private Player player;
     private BossCutsceneControl bossCutscene;
     private EnemySimple[] simpleEnemies;
-    
+
     private void Awake()
     {
-        player = FindObjectOfType<Player>();
-        bossCutscene = FindObjectOfType<BossCutsceneControl>();
-
         baseDefaultVolume = baseBackground.volume;
         combatDefaultVolume = combatBackground.volume;
 
+        player = FindObjectOfType<Player>();
+        bossCutscene = FindObjectOfType<BossCutsceneControl>();
         simpleEnemies = FindObjectsOfType<EnemySimple>();
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    /// <summary>
+    /// Triggered every time a scene is loaded. Finds all components needed for
+    /// this class.
+    /// </summary>
+    /// <param name="scene">Null.</param>
+    /// <param name="mode">Null.</param>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) =>
+        StartCoroutine(Start());
+
+    private IEnumerator Start()
+    {
+        YieldInstruction wffu = new WaitForFixedUpdate();
+
+        while (player == null)
+        {
+            player = FindObjectOfType<Player>();
+            yield return wffu;
+        }
+
+        bossCutscene = FindObjectOfType<BossCutsceneControl>();
+        simpleEnemies = FindObjectsOfType<EnemySimple>();
+    }
 
     private void Update()
     {
