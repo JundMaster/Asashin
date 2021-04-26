@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -129,6 +130,17 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
         PlayerTarget = myTarget;
         PlayerCurrentlyFighting = 0;
     }
+
+    /// <summary>
+    /// Method that invokes Die event.
+    /// </summary>
+    public virtual void OnDie() => Die?.Invoke();
+
+    /// <summary>
+    /// Event invoked when the enemy dies.
+    /// Event registered on EnemyShinobiRangedState.
+    /// </summary>
+    public event Action Die;
 
     #region Gizmos
     private void OnDrawGizmos()
