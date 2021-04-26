@@ -67,6 +67,11 @@ public class Options : MonoBehaviour
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+    /// <summary>
+    /// Every time a scene loads, this script updates current post process volume.
+    /// </summary>
+    /// <param name="scene">Null.</param>
+    /// <param name="mode">Null.</param>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         CurrentLevelDefinitions levelDefinitions = FindObjectOfType<CurrentLevelDefinitions>();

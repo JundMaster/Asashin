@@ -20,7 +20,9 @@ public class PlayerInstantKillAnimationBehaviour : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        // This walking is used to always use instant kill in case the player releases the key
         playerMovement.Walking = true;
+        playerAttack.InInstantKill = true;
         playerAttack.Performing = true;
         playerAttack.Anim.applyRootMotion = true;
     }
@@ -29,8 +31,10 @@ public class PlayerInstantKillAnimationBehaviour : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         playerMovement.Walking = false;
+        playerAttack.InInstantKill = false;
         playerAttack.Performing = false;
         playerAttack.Anim.applyRootMotion = false;
+        playerAttack.Anim.ResetTrigger("MeleeLightAttack");
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

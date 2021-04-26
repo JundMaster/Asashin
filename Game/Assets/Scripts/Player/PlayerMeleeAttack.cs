@@ -37,6 +37,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     [SerializeField] private GameObject swordHitPrefab;
 
     public bool Performing { get; set; }
+    public bool InInstantKill { get; set; }
 
     // Rotation
     private float smoothTimeRotation;
@@ -85,7 +86,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     public void ComponentFixedUpdate()
     {
-        if (Performing && target.Targeting == false && input.Movement.magnitude > 0)
+        if (Performing && target.Targeting == false && 
+            input.Movement.magnitude > 0 && InInstantKill == false)
         {
             // Rotates towards player's pressing direction
             Vector3 movement = new Vector3(input.Movement.x, 0, input.Movement.y);
