@@ -1,14 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-using System;
+using UnityEngine.UI;
 
 /// <summary>
 /// Class responsible for controlling scenes.
 /// </summary>
 public class SceneControl : MonoBehaviour
 {
+    [SerializeField] private Image loadingBar;
+
     // Components
     private Animator anim;
 
@@ -44,6 +47,7 @@ public class SceneControl : MonoBehaviour
     private IEnumerator LoadNewScene(SceneEnum scene)
     {
         YieldInstruction waitForFrame = new WaitForEndOfFrame();
+        YieldInstruction wffu = new WaitForFixedUpdate();
 
         DisableControls();
         // Triggers transition to area animation
@@ -61,11 +65,11 @@ public class SceneControl : MonoBehaviour
             SceneManager.LoadSceneAsync(scene.ToString());
 
         // After the progress of the async operation reaches 1, the scene loads
-        while (sceneToLoad.progress < 1)
+        while (sceneToLoad.progress <= 1)
         {
+            loadingBar.fillAmount = sceneToLoad.progress;
             yield return waitForFrame;
         }
-        yield return null;
     }
 
     /// <summary>
