@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Scriptable object responsible for handling shinobi's aggressive state.
+/// </summary>
 [CreateAssetMenu(fileName = "Enemy Shinobi Aggressive State")]
 public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
 {
@@ -31,6 +34,13 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
     [Range(0f, 5f)][SerializeField] private float delayTimerToInvokeAlert;
     private float currentTimerToInvokeAlert;
 
+    [Header("Timer to change to reinforcements state")]
+    [SerializeField] private float timeToChangeState;
+    private float timeEnteringThisState;
+
+    /// <summary>
+    /// Runs once on start. Gets enemy variables.
+    /// </summary>
     public override void Start()
     {
         base.Start();
@@ -42,11 +52,17 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         weapon = enemy.WeaponCollider;
     }
 
+    /// <summary>
+    /// Runs every time the enemy enters this state. Registers to events and
+    /// sets variables.
+    /// </summary>
     public override void OnEnter()
     {
         attacking = false;
         attackingAnimation = false;
         currentTimerToInvokeAlert = 0;
+
+        timeEnteringThisState = Time.time;
 
         if (enemy.Player != null)
             playerRoll = enemy.Player.GetComponent<PlayerRoll>();
@@ -54,12 +70,21 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         animationEvents.Hit += WeaponHit;
     }
 
+    /// <summary>
+    /// Runs every fixed update. Checks the distance between the enemy and the
+    /// player and attacks or gets close to the player depending on that
+    /// distance.
+    /// </summary>
+    /// <returns>IState.</returns>
     public override IState FixedUpdate()
     {
         base.FixedUpdate();
 
         if (die)
             return enemy.DeathState;
+
+        if (Time.time - timeEnteringThisState > timeToChangeState)
+            return enemy.ReinforcementsState;
 
         float currentDistanceFromPlayer =
             Vector3.Distance(playerTarget.position, myTarget.position);
@@ -239,7 +264,7 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
     /// <param name="distance">Distance from player.</param>
     /// <returns>Returns true if it's near the player.
     /// Returns false if it's still moving towards the player.</returns>
-    private bool IsCloseToPlayer(float distance)
+    protected override bool IsCloseToPlayer(float distance)
     {
         // If the enemy is not close to the player
         if (distance > closeToPlayerRange)

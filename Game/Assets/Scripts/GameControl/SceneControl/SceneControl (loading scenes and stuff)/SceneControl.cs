@@ -47,7 +47,6 @@ public class SceneControl : MonoBehaviour
     private IEnumerator LoadNewScene(SceneEnum scene)
     {
         YieldInstruction waitForFrame = new WaitForEndOfFrame();
-        YieldInstruction wffu = new WaitForFixedUpdate();
 
         DisableControls();
         // Triggers transition to area animation

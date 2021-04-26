@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-/// <summary>
+﻿/// <summary>
 /// Abstract Scriptable object responsible for controlling boss enemy states.
 /// </summary>
 public abstract class EnemyBossAbstractState : EnemyAbstractState
@@ -17,4 +15,11 @@ public abstract class EnemyBossAbstractState : EnemyAbstractState
 
         enemy = en as EnemyBoss;
     }
+
+    /// <summary>
+    /// Checks if the enemy is close to the player.
+    /// </summary>
+    /// <param name="distance">Distance from player.</param>
+    /// <returns>Returns true if it's near the player.</returns>
+    protected virtual bool IsCloseToPlayer(float distance) => false;
 }

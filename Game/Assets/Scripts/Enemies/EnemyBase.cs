@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -58,12 +57,16 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     public Transform MyTarget => myTarget;
     public SphereCollider WeaponCollider => weaponCollider;
 
+    /// <summary>
+    /// Called once on awake. Gets components.
+    /// </summary>
     protected void Awake()
     {
         CineTarget = FindObjectOfType<CinemachineTarget>();
         Anim = GetComponentInChildren<Animator>();
         Stats = GetComponent<EnemyStats>();
         Agent = GetComponent<NavMeshAgent>();
+        FindPlayer();
 
         if (deathStateOriginal != null)
             DeathState = Instantiate(deathStateOriginal);
