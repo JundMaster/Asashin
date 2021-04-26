@@ -1873,6 +1873,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5967915184954310016, guid: 0034956325071c74fa782dc3b58753bc, type: 3}
+      propertyPath: m_FirstSelected
+      value: 
+      objectReference: {fileID: 320800799}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0034956325071c74fa782dc3b58753bc, type: 3}
 --- !u!1001 &221488904
@@ -3459,6 +3463,7 @@ GameObject:
   - component: {fileID: 320800803}
   - component: {fileID: 320800802}
   - component: {fileID: 320800801}
+  - component: {fileID: 320800804}
   m_Layer: 5
   m_Name: NewGame
   m_TagString: Untagged
@@ -3475,7 +3480,7 @@ RectTransform:
   m_GameObject: {fileID: 320800799}
   m_LocalRotation: {x: -0.0023151443, y: 0.007808484, z: 0.04143104, w: 0.99910825}
   m_LocalPosition: {x: 0, y: 0, z: 28.3}
-  m_LocalScale: {x: 0.30359, y: 0.30359, z: 0.30359}
+  m_LocalScale: {x: 0.30359012, y: 0.30359, z: 0.30359006}
   m_Children: []
   m_Father: {fileID: 1553884068}
   m_RootOrder: 3
@@ -3498,9 +3503,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1636639124}
+    m_SelectOnDown: {fileID: 1125512489}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -3578,6 +3583,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 320800799}
   m_CullTransparentMesh: 0
+--- !u!114 &320800804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320800799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 11
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &327323637
 GameObject:
   m_ObjectHideFlags: 0
@@ -3665,6 +3687,7 @@ GameObject:
   - component: {fileID: 351423469}
   - component: {fileID: 351423468}
   - component: {fileID: 351423467}
+  - component: {fileID: 351423470}
   m_Layer: 5
   m_Name: Continue
   m_TagString: Untagged
@@ -3704,9 +3727,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 1636639124}
+    m_SelectOnDown: {fileID: 1125512489}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -3784,6 +3807,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 351423465}
   m_CullTransparentMesh: 0
+--- !u!114 &351423470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351423465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals: []
+    m_Events: []
 --- !u!4 &371604000 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f7b9d983ac807144884bb6b85c07f91e, type: 3}
@@ -5654,6 +5692,41 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3899c58356b4df14ca15900ad60a5d7a, type: 3}
+--- !u!1 &643543845
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 643543846}
+  m_Layer: 5
+  m_Name: NewGameOption
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &643543846
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643543845}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1553884068}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &651021449
 GameObject:
   m_ObjectHideFlags: 0
@@ -9253,6 +9326,8 @@ GameObject:
   - component: {fileID: 1125512491}
   - component: {fileID: 1125512490}
   - component: {fileID: 1125512489}
+  - component: {fileID: 1125512492}
+  - component: {fileID: 1125512493}
   m_Layer: 5
   m_Name: DownWardArrow
   m_TagString: Untagged
@@ -9269,7 +9344,7 @@ RectTransform:
   m_GameObject: {fileID: 1125512487}
   m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: -1.4444}
-  m_LocalScale: {x: -0.043341376, y: 0.10149162, z: 1.653}
+  m_LocalScale: {x: -0.043341376, y: 0.10149164, z: 1.6530002}
   m_Children: []
   m_Father: {fileID: 1553884068}
   m_RootOrder: 2
@@ -9292,7 +9367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 2
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -9321,43 +9396,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1125512490}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1038209145}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: SwitchActiveCamDown
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 508090460}
-        m_TargetAssemblyTypeName: TimelineController, Assembly-CSharp
-        m_MethodName: ChangeTimeline
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 276581168}
-        m_TargetAssemblyTypeName: MenuOptionsController, Assembly-CSharp
-        m_MethodName: SwitchMenuOption
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1125512490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9396,6 +9435,87 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1125512487}
   m_CullTransparentMesh: 0
+--- !u!114 &1125512492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125512487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1038209145}
+          m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
+          m_MethodName: SwitchActiveCamDown
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 508090460}
+          m_TargetAssemblyTypeName: TimelineController, Assembly-CSharp
+          m_MethodName: ChangeTimeline
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 276581168}
+          m_TargetAssemblyTypeName: MenuOptionsController, Assembly-CSharp
+          m_MethodName: SwitchMenuOption
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1125512493}
+          m_TargetAssemblyTypeName: UIMainMenuButtonSelect, Assembly-CSharp
+          m_MethodName: StartCoroutineDeselect
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1125512493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125512487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e48c6503e5bf334280795d78a8d3adf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newGame: {fileID: 320800799}
+  continueGame: {fileID: 351423465}
+  options: {fileID: 585359277}
+  quit: {fileID: 18686016}
 --- !u!1001 &1126464168
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17255,6 +17375,7 @@ RectTransform:
   - {fileID: 351423466}
   - {fileID: 585359278}
   - {fileID: 18686020}
+  - {fileID: 643543846}
   m_Father: {fileID: 734236713}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18921,6 +19042,9 @@ GameObject:
   - component: {fileID: 1636639126}
   - component: {fileID: 1636639125}
   - component: {fileID: 1636639124}
+  - component: {fileID: 1636639127}
+  - component: {fileID: 1636639128}
+  - component: {fileID: 1636639129}
   m_Layer: 5
   m_Name: UpWardArrow
   m_TagString: Untagged
@@ -18937,14 +19061,14 @@ RectTransform:
   m_GameObject: {fileID: 1636639122}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -0.043341376, y: 0.10149162, z: 1.653}
+  m_LocalScale: {x: -0.043341376, y: 0.10149164, z: 1.6530002}
   m_Children: []
   m_Father: {fileID: 1553884068}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 261.89996, y: -36.3}
+  m_AnchoredPosition: {x: 261.90002, y: -36.3}
   m_SizeDelta: {x: 925, y: 519}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1636639124
@@ -18960,8 +19084,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
+    m_Mode: 2
+    m_SelectOnUp: {fileID: 1636639124}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
@@ -18989,43 +19113,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1636639125}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1038209145}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: SwitchActiveCamUp
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 508090460}
-        m_TargetAssemblyTypeName: TimelineController, Assembly-CSharp
-        m_MethodName: ChangeTimeline
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 276581168}
-        m_TargetAssemblyTypeName: MenuOptionsController, Assembly-CSharp
-        m_MethodName: SwitchMenuOption
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1636639125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19064,6 +19152,102 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1636639122}
   m_CullTransparentMesh: 0
+--- !u!114 &1636639127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636639122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1038209145}
+          m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
+          m_MethodName: SwitchActiveCamUp
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 508090460}
+          m_TargetAssemblyTypeName: TimelineController, Assembly-CSharp
+          m_MethodName: ChangeTimeline
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 276581168}
+          m_TargetAssemblyTypeName: MenuOptionsController, Assembly-CSharp
+          m_MethodName: SwitchMenuOption
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1636639128}
+          m_TargetAssemblyTypeName: UIMainMenuButtonSelect, Assembly-CSharp
+          m_MethodName: StartCoroutineDeselect
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1636639128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636639122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e48c6503e5bf334280795d78a8d3adf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newGame: {fileID: 320800799}
+  continueGame: {fileID: 351423465}
+  options: {fileID: 585359277}
+  quit: {fileID: 18686016}
+--- !u!114 &1636639129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636639122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals: []
+    m_Events: []
 --- !u!1 &1670784947
 GameObject:
   m_ObjectHideFlags: 0
