@@ -29,7 +29,7 @@ public sealed class EnemyBoss : EnemyBase
     private new void Awake()
     {
         base.Awake();
-        InitializeStateMachine();
+        //InitializeStateMachine();
     }
 
     /// <summary>
