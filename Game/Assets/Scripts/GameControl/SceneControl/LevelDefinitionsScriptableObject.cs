@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// Scriptable object responsible for keeping each scene definitions.
@@ -6,14 +7,6 @@
 [CreateAssetMenu(fileName = "Level Definitions")]
 public class LevelDefinitionsScriptableObject : ScriptableObject
 {
-    [Header("Music to play")]
-    [SerializeField] private AudioClip music;
-
-    /// <summary>
-    /// Music to play on this area.
-    /// </summary>
-    public AudioClip Music => music;
-
     [Header("Current area")]
     [SerializeField] private new SceneEnum name;
 
@@ -21,4 +14,12 @@ public class LevelDefinitionsScriptableObject : ScriptableObject
     /// Name of this area.
     /// </summary>
     public SceneEnum Name => name;
+
+    [Header("Post process profile")]
+    [SerializeField] private VolumeProfile postProcess;
+
+    /// <summary>
+    /// Post process volume for this area.
+    /// </summary>
+    public VolumeProfile PostProcess => postProcess;
 }

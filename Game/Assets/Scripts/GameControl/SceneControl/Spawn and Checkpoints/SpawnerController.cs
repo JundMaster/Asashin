@@ -13,6 +13,9 @@ using UnityEngine;
 /// </summary>
 public class SpawnerController : MonoBehaviour
 {
+    [Header("Turn this on for tests, it will set TypeOfSpawn to Load type")]
+    [SerializeField] private bool ONFORTESTING;
+
     [SerializeField] private PlayerSavedStatsScriptableObj playerSavedStats;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Transform initialPosition;
@@ -104,16 +107,11 @@ public class SpawnerController : MonoBehaviour
 
     private void Start()
     {
-        ///////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
-        //////////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
-        //////////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
-        ///////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
-        PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());
-        ///////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
-        //////////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
-        //////////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
-        //////////////////////////////////////////////////////////////////////////////// ESTA PORRA É `SÓ PARA TESTES, APAGAR NO FINAL
-
+        // ONLY FOR TESTS
+        if (ONFORTESTING)
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Loadgame.ToString());
+        ////////////////////////////////////////////////////////////////////////
+        
         // Main menu is always visited by default.
         PlayerPrefs.SetInt(SceneEnum.MainMenu.ToString(), 1);
 

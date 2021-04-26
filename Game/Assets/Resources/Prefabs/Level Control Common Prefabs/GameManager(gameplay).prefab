@@ -74,7 +74,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1683,10 +1683,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f74478b12d2d224081d2ddd717e20f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ONFORTESTING: 1
   playerSavedStats: {fileID: 11400000, guid: b1228f2b89d24484bb3fea9101484b32, type: 2}
   playerPrefab: {fileID: 7366061340869173852, guid: 464dc869de7de6a499b4a10a86756c37, type: 3}
   initialPosition: {fileID: 7432806368875890946}
-  TRUEIFNEWGAMESPAWN: 0
 --- !u!1 &7432806370263757458
 GameObject:
   m_ObjectHideFlags: 0
@@ -1794,4 +1794,3 @@ MonoBehaviour:
   changeToLevel: 7
   boxCollider: {fileID: 4323862652557504567}
   playerGoToPosition: {fileID: 2946864867756950676}
-  playerSavedStats: {fileID: 11400000, guid: b1228f2b89d24484bb3fea9101484b32, type: 2}

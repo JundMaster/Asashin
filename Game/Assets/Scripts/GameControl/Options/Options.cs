@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using System;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Class responsible for updating options.
@@ -57,6 +58,20 @@ public class Options : MonoBehaviour
     }
     #endregion
     ////////////////////////////////////////////////////////////////////////////
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        CurrentLevelDefinitions levelDefinitions = FindObjectOfType<CurrentLevelDefinitions>();
+        postProcess.profile = levelDefinitions.ThisArea.PostProcess;
+    }
 
     /// <summary>
     /// Creates a new copy of the saved values.
