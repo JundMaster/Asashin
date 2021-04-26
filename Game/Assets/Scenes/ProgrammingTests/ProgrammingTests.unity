@@ -155,22 +155,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &17817210 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7432806370208017081, guid: 9b62fa8b1cefb0544b430d43d3a98db3, type: 3}
-  m_PrefabInstance: {fileID: 7432806370348055974}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &17817211 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7432806370208017030, guid: 9b62fa8b1cefb0544b430d43d3a98db3, type: 3}
-  m_PrefabInstance: {fileID: 7432806370348055974}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f74478b12d2d224081d2ddd717e20f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &67930664
 GameObject:
   m_ObjectHideFlags: 0
@@ -979,65 +963,6 @@ MonoBehaviour:
   bossMusic: {fileID: 8300000, guid: e8de418eea26a634083ae527ed15f58f, type: 3}
   playerFinalPosition: {fileID: 1869174305}
   bossFloorCamera: {fileID: 1892812762}
---- !u!1 &298009946
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 298009947}
-  - component: {fileID: 298009949}
-  - component: {fileID: 298009948}
-  m_Layer: 16
-  m_Name: Checkpoint (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &298009947
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 298009946}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.35, y: 0, z: -6.68}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 17817210}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &298009948
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 298009946}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.47, y: 5, z: 5}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &298009949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 298009946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38d78d6f04b5540489d31a869bf20059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkpointController: {fileID: 17817211}
-  checkpointNumber: 1
 --- !u!1 &356810561
 GameObject:
   m_ObjectHideFlags: 0
