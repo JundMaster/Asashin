@@ -21,6 +21,11 @@ public class UIMainMenu : MonoBehaviour
         OnMainMenuSpawn(SpawnTypeEnum.Loadgame);
     }
 
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
     protected virtual void OnMainMenuSpawn(SpawnTypeEnum spawnType) =>
         MainMenuSpawn?.Invoke(spawnType);
 
