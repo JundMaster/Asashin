@@ -21,6 +21,34 @@ public sealed class PlayerStats : Stats, IPlayerDamage, IHealable
     // Stats
     public float FirebombKunaiDamage => commonStats.RangedDamage * 10;
 
+    public bool Dead { get; private set; }
+
+    private void OnEnable()
+    {
+        base.Die += DisablePlayerCollisions;
+    }
+
+    private void OnDisable()
+    {
+        base.Die -= DisablePlayerCollisions;
+    }
+
+    private new void Start()
+    {
+        base.Start();
+        Dead = false;
+    }
+
+    private void DisablePlayerCollisions()
+    {
+        // Variable to make sure there are no other animations after the player dies
+        Dead = true; 
+
+        GetComponent<CapsuleCollider>().enabled = false;
+        GetComponent<CharacterController>().enabled = false;
+        gameObject.layer = 31;
+    }
+
     /// <summary>
     /// Heals an amount of damage.
     /// </summary>

@@ -44,6 +44,7 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
         kunaiCoroutine = null;
         usedKunaiTime = Time.time;
         minionsAlive = enemy.SpawnedMinions.Length;
+
         foreach (GameObject minion in enemy.SpawnedMinions)
         {
             EnemyBase minionSpawned = 
@@ -118,31 +119,21 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
     /// <returns></returns>
     private IEnumerator TeleportEnemy()
     {
-        YieldInstruction wffu = new WaitForFixedUpdate();
         YieldInstruction wfs = new WaitForSeconds(2);
 
-        agent.SetDestination(myTarget.position);
-        anim.SetTrigger("SmokeGrenade");
+        enemy.CineTarget.CancelCurrentTarget();
 
-        // Waits for the current animation before smoke grenade to pass
-        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1f)
-        {
-            yield return wffu;
-        }
-        // Waits for the current animation snome grenade to end
-        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime <
-            smokeGrenadeAnimationTime)
-        {
-            yield return wffu;
-        }
+        agent.SetDestination(myTarget.position);
+        agent.enabled = false;
 
         // Makes the enemy disappear for wfs
         enemy.transform.position = new Vector3(100000, 100000, 100000);
         yield return wfs;
 
         // Teleports enemy to a random position and stops him
-        Vector2 teleportTo = Custom.RandomPlanePosition(limitPositions);
+        Vector2 teleportTo = Custom.RandomPositionInSquare(limitPositions);
         enemy.transform.position = new Vector3(teleportTo.x, 0, teleportTo.y);
+        agent.enabled = true;
         agent.SetDestination(myTarget.position);
 
         teleportEnemy = null;

@@ -211,7 +211,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   myTarget: {fileID: 1009517689644205632}
-  sizeOfAlert: 20
+  sizeOfAlert: 40
   weaponCollider: {fileID: 1009517689244656410}
   deathStateOriginal: {fileID: 11400000, guid: 496dcce0ead4ca742ab4a1e6e70dcfe8, type: 2}
   aggressiveStateOriginal: {fileID: 11400000, guid: b1bd60b94ec228a4898db3c853edf30d, type: 2}
@@ -453,7 +453,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4476931563121593968}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 12.2, y: -3.7, z: 13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1009517688641600686}
@@ -513,7 +513,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6152130934154878553}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -3.7, z: 13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4843808547453332226}
@@ -1752,6 +1752,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.051692907
       objectReference: {fileID: 0}
+    - target: {fileID: 5822821947120931875, guid: 54543be746191b640aed6c711d4f6538, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 29d93f6ea31eb9d41a0e28fdbc8b9319, type: 2}
     - target: {fileID: 5866666021909216657, guid: 54543be746191b640aed6c711d4f6538, type: 3}
       propertyPath: m_Controller
       value: 

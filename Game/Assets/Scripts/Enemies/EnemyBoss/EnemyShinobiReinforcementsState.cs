@@ -10,12 +10,10 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
     [Header("Time to wait for animation to end")]
     [Range(0.01f, 1)] [SerializeField] private float smokeGrenadeAnimationTime;
 
-    [Header("How many enemies to spawn")]
-    [Range(0, 10)][SerializeField] private byte numberOfEnemies;
-
     private Transform[] limitPositions;
     private GameObject[] minionsPrefabs;
 
+    private byte timesEnteredThisState;
     private bool breakState;
 
     /// <summary>
@@ -26,7 +24,8 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
         base.Start();
         limitPositions = enemy.Corners;
         minionsPrefabs = enemy.MinionsPrefabs;
-        enemy.SpawnedMinions = new GameObject[numberOfEnemies];
+        timesEnteredThisState = 0;
+        
     }
 
     /// <summary>
@@ -37,7 +36,11 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
     {
         base.OnEnter();
         breakState = false;
-        enemy.StartCoroutine(EnteredStateCoroutine());
+
+        //enemy.SpawnedMinions = new GameObject[++timesEnteredThisState];
+        enemy.SpawnedMinions = new GameObject[50];
+
+        enemy.StartCoroutine(EnteredState());
     }
 
     /// <summary>
@@ -58,46 +61,38 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
     }
 
     /// <summary>
-    /// Triggers smoke grenade animation, spawns minions and teleports the boss
-    /// to a random position inside its area.
+    /// Spawns minions and teleports the boss to a random position inside its 
+    /// area.
     /// </summary>
-    /// <returns>Wait for fixed update.</returns>
-    private IEnumerator EnteredStateCoroutine()
+    private IEnumerator EnteredState()
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
-        
-        agent.SetDestination(myTarget.position);
-        anim.SetTrigger("SmokeGrenade");
 
-        // Waits for the current animation before smoke grenade to pass
-        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1f)
-        {
-            yield return wffu;
-        }
-        // Waits for the current animation snome grenade to end
-        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 
-            smokeGrenadeAnimationTime)
-        {
-            yield return wffu;
-        }
+        agent.SetDestination(myTarget.position);
 
         Vector2 spawnPos;
+        
         // Spawns minions and sets them as boss' minions
-        for (int i = 0; i < numberOfEnemies; i++)
+        for (int i = 0; i < 50; i++)
         {
-            spawnPos = Custom.RandomPlanePosition(limitPositions);
+            spawnPos = Custom.RandomPositionInSquare(limitPositions);
 
-            byte enemyToSpawn;
-            if (i % 2 == 0) enemyToSpawn = 0;
-            else enemyToSpawn = 1;
+            byte enemyPrefab;
+            if (i % 2 == 0) enemyPrefab = 0;
+            else enemyPrefab = 1;
 
             enemy.SpawnedMinions[i] = Instantiate(
-            minionsPrefabs[enemyToSpawn], new Vector3(spawnPos.x, 0, spawnPos.y),
+            minionsPrefabs[enemyPrefab], new Vector3(spawnPos.x, 0, spawnPos.y),
             enemy.transform.RotateTo(playerTarget.position));
         }
 
+        yield return wffu;
+        enemy.AlertSurroundings();
+
+        enemy.CineTarget.CancelCurrentTarget();
+
         // Teleports boss enemy to a random position and stops him
-        spawnPos = Custom.RandomPlanePosition(limitPositions);
+        spawnPos = Custom.RandomPositionInSquare(limitPositions);
         enemy.transform.position = new Vector3(spawnPos.x, 0, spawnPos.y);
         agent.SetDestination(myTarget.position);
 

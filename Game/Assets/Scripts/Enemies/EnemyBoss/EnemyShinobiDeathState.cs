@@ -37,8 +37,7 @@ public sealed class EnemyShinobiDeathState : EnemyBossAbstractState
 
         // If the player is targetting this enemy and if there are more enemies 
         // around, it changes target to next enemy
-        enemy.CineTarget.CancelCurrentTargetAutomaticallyCall();
-        enemy.CineTarget.AutomaticallyFindTargetCall();
+        enemy.CineTarget.CancelCurrentTarget();
 
         anim.SetTrigger("Death");
         enemy.OnDie();

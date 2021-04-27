@@ -431,14 +431,14 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// Calls a coroutine to cancel the current target. Only happens after an
     /// enemy dies.
     /// </summary>
-    public void CancelCurrentTargetAutomaticallyCall() =>
-        StartCoroutine(CancelCurrentTargetAutomatically());
+    public void CancelCurrentTargetOnDeath() =>
+        StartCoroutine(CancelCurrentTargetOnDeathCoroutine());
 
     /// <summary>
     /// Cancels current target automatically. This method only happens when
     /// an enemy dies.
     /// </summary>
-    private IEnumerator CancelCurrentTargetAutomatically()
+    private IEnumerator CancelCurrentTargetOnDeathCoroutine()
     {
         yield return new WaitForSecondsRealtime(0.5f);
         FindAllEnemiesAroundPlayer();
@@ -446,9 +446,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         {
             // Switches camera back to third person camera
             mainCameraBrain.m_DefaultBlend.m_Time = 0.75f;
-            targetCamera.Priority = thirdPersonCamera.Priority - 3;
-            if (currentTarget) currentTarget.gameObject.SetActive(false);
-            Targeting = false;;
+            CancelCurrentTarget();
         }
     }
 

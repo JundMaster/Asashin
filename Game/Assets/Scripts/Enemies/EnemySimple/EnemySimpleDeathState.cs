@@ -28,8 +28,9 @@ public class EnemySimpleDeathState : EnemySimpleAbstractState
             enemy.InCombat = false;
 
         // Variables to make sure the is no collision while the enemy is dying
+        enemy.Agent.enabled = false;
         enemy.GetComponent<CapsuleCollider>().enabled = false;
-        enemy.gameObject.layer = 0; // Changes to default layer
+        enemy.gameObject.layer = 31; // Changes to ignore layer
 
         enemy.StopAllCoroutines();
         enemy.StartCoroutine(Die());
@@ -46,7 +47,7 @@ public class EnemySimpleDeathState : EnemySimpleAbstractState
 
         // If the player is targetting this enemy and if there are more enemies 
         // around, it changes target to next enemy
-        enemy.CineTarget.CancelCurrentTargetAutomaticallyCall();
+        enemy.CineTarget.CancelCurrentTargetOnDeath();
         enemy.CineTarget.AutomaticallyFindTargetCall();
 
         // Random chance of spawning items.

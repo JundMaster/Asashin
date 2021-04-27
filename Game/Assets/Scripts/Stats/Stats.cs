@@ -15,7 +15,7 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
 
     public float RangedDamage => commonStats.RangedDamage;
 
-    private void Start()
+    protected void Start()
     {
         Health = commonStats.MaxHealth;
     }
