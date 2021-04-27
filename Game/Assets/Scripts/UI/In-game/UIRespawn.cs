@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 /// <summary>
 /// Class responsible for UIRespawn menu.
@@ -11,7 +12,6 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
     private PlayerAnimations playerAnims;
     private EventSystem eventSys;
     private GameObject lastSelectedGameObject;
-    private PlayerInputCustom input;
 
     [SerializeField] private GameObject respawnUI;
     [SerializeField] private GameObject confirmButton;
@@ -20,7 +20,6 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
     {
         playerAnims = FindObjectOfType<PlayerAnimations>();
         eventSys = FindObjectOfType<EventSystem>();
-        input = FindObjectOfType<PlayerInputCustom>();
     }
 
     private void OnEnable()
@@ -36,25 +35,6 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
     }
 
     /// <summary>
-    /// Checks if current selected game object is null.
-    /// If it's null it selects the last game object selected.
-    /// </summary>
-    private void Update()
-    {
-        // Keeps last selected gameobject
-        if (eventSys.currentSelectedGameObject != null &&
-            eventSys.currentSelectedGameObject != lastSelectedGameObject)
-        {
-            lastSelectedGameObject = eventSys.currentSelectedGameObject;
-        }
-        // If the button is null, it selects the last selected button
-        if (eventSys.currentSelectedGameObject == null)
-        {
-            eventSys.SetSelectedGameObject(lastSelectedGameObject);
-        }
-    }
-
-    /// <summary>
     /// After the player's death animation, this method happens.
     /// </summary>
     private void EnableRespawnUI()
@@ -64,19 +44,15 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
         Cursor.visible = true;
 
         respawnUI.SetActive(true);
+        StartCoroutine(WaitForLoading());
     }
 
-    /// <summary>
-    /// Selects button on animation event.
-    /// </summary>
-    public void SelectButton() =>
-        eventSys.SetSelectedGameObject(confirmButton);
-
-    /// <summary>
-    /// Defines what happens when respawn button is pressed.
-    /// </summary>
-    public void RespawnButton() =>
+    private IEnumerator WaitForLoading()
+    {
+        yield return new WaitForSecondsRealtime(3f);
         OnRespawnButtonPressed(SpawnTypeEnum.Respawn);
+    }
+
 
     protected virtual void OnRespawnButtonPressed(SpawnTypeEnum typeOfSpawn) =>
         RespawnButtonPressed?.Invoke(typeOfSpawn);
@@ -85,12 +61,6 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
     /// Event registered on SpawnerController.
     /// </summary>
     public event Action<SpawnTypeEnum> RespawnButtonPressed;
-
-    public void QuitButton()
-    {
-        ////////////////////////////////////////////////////////////
-        Debug.Log("Quit to main menu");
-    }
 
     public void FindPlayer()
     {

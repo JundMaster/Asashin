@@ -77,12 +77,12 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     private IEnumerator FadeOutMasterCoroutine()
     {
         float masterSound = options.MasterVolume;
-        YieldInstruction wffu = new WaitForFixedUpdate();
+
         while (masterSound > options.MinMasterVolume)
         {
-            masterSound -= Time.fixedDeltaTime * 25;
+            masterSound -= Time.fixedUnscaledDeltaTime * 25;
             masterVolume.SetFloat("masterVolume", masterSound);
-            yield return wffu;
+            yield return null;
         }
     }
 
