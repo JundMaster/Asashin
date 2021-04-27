@@ -37,8 +37,7 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
         base.OnEnter();
         breakState = false;
 
-        //enemy.SpawnedMinions = new GameObject[++timesEnteredThisState];
-        enemy.SpawnedMinions = new GameObject[50];
+        enemy.SpawnedMinions = new GameObject[++timesEnteredThisState];
 
         enemy.StartCoroutine(EnteredState());
     }
@@ -73,7 +72,7 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
         Vector2 spawnPos;
         
         // Spawns minions and sets them as boss' minions
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < timesEnteredThisState; i++)
         {
             spawnPos = Custom.RandomPositionInSquare(limitPositions);
 

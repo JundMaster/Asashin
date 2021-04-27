@@ -23,10 +23,13 @@ public class SpawnerController : MonoBehaviour
     // Components
     public GameState GameState { get; private set; }
     private Checkpoint[] childrenCheckpoints;
-    private UIRespawn uiRespawn;
-    private UIMainMenu uiMainMenu;
+    
     private SceneControl sceneControl;
     private LevelChanger levelChanger;
+
+    // Components to load or respawn player
+    private UIRespawn uiRespawn;
+    private UIMainMenu uiMainMenu;
 
     private void Awake()
     {
@@ -58,10 +61,12 @@ public class SpawnerController : MonoBehaviour
         if (levelChanger != null) levelChanger.LevelChanged -= TypeOfRespawn;
     }
 
+
+
     /// <summary>
     /// Loads a scene corresponding to the last checkpoint.
     /// </summary>
-    private void TypeOfRespawn(SpawnTypeEnum typeOfSpawn)
+    public void TypeOfRespawn(SpawnTypeEnum typeOfSpawn)
     {
         if (typeOfSpawn == SpawnTypeEnum.Respawn)
         {

@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
-using System.Collections;
 
 /// <summary>
 /// Class responsible for controlling UIOptions. Updates values on ui
@@ -86,6 +87,16 @@ public class UIOptions : MonoBehaviour
         {
             eventSys.SetSelectedGameObject(lastSelectedGameObject);
         }
+    }
+
+    /// <summary>
+    /// Defines what happens when loading button is pressed.
+    /// Loads game on the last checkpoint and deactivates pause menu.
+    /// </summary>
+    public void LoadingButton()
+    {
+        FindObjectOfType<SpawnerController>().TypeOfRespawn(SpawnTypeEnum.Loadgame);
+        gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -467,4 +478,12 @@ public class UIOptions : MonoBehaviour
         horizontalSensiblity.minValue = configScriptableObj.MinHorizontalSensibility;
         horizontalSensiblity.maxValue = configScriptableObj.MaxHorizontalSensibility;
     }
+
+    protected virtual void OnLoadingButtonPressed(SpawnTypeEnum typeOfSpawn) =>
+        LoadingButtonPressed?.Invoke(typeOfSpawn);
+
+    /// <summary>
+    /// Event registered on SpawnerController.
+    /// </summary>
+    public event Action<SpawnTypeEnum> LoadingButtonPressed;
 }

@@ -64,6 +64,8 @@ public class MusicCombatTransition : MonoBehaviour
             yield return wffu;
         }
 
+        SwitchToBackgroundMusic();
+
         bossCutscene = FindObjectOfType<BossCutsceneControl>();
         simpleEnemies = FindObjectsOfType<EnemySimple>();
     }
@@ -85,40 +87,6 @@ public class MusicCombatTransition : MonoBehaviour
                         StartCoroutine(switchTracks);
                     }
                 }
-            }
-        }
-    }
-
-    /// <summary>
-    /// When an enemy returns back to patrol state, it calls this method.
-    /// Changes msuic back to background music.
-    /// </summary>
-    public void SwitchToBackgroundMusic()
-    {
-        if (bossCutscene == null ||
-            (bossCutscene != null && bossCutscene.OnBossFight == false))
-        {
-            // Checks if all alive enemies are in patrol state
-            byte enemiesNotInCombat = 0;
-
-            for (int i = 0; i < simpleEnemies.Length; i++)
-            {
-                if (simpleEnemies[i] == null)
-                    enemiesNotInCombat++;
-
-                else if (simpleEnemies[i] != null &&
-                    simpleEnemies[i].InCombat == false)
-                    enemiesNotInCombat++;
-            }
-
-            // If all alive enemies are in patrol state it changes to normal
-            // music
-            if (enemiesNotInCombat == simpleEnemies.Length)
-            {
-                currentTrack = MusicTrack.Basetrack;
-                if (switchTracks != null) StopCoroutine(switchTracks);
-                switchTracks = SwitchToBackground();
-                StartCoroutine(switchTracks);
             }
         }
     }
@@ -153,6 +121,40 @@ public class MusicCombatTransition : MonoBehaviour
             yield return wffu;
 
             break;
+        }
+    }
+
+    /// <summary>
+    /// When an enemy returns back to patrol state, it calls this method.
+    /// Changes music back to background music.
+    /// </summary>
+    public void SwitchToBackgroundMusic()
+    {
+        if (bossCutscene == null ||
+            (bossCutscene != null && bossCutscene.OnBossFight == false))
+        {
+            // Checks if all alive enemies are in patrol state
+            byte enemiesNotInCombat = 0;
+
+            for (int i = 0; i < simpleEnemies.Length; i++)
+            {
+                if (simpleEnemies[i] == null)
+                    enemiesNotInCombat++;
+
+                else if (simpleEnemies[i] != null &&
+                    simpleEnemies[i].InCombat == false)
+                    enemiesNotInCombat++;
+            }
+
+            // If all alive enemies are in patrol state it changes to normal
+            // music
+            if (enemiesNotInCombat == simpleEnemies.Length)
+            {
+                currentTrack = MusicTrack.Basetrack;
+                if (switchTracks != null) StopCoroutine(switchTracks);
+                switchTracks = SwitchToBackground();
+                StartCoroutine(switchTracks);
+            }
         }
     }
 
