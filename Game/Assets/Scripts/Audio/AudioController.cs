@@ -27,9 +27,6 @@ public class AudioController : MonoBehaviour, IUpdateOptions
             instance = this;
             DontDestroyOnLoad(this);
 
-            optionsScript = FindObjectOfType<Options>();
-            slowMotion = FindObjectOfType<SlowMotionBehaviour>();
-
             // Sets master to min volume so it can start fading in
             masterVolume.SetFloat("masterVolume", options.MinMasterVolume);
 
@@ -37,8 +34,6 @@ public class AudioController : MonoBehaviour, IUpdateOptions
             masterVolume.SetFloat("musicVolume", options.MusicVolume);
             masterVolume.SetFloat("soundVolume", options.SoundVolume);
             masterVolume.SetFloat("soundPitch", 1);
-
-            StartCoroutine(FadeInMasterCoroutine());
 
             return;
         }
@@ -66,8 +61,8 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     {
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         sceneControl = FindObjectOfType<SceneControl>();
-        slowMotion.SlowMotionEvent += UpdatePitch;
-        sceneControl.StartedLoadingScene += FadeOutMaster;
+        if (slowMotion != null) slowMotion.SlowMotionEvent += UpdatePitch;
+        if (sceneControl != null) sceneControl.StartedLoadingScene += FadeOutMaster;
 
         StartCoroutine(FadeInMasterCoroutine());
     }

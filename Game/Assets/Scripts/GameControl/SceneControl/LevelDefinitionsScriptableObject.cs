@@ -7,6 +7,14 @@ using UnityEngine.Rendering;
 [CreateAssetMenu(fileName = "Level Definitions")]
 public class LevelDefinitionsScriptableObject : ScriptableObject
 {
+    [Header("Level music")]
+    [SerializeField] private AudioClip music;
+
+    /// <summary>
+    /// Name of this area.
+    /// </summary>
+    public AudioClip Music => music;
+
     [Header("Current area")]
     [SerializeField] private new SceneEnum name;
 
