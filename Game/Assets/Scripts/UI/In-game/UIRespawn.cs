@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Class responsible for UIRespawn menu.
@@ -8,12 +9,17 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
 {
     // Components
     private PlayerAnimations playerAnims;
+    private EventSystem eventSys;
+    private PlayerInputCustom input;
 
     [SerializeField] private GameObject respawnUI;
+    [SerializeField] private GameObject confirmButton;
 
     private void Awake()
     {
         playerAnims = FindObjectOfType<PlayerAnimations>();
+        eventSys = FindObjectOfType<EventSystem>();
+        input = FindObjectOfType<PlayerInputCustom>();
     }
 
     private void OnEnable()
@@ -28,15 +34,25 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
             playerAnims.PlayerDiedEndOfAnimationUIRespawn -= EnableRespawnUI;
     }
 
+
+    private void Update()
+    {
+        eventSys.SetSelectedGameObject(confirmButton);
+    }
+
+
+
     /// <summary>
     /// After the player's death animation, this method happens.
     /// </summary>
     private void EnableRespawnUI()
     {
+        FindObjectOfType<PlayerInputCustom>().SwitchActionMapToGamePaused();
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
         respawnUI.SetActive(true);
+        eventSys.SetSelectedGameObject(confirmButton);
     }
 
     /// <summary>

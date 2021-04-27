@@ -11,14 +11,10 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
 {
     [SerializeField] private PlayerInput controls;
 
-    // Components
-    private PlayerDeathBehaviour deathBehaviour;
-
     public Vector2 Movement { get; private set; }
 
     private void Awake()
     {
-        deathBehaviour = FindObjectOfType<PlayerDeathBehaviour>();
         SwitchActionMapToGamePaused();
     }
 
@@ -26,22 +22,6 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-    }
-
-    private void OnEnable()
-    {
-        if (deathBehaviour != null)
-        {
-            deathBehaviour.PlayerDied += SwitchActionMapToGamePaused;
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (deathBehaviour != null)
-        {
-            deathBehaviour.PlayerDied -= SwitchActionMapToGamePaused;
-        }
     }
 
     /// <summary>
@@ -311,14 +291,8 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     public event Action WallHug;
 
 
-    public void FindPlayer()
-    {
-        deathBehaviour = FindObjectOfType<PlayerDeathBehaviour>();
-        deathBehaviour.PlayerDied += () =>
-            controls.SwitchCurrentActionMap("GamePaused");
-
+    public void FindPlayer() =>
         StartCoroutine(SwitchToGameplayAfterSeconds());
-    }
 
     /// <summary>
     /// Switches to gameplay controls after fixed update.
@@ -332,7 +306,6 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
 
     public void PlayerLost()
     {
-        deathBehaviour.PlayerDied -= () =>
-            controls.SwitchCurrentActionMap("Death");
+        // Left blank on purpose
     }
 }
