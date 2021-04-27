@@ -16,7 +16,9 @@ public class UIMainMenuButtonSelect : MonoBehaviour
     private void Start()
     {
         eventSys = FindObjectOfType<EventSystem>();
+       
     }
+
     public void SelectMenuOption()
     {
         if (newGame.activeSelf) eventSys.SetSelectedGameObject(newGame);
@@ -31,7 +33,7 @@ public class UIMainMenuButtonSelect : MonoBehaviour
 
     private void Update()
     {
-
+        Debug.Log(eventSys.currentSelectedGameObject, gameObject);
         // Keeps last selected gameobject
         if (eventSys.currentSelectedGameObject != null &&
             eventSys.currentSelectedGameObject != lastSelectedGameObject)
