@@ -17,6 +17,7 @@ public class ShowPauseMenu : MonoBehaviour
 
     private PauseSystem pause;
     private EventSystem eventSys;
+    private GameObject lastSelectedGameObject;
 
     private void Awake()
     {
@@ -34,6 +35,25 @@ public class ShowPauseMenu : MonoBehaviour
     {
         if (pause != null)
             pause.GamePaused -= ControlPause;
+    }
+
+    /// <summary>
+    /// Checks if current selected game object is null.
+    /// If it's null it selects the last game object selected.
+    /// </summary>
+    private void Update()
+    {
+        // Keeps last selected gameobject
+        if (eventSys.currentSelectedGameObject != null &&
+            eventSys.currentSelectedGameObject != lastSelectedGameObject)
+        {
+            lastSelectedGameObject = eventSys.currentSelectedGameObject;
+        }
+        // If the button is null, it selects the last selected button
+        if (eventSys.currentSelectedGameObject == null)
+        {
+            eventSys.SetSelectedGameObject(lastSelectedGameObject);
+        }
     }
 
     private void ControlPause(PauseSystemEnum pause)

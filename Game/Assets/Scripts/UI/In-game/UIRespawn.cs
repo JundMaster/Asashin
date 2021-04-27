@@ -10,6 +10,7 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
     // Components
     private PlayerAnimations playerAnims;
     private EventSystem eventSys;
+    private GameObject lastSelectedGameObject;
     private PlayerInputCustom input;
 
     [SerializeField] private GameObject respawnUI;
@@ -34,13 +35,24 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
             playerAnims.PlayerDiedEndOfAnimationUIRespawn -= EnableRespawnUI;
     }
 
-
+    /// <summary>
+    /// Checks if current selected game object is null.
+    /// If it's null it selects the last game object selected.
+    /// </summary>
     private void Update()
     {
-        eventSys.SetSelectedGameObject(confirmButton);
+        // Keeps last selected gameobject
+        if (eventSys.currentSelectedGameObject != null &&
+            eventSys.currentSelectedGameObject != lastSelectedGameObject)
+        {
+            lastSelectedGameObject = eventSys.currentSelectedGameObject;
+        }
+        // If the button is null, it selects the last selected button
+        if (eventSys.currentSelectedGameObject == null)
+        {
+            eventSys.SetSelectedGameObject(lastSelectedGameObject);
+        }
     }
-
-
 
     /// <summary>
     /// After the player's death animation, this method happens.
@@ -52,16 +64,19 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
         Cursor.visible = true;
 
         respawnUI.SetActive(true);
-        eventSys.SetSelectedGameObject(confirmButton);
     }
+
+    /// <summary>
+    /// Selects button on animation event.
+    /// </summary>
+    public void SelectButton() =>
+        eventSys.SetSelectedGameObject(confirmButton);
 
     /// <summary>
     /// Defines what happens when respawn button is pressed.
     /// </summary>
-    public void RespawnButton()
-    {
+    public void RespawnButton() =>
         OnRespawnButtonPressed(SpawnTypeEnum.Respawn);
-    }
 
     protected virtual void OnRespawnButtonPressed(SpawnTypeEnum typeOfSpawn) =>
         RespawnButtonPressed?.Invoke(typeOfSpawn);
