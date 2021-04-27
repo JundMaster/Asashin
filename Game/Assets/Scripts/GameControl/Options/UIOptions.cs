@@ -75,7 +75,6 @@ public class UIOptions : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        Debug.Log(eventSys.currentSelectedGameObject, gameObject);
         // Keeps last selected gameobject
         if (eventSys.currentSelectedGameObject != null &&
             eventSys.currentSelectedGameObject != lastSelectedGameObject)
@@ -441,7 +440,7 @@ public class UIOptions : MonoBehaviour
 
         lightness.value = currentValues.Lightness;
         contrast.value = currentValues.Contrast;
-        //masterVolume.value = currentValues.MasterVolume;
+        masterVolume.value = currentValues.MasterVolume;
         musicVolume.value = currentValues.MusicVolume;
         soundVolume.value = currentValues.SoundVolume;
         verticalSensiblity.value = currentValues.VerticalSensibility;
@@ -459,8 +458,8 @@ public class UIOptions : MonoBehaviour
         contrast.maxValue = configScriptableObj.MaxContrast;
         musicVolume.minValue = configScriptableObj.MinMusicVolume;
         musicVolume.maxValue = configScriptableObj.MaxMusicVolume;
-        //masterVolume.minValue = configScriptableObj.MinMasterVolume;
-        //masterVolume.maxValue = configScriptableObj.MaxMasterVolume;
+        masterVolume.minValue = configScriptableObj.MinMasterVolume;
+        masterVolume.maxValue = configScriptableObj.MaxMasterVolume;
         soundVolume.minValue = configScriptableObj.MinSoundVolume;
         soundVolume.maxValue = configScriptableObj.MaxSoundVolume;
         verticalSensiblity.minValue = configScriptableObj.MinVerticalSensibility;

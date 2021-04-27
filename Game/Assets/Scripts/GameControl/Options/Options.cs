@@ -119,7 +119,7 @@ public class Options : MonoBehaviour
         options.MotionBlur = value.MotionBlur;
         options.Lightness = value.Lightness;
         options.Contrast = value.Contrast;
-        //options.MasterVolume = value.MasterVolume;
+        options.MasterVolume = value.MasterVolume;
         options.SoundVolume = value.SoundVolume;
         options.MusicVolume = value.MusicVolume;
         options.HorizontalSensibility = value.HorizontalSensibility;
