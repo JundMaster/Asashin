@@ -14,6 +14,9 @@ public sealed class EnemyShinobiDeathState : EnemyBossAbstractState
         enemy.gameObject.layer = 0; // Changes to default layer
         agent.isStopped = true;
 
+        foreach (GameObject minion in enemy.SpawnedMinions)
+            Destroy(minion);
+
         enemy.StopAllCoroutines();
         enemy.StartCoroutine(Die());
     }
@@ -27,11 +30,17 @@ public sealed class EnemyShinobiDeathState : EnemyBossAbstractState
     {
         yield return new WaitForFixedUpdate();
 
+        enemy.transform.position = new Vector3(
+            enemy.CenterPosition.position.x, 
+            0,
+            enemy.CenterPosition.position.z);
+
         // If the player is targetting this enemy and if there are more enemies 
         // around, it changes target to next enemy
         enemy.CineTarget.CancelCurrentTargetAutomaticallyCall();
         enemy.CineTarget.AutomaticallyFindTargetCall();
 
         anim.SetTrigger("Death");
+        enemy.OnDie();
     }
 }

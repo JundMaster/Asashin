@@ -153,6 +153,7 @@ Transform:
   m_Children:
   - {fileID: 1009517688832808619}
   - {fileID: 3476084160788714974}
+  - {fileID: 9135696086922464183}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -221,6 +222,7 @@ MonoBehaviour:
   - {fileID: 8069929331544921450}
   - {fileID: 2890732368070308310}
   - {fileID: 250948376597533658}
+  centerPosition: {fileID: 9135696086922464183}
   minionsPrefabs:
   - {fileID: 1009517688641600681, guid: ceb4a91bc2a786f4b88b40f4f5ecfee2, type: 3}
   - {fileID: 962524041426243527, guid: ae099e138a9deb94e8e0c7efc92fc5ac, type: 3}
@@ -426,6 +428,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1009517688832808619}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4476931563121593968
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9135696086922464183}
+  m_Layer: 0
+  m_Name: CenterPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9135696086922464183
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4476931563121593968}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1009517688641600686}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5720840016634360952
 GameObject:

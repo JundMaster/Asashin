@@ -19,17 +19,18 @@ public sealed class EnemyBoss : EnemyBase
     [Header("Boss area corner limits, 0 must be on the oposite corner of 3")]
     [SerializeField] private Transform[] corners;
     public Transform[] Corners => corners;
+    [SerializeField] private Transform centerPosition;
+    public Transform CenterPosition => centerPosition;
 
     [Header("Prefabs to spawn when calling for reinforcements")]
     [SerializeField] private GameObject[] minionsPrefabs;
     public GameObject[] MinionsPrefabs => minionsPrefabs;
-
     public GameObject[] SpawnedMinions { get; set; }
 
     private new void Awake()
     {
         base.Awake();
-        //InitializeStateMachine();
+        InitializeStateMachine();
     }
 
     /// <summary>

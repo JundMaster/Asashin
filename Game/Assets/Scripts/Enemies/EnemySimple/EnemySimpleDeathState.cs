@@ -60,6 +60,7 @@ public class EnemySimpleDeathState : EnemySimpleAbstractState
                 enemy.transform.position.z),
             Quaternion.identity);
 
+        enemy.OnDie();
         Destroy(enemy.gameObject);
     }
 }
