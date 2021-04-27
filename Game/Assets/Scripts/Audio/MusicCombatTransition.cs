@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,15 +23,12 @@ public class MusicCombatTransition : MonoBehaviour
     private Player player;
     private BossCutsceneControl bossCutscene;
     private EnemySimple[] simpleEnemies;
+    private CurrentLevelDefinitions levelDefinitions;
 
     private void Awake()
     {
         baseDefaultVolume = baseBackground.volume;
         combatDefaultVolume = combatBackground.volume;
-
-        player = FindObjectOfType<Player>();
-        bossCutscene = FindObjectOfType<BossCutsceneControl>();
-        simpleEnemies = FindObjectsOfType<EnemySimple>();
     }
 
     private void OnEnable()
@@ -52,21 +48,22 @@ public class MusicCombatTransition : MonoBehaviour
     /// <param name="scene">Null.</param>
     /// <param name="mode">Null.</param>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) =>
-        StartCoroutine(Start());
+        StartCoroutine(GetVariables());
 
-    private IEnumerator Start()
+    private IEnumerator GetVariables()
     {
-        YieldInstruction wffu = new WaitForFixedUpdate();
+        bossCutscene = FindObjectOfType<BossCutsceneControl>();
+        simpleEnemies = FindObjectsOfType<EnemySimple>();
+        levelDefinitions = FindObjectOfType<CurrentLevelDefinitions>();
 
+        YieldInstruction wffu = new WaitForFixedUpdate();
         while (player == null)
         {
             player = FindObjectOfType<Player>();
             yield return wffu;
         }
 
-        bossCutscene = FindObjectOfType<BossCutsceneControl>();
-        simpleEnemies = FindObjectsOfType<EnemySimple>();
-
+        SwitchBackgroundToThisLevel();
         SwitchToBackgroundMusic();
     }
 
@@ -187,6 +184,18 @@ public class MusicCombatTransition : MonoBehaviour
 
             yield return wffu;
             break;
+        }
+    }
+
+    /// <summary>
+    /// Checks if it should change the audiotrack.
+    /// </summary>
+    private void SwitchBackgroundToThisLevel()
+    {
+        if (levelDefinitions.ThisArea.Music != baseBackground.clip)
+        {
+            baseBackground.clip = levelDefinitions.ThisArea.Music;
+            baseBackground.Play();
         }
     }
 

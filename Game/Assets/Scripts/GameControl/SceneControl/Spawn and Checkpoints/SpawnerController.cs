@@ -61,8 +61,6 @@ public class SpawnerController : MonoBehaviour
         if (levelChanger != null) levelChanger.LevelChanged -= TypeOfRespawn;
     }
 
-
-
     /// <summary>
     /// Loads a scene corresponding to the last checkpoint.
     /// </summary>

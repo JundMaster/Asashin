@@ -43,17 +43,20 @@ public class ShowPauseMenu : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        // Keeps last selected gameobject
-        if (eventSys.currentSelectedGameObject != null &&
-            eventSys.currentSelectedGameObject != lastSelectedGameObject)
+        if (pauseMenuParent.activeSelf)
         {
-            lastSelectedGameObject = eventSys.currentSelectedGameObject;
-        }
-        // If the button is null, it selects the last selected button
-        if (eventSys.currentSelectedGameObject == null)
-        {
-            eventSys.SetSelectedGameObject(lastSelectedGameObject);
-        }
+            // Keeps last selected gameobject
+            if (eventSys.currentSelectedGameObject != null &&
+                eventSys.currentSelectedGameObject != lastSelectedGameObject)
+            {
+                lastSelectedGameObject = eventSys.currentSelectedGameObject;
+            }
+            // If the button is null, it selects the last selected button
+            if (eventSys.currentSelectedGameObject == null)
+            {
+                eventSys.SetSelectedGameObject(lastSelectedGameObject);
+            }
+        }  
     }
 
     private void ControlPause(PauseSystemEnum pause)

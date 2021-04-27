@@ -16,7 +16,6 @@ public class UIMainMenuButtonSelect : MonoBehaviour
     private void Start()
     {
         eventSys = FindObjectOfType<EventSystem>();
-       
     }
 
     public void SelectMenuOption()

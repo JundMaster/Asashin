@@ -69,7 +69,7 @@ public class SceneControl : MonoBehaviour
         while (sceneToLoad.progress <= 1)
         {
             loadingBar.fillAmount = sceneToLoad.progress;
-            yield return waitForFrame;
+            yield return null;
         }
     }
 

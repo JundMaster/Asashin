@@ -56,7 +56,7 @@ public class UIOptions : MonoBehaviour
     /// <returns></returns>
     private void OnEnable()
     {
-        eventSys.SetSelectedGameObject(initialSelectedButton);
+        StartCoroutine(SelectResumeButton());
 
         currentValues = optionsScript.SavedValues;
 
@@ -68,6 +68,17 @@ public class UIOptions : MonoBehaviour
 
         // Updates current values again
         UpdateAllUI();
+    }
+
+    private void OnDisable()
+    {
+        eventSys.SetSelectedGameObject(null);
+    }
+
+    private IEnumerator SelectResumeButton()
+    {
+        yield return new WaitForEndOfFrame();
+        eventSys.SetSelectedGameObject(initialSelectedButton);
     }
 
     /// <summary>
