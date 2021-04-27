@@ -46,6 +46,8 @@ public class SceneControl : MonoBehaviour
     /// <returns>Returns null.</returns>
     private IEnumerator LoadNewScene(SceneEnum scene)
     {
+        OnStartedLoadingScene();
+
         YieldInstruction waitForFrame = new WaitForEndOfFrame();
 
         DisableControls();
@@ -90,4 +92,16 @@ public class SceneControl : MonoBehaviour
         BaseInputModule inputModule = FindObjectOfType<BaseInputModule>();
         if (inputModule != null) inputModule.enabled = true;
     }
+
+    /// <summary>
+    /// Invokes startedloadingscene event.
+    /// </summary>
+    protected virtual void OnStartedLoadingScene() =>
+        StartedLoadingScene?.Invoke();
+
+    /// <summary>
+    /// Event triggered when this class starts loading a scene.
+    /// Event registered on AudioController.
+    /// </summary>
+    public event Action StartedLoadingScene;
 }

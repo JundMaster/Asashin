@@ -64,10 +64,10 @@ public class MusicCombatTransition : MonoBehaviour
             yield return wffu;
         }
 
-        SwitchToBackgroundMusic();
-
         bossCutscene = FindObjectOfType<BossCutsceneControl>();
         simpleEnemies = FindObjectsOfType<EnemySimple>();
+
+        SwitchToBackgroundMusic();
     }
 
     private void Update()
@@ -168,18 +168,21 @@ public class MusicCombatTransition : MonoBehaviour
 
         while (true)
         {
-            while (combatBackground.volume > 0)
+            if (combatBackground.isPlaying)
             {
-                combatBackground.volume -= Time.fixedDeltaTime * (1 - transitionTimeBetweenSongs);
-                yield return wffu;
-            }
-            combatBackground.Stop();
+                while (combatBackground.volume > 0)
+                {
+                    combatBackground.volume -= Time.fixedDeltaTime * (1 - transitionTimeBetweenSongs);
+                    yield return wffu;
+                }
+                combatBackground.Stop();
 
-            baseBackground.Play();
-            while (baseBackground.volume < baseDefaultVolume)
-            {
-                baseBackground.volume += Time.fixedDeltaTime * (1 - transitionTimeBetweenSongs);
-                yield return wffu;
+                baseBackground.Play();
+                while (baseBackground.volume < baseDefaultVolume)
+                {
+                    baseBackground.volume += Time.fixedDeltaTime * (1 - transitionTimeBetweenSongs);
+                    yield return wffu;
+                }
             }
 
             yield return wffu;

@@ -16,6 +16,7 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     [SerializeField] private OptionsScriptableObj options;
     private Options optionsScript;
     private SlowMotionBehaviour slowMotion;
+    private SceneControl sceneControl;
 
     #region Singleton
     public static AudioController instance = null;
@@ -28,6 +29,17 @@ public class AudioController : MonoBehaviour, IUpdateOptions
 
             optionsScript = FindObjectOfType<Options>();
             slowMotion = FindObjectOfType<SlowMotionBehaviour>();
+
+            // Sets master to min volume so it can start fading in
+            masterVolume.SetFloat("masterVolume", options.MinMasterVolume);
+
+            // Sets normal volumes
+            masterVolume.SetFloat("musicVolume", options.MusicVolume);
+            masterVolume.SetFloat("soundVolume", options.SoundVolume);
+            masterVolume.SetFloat("soundPitch", 1);
+
+            StartCoroutine(FadeInMasterCoroutine());
+
             return;
         }
         else
@@ -36,16 +48,6 @@ public class AudioController : MonoBehaviour, IUpdateOptions
         }
     }
     #endregion
-
-    private IEnumerator Start()
-    {
-        yield return new WaitForFixedUpdate();
-
-        masterVolume.SetFloat("masterVolume", options.MasterVolume);
-        masterVolume.SetFloat("musicVolume", options.MusicVolume);
-        masterVolume.SetFloat("soundVolume", options.SoundVolume);
-        masterVolume.SetFloat("soundPitch", 1);
-    }
 
     private void OnEnable()
     {
@@ -63,7 +65,37 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
+        sceneControl = FindObjectOfType<SceneControl>();
         slowMotion.SlowMotionEvent += UpdatePitch;
+        sceneControl.StartedLoadingScene += FadeOutMaster;
+
+        StartCoroutine(FadeInMasterCoroutine());
+    }
+
+    private void FadeOutMaster() => StartCoroutine(FadeOutMasterCoroutine());
+
+    private IEnumerator FadeOutMasterCoroutine()
+    {
+        float masterSound = options.MasterVolume;
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        while (masterSound > options.MinMasterVolume)
+        {
+            masterSound -= Time.fixedDeltaTime * 25;
+            masterVolume.SetFloat("masterVolume", masterSound);
+            yield return wffu;
+        }
+    }
+
+    private IEnumerator FadeInMasterCoroutine()
+    {
+        float masterSound = options.MinMasterVolume;
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        while (masterSound < options.MasterVolume)
+        {
+            masterSound += Time.fixedDeltaTime * 25;
+            masterVolume.SetFloat("masterVolume", masterSound);
+            yield return wffu;
+        }
     }
 
     /// <summary>
