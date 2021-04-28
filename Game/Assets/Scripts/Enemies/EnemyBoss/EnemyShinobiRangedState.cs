@@ -7,8 +7,6 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
     [Header("Minimum distance to be close to player")]
     [Range(1, 10)] [SerializeField] private float closeToPlayerRange;
 
-    [Header("Time to wait for animation to end")]
-    [Range(0.01f, 1)] [SerializeField] private float smokeGrenadeAnimationTime;
     private Transform[] limitPositions;
     private IEnumerator teleportEnemy;
 

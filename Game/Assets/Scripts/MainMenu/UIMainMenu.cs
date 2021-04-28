@@ -14,10 +14,11 @@ public class UIMainMenu : MonoBehaviour
 
     private IEnumerator Start()
     {
-        // Testing shit
         yield return new WaitForEndOfFrame();
         FindObjectOfType<PlayerInputCustom>().SwitchActionMapToGamePaused();
         Time.timeScale = 1;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
     }
 
     public void NewGame()

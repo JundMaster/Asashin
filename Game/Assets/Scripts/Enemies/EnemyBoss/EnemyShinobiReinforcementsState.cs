@@ -7,9 +7,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Enemy Shinobi Reinforcements State")]
 public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
 {
-    [Header("Time to wait for animation to end")]
-    [Range(0.01f, 1)] [SerializeField] private float smokeGrenadeAnimationTime;
-
     private Transform[] limitPositions;
     private GameObject[] minionsPrefabs;
 

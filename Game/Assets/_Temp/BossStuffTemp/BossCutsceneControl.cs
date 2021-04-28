@@ -23,7 +23,6 @@ public class BossCutsceneControl : MonoBehaviour
     private CinemachineBrain cineBrain;
     private CinemachineTarget cinemachine;
     private PlayerInputCustom input;
-    private MusicReferences musicSource;
     private EnemyBoss boss;
 
     public bool OnBossFight { get; private set; }
@@ -33,10 +32,14 @@ public class BossCutsceneControl : MonoBehaviour
         cineBrain = Camera.main.GetComponent<CinemachineBrain>();
         cinemachine = FindObjectOfType<CinemachineTarget>();
         input = FindObjectOfType<PlayerInputCustom>();
-        musicSource = FindObjectOfType<MusicReferences>();
     }
 
-    public void StartCutscene() => StartCoroutine(StartCutsceneCoroutine());
+    /// <summary>
+    /// Called with timeline signal.
+    /// </summary>
+    public void StartCutscene() => 
+        StartCoroutine(StartCutsceneCoroutine());
+
     private IEnumerator StartCutsceneCoroutine()
     {
         OnBossFight = true;
@@ -45,8 +48,9 @@ public class BossCutsceneControl : MonoBehaviour
 
         PlayerMovement playerMovement = FindObjectOfType<PlayerMovement>();
         CharacterController player = FindObjectOfType<PlayerMovement>().Controller;
+        MusicReferences musicSource = FindObjectOfType<MusicReferences>();
 
-        while(player.transform.position.Similiar(playerFinalPosition.position, 0.1f) == false)
+        while (player.transform.position.Similiar(playerFinalPosition.position, 0.1f) == false)
         {
             playerMovement.MovementSpeed = 4f;
             Vector3 dir = player.transform.Direction(playerFinalPosition); 
@@ -91,6 +95,9 @@ public class BossCutsceneControl : MonoBehaviour
         else input.SwitchActionMapToDisable();
     }
 
+    /// <summary>
+    /// Called with timeline signal.
+    /// </summary>
     public void SpawnBoss()
     {
         Instantiate(smokeParticles, bossPosition.transform.position, Quaternion.identity);
@@ -98,7 +105,12 @@ public class BossCutsceneControl : MonoBehaviour
             Instantiate(bossPrefab, bossPosition.transform.position, Quaternion.Euler(0, 90, 0));
     }
 
-    public void BossJump() => StartCoroutine(BossJumpCoroutine());
+    /// <summary>
+    /// Called with timeline signal.
+    /// </summary>
+    public void BossJump() => 
+        StartCoroutine(BossJumpCoroutine());
+
     private IEnumerator BossJumpCoroutine()
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
@@ -131,6 +143,9 @@ public class BossCutsceneControl : MonoBehaviour
             finalBossPosition.position + new Vector3(0, 0.5f, 0), 3f);
     }
 
+    /// <summary>
+    /// Called with timeline signal.
+    /// </summary>
     public void EndCutscene()
     {
         boss.enabled = true;

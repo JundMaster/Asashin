@@ -6,6 +6,8 @@ using System.Collections.Generic;
 /// </summary>
 public sealed class EnemyBoss : EnemyBase
 {
+    [SerializeField] private bool TESTVARIABLETOTESTBOSSOUTSIDEAREA;
+
     [Header("Enemy Boss States")]
     [SerializeField] private EnemyAbstractState aggressiveStateOriginal;
     [SerializeField] private EnemyAbstractState rangedStateOriginal;
@@ -30,7 +32,9 @@ public sealed class EnemyBoss : EnemyBase
     private new void Awake()
     {
         base.Awake();
-        InitializeStateMachine();
+
+        if (TESTVARIABLETOTESTBOSSOUTSIDEAREA)
+            InitializeStateMachine();
     }
 
     /// <summary>

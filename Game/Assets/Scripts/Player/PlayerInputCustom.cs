@@ -45,16 +45,16 @@ public class PlayerInputCustom : MonoBehaviour, IFindPlayer
     public string GetActionMap() => controls.currentActionMap.name;
 
     /// <summary>
-    /// Disables or enables input module
+    /// Disables or enables input module.
     /// </summary>
     /// <param name="condition">If true, disables the input module, else
     /// enables the input module.</param>
-    public void DisableInputModule(bool condition)
+    public void EnableInputModule(bool condition)
     {
         BaseInputModule inputModule = FindObjectOfType<BaseInputModule>();
         if (inputModule != null)
         {
-            if (condition == true) inputModule.enabled = false;
+            if (condition == false) inputModule.enabled = false;
             else inputModule.enabled = true;
         }
     }

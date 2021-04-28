@@ -20,11 +20,10 @@ public class SceneControl : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    private void Start()
-    {
-        // If there is a UI Input base module, it enables it
-        EnableControls();
-    }
+    private void OnEnable() => 
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    private void OnDisable() =>
+        SceneManager.sceneLoaded -= OnSceneLoaded;
 
     public Scene CurrentScene() => SceneManager.GetActiveScene();
 
@@ -55,6 +54,7 @@ public class SceneControl : MonoBehaviour
         anim.SetTrigger("TransitionToArea");
 
         yield return waitForFrame;
+
         while (anim.GetCurrentAnimatorStateInfo(0).IsName("TransitionToArea"))
         {
             yield return waitForFrame;
@@ -69,28 +69,44 @@ public class SceneControl : MonoBehaviour
         while (sceneToLoad.progress <= 1)
         {
             loadingBar.fillAmount = sceneToLoad.progress;
-            yield return null;
+            yield return waitForFrame;
         }
     }
 
     /// <summary>
-    /// Disables all controls.
+    /// Disables all controls. Happens when scene is ending.
     /// </summary>
     private void DisableControls()
     {
         PlayerInputCustom input = FindObjectOfType<PlayerInputCustom>();
-        BaseInputModule inputModule = FindObjectOfType<BaseInputModule>();
-        if (input != null) input.SwitchActionMapToDisable();
-        if (inputModule != null) inputModule.enabled = false;
+        if (input != null)
+        {
+            input.SwitchActionMapToDisable();
+            input.EnableInputModule(false);
+        }
     }
 
     /// <summary>
-    /// Enables controls.
+    /// Every time a scene loads, calls a coroutine to enable base module input.
     /// </summary>
-    private void EnableControls()
+    /// <param name="scene">Null.</param>
+    /// <param name="mode">Null.</param>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        BaseInputModule inputModule = FindObjectOfType<BaseInputModule>();
-        if (inputModule != null) inputModule.enabled = true;
+        StartCoroutine(EnableControls());
+    }
+
+    /// <summary>
+    /// Enables base module input.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator EnableControls()
+    {
+        yield return new WaitForFixedUpdate();
+
+        PlayerInputCustom input = FindObjectOfType<PlayerInputCustom>();
+        if (input != null)
+            input.EnableInputModule(true);
     }
 
     /// <summary>
