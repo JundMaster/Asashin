@@ -108,7 +108,8 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
                 // Else if the player isn't blocking
                 else if (playerRoll.Performing)
                 {
-                    // left brank on purpose
+                    // Changes to a layer that ignores player
+                    gameObject.layer = 30;
                 }
                 else
                 {

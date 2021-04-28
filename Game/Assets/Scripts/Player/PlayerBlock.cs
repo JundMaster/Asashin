@@ -45,13 +45,11 @@ public class PlayerBlock : MonoBehaviour, IAction
             if (roll.Performing == false && useItem.Performing == false)
             {
                 Performing = true;
-                anim.applyRootMotion = true;
             }
         }
         else
         {
             Performing = false;
-            anim.applyRootMotion = false;
         }
     }
 
