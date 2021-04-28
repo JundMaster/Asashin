@@ -225,7 +225,6 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
         }
     }
 
-
     public void FindPlayer()
     {
         playerRoll = FindObjectOfType<PlayerRoll>();
@@ -244,7 +243,9 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
         SlowMotionEvent?.Invoke(condition);
 
     /// <summary>
-    /// Event registered on CinemachineTarget. Event registered on PlayerMovement
+    /// Event registered on CinemachineTarget. 
+    /// Event registered on PlayerMovement.
+    /// Event registered on AudioController.
     /// </summary>
     public event Action<SlowMotionEnum> SlowMotionEvent;
 }

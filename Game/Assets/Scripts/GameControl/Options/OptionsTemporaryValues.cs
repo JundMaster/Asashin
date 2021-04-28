@@ -6,7 +6,6 @@ public struct OptionsTemporaryValues
     public bool AutoLock { get; set; }
     public int ScreenMode { get; set; }
     public int ScreenResolution { get; set; }
-    public int Difficulty { get; set; }
     public int GraphicsQuality { get; set; }
     public int ShadowQuality { get; set; }
     public bool Shadows { get; set; }
@@ -25,7 +24,6 @@ public struct OptionsTemporaryValues
         AutoLock = options.AutoLock;
         ScreenMode = options.ScreenMode;
         ScreenResolution = options.ScreenResolution;
-        Difficulty = options.Difficulty;
         GraphicsQuality = options.GraphicsQuality;
         ShadowQuality = options.ShadowQuality;
         Shadows = options.Shadows;

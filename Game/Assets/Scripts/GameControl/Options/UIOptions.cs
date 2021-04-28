@@ -18,7 +18,6 @@ public class UIOptions : MonoBehaviour
     [SerializeField] private TextMeshProUGUI screenModeText;
     [SerializeField] private TextMeshProUGUI screenResText;
     [SerializeField] private TextMeshProUGUI autoLockText;
-    [SerializeField] private TextMeshProUGUI difficultyText;
 
     [Header("Graphic Options")]
     [SerializeField] private TextMeshProUGUI graphicsQualityText;
@@ -220,11 +219,6 @@ public class UIOptions : MonoBehaviour
                 else currentValues.ScreenResolution = configScriptableObj.MaxScreenResolution;
                 break;
 
-            case "Difficulty":
-                if (currentValues.Difficulty - 1 >= 0) currentValues.Difficulty--;
-                else currentValues.Difficulty = configScriptableObj.MaxDifficulty;
-                break;
-
             case "GraphicsQuality":
                 if (currentValues.GraphicsQuality - 1 >= 0) currentValues.GraphicsQuality--;
                 else currentValues.GraphicsQuality = configScriptableObj.MaxGraphicsQuality;
@@ -282,11 +276,6 @@ public class UIOptions : MonoBehaviour
             case "ScreenResolution":
                 if (currentValues.ScreenResolution + 1 <= configScriptableObj.MaxScreenResolution) currentValues.ScreenResolution++;
                 else currentValues.ScreenResolution = 0;
-                break;
-
-            case "Difficulty":
-                if (currentValues.Difficulty + 1 <= configScriptableObj.MaxDifficulty) currentValues.Difficulty++;
-                else currentValues.Difficulty = 0;
                 break;
 
             case "GraphicsQuality":
@@ -395,22 +384,6 @@ public class UIOptions : MonoBehaviour
                 break;
             case 2:
                 screenResText.text = "1920x1080";
-                break;
-        }
-
-        switch (currentValues.Difficulty)
-        {
-            case 0:
-                difficultyText.text = "Easy";
-                break;
-            case 1:
-                difficultyText.text = "Medium";
-                break;
-            case 2:
-                difficultyText.text = "Hardcore";
-                break;
-            case 3:
-                difficultyText.text = "Impossible";
                 break;
         }
 
