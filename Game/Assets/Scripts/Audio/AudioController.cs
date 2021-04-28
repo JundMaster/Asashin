@@ -56,6 +56,13 @@ public class AudioController : MonoBehaviour, IUpdateOptions
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        StartCoroutine(RegisterToEvents());
+        StartCoroutine(FadeInMasterCoroutine());
+    }
+
+    private IEnumerator RegisterToEvents()
+    {
+        yield return new WaitForFixedUpdate();
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         sceneControl = FindObjectOfType<SceneControl>();
         optionsScript = FindObjectOfType<Options>();
@@ -63,8 +70,6 @@ public class AudioController : MonoBehaviour, IUpdateOptions
         if (optionsScript != null) optionsScript.UpdatedValues += UpdateValues;
         if (slowMotion != null) slowMotion.SlowMotionEvent += UpdatePitch;
         if (sceneControl != null) sceneControl.StartedLoadingScene += FadeOutMaster;
-
-        StartCoroutine(FadeInMasterCoroutine());
     }
 
     private void FadeOutMaster() => StartCoroutine(FadeOutMasterCoroutine());

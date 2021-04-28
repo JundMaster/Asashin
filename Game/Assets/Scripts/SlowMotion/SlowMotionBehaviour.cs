@@ -75,6 +75,8 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     {
         if (playerRoll != null) playerRoll.Dodge -= TriggerSlowMotion;
         if (playerDeath != null) playerDeath.PlayerDied -= StopSlowMotion;
+
+        StopSlowMotion();
     }
 
     private void TriggerSlowMotion()
