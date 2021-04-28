@@ -31,9 +31,6 @@ public class OptionsScriptableObj : ScriptableObject
 
     [SerializeField] private int defaultDifficulty;
 
-    [SerializeField] private int maxDifficulty;
-    public int MaxDifficulty => maxDifficulty;
-
 
     public int GraphicsQuality { get; set; }
 
@@ -150,7 +147,6 @@ public class OptionsScriptableObj : ScriptableObject
         PlayerPrefs.SetString(GameOptionsEnum.AutoLock.ToString(), AutoLock.ToString());
         PlayerPrefs.SetInt(GameOptionsEnum.ScreenMode.ToString(), ScreenMode);
         PlayerPrefs.SetInt(GameOptionsEnum.ScreenResolution.ToString(), ScreenResolution);
-        PlayerPrefs.SetInt(GameOptionsEnum.Difficulty.ToString(), Difficulty);
         PlayerPrefs.SetInt(GameOptionsEnum.GraphicsQuality.ToString(), GraphicsQuality);
         PlayerPrefs.SetInt(GameOptionsEnum.ShadowQuality.ToString(), ShadowQuality);
         PlayerPrefs.SetString(GameOptionsEnum.Shadows.ToString(), Shadows.ToString());
@@ -185,12 +181,29 @@ public class OptionsScriptableObj : ScriptableObject
         VerticalSensibility = PlayerPrefs.GetFloat(GameOptionsEnum.VerticalSensibility.ToString(), defaultVerticalSensibility);
     }
 
+    /// <summary>
+    /// Saves difficulty. Only happens on start new game.
+    /// </summary>
+    /// <param name="dif">0 for normal, 1 for hard.</param>
+    public void SaveDifficulty(int dif)
+    {
+        if (dif == 0)
+        {
+            Difficulty = 0;
+            PlayerPrefs.SetInt(GameOptionsEnum.Difficulty.ToString(), 0);
+        }
+        else if (dif == 1)
+        {
+            Difficulty = 1;
+            PlayerPrefs.SetInt(GameOptionsEnum.Difficulty.ToString(), 1);
+        }
+    }
+
     public void ResetGeneralOptions()
     {
         AutoLock = defaultAutoLock;
         ScreenMode = defaultScreenMode;
         ScreenResolution = defaultScreenResolution;
-        Difficulty = defaultDifficulty;
     }
 
     public void ResetGraphicOptions()

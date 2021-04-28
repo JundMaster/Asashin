@@ -111,7 +111,6 @@ public class Options : MonoBehaviour
         options.AutoLock = value.AutoLock;
         options.ScreenMode = value.ScreenMode;
         options.ScreenResolution = value.ScreenResolution;
-        options.Difficulty = value.Difficulty;
         options.GraphicsQuality = value.GraphicsQuality;
         options.ShadowQuality = value.ShadowQuality;
         options.Shadows = value.Shadows;
