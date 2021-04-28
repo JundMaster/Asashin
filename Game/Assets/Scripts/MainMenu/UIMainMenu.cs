@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Class responsible for handling main menu UI.
@@ -9,6 +10,14 @@ public class UIMainMenu : MonoBehaviour
     private void Awake()
     {
         PlayerPrefs.SetString("TypeOfSpawn", SceneEnum.MainMenu.ToString());
+    }
+
+    private IEnumerator Start()
+    {
+        // Testing shit
+        yield return new WaitForEndOfFrame();
+        FindObjectOfType<PlayerInputCustom>().SwitchActionMapToGamePaused();
+        Time.timeScale = 1;
     }
 
     public void NewGame()

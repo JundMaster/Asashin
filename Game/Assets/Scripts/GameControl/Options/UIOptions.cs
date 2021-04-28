@@ -110,6 +110,12 @@ public class UIOptions : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void BackToMenuButton()
+    {
+        FindObjectOfType<SceneControl>().LoadScene(SceneEnum.MainMenu);
+        gameObject.SetActive(false);
+    }
+
     /// <summary>
     /// Passes a struct with current values to Options class, updates current
     /// values and saves those values in a file. Also updates UI.
