@@ -9,11 +9,16 @@ public class UIMainMenu : MonoBehaviour
 {
     [SerializeField] private OptionsScriptableObj options;
 
-    private void Awake()
-    {
+    /// <summary>
+    /// Sets playerprefs typeofspawn to main menu.
+    /// </summary>
+    private void Awake() =>
         PlayerPrefs.SetString("TypeOfSpawn", SceneEnum.MainMenu.ToString());
-    }
 
+    /// <summary>
+    /// Resets controls, time and mouse lockstate.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Start()
     {
         yield return new WaitForEndOfFrame();
@@ -23,9 +28,13 @@ public class UIMainMenu : MonoBehaviour
         Cursor.visible = true;
     }
 
+    /// <summary>
+    /// Starts a new game with x difficulty.
+    /// </summary>
+    /// <param name="difficulty">0 for normal, 1 for hard.</param>
     public void NewGame(int difficulty)
     {
-        if (difficulty != 0 || difficulty != 1) 
+        if (difficulty < 0 || difficulty > 1) 
             throw new Exception("Invalid difficulty");
 
         options.SaveDifficulty(difficulty);
@@ -33,15 +42,11 @@ public class UIMainMenu : MonoBehaviour
         OnMainMenuSpawn(SpawnTypeEnum.Newgame);
     }
 
-    public void LoadGame()
-    {
+    public void LoadGame() =>
         OnMainMenuSpawn(SpawnTypeEnum.Loadgame);
-    }
 
-    public void Quit()
-    {
+    public void Quit() =>
         Application.Quit();
-    }
 
     protected virtual void OnMainMenuSpawn(SpawnTypeEnum spawnType) =>
         MainMenuSpawn?.Invoke(spawnType);

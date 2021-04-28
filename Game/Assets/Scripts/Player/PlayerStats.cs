@@ -6,6 +6,7 @@ using System;
 /// </summary>
 public sealed class PlayerStats : Stats, IPlayerDamage, IHealable
 {
+    [SerializeField] private CommonStatsScriptableObj playerCommonStats;
     [SerializeField] private PlayerSavedStatsScriptableObj playerStats;
 
     // Items
@@ -22,6 +23,11 @@ public sealed class PlayerStats : Stats, IPlayerDamage, IHealable
     public float FirebombKunaiDamage => commonStats.RangedDamage * 10;
 
     public bool Dead { get; private set; }
+
+    private void Awake()
+    {
+        commonStats = playerCommonStats;
+    }
 
     private void OnEnable()
     {

@@ -6,8 +6,10 @@ using System;
 /// </summary>
 public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
 {
-    // Stats
-    [SerializeField] protected CommonStatsScriptableObj commonStats;
+    /// <summary>
+    /// This variable is initialized on the children classes.
+    /// </summary>
+    protected CommonStatsScriptableObj commonStats;
 
     public float Health { get; protected set; }
 

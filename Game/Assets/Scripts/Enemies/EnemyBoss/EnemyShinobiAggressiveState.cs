@@ -86,17 +86,22 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         if (Time.time - timeEnteringThisState > timeToChangeState)
             return enemy.ReinforcementsState;
 
-        float currentDistanceFromPlayer =
-            Vector3.Distance(playerTarget.position, myTarget.position);
+        float currentDistanceFromPlayer = 0;
+        if (playerTarget != null)
+            currentDistanceFromPlayer = 
+                Vector3.Distance(playerTarget.position, myTarget.position);
 
         // Checks and moves enemy close to player
         if (IsCloseToPlayer(currentDistanceFromPlayer))
         {
             // If the enemy is not inside attacking anim, it rotates
-            if (attackingAnimation == false)
-                enemy.transform.RotateToSmoothly(
-                    playerTarget.position, ref smoothTimeRotation,
-                    turnSpeed);
+            if (playerTarget != null)
+            {
+                if (attackingAnimation == false)
+                    enemy.transform.RotateToSmoothly(
+                        playerTarget.position, ref smoothTimeRotation,
+                        turnSpeed);
+            }
 
             // If the enemy has not performing an attack yet
             // It starts attacking coroutine
