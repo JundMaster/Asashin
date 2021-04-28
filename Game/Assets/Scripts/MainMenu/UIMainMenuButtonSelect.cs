@@ -32,7 +32,6 @@ public class UIMainMenuButtonSelect : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(eventSys.currentSelectedGameObject, gameObject);
         // Keeps last selected gameobject
         if (eventSys.currentSelectedGameObject != null &&
             eventSys.currentSelectedGameObject != lastSelectedGameObject)

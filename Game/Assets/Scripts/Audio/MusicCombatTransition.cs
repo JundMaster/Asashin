@@ -52,16 +52,14 @@ public class MusicCombatTransition : MonoBehaviour
 
     private IEnumerator GetVariables()
     {
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        
         bossCutscene = FindObjectOfType<BossCutsceneControl>();
         simpleEnemies = FindObjectsOfType<EnemySimple>();
         levelDefinitions = FindObjectOfType<CurrentLevelDefinitions>();
-
-        YieldInstruction wffu = new WaitForFixedUpdate();
-        while (player == null)
-        {
-            player = FindObjectOfType<Player>();
-            yield return wffu;
-        }
+        
+        yield return wffu;
+        player = FindObjectOfType<Player>();
 
         SwitchBackgroundToThisLevel();
         SwitchToBackgroundMusic();
