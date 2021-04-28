@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Class responsible for handling menu actions.
@@ -19,9 +20,12 @@ public class MenuOptionsController : MonoBehaviour
 
     private CameraController vmController;
 
+    private EventSystem eventSys;
+
     private void Awake()
     {
         vmController = FindObjectOfType<CameraController>();
+        eventSys = FindObjectOfType<EventSystem>();
     }
 
     private void Start()
@@ -29,6 +33,7 @@ public class MenuOptionsController : MonoBehaviour
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        eventSys.SetSelectedGameObject(newGameOption);
     }
 
     public void SwitchMenuOption()
