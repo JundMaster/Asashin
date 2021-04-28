@@ -193,7 +193,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
                 attackingCoroutine = null;
                 break;
             }
-                
+
             // Starts atacking animation
             attackingAnimation = true;
             anim.SetTrigger("MeleeAttack");

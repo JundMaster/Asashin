@@ -87,7 +87,7 @@ public abstract class EnemyAbstractState : StateBase
         enemyBase.StartCoroutine(ImpactToBack());
 
     /// <summary>
-    /// Happens after enemy being hit. Enemy is pushed it back.
+    /// Happens after enemy being hit. Enemy is pushed back.
     /// </summary>
     /// <returns>Null.</returns>
     protected virtual IEnumerator ImpactToBack()

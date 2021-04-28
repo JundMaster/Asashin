@@ -43,8 +43,7 @@ public class EnemyKenshuseiDefenseState : EnemySimpleAbstractDefenseState
             }
 
             // Keeps rotating the enemy towards the player
-            enemy.transform.RotateToSmoothly(
-                playerTarget.position, ref smoothTimeRotation, turnSpeed);
+            enemy.transform.RotateTo(playerTarget.position);
         }
 
         // Keeps rotating the enemy towards the player

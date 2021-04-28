@@ -71,7 +71,6 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
                 }
             }
             // If the enemy can NOT see and is facing the player
-            // Happens while the enemy is rotating after reaching final path
             else if (PlayerInRange() == false && FacingPlayer())
             {
                 // Meaning it's not inside throw kunai coroutine
@@ -80,8 +79,7 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
             }
 
             // Keeps rotating the enemy towards the player
-            enemy.transform.RotateToSmoothly(
-                playerTarget.position, ref smoothTimeRotation, turnSpeed);
+            enemy.transform.RotateTo(playerTarget.position);
         }
 
         // Keeps rotating the enemy towards the player
