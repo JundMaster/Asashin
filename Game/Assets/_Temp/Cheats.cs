@@ -57,21 +57,51 @@ public class Cheats : MonoBehaviour
     /// <returns></returns>
     private IEnumerator CheatCoroutine()
     {
-        while (Time.time - timePressed < 1 && buttonPressed == ButtonPressed.ItemLeft)
+        float timeToPressNext = 1;
+        byte value = 0;
+        while (value == 0 && Time.time - timePressed < timeToPressNext)
+        {
+            if (buttonPressed == ButtonPressed.Block) value = 1;
             yield return null;
-        while (Time.time - timePressed < 1 && buttonPressed == ButtonPressed.Block)
+        }
+        
+        while (value == 1 && Time.time - timePressed < timeToPressNext)
+        {
+            if (buttonPressed == ButtonPressed.Attack) value = 2;
             yield return null;
-        while (Time.time - timePressed < 1 && buttonPressed == ButtonPressed.Attack)
+        }
+
+        while (value == 2 && Time.time - timePressed < timeToPressNext)
+        {
+            if (buttonPressed == ButtonPressed.ItemRight) value = 3;
             yield return null;
-        while (Time.time - timePressed < 1 && buttonPressed == ButtonPressed.ItemRight)
+        }
+
+        while (value == 3 && Time.time - timePressed < timeToPressNext)
+        {
+            if (buttonPressed == ButtonPressed.Block) value = 4;
             yield return null;
-        while (Time.time - timePressed < 1 && buttonPressed == ButtonPressed.Block)
+        }
+
+        while (value == 4 && Time.time - timePressed < timeToPressNext)
+        {
+            if (buttonPressed == ButtonPressed.Attack) value = 5;
             yield return null;
-        while (Time.time - timePressed < 1 && buttonPressed == ButtonPressed.Attack)
+        }
+
+        while (value == 5 && Time.time - timePressed < timeToPressNext)
+        {
+            if (buttonPressed == ButtonPressed.ItemRight) value = 6;
             yield return null;
-        while (Time.time - timePressed < 1 && buttonPressed == ButtonPressed.ItemRight)
+        }
+
+        while (value == 6 && Time.time - timePressed < timeToPressNext)
+        {
+            if (buttonPressed == ButtonPressed.Roll) value = 7;
             yield return null;
-        while (Time.time - timePressed < 1 && buttonPressed == ButtonPressed.Roll)
+        }
+
+        while (value == 7 && Time.time - timePressed < timeToPressNext)
         {
             PlayerStats playerStats = FindObjectOfType<PlayerStats>();
             playerStats.FirebombKunais += 10;
