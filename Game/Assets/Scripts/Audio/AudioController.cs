@@ -44,12 +44,9 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     }
     #endregion
 
-    private void OnEnable()
-    {
-        if (optionsScript != null) optionsScript.UpdatedValues += UpdateValues;
-        if (slowMotion != null) slowMotion.SlowMotionEvent += UpdatePitch;
+    private void OnEnable() =>
         SceneManager.sceneLoaded += OnSceneLoaded;
-    }
+
     private void OnDisable()
     {
         if (optionsScript != null) optionsScript.UpdatedValues -= UpdateValues;
@@ -61,6 +58,9 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     {
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         sceneControl = FindObjectOfType<SceneControl>();
+        optionsScript = FindObjectOfType<Options>();
+
+        if (optionsScript != null) optionsScript.UpdatedValues += UpdateValues;
         if (slowMotion != null) slowMotion.SlowMotionEvent += UpdatePitch;
         if (sceneControl != null) sceneControl.StartedLoadingScene += FadeOutMaster;
 
