@@ -27,10 +27,15 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
             ParentKunai.HittableLayers = ParentKunai.HittableLayersWithEnemy;
             gameObject.layer = HITTABLELAYERWITHENEMIES;
         }
-        else
+        else if (!isReflected)
         {
             ParentKunai.HittableLayers = hittableLayersWithPlayer;
             gameObject.layer = HITTABLELAYERWITHPLAYER;
+        }
+        else if (playerRoll.Performing)
+        {
+            // Changes to a layer that ignores player
+            gameObject.layer = 30;
         }
     }
 
@@ -87,6 +92,7 @@ public class EnemyKunaiBehaviour : KunaiBehaviour
                         ParentEnemy.transform.position - player.position,
                         player.forward) < 50f)
                     {
+                        // Reflects kunai back to enemy
                         KunaiCurrentTarget = ParentEnemy.MyTarget;
 
                         // Also triggers player animation

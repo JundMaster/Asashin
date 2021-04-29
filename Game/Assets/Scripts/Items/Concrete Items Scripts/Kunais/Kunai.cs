@@ -14,6 +14,7 @@ public class Kunai : ItemBehaviour, IFindPlayer
     [SerializeField] protected float speed;
     
     private Transform player;
+    private PlayerRoll playerRoll;
 
     // Hit variables
     [SerializeField] protected float hitRange;
@@ -31,16 +32,18 @@ public class Kunai : ItemBehaviour, IFindPlayer
     private void Start()
     {
         player = FindObjectOfType<Player>().transform;
+        playerRoll = FindObjectOfType<PlayerRoll>();
         behaviour.KunaiCurrentTarget = null;
         behaviour.ParentKunai = this;
-
-        // Decides direction of kunai
-        behaviour.OnStart(player);
 
         rotation = 0;
         timePassed = Time.time;
 
         HittableLayers = hittableLayersWithEnemy;
+
+        // Decides direction of kunai
+        // Changes kunai layers if it's an enemy / pressure plate kunai
+        behaviour.OnStart(player);
 
         behaviour.Execute(this);
     }
@@ -97,6 +100,9 @@ public class Kunai : ItemBehaviour, IFindPlayer
                 {
                     // Trigers behaviour hit()
                     behaviour.Hit(damageableBody, other, player);
+
+                    if (playerRoll.Performing == false)
+                        Instantiate(hitParticles, transform.position, Quaternion.identity);
                 }
             }
             // Else if the object can not receive damage
@@ -104,8 +110,11 @@ public class Kunai : ItemBehaviour, IFindPlayer
             {
                 behaviour.Hit(null, other, player);
                 Destroy(gameObject);
+
+                Instantiate(hitParticles, transform.position, Quaternion.identity);
             }
-            Instantiate(hitParticles, transform.position, Quaternion.identity);
+            
+            // Doesn't hit anything, so it does nothing
         }
         else
         {

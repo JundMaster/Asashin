@@ -4,57 +4,58 @@ using UnityEngine;
 public class PressurePlate : MonoBehaviour
 {
     private Animator anim;
+    private BoxCollider col;
 
+    [SerializeField] private Kunai kunai;
     [SerializeField] private Transform[] kunaiSpawns;
-    [SerializeField] private float plateDelay;
+    [Range(2f, 10f)][SerializeField] private float plateTriggerDelay;
 
     private void Awake()
     {
-        anim = GetComponent<Animator>();    
+        anim = GetComponent<Animator>();
+        col = GetComponent<BoxCollider>();
     }		
 
-    private void Start()
+    private void OnTriggerEnter(Collider other)
     {
-        
-    }
-
-    private void Update()
-    {
-        
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.layer == 11)
+        if (other.gameObject.layer == 11)
         {
-            Debug.Log("temp");
             anim.SetTrigger("Trigger");
-            StartCoroutine(BackToNormal());
+            
+            foreach (Transform kunaiSpawn in kunaiSpawns)
+                Instantiate(kunai, kunaiSpawn.position, Quaternion.identity);
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
-        if (collision.gameObject.layer == 11)
-        {
-            Debug.Log("2");
-        }
+        if (other.gameObject.layer == 11)
+            StartCoroutine(BackToNormal());
     }
 
     private IEnumerator BackToNormal()
     {
+        col.enabled = false;
+
+        // Waits for delay to go back to normal
         float timeEntered = Time.time;
-        while (Time.time - timeEntered < plateDelay)
+        while (Time.time - timeEntered < plateTriggerDelay)
         {
             yield return null;
         }
+
         anim.ResetTrigger("Trigger");
         anim.SetTrigger("BackToNormal");
+
+        // Waits for animation time
+        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
+
+        col.enabled = true;
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(0.25f, 0.25f, 0.25f, 0.5f);
+        Gizmos.color = new Color(0.25f, 0.25f, 0.75f, 0.5f);
         foreach (Transform kunaiSpawn in kunaiSpawns)
             Gizmos.DrawSphere(kunaiSpawn.position, 0.25f);
     }
