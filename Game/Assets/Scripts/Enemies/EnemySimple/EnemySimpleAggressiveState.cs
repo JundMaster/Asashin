@@ -55,7 +55,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
             playerRoll = enemy.Player.GetComponent<PlayerRoll>();
 
         animationEvents = enemy.GetComponentInChildren<EnemyAnimationEvents>();
-        weapon = enemy.WeaponCollider;
+        weapon = enemy.Weapon;
     }
 
     /// <summary>

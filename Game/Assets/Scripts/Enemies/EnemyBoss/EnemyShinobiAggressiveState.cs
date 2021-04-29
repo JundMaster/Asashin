@@ -49,7 +49,7 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
             playerRoll = enemy.Player.GetComponent<PlayerRoll>();
 
         animationEvents = enemy.GetComponentInChildren<EnemyAnimationEvents>();
-        weapon = enemy.WeaponCollider;
+        weapon = enemy.Weapon;
     }
 
     /// <summary>
