@@ -89,6 +89,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         SetAllCamerasTargets();
 
         StartCoroutine(KeepsFindingClosestTarget());
+
+        UpdateValues();
     }
 
     /// <summary>
