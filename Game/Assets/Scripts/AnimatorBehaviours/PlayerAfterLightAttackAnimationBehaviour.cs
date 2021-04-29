@@ -14,7 +14,6 @@ public class PlayerAfterLightAttackAnimationBehaviour : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        //playerMovement.Walking = false;
         playerMovement.OnHide(false);
     }
 
@@ -31,6 +30,7 @@ public class PlayerAfterLightAttackAnimationBehaviour : StateMachineBehaviour
         playerAttack.Anim.ResetTrigger("MeleeLightAttack");
         playerAttack.Performing = false;
         playerAttack.Anim.applyRootMotion = false;
+        playerAttack.TurnTrailToFalse();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

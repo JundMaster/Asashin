@@ -146,7 +146,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// <summary>
     /// Turns trail to false. Runs on Animation event.
     /// </summary>
-    private void TurnTrailToFalse()
+    public void TurnTrailToFalse()
     {
         foreach (ParticleSystem particle in particles)
             particle.Stop();
