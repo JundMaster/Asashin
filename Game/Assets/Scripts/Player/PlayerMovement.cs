@@ -97,8 +97,8 @@ public class PlayerMovement : MonoBehaviour, IAction
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
         input.Walk += HandleWalk;
         input.Sprint += HandleSprint;
-        roll.Roll += () => Walking = false;
-        useItem.UsedItemDelay += () => Walking = false;
+        //roll.Roll += () => Walking = false;
+        //useItem.UsedItemDelay += () => Walking = false;
         wallHug.WallHug += StopMovementAfterWallHug;
         stats.TookDamage += () => Walking = false;
         Hide += HandleHidden;
@@ -110,8 +110,8 @@ public class PlayerMovement : MonoBehaviour, IAction
         slowMotion.SlowMotionEvent -= ChangeTurnSmoothValue;
         input.Walk -= HandleWalk;
         input.Sprint -= HandleSprint;
-        roll.Roll -= () => Walking = false;
-        useItem.UsedItemDelay -= () => Walking = false;
+        //roll.Roll -= () => Walking = false;
+        //seItem.UsedItemDelay -= () => Walking = false;
         wallHug.WallHug -= StopMovementAfterWallHug;
         stats.TookDamage -= () => Walking = false;
         Hide -= HandleHidden;
@@ -148,7 +148,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         }
 
         // Cancels sneak
-        if (wallHug.Performing || block.Performing || !IsGrounded())
+        if (wallHug.Performing || !IsGrounded())
         {
             Walking = false;
             OnHide(false);

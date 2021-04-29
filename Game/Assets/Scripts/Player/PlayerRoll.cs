@@ -6,7 +6,6 @@ public class PlayerRoll : MonoBehaviour, IAction
     // Components
     public Animator Anim { get; private set; }
     private PlayerInputCustom input;
-    private PlayerMeleeAttack attack;
     private PlayerUseItem useItem;
     private PlayerBlock block;
     private PlayerWallHug wallHug;
@@ -18,7 +17,6 @@ public class PlayerRoll : MonoBehaviour, IAction
     private void Awake()
     {
         input = FindObjectOfType<PlayerInputCustom>();
-        attack = GetComponent<PlayerMeleeAttack>();
         Anim = GetComponent<Animator>();
         useItem = GetComponent<PlayerUseItem>();
         block = GetComponent<PlayerBlock>();
@@ -57,8 +55,8 @@ public class PlayerRoll : MonoBehaviour, IAction
     private void HandleRoll()
     {
         if (Performing == false &&
-            movement.IsGrounded() && useItem.Performing == false &&
-            block.Performing == false && wallHug.Performing == false)
+            movement.IsGrounded() && useItem.Performing == false 
+            && wallHug.Performing == false)
         {
             OnRoll();
         }

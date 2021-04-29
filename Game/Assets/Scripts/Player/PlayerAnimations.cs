@@ -116,13 +116,9 @@ public class PlayerAnimations : MonoBehaviour
     private void TriggerLightMeleeAttack(bool condition)
     {
         if (condition == true)
-        {
             anim.SetTrigger("MeleeLightAttack");
-        }
         else
-        {
             anim.SetTrigger("InstantKill");
-        }
     }
 
     /// <summary>
