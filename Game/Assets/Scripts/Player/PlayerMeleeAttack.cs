@@ -285,4 +285,12 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// it triggers instant kill Animation.</param>
     /// </summary>
     public event Action<bool> LightMeleeAttack;
+
+    #region Gizmos
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(sword.transform.position + sword.center,
+                sword.radius);
+    }
+    #endregion
 }

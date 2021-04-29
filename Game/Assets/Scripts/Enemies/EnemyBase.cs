@@ -25,7 +25,7 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     [SerializeField] private float sizeOfAlert;
 
     [Header("Enemy melee weapon")]
-    [SerializeField] protected SphereCollider weaponCollider;
+    [SerializeField] protected SphereCollider weapon;
     ////////////////////////////////////////////////////////////////////////////
 
     // State machine variables
@@ -56,7 +56,7 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     public EnemyStats Stats { get; private set; }
     public NavMeshAgent Agent { get; private set; }
     public Transform MyTarget => myTarget;
-    public SphereCollider WeaponCollider => weaponCollider;
+    public SphereCollider Weapon => weapon;
 
     /// <summary>
     /// Called once on awake. Gets components.
@@ -143,7 +143,7 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     public event Action Die;
 
     #region Gizmos
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sizeOfAlert);
