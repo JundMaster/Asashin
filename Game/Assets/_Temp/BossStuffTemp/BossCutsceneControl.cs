@@ -50,18 +50,20 @@ public class BossCutsceneControl : MonoBehaviour
         CharacterController player = FindObjectOfType<PlayerMovement>().Controller;
         MusicReferences musicSource = FindObjectOfType<MusicReferences>();
 
+        YieldInstruction wffu = new WaitForFixedUpdate();
         while (player.transform.position.Similiar(playerFinalPosition.position, 0.1f) == false)
         {
             playerMovement.MovementSpeed = 4f;
             Vector3 dir = player.transform.Direction(playerFinalPosition); 
             player.Move((playerMovement.MovementSpeed * 0.75f) * dir * Time.fixedDeltaTime);
-            player.transform.RotateTo(bossPosition.transform.position);
-            yield return null;          
+            player.transform.RotateTo(playerFinalPosition.position);
+            yield return wffu;          
         }
+        player.transform.RotateTo(bossPosition.transform.position);
         playerMovement.MovementSpeed = 0;
 
         float currentVolume = musicSource.Music.volume;
-        YieldInstruction wffu = new WaitForFixedUpdate();
+        
         while (true)
         {
             while (musicSource.Music.volume > 0 && musicSource.CombatMusic.volume > 0)

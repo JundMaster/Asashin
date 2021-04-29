@@ -48,6 +48,7 @@ public class LevelChanger : MonoBehaviour
         CharacterController playerController = playerMovement.GetComponent<CharacterController>();
         SpawnerController spawner = FindObjectOfType<SpawnerController>();
 
+        YieldInstruction wffu = new WaitForFixedUpdate();
         while (playerMovement.transform.position.Similiar(playerGoToPosition.position, 0.1f) == false)
         {
             playerMovement.MovementSpeed = 4f;
@@ -64,7 +65,7 @@ public class LevelChanger : MonoBehaviour
                     changedScene = true;
                 }
             }
-            yield return null;
+            yield return wffu;
         }
     }
 
