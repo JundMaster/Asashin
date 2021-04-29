@@ -56,7 +56,7 @@ public class PlayerRoll : MonoBehaviour, IAction
     /// </summary>
     private void HandleRoll()
     {
-        if (Performing == false && attack.Performing == false &&
+        if (Performing == false &&
             movement.IsGrounded() && useItem.Performing == false &&
             block.Performing == false && wallHug.Performing == false)
         {
