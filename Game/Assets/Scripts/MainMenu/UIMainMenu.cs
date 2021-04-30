@@ -34,6 +34,7 @@ public class UIMainMenu : MonoBehaviour
     /// <param name="difficulty">0 for normal, 1 for hard.</param>
     public void NewGame(int difficulty)
     {
+        Debug.Log("DAfuq!?");
         if (difficulty < 0 || difficulty > 1) 
             throw new Exception("Invalid difficulty");
 
