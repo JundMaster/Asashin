@@ -9,9 +9,8 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
 {
     [Header("Player check ranges")]
     [Range(1,30)][SerializeField] private float checkForPlayerRange;
-    [Range(1, 3)][SerializeField] private float closeToPlayerRange;
-    [Tooltip("Distance to stay from player while attacking")]
-    [Range(1, 1.5f)][SerializeField] private float distanceFromPlayer;
+    private readonly float CLOSETOPLAYERRANGE = 2;
+    private readonly float DISTANCEFROMPLAYER = 1;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private LayerMask collisionLayers;
 
@@ -191,7 +190,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
 
             // Checks if player is still in range
             if (Vector3.Distance(playerTarget.position, myTarget.position) >
-                closeToPlayerRange)
+                CLOSETOPLAYERRANGE)
             {
                 attackingCoroutine = null;
                 break;
@@ -205,7 +204,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
             // EnemyAnimationEvents
 
             yield return wfdaa;
-            // After delay from attack animation
+            // Delay after attack
 
             attackingAnimation = false;
         }
@@ -313,13 +312,19 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     private bool IsCloseToPlayer(float distance)
     {
         // If the enemy is not close to the player
-        if (distance > closeToPlayerRange)
+        if (distance > CLOSETOPLAYERRANGE)
         {
             // Only happens if the enemy is not doing something else
             // for example, it doesn't happen while atacking
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
             {
-                agent.speed = runningSpeed;
+                // If enemy is reaching player's radius
+                if (distance < CLOSETOPLAYERRANGE + 0.5f)
+                    agent.speed = Mathf.Lerp(
+                        agent.speed, walkingSpeed, Time.fixedDeltaTime * 50);
+                else
+                    agent.speed = Mathf.Lerp(
+                        agent.speed, runningSpeed, Time.fixedDeltaTime * 50);
 
                 Vector3 dir =
                     myTarget.position.InvertedDirection(playerTarget.position);
@@ -327,7 +332,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
                 if (attackingAnimation == false)
                 {
                     agent.SetDestination(
-                        playerTarget.position + dir * distanceFromPlayer);
+                        playerTarget.position + dir * DISTANCEFROMPLAYER);
                 }
             }
             return false;

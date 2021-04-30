@@ -13,6 +13,7 @@ public abstract class EnemyAbstractState : StateBase
 
     // Movement
     [Range(0.1f, 5f)] [SerializeField] protected float runningSpeed;
+    [Range(0.1f, 5f)] [SerializeField] protected float walkingSpeed;
 
     private EnemyBase enemyBase;
     protected EnemyStats stats;
