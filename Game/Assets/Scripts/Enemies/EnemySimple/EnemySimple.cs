@@ -108,7 +108,7 @@ public sealed class EnemySimple : EnemyBase
     /// Method called from AlertSurroundings, called from enemy states,
     /// in order to invoke Alert event.
     /// </summary>
-    protected override void OnAlert() => 
+    public void OnAlert() => 
         Alert?.Invoke();
 
     /// <summary>

@@ -6,8 +6,6 @@ using System.Collections;
 /// </summary>
 public abstract class EnemySimpleAbstractState : EnemyAbstractState
 {
-    [Range(0.1f, 5f)] [SerializeField] protected float walkingSpeed;
-
     [Header("Rotation speed after being hit (less means faster)")]
     [Range(0.1f, 1f)] [SerializeField] private float turnSpeedAfterBeingHit;
     private float smoothTimeRotationAfterBeingHit;

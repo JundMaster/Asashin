@@ -30,7 +30,7 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
         kunaiCoroutine = null;
 
         whileThrowingKunai = false;
-    }
+    }   
 
     /// <summary>
     /// Goes to defense position. If the player is fighting an enemy,
@@ -83,7 +83,8 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
         }
 
         // Keeps rotating the enemy towards the player
-        enemy.transform.RotateTo(playerTarget.position);
+        enemy.transform.RotateToSmoothly(
+            playerTarget.position, ref smoothRotation, ROTATIONSPEED);
 
         // Else it moves to the enemy without rotating towards the player
         return enemy.DefenseState;
@@ -125,7 +126,7 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
                 agent.speed = walkingSpeed;
                 runningBack = true;
             }
-            else
+            else if (distance > randomDistance + 2)
             {
                 agent.speed = runningSpeed;
                 runningBack = false;
@@ -134,33 +135,37 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
             agent.isStopped = false;
 
             // Direction from player to enemy.
-            Vector3 desiredDirection =
-                myTarget.position.Direction(playerTarget.position);
+            Vector3 desiredDirection = Vector3.zero;
+                
+            if (distance < randomDistance - 2)
+                desiredDirection = 
+                    myTarget.position.InvertedDirection(playerTarget.position);
+            else if (distance > randomDistance + 2)
+                desiredDirection =
+                    myTarget.position.Direction(playerTarget.position);
 
             // Ray from player to final destination
             Ray finalPosition = 
-                new Ray(
-                    playerTarget.position,
-                    -desiredDirection * randomDistance);
+                new Ray(myTarget.position, desiredDirection);
 
             // If there isn't any wall in the way
             if (Physics.Raycast(
-                finalPosition, randomDistance, collisionLayers) == false)
+                finalPosition, MINDISTANCEFROMWALL, collisionLayers) == false)
             {
-                // Moves the enemy in order to keep a random distance 
+                // Moves the enemy back in order to keep a random distance 
                 // from the player
                 // Only happens if the enemy is not throwing a kunai
                 if (whileThrowingKunai == false)
                 {
                     agent.SetDestination(
-                        playerTarget.position - desiredDirection *
-                        randomDistance);
+                    myTarget.position + desiredDirection * 1.1f);
                     return true;
                 }
                 // Stops enemy, only happens if the enemy is throwing a kunai
                 else
                 {
                     agent.SetDestination(myTarget.position);
+                    return false;
                 }
             }
             // Else if there is a wall
@@ -168,6 +173,8 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
             {
                 // Keeps the enemy in the same place and final destination.
                 agent.SetDestination(myTarget.position);
+                agent.speed = 0;
+                runningBack = false;
                 agent.isStopped = true;
                 return false;
             }
