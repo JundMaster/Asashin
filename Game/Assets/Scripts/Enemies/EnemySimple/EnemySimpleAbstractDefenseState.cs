@@ -13,6 +13,11 @@ public abstract class EnemySimpleAbstractDefenseState :
     protected float randomDistance;
     protected bool runningBack;
 
+    protected float smoothRotation;
+    protected readonly float ROTATIONSPEED = 0.01f;
+
+    protected readonly float MINDISTANCEFROMWALL = 3f;
+
     /// <summary>
     /// Happens once on start. Sets a random distance to mantain while defending.
     /// </summary>
