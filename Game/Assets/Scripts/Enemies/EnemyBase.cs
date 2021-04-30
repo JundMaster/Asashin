@@ -17,6 +17,7 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
 {
     // Fields and their getters
     [SerializeField] protected LayerMask myLayer;
+    [SerializeField] private LayerMask wallsWithEnemy;
 
     [Header("Enemy target")]
     [SerializeField] protected Transform myTarget;
@@ -82,7 +83,8 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     }
 
     /// <summary>
-    /// In case this enemy finds the player, it alerts the surrounding enemies.
+    /// In case this enemy finds the player, it alerts the surrounding enemies
+    /// that this enemy can see.
     /// </summary>
     public void AlertSurroundings()
     {
@@ -95,18 +97,16 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
             {
                 if (enemyCollider.TryGetComponent(out EnemySimple otherEnemy))
                 {
-                    if (otherEnemy.gameObject != gameObject)
+                    if (transform.CanSee(otherEnemy.transform, wallsWithEnemy))
                     {
-                        otherEnemy.OnAlert();
+                        if (otherEnemy.gameObject != gameObject)
+                        {
+                            otherEnemy.OnAlert();
+                        }
                     }
                 }
             }
         }
-    }
-
-    protected virtual void OnAlert()
-    {
-        // Left brank on purpose
     }
 
     /// <summary>

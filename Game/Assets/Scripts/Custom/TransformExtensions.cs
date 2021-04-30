@@ -48,7 +48,8 @@ public static class TransformExtentions
     /// <param name="layers">Layers to check.</param>
     /// <returns>Returns true if source transform can see the final 
     /// transform.</returns>
-    public static bool CanSee(this Transform from, Transform to, LayerMask layers)
+    public static bool CanSee(this Transform from, Transform to, 
+        LayerMask layers)
     {
         Ray rayTo = new Ray(from.position, from.position.Direction(to.position));
         float distance = Vector3.Distance(from.position, to.position);
