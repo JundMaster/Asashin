@@ -145,6 +145,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
 
             return enemy.AggressiveState;
         }
+
         return enemy.LostPlayerState ?? enemy.PatrolState;    
     }
 
@@ -160,6 +161,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         attackingAnimation = false;
         attacking = false;
         agent.isStopped = false;
+        agent.speed = runningSpeed;
 
         animationEvents.Hit -= WeaponHit;
     }
@@ -177,6 +179,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         // While in range with the player
         while (attacking)
         {
+            agent.speed = 0;
             yield return wfd;
 
             // Only checks this once in a while, so it won't do it every frame
@@ -230,7 +233,6 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
                 return;
         }
         
-
         // Collisions of the melee weapon
         Collider[] swordCollider = Physics.OverlapSphere(
             weapon.transform.position,
@@ -313,15 +315,21 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         // If the enemy is not close to the player
         if (distance > closeToPlayerRange)
         {
-            Vector3 dir = 
-                myTarget.position.InvertedDirection(playerTarget.position);
-
-            if (attackingAnimation == false)
+            // Only happens if the enemy is not doing something else
+            // for example, it doesn't happen while atacking
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
             {
-                agent.SetDestination(
-                    playerTarget.position + dir * distanceFromPlayer);
-            }
+                agent.speed = runningSpeed;
 
+                Vector3 dir =
+                    myTarget.position.InvertedDirection(playerTarget.position);
+
+                if (attackingAnimation == false)
+                {
+                    agent.SetDestination(
+                        playerTarget.position + dir * distanceFromPlayer);
+                }
+            }
             return false;
         }
         // Else if the enemy is close to the player
