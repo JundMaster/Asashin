@@ -5,11 +5,11 @@ OcclusionCullingSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_OcclusionBakeSettings:
-    smallestOccluder: 10
+    smallestOccluder: 20
     smallestHole: 0.25
     backfaceThreshold: 100
-  m_SceneGUID: 07dcb168854c7cf438616dff0a6e641f
-  m_OcclusionCullingData: {fileID: 36300000, guid: 4ea57c74b66459e4ebad433fab61cdc4, type: 2}
+  m_SceneGUID: 00000000000000000000000000000000
+  m_OcclusionCullingData: {fileID: 0}
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
@@ -2319,6 +2319,26 @@ PrefabInstance:
     - target: {fileID: 6028468781260369709, guid: 38b16c855840ec649aea56f14f1266d1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028468781820154733, guid: 38b16c855840ec649aea56f14f1266d1, type: 3}
+      propertyPath: m_Damping
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028468781820154733, guid: 38b16c855840ec649aea56f14f1266d1, type: 3}
+      propertyPath: m_SmoothingTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028468781820154733, guid: 38b16c855840ec649aea56f14f1266d1, type: 3}
+      propertyPath: m_DampingWhenOccluded
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028468781849755510, guid: 38b16c855840ec649aea56f14f1266d1, type: 3}
+      propertyPath: m_Damping
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028468781849755510, guid: 38b16c855840ec649aea56f14f1266d1, type: 3}
+      propertyPath: m_DampingWhenOccluded
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6028468782493630252, guid: 38b16c855840ec649aea56f14f1266d1, type: 3}
       propertyPath: m_LocalPosition.x
