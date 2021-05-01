@@ -7,6 +7,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Enemy Shinobi Reinforcements State")]
 public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
 {
+    [SerializeField] private GameObject smokePrefab;
+
     private Transform[] limitPositions;
     private GameObject[] minionsPrefabs;
 
@@ -56,6 +58,11 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
         return enemy.ReinforcementsState;
     }
 
+    public override void OnExit()
+    {
+        base.OnExit();
+    }
+
     /// <summary>
     /// Spawns minions and teleports the boss to a random position inside its 
     /// area.
@@ -86,6 +93,9 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
         enemy.AlertSurroundings();
 
         enemy.CineTarget.CancelCurrentTarget();
+        Vector3 offset = new Vector3(0, 0.5f, 0);
+        Instantiate(
+            smokePrefab, enemy.transform.position + offset, Quaternion.identity);
 
         // Teleports boss enemy to a random position and stops him
         spawnPos = Custom.RandomPositionInSquare(limitPositions);

@@ -21,6 +21,8 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
     private const byte KUNAILAYER = 15;
     private float usedKunaiTime;
 
+    [SerializeField] private GameObject smokePrefab;
+
     private int minionsAlive;
 
     /// <summary>
@@ -123,6 +125,10 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
 
         agent.SetDestination(myTarget.position);
         agent.enabled = false;
+
+        Vector3 offset = new Vector3(0, 0.5f, 0);
+        Instantiate(
+            smokePrefab, enemy.transform.position + offset, Quaternion.identity);
 
         // Makes the enemy disappear for wfs
         enemy.transform.position = new Vector3(100000, 100000, 100000);
