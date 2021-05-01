@@ -16,6 +16,9 @@ public class LevelChanger : MonoBehaviour
 
     private bool changedScene;
 
+    private float smoothTimeRotation;
+    private readonly float TURNSPEED = 0.125f;
+
     private void Awake()
     {
         input = FindObjectOfType<PlayerInputCustom>();
@@ -54,12 +57,13 @@ public class LevelChanger : MonoBehaviour
             playerMovement.MovementSpeed = 4f;
             Vector3 dir = playerMovement.transform.Direction(playerGoToPosition);
             playerController.Move((playerMovement.MovementSpeed * 0.75f) * dir * Time.fixedDeltaTime);
-            playerMovement.transform.RotateTo(playerGoToPosition.position);
+            playerMovement.transform.RotateToSmoothly(playerGoToPosition.position, ref smoothTimeRotation, TURNSPEED);
 
             if (Vector3.Distance(playerMovement.transform.position, playerGoToPosition.position) < 1)
             {
                 if (changedScene == false)
                 {
+                    // Saves all stats so it can respawn the player with these stats in the next scene
                     spawner.GameState.SavePlayerStats();
                     OnLevelChanged(changeToLevel);
                     changedScene = true;
