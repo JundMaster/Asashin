@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -69,10 +68,8 @@ public class UIOptions : MonoBehaviour
         UpdateAllUI();
     }
 
-    private void OnDisable()
-    {
+    private void OnDisable() =>
         eventSys.SetSelectedGameObject(null);
-    }
 
     private IEnumerator SelectResumeButton()
     {
@@ -318,9 +315,21 @@ public class UIOptions : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////
     public void UpdateLightnessValue(float value) => currentValues.Lightness = value;
     public void UpdateContrastValue(float value) => currentValues.Contrast = value;
-    public void UpdateMasterVolume(float value) => currentValues.MasterVolume = value;
-    public void UpdateMusicVolume(float value) => currentValues.MusicVolume = value;
-    public void UpdateSoundVolume(float value) => currentValues.SoundVolume = value;
+    public void UpdateMasterVolume(float value)
+    {
+        currentValues.MasterVolume = value;
+        optionsScript.UpdateSoundInstantlyWithSliders(currentValues);
+    }
+    public void UpdateMusicVolume(float value)
+    {
+        currentValues.MusicVolume = value;
+        optionsScript.UpdateSoundInstantlyWithSliders(currentValues);
+    }
+    public void UpdateSoundVolume(float value)
+    {
+        currentValues.SoundVolume = value;
+        optionsScript.UpdateSoundInstantlyWithSliders(currentValues);
+    }
     public void VerticalSensiblity(float value) => currentValues.VerticalSensibility = value;
     public void HorizontalSensiblity(float value) => currentValues.HorizontalSensibility = value;
 
@@ -468,12 +477,4 @@ public class UIOptions : MonoBehaviour
         horizontalSensiblity.minValue = configScriptableObj.MinHorizontalSensibility;
         horizontalSensiblity.maxValue = configScriptableObj.MaxHorizontalSensibility;
     }
-
-    protected virtual void OnLoadingButtonPressed(SpawnTypeEnum typeOfSpawn) =>
-        LoadingButtonPressed?.Invoke(typeOfSpawn);
-
-    /// <summary>
-    /// Event registered on SpawnerController.
-    /// </summary>
-    public event Action<SpawnTypeEnum> LoadingButtonPressed;
 }

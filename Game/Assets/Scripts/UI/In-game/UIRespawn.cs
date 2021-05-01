@@ -40,8 +40,6 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
     private void EnableRespawnUI()
     {
         FindObjectOfType<PlayerInputCustom>().SwitchActionMapToGamePaused();
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
 
         respawnUI.SetActive(true);
         StartCoroutine(WaitForLoading());
