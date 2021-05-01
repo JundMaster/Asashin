@@ -9,6 +9,10 @@ using UnityEngine.Rendering.Universal;
 /// </summary>
 public class PlayerMovement : MonoBehaviour, IAction
 {
+    [SerializeField] private GameObject footImpactParticles;
+    [SerializeField] private Transform leftFoot;
+    [SerializeField] private Transform rightFoot;
+
     // Components
     public CharacterController Controller { get; private set; }
     private PlayerInputCustom input;
@@ -23,6 +27,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerWallHug wallHug;
     private CinemachineTarget cineTarget;
     private PlayerStats stats;
+    private SceneEnum currentScene;
 
     public bool Sprinting { get; private set; }
     public bool Performing { get; private set; }
@@ -79,6 +84,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         stats = GetComponent<PlayerStats>();
         postProcessing =
             GameObject.FindGameObjectWithTag("postProcessing").GetComponent<Volume>();
+        currentScene = FindObjectOfType<SceneControl>().CurrentSceneEnum();
     }
 
     private void Start()
@@ -427,4 +433,18 @@ public class PlayerMovement : MonoBehaviour, IAction
     /// Event registered on PlayerMovement.
     /// </summary>
     public event Action<bool> Hide;
+
+    public void InstantiateLeftFootImpact()
+    {
+        // Forest
+        if ((byte)currentScene < 3)
+            Instantiate(footImpactParticles, leftFoot.position, Quaternion.identity);
+    }
+
+    public void InstantiateRightFootImpact()
+    {
+        // Forest
+        if ((byte)currentScene < 3)
+            Instantiate(footImpactParticles, rightFoot.position, Quaternion.identity);
+    }
 }
