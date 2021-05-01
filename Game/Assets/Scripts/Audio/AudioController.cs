@@ -50,7 +50,9 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     private void OnDisable()
     {
         if (optionsScript != null) optionsScript.UpdatedValues -= UpdateValues;
+        if (optionsScript != null) optionsScript.UpdateAudioRealTime -= TemporaryUpdateValuesInRealTime;
         if (slowMotion != null) slowMotion.SlowMotionEvent -= UpdatePitch;
+        if (sceneControl != null) sceneControl.StartedLoadingScene -= FadeOutMaster;
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
@@ -68,6 +70,7 @@ public class AudioController : MonoBehaviour, IUpdateOptions
         optionsScript = FindObjectOfType<Options>();
 
         if (optionsScript != null) optionsScript.UpdatedValues += UpdateValues;
+        if (optionsScript != null) optionsScript.UpdateAudioRealTime += TemporaryUpdateValuesInRealTime;
         if (slowMotion != null) slowMotion.SlowMotionEvent += UpdatePitch;
         if (sceneControl != null) sceneControl.StartedLoadingScene += FadeOutMaster;
     }
@@ -120,5 +123,21 @@ public class AudioController : MonoBehaviour, IUpdateOptions
         masterVolume.SetFloat("masterVolume", options.MasterVolume);
         masterVolume.SetFloat("musicVolume", options.MusicVolume);
         masterVolume.SetFloat("soundVolume", options.SoundVolume);
+    }
+
+    private void TemporaryUpdateValuesInRealTime(TypeOfAudio type, float value)
+    {
+        switch(type)
+        {
+            case TypeOfAudio.Master:
+                masterVolume.SetFloat("masterVolume", value);
+                break;
+            case TypeOfAudio.Music:
+                masterVolume.SetFloat("musicVolume", value);
+                break;
+            case TypeOfAudio.Sound:
+                masterVolume.SetFloat("soundVolume", value);
+                break;
+        }
     }
 }

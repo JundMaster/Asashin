@@ -318,17 +318,17 @@ public class UIOptions : MonoBehaviour
     public void UpdateMasterVolume(float value)
     {
         currentValues.MasterVolume = value;
-        optionsScript.UpdateSoundInstantlyWithSliders(currentValues);
+        optionsScript.UpdateSoundInstantlyWithSliders(TypeOfAudio.Master, value);
     }
     public void UpdateMusicVolume(float value)
     {
         currentValues.MusicVolume = value;
-        optionsScript.UpdateSoundInstantlyWithSliders(currentValues);
+        optionsScript.UpdateSoundInstantlyWithSliders(TypeOfAudio.Music, value);
     }
     public void UpdateSoundVolume(float value)
     {
         currentValues.SoundVolume = value;
-        optionsScript.UpdateSoundInstantlyWithSliders(currentValues);
+        optionsScript.UpdateSoundInstantlyWithSliders(TypeOfAudio.Sound, value);
     }
     public void VerticalSensiblity(float value) => currentValues.VerticalSensibility = value;
     public void HorizontalSensiblity(float value) => currentValues.HorizontalSensibility = value;
