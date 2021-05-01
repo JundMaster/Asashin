@@ -32,8 +32,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     private float framingDampingXDefault;
     private float compX;
     private float compXDefault;
-    private float compDampingX;
-    private float compDampingXDefault;
 
     // Current target from player
     [SerializeField] private Transform currentTarget;
@@ -88,8 +86,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         framingDampingX = framingDampingXDefault;
         compXDefault = 0.5f;
         compX = compXDefault;
-        compDampingXDefault = 25f;
-        compDampingX = compDampingXDefault;
 
         allEnemies = new List<EnemyBase>();
 
@@ -665,29 +661,25 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         {
             framingDampingX = Mathf.Lerp(framingDampingX, 0, Time.fixedDeltaTime * 10f);
             framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault + 0.3f, Time.fixedDeltaTime * 4);
-            compDampingX = Mathf.Lerp(compDampingX, 0, Time.fixedDeltaTime * 10f);
-            compX = Mathf.Lerp(compX, compXDefault + 0.3f, Time.fixedDeltaTime * 4);
+            compX = Mathf.Lerp(compX, compXDefault + 0.2f, Time.fixedDeltaTime * 4);
         }
         else if (dir == Direction.Right)
         {
             framingDampingX = Mathf.Lerp(framingDampingX, 0, Time.fixedDeltaTime * 10f);
             framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault - 0.3f, Time.fixedDeltaTime * 4);
-            compDampingX = Mathf.Lerp(compDampingX, 0, Time.fixedDeltaTime * 10f);
-            compX = Mathf.Lerp(compX, compXDefault - 0.3f, Time.fixedDeltaTime * 4);
+            compX = Mathf.Lerp(compX, compXDefault - 0.2f, Time.fixedDeltaTime * 4);
         }
         else
         {
             framingDampingX = Mathf.Lerp(framingDampingX, framingDampingXDefault, Time.fixedDeltaTime * 5f);
             framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault, Time.fixedDeltaTime * 4);
-            compDampingX = Mathf.Lerp(compDampingX, compDampingXDefault, Time.fixedDeltaTime * 5f);
             compX = Mathf.Lerp(compX, compXDefault, Time.fixedDeltaTime * 4);
 
         }
 
         wallHugCameraTransposer.m_XDamping = framingDampingX;
         wallHugCameraTransposer.m_ScreenX = framingTranspX;
-        //wallHugCameraComposer.m_HorizontalDamping = compDampingX;
-        //wallHugCameraComposer.m_ScreenX = compX;
+        wallHugCameraComposer.m_ScreenX = compX;
     }
 
     /// <summary>

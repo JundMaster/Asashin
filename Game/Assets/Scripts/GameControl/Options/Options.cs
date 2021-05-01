@@ -45,11 +45,7 @@ public class Options : MonoBehaviour
 
             // Initializes a struct with all current values from options
             CreateNewStructWithSavedValues();
-            UpdateQualitySettings();
-            UpdateScreenResolution();
-            UpdateWindowMode();
-            UpdatePostProcess();
-            OnUpdatedValues();
+            UpdateConfiguration();
         }
         else
         {
@@ -76,6 +72,8 @@ public class Options : MonoBehaviour
     {
         CurrentLevelDefinitions levelDefinitions = FindObjectOfType<CurrentLevelDefinitions>();
         postProcess.profile = levelDefinitions.ThisArea.PostProcess;
+
+        UpdateConfiguration();
     }
 
     /// <summary>
@@ -127,6 +125,14 @@ public class Options : MonoBehaviour
         // Copies the script received
         SavedValues = value;
         options.SaveConfig();
+        UpdateConfiguration();
+    }
+
+    /// <summary>
+    /// Updates all configs.
+    /// </summary>
+    private void UpdateConfiguration()
+    {
         UpdateWindowMode();
         UpdateScreenResolution();
         UpdateQualitySettings();
