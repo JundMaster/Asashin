@@ -11,8 +11,7 @@ public class OptionsScriptableObj : ScriptableObject
     [Header("Game Options")]
     [SerializeField] private bool defaultAutoLock;
 
-    [SerializeField] bool temp;
-    public bool EnemyVisionCones { get => temp; set => temp = value; }
+    public bool EnemyVisionCones { get; set; }
 
     [SerializeField] private bool defaultEnemyVisionCones;
 
