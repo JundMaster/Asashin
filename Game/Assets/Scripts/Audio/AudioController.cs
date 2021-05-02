@@ -125,6 +125,11 @@ public class AudioController : MonoBehaviour, IUpdateOptions
         masterVolume.SetFloat("soundVolume", options.SoundVolume);
     }
 
+    /// <summary>
+    /// Updates audio values in realtime.
+    /// </summary>
+    /// <param name="type">Type of audio to update.</param>
+    /// <param name="value">Value to update to.</param>
     private void TemporaryUpdateValuesInRealTime(TypeOfAudio type, float value)
     {
         switch(type)
