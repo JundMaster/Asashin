@@ -9,6 +9,7 @@ public class UIMainMenuButtonSelect : MonoBehaviour
     [Header("Menu options")]
     [SerializeField] private GameObject newGame;
     [SerializeField] private GameObject continueGame;
+    [SerializeField] private GameObject continueGameGrayedOut;
     [SerializeField] private GameObject options;
     [SerializeField] private GameObject quit;
 
@@ -39,6 +40,9 @@ public class UIMainMenuButtonSelect : MonoBehaviour
 
         else if (continueGame.activeSelf)
             eventSys.SetSelectedGameObject(continueGame);
+
+        else if (continueGameGrayedOut.activeSelf)
+            eventSys.SetSelectedGameObject(continueGameGrayedOut);
 
         else if (options.activeSelf)
             eventSys.SetSelectedGameObject(options);

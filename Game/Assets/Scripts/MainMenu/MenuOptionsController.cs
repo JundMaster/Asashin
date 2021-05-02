@@ -8,13 +8,18 @@ public class MenuOptionsController : MonoBehaviour
     [Header("Main menu buttons")]
     [SerializeField] private GameObject newGameOption;
     [SerializeField] private GameObject continueOption;
+    [SerializeField] private GameObject continueOptionNonSelectable;
     [SerializeField] private GameObject optionsOption;
     [SerializeField] private GameObject quitOption;
 
+    private SpawnerController options;
     private CameraController vmController;
 
-    private void Awake() =>
+    private void Awake()
+    {
         vmController = FindObjectOfType<CameraController>();
+        options = FindObjectOfType<SpawnerController>();
+    }
 
     public void SwitchMenuOption()
     {
@@ -22,6 +27,7 @@ public class MenuOptionsController : MonoBehaviour
         {
             newGameOption.SetActive(true);
             continueOption.SetActive(false);
+            continueOptionNonSelectable.SetActive(false);
             optionsOption.SetActive(false);
             quitOption.SetActive(false);
         }
@@ -29,15 +35,25 @@ public class MenuOptionsController : MonoBehaviour
         else if (vmController.IsContinueCamActive)
         {
             newGameOption.SetActive(false);
-            continueOption.SetActive(true);
             optionsOption.SetActive(false);
             quitOption.SetActive(false);
+            if (options.GameState.FileExists(FilePath.SAVEFILECHECKPOINT))
+            {
+                continueOption.SetActive(true);
+                continueOptionNonSelectable.SetActive(false);
+            }
+            else
+            {
+                continueOptionNonSelectable.SetActive(true);
+                continueOption.SetActive(false);
+            }
         }
 
         else if (vmController.IsOptionCamActive)
         {
             newGameOption.SetActive(false);
             continueOption.SetActive(false);
+            continueOptionNonSelectable.SetActive(false);
             optionsOption.SetActive(true);
             quitOption.SetActive(false);
         }
@@ -46,6 +62,7 @@ public class MenuOptionsController : MonoBehaviour
         {
             newGameOption.SetActive(false);
             continueOption.SetActive(false);
+            continueOptionNonSelectable.SetActive(false);
             optionsOption.SetActive(false);
             quitOption.SetActive(true);
         }
