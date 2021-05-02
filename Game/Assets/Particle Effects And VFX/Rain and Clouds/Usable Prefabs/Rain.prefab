@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: 3593748080840207855}
   - component: {fileID: 3287289051231084608}
   - component: {fileID: 3287289051231084609}
+  - component: {fileID: 6654865828397124012}
   m_Layer: 0
   m_Name: Rain
   m_TagString: Untagged
@@ -301,7 +302,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
   randomSeed: 0
@@ -5013,6 +5014,18 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &6654865828397124012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3287289051231084610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2e045846c2436c409d5ce9556f899b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7254205680503529331
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5020,6 +5033,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3287289051231084639}
     m_Modifications:
+    - target: {fileID: 3766205498514949153, guid: 744f3bbea4a45224a82afc9365af842f, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3766205498514949153, guid: 744f3bbea4a45224a82afc9365af842f, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 0.05
@@ -5095,6 +5112,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3287289051231084639}
     m_Modifications:
+    - target: {fileID: 4694861105135780776, guid: 9c283fbd249f4114997303b5e4d9cb62, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4694861105135780776, guid: 9c283fbd249f4114997303b5e4d9cb62, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 0.5
