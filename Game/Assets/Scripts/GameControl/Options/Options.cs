@@ -132,17 +132,8 @@ public class Options : MonoBehaviour
     /// Only updates sound options in real time.
     /// </summary>
     /// <param name="value"></param>
-    public void UpdateSoundInstantlyWithSliders(OptionsTemporaryValues value)
-    {
-        options.MasterVolume = value.MasterVolume;
-        options.SoundVolume = value.SoundVolume;
-        options.MusicVolume = value.MusicVolume;
-
-        // Copies the script received
-        SavedValues = value;
-        options.SaveConfig();
-        OnUpdatedValues();
-    }
+    public void UpdateSoundInstantlyWithSliders(TypeOfAudio type, float value) =>
+        OnUpdateAudioRealTime(type, value);
 
     /// <summary>
     /// Updates all configs.
@@ -236,6 +227,15 @@ public class Options : MonoBehaviour
 
     /// <summary>
     /// Registered on CinemachineTarget.
+    /// Event registered on AudioController. 
     /// </summary>
     public event Action UpdatedValues;
+
+    protected virtual void OnUpdateAudioRealTime(TypeOfAudio type, float value) => 
+        UpdateAudioRealTime?.Invoke(type, value);
+
+    /// <summary>
+    /// Event registered on AudioController.
+    /// </summary>
+    public event Action<TypeOfAudio, float> UpdateAudioRealTime;
 }
