@@ -7,11 +7,13 @@ using System;
 public class PlayerDeathBehaviour: MonoBehaviour
 {
     private PlayerStats stats;
+    private PlayerInputCustom input;
     private bool isAlive;
 
     private void Awake()
     {
         stats = GetComponent<PlayerStats>();
+        input = FindObjectOfType<PlayerInputCustom>();
     }
 
     private void OnEnable()
@@ -38,6 +40,7 @@ public class PlayerDeathBehaviour: MonoBehaviour
         // Only happens once after the player reached 0 health.
         if (isAlive)
         {
+            input.SwitchActionMapToDisable();
             OnPlayerDied();
             isAlive = false;
         }

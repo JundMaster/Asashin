@@ -8,13 +8,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Cliff_B_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: bea2c318760f42c4c8e9583363f212e7, type: 3}
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_ShaderKeywords: _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
   m_LightmapFlags: 6
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2000
+  stringTagMap:
+    RenderType: Opaque
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -162,8 +163,10 @@ Material:
     m_Floats:
     - Vector1_42383810: 0
     - Vector1_60BE0B: 0.5
+    - Vector1_63330E6D: 1
     - Vector1_7B35F358: 0
     - Vector1_8020413A: 0
+    - Vector1_AF235C83: 1
     - Vector1_CCE960B8: 0
     - Vector1_EE45A91D: 0.067
     - _AlphaClip: 0
