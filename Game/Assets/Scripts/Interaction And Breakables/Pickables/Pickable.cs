@@ -8,8 +8,10 @@ using UnityEngine;
 public abstract class Pickable : MonoBehaviour, IPickable
 {
     [SerializeField] private float destroyAfterSeconds;
-    private SphereCollider triggerCollider;
-    private LayerMask playerLayer;
+    private SphereCollider sphereCollider;
+    private CapsuleCollider capsuleCollider;
+    private readonly LayerMask PLAYERLAYER = 11;
+    private Rigidbody rb;
     protected System.Random rand;
 
     public CustomVector2 Quantity { get; set; }
@@ -17,22 +19,46 @@ public abstract class Pickable : MonoBehaviour, IPickable
 
     private void Awake()
     {
-        triggerCollider = GetComponent<SphereCollider>();
-        triggerCollider.enabled = false;
+        sphereCollider = GetComponent<SphereCollider>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        sphereCollider.enabled = false;
+        capsuleCollider.enabled = false;
         rand = new System.Random();
-        playerLayer = 11;
+        rb = GetComponent<Rigidbody>();
     }
 
     /// <summary>
     /// Waits some time before being possible to collide with this item.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return new WaitForSecondsRealtime(1f);
-        triggerCollider.enabled = true;
-
         Destroy(gameObject, destroyAfterSeconds);
+        StartCoroutine(ActivateCollider());
+    }
+
+    /// <summary>
+    /// Activates collider if the item is falling.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ActivateCollider()
+    {
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        yield return wffu;
+        while(true)
+        {
+            if (rb.velocity.y < 0)
+            {
+                if (capsuleCollider.enabled == false)
+                {
+                    capsuleCollider.enabled = true;
+                    break;
+                }
+            }
+            yield return wffu;
+        }
+        yield return new WaitForSeconds(1);
+        sphereCollider.enabled = true;
     }
 
     /// <summary>
@@ -41,7 +67,7 @@ public abstract class Pickable : MonoBehaviour, IPickable
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == playerLayer)
+        if (other.gameObject.layer == PLAYERLAYER)
         {
             PlayerStats playerStats = other.GetComponent<PlayerStats>();
             ItemUIParent itemsUI = FindObjectOfType<ItemUIParent>();
