@@ -224,7 +224,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         // Creates a list with all enemies around the player
         List<Transform> allEnemies = new List<Transform>();
         Collider[] enemies =
-                Physics.OverlapSphere(transform.position, 2.5f, enemyLayers);
+                Physics.OverlapSphere(transform.position, 2f, enemyLayers);
 
         // If there are enemies
         if (enemies.Length > 0)

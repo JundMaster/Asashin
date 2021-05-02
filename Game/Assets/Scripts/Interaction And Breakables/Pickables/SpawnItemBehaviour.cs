@@ -19,13 +19,6 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
                 transform.position.y + 0.5f, 
                 transform.position.z);
 
-        /*
-        if (firstItemSpawnChance < nextItemsSpawningChance)
-        {
-            firstItemSpawnChance = nextItemsSpawningChance;
-        }
-        */
-
         switch(typeOfDrop)
         {
             case TypeOfDropEnum.Enemy:
