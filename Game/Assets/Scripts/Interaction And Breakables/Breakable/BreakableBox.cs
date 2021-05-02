@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Class responsible for breakable objects.
@@ -23,7 +21,7 @@ public class BreakableBox : MonoBehaviour, IBreakable
     {
         Instantiate(brokenObject, transform.position, Quaternion.identity);
 
-        spawnItemsBehaviour.ExecuteBehaviour();
+        spawnItemsBehaviour?.ExecuteBehaviour();
 
         Destroy(gameObject);
     }

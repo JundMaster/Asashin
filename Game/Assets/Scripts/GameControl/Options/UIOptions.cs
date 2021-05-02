@@ -17,6 +17,7 @@ public class UIOptions : MonoBehaviour
     [SerializeField] private TextMeshProUGUI screenModeText;
     [SerializeField] private TextMeshProUGUI screenResText;
     [SerializeField] private TextMeshProUGUI autoLockText;
+    [SerializeField] private TextMeshProUGUI enemyVisionConesText;
 
     [Header("Graphic Options")]
     [SerializeField] private TextMeshProUGUI graphicsQualityText;
@@ -206,6 +207,13 @@ public class UIOptions : MonoBehaviour
                     currentValues.AutoLock = true;
                 break;
 
+            case "EnemyVisionCones":
+                if (currentValues.EnemyVisionCones)
+                    currentValues.EnemyVisionCones = false;
+                else
+                    currentValues.EnemyVisionCones = true;
+                break;
+
             case "ScreenMode":
                 if (currentValues.ScreenMode - 1 >= 0) currentValues.ScreenMode--;
                 else currentValues.ScreenMode = configScriptableObj.MaxScreenMode;
@@ -263,6 +271,13 @@ public class UIOptions : MonoBehaviour
                     currentValues.AutoLock = false;
                 else
                     currentValues.AutoLock = true;
+                break;
+
+            case "EnemyVisionCones":
+                if (currentValues.EnemyVisionCones)
+                    currentValues.EnemyVisionCones = false;
+                else
+                    currentValues.EnemyVisionCones = true;
                 break;
 
             case "ScreenMode":
@@ -372,7 +387,6 @@ public class UIOptions : MonoBehaviour
                 autoLockText.text = "Off";
                 break;
         }
-
         switch (currentValues.ScreenMode)
         {
             case 0:
@@ -382,7 +396,6 @@ public class UIOptions : MonoBehaviour
                 screenModeText.text = "Fullscreen";
                 break;
         }
-
         switch (currentValues.ScreenResolution)
         {
             case 0:
@@ -395,7 +408,15 @@ public class UIOptions : MonoBehaviour
                 screenResText.text = "1920x1080";
                 break;
         }
-
+        switch (currentValues.EnemyVisionCones)
+        {
+            case true:
+                enemyVisionConesText.text = "On";
+                break;
+            case false:
+                enemyVisionConesText.text = "Off";
+                break;
+        }
         switch (currentValues.GraphicsQuality)
         {
             case 0:

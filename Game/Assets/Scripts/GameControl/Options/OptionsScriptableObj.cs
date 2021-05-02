@@ -10,7 +10,12 @@ public class OptionsScriptableObj : ScriptableObject
 
     [Header("Game Options")]
     [SerializeField] private bool defaultAutoLock;
-    
+
+    [SerializeField] bool temp;
+    public bool EnemyVisionCones { get => temp; set => temp = value; }
+
+    [SerializeField] private bool defaultEnemyVisionCones;
+
     public int ScreenMode { get; set; }
 
     [SerializeField] private int defaultScreenMode;
@@ -145,6 +150,7 @@ public class OptionsScriptableObj : ScriptableObject
     public void SaveConfig()
     {
         PlayerPrefs.SetString(GameOptionsEnum.AutoLock.ToString(), AutoLock.ToString());
+        PlayerPrefs.SetString(GameOptionsEnum.EnemyVisionCones.ToString(), EnemyVisionCones.ToString());
         PlayerPrefs.SetInt(GameOptionsEnum.ScreenMode.ToString(), ScreenMode);
         PlayerPrefs.SetInt(GameOptionsEnum.ScreenResolution.ToString(), ScreenResolution);
         PlayerPrefs.SetInt(GameOptionsEnum.GraphicsQuality.ToString(), GraphicsQuality);
@@ -164,6 +170,7 @@ public class OptionsScriptableObj : ScriptableObject
     public void LoadConfig()
     {
         AutoLock = bool.Parse(PlayerPrefs.GetString(GameOptionsEnum.AutoLock.ToString(), defaultAutoLock.ToString()));
+        EnemyVisionCones = bool.Parse(PlayerPrefs.GetString(GameOptionsEnum.EnemyVisionCones.ToString(), defaultEnemyVisionCones.ToString()));
         ScreenMode = PlayerPrefs.GetInt(GameOptionsEnum.ScreenMode.ToString(), defaultScreenMode);
         ScreenResolution = PlayerPrefs.GetInt(GameOptionsEnum.ScreenResolution.ToString(), defaultScreenResolution);
         Difficulty = PlayerPrefs.GetInt(GameOptionsEnum.Difficulty.ToString(), defaultDifficulty);
@@ -202,6 +209,7 @@ public class OptionsScriptableObj : ScriptableObject
     public void ResetGeneralOptions()
     {
         AutoLock = defaultAutoLock;
+        EnemyVisionCones = defaultEnemyVisionCones;
         ScreenMode = defaultScreenMode;
         ScreenResolution = defaultScreenResolution;
     }

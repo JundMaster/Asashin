@@ -5,7 +5,8 @@ using System.Collections;
 /// Scriptable object responsible for controlling enemy patrol state.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Common Patrol State")]
-public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
+public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
+    IUpdateOptions
 {
     [Header("Checks if player is in cone range every X seconds")]
     [Range(0.01f,2f)][SerializeField] private float searchCheckDelay;
@@ -30,6 +31,8 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
     private bool hitFromBehind;
     private IEnumerator movementCoroutine;
 
+    private Options options;
+
     /// <summary>
     /// Runs once on start.
     /// </summary>
@@ -38,23 +41,24 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
         base.Start();
 
         // Vision cone setup
-        if (amountOfVertices > desiredConeAngle) 
+        if (amountOfVertices > desiredConeAngle)
             amountOfVertices = desiredConeAngle;
 
-        MeshFilter meshFilter = enemy.VisionCone.GetComponent<MeshFilter>();
-        MeshRenderer meshRenderer = 
-            enemy.VisionCone.GetComponent<MeshRenderer>();
+        MeshFilter meshFilter = 
+            enemy.VisionConeGameObject.GetComponent<MeshFilter>();
+        MeshRenderer meshRenderer =
+            enemy.VisionConeGameObject.GetComponent<MeshRenderer>();
 
         visionCone = new VisionCone(
             meshFilter, meshRenderer, coneMaterial, amountOfVertices,
             desiredConeAngle, coneRange, collisionLayers, enemy.transform);
 
-        enemy.EnemyVisionCone = visionCone;
-
         // Agent destination setup
         breakState = false;
         patrolPoints = enemy.PatrolPoints;
         patrolIndex = 0;
+
+        options = FindObjectOfType<Options>();
     }
 
     /// <summary>
@@ -69,7 +73,14 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
         hitFromBehind = false;
         agent.isStopped = false;
         enemy.InCombat = false;
-        enemy.VisionCone.SetActive(true);
+        
+        // If vision cone option is on
+        if (enemy.Options.EnemyVisionCones)
+            enemy.VisionConeScript = visionCone;
+        else // else if it is off
+            enemy.VisionConeScript = null;
+
+        enemy.VisionConeGameObject.SetActive(true);
 
         // Only starts movement coroutine if the enemy has more than 1 patroi
         // point (meaning the enemy is not static)
@@ -86,6 +97,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
         agent.speed = walkingSpeed;
 
         enemy.CollisionWithPlayer += TakeImpact;
+        options.UpdatedValues += UpdateValues;
     }
 
     /// <summary>
@@ -105,21 +117,25 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
 
         if (hitFromBehind)
             return enemy.LostPlayerState;
-
+            
         // Calculates vision cone if the player isn't too far
         if (playerTarget != null)
         {
-            if (Vector3.Distance(myTarget.position, playerTarget.position) < 75)
+            if (enemy.VisionConeScript != null)
             {
-                if (!enemy.VisionCone.activeSelf) 
-                    enemy.VisionCone.SetActive(true);
+                if (Vector3.Distance(
+                    myTarget.position, playerTarget.position) < 75)
+                {
+                    if (!enemy.VisionConeGameObject.activeSelf)
+                        enemy.VisionConeGameObject.SetActive(true);
 
-                visionCone?.Calculate();
-            }
-            else
-            {
-                if (enemy.VisionCone.activeSelf) 
-                    enemy.VisionCone.SetActive(false);
+                    visionCone?.Calculate();
+                }
+                else
+                {
+                    if (enemy.VisionConeGameObject.activeSelf)
+                        enemy.VisionConeGameObject.SetActive(false);
+                }
             }
         }
 
@@ -175,7 +191,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
 
         agent.speed = runningSpeed;
 
-        enemy.VisionCone.SetActive(false);
+        enemy.VisionConeGameObject.SetActive(false);
 
         if (movementCoroutine != null)
             enemy.StopCoroutine(movementCoroutine);
@@ -190,6 +206,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
         agent.speed = runningSpeed;
 
         enemy.CollisionWithPlayer -= TakeImpact;
+        options.UpdatedValues -= UpdateValues;
     }
 
     /// <summary>
@@ -250,5 +267,23 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision
         breakState = false;
         hitFromBehind = true;
         base.TakeImpact();
+    }
+
+    /// <summary>
+    /// Updates vision cone variables.
+    /// </summary>
+    public void UpdateValues()
+    {
+        // If vision cone option is on
+        if (enemy.Options.EnemyVisionCones)
+        {
+            enemy.VisionConeScript = visionCone;
+            enemy.VisionConeGameObject.SetActive(true);
+        }
+        else // If vision cone option is off
+        {
+            enemy.VisionConeGameObject.SetActive(false);
+            enemy.VisionConeScript = null;
+        }
     }
 }

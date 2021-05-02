@@ -49,7 +49,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     {
         base.Start();
 
-        visionCone = enemy.VisionCone;
+        visionCone = enemy.VisionConeGameObject;
         if (enemy.Player != null)
             playerRoll = enemy.Player.GetComponent<PlayerRoll>();
 

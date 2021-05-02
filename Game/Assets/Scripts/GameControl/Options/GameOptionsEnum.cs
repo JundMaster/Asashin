@@ -16,4 +16,5 @@
     ScreenResolution,
     AutoLock,
     MasterVolume,
+    EnemyVisionCones,
 }

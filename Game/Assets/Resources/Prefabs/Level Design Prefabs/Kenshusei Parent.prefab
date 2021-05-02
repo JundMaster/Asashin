@@ -257,7 +257,8 @@ MonoBehaviour:
   temporaryBlindnessStateOriginal: {fileID: 11400000, guid: ca6e9c4d52df45a44b4b1125aa3d7d01, type: 2}
   patrolPoints:
   - {fileID: 962524042595489655}
-  visionCone: {fileID: 962524042342714880}
+  visionConeGameObject: {fileID: 962524042342714880}
+  options: {fileID: 11400000, guid: f6b5564f096ffe64590e2ab28646e6c7, type: 2}
 --- !u!114 &962524041467204838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,7 +320,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: -0.01
+  m_BaseOffset: -0.05
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!54 &962524041467204858

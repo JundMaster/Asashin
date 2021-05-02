@@ -6,7 +6,8 @@ using System.Collections;
 /// player.
 /// </summary>
 [CreateAssetMenu(fileName = "Enemy Common Lost Player State")]
-public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision
+public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision, 
+    IUpdateOptions
 {
     [Header("Time the enemy will spend looking for player")]
     [Range(0.1f,15)][SerializeField] private float timeToLookForPlayer;
@@ -20,6 +21,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision
 
     // Components
     private VisionCone visionCone;
+    private Options options;
 
     /// <summary>
     /// Runs once on start. Sets vision cone to be the same as the enemy's one.
@@ -27,7 +29,10 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision
     public override void Start()
     {
         base.Start();
-        visionCone = enemy.EnemyVisionCone;
+
+        options = FindObjectOfType<Options>();
+
+        visionCone = enemy.VisionConeScript;
     }
 
     /// <summary>
@@ -46,9 +51,10 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision
 
         agent.isStopped = false;
 
-        agent.SetDestination(enemy.PlayerLastKnownPosition);
+        agent.SetDestination(enemy.PlayerLastKnownPosition);            
 
         enemy.CollisionWithPlayer += TakeImpact;
+        options.UpdatedValues += UpdateValues;
     }
 
     /// <summary>
@@ -106,11 +112,11 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision
         }
 
         agent.isStopped = false;
-        enemy.VisionCone.SetActive(false);
+        enemy.VisionConeGameObject.SetActive(false);
 
         enemy.CollisionWithPlayer -= TakeImpact;
+        options.UpdatedValues -= UpdateValues;
     }
-
 
     /// <summary>
     /// Method to check if the enemy is at player's last known position.
@@ -166,14 +172,41 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision
             enemy.transform.eulerAngles += 
                 new Vector3(0, turnSpeed * multiplier, 0);
 
-            // Activates and calculates vision cone
-            if (enemy.VisionCone.activeSelf == false)
-                enemy.VisionCone.SetActive(true);
+            // Activates/Deactivates and calculates vision cone
+            if (enemy.VisionConeScript != null &&
+                enemy.VisionConeGameObject.activeSelf == false)
+                enemy.VisionConeGameObject.SetActive(true);
 
-            visionCone.Calculate();
+            if (enemy.VisionConeScript == null &&
+                enemy.VisionConeGameObject.activeSelf)
+                enemy.VisionConeGameObject.SetActive(false);
+
+            if (enemy.VisionConeScript != null)
+            {
+                if (visionCone == null) visionCone = enemy.VisionConeScript;
+                visionCone?.Calculate();
+            } 
 
             yield return wffu;
         }
         breakState = true;
+    }
+
+    /// <summary>
+    /// Updates vision cone variables.
+    /// </summary>
+    public void UpdateValues()
+    {
+        // If vision cone option is on
+        if (enemy.Options.EnemyVisionCones)
+        {
+            enemy.VisionConeScript = visionCone;
+            enemy.VisionConeGameObject.SetActive(true);
+        }
+        else // If vision cone option is off
+        {
+            enemy.VisionConeGameObject.SetActive(false);
+            enemy.VisionConeScript = null;
+        }
     }
 }

@@ -107,6 +107,7 @@ public class Options : MonoBehaviour
     public void UpdateValues(OptionsTemporaryValues value)
     {
         options.AutoLock = value.AutoLock;
+        options.EnemyVisionCones = value.EnemyVisionCones;
         options.ScreenMode = value.ScreenMode;
         options.ScreenResolution = value.ScreenResolution;
         options.GraphicsQuality = value.GraphicsQuality;

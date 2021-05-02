@@ -49,7 +49,7 @@ public abstract class EnemySimpleAbstractDefenseState :
 
         runningBack = false;
 
-        enemy.VisionCone.SetActive(false);
+        enemy.VisionConeGameObject.SetActive(false);
     }
 
     /// <summary>

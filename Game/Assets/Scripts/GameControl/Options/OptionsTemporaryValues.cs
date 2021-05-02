@@ -4,6 +4,7 @@
 public struct OptionsTemporaryValues
 {
     public bool AutoLock { get; set; }
+    public bool EnemyVisionCones { get; set; }
     public int ScreenMode { get; set; }
     public int ScreenResolution { get; set; }
     public int GraphicsQuality { get; set; }
@@ -22,6 +23,7 @@ public struct OptionsTemporaryValues
     public OptionsTemporaryValues(OptionsScriptableObj options)
     {
         AutoLock = options.AutoLock;
+        EnemyVisionCones = options.EnemyVisionCones;
         ScreenMode = options.ScreenMode;
         ScreenResolution = options.ScreenResolution;
         GraphicsQuality = options.GraphicsQuality;

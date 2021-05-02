@@ -28,12 +28,16 @@ public sealed class EnemySimple : EnemyBase
     public EnemyPatrolPoint[] PatrolPoints => patrolPoints;
 
     [Header("Cone mesh")]
-    [SerializeField] private GameObject visionCone;
-    public GameObject VisionCone => visionCone;
+    [SerializeField] private GameObject visionConeGameObject;
+    public GameObject VisionConeGameObject => visionConeGameObject;
+
+    [Header("Options")]
+    [SerializeField] private OptionsScriptableObj options;
+    public OptionsScriptableObj Options => options;
 
     public Vector3 PlayerLastKnownPosition { get; set; }
 
-    public VisionCone EnemyVisionCone { get; set; }
+    public VisionCone VisionConeScript { get; set; }
 
     private MusicCombatTransition combatMusic;
 
