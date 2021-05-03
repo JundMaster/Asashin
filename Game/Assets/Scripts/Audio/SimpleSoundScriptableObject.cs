@@ -7,6 +7,7 @@
 public class SimpleSoundScriptableObject : AbstractSoundScriptableObject
 {
     [Range(0f, 1f)][SerializeField] private float volume;
+    [Header("Leave 0 pitch to always play pitch 1")]
     [Range(0f, 1f)][SerializeField] private float pitch;
 
     /// <summary>
@@ -17,7 +18,8 @@ public class SimpleSoundScriptableObject : AbstractSoundScriptableObject
     {
         int randomNum;
         randomNum = Random.Range(0, audioClips.Count);
-        audioSource.pitch = pitch + Random.Range(-0.1f, 0.1f);
+        if (pitch != 0)
+            audioSource.pitch = pitch + Random.Range(-0.1f, 0.1f);
         audioSource.PlayOneShot(audioClips[randomNum], volume);
     }
 }
