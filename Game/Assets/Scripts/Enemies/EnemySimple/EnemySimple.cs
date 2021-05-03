@@ -48,7 +48,9 @@ public sealed class EnemySimple : EnemyBase
         set
         {
             inCombat = value;
-            if (inCombat == false) combatMusic?.SwitchToBackgroundMusic();
+            if (inCombat == false)
+                if (combatMusic != null)
+                    combatMusic.SwitchToBackgroundMusic();
         }
     }
 
@@ -91,12 +93,14 @@ public sealed class EnemySimple : EnemyBase
     private IEnumerator Start()
     {
         PlayerLastKnownPosition = default;
-        stateMachine?.Initialize();
 
         yield return new WaitForFixedUpdate();
         // Finds combat music after singleton destroys the one that exists
         // on this scene
         combatMusic = FindObjectOfType<MusicCombatTransition>();
+
+        // Initializes states after options singleton takes effect
+        stateMachine?.Initialize();
     }
 
     /// <summary>

@@ -59,6 +59,9 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         patrolIndex = 0;
 
         options = FindObjectOfType<Options>();
+
+        // Updates options dependant values as soon as the enemy spawns
+        enemy.StartCoroutine(UpdateValuesCoroutine());
     }
 
     /// <summary>
@@ -270,20 +273,35 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     }
 
     /// <summary>
-    /// Updates vision cone variables.
+    /// Invokes coroutine to update vision cone variables.
     /// </summary>
     public void UpdateValues()
     {
-        // If vision cone option is on
-        if (enemy.Options.EnemyVisionCones)
+        // Will only call if enemy already respawned
+        // (will only happen if the player changes options in pause menu)
+        if (enemy != null) enemy.StartCoroutine(UpdateValuesCoroutine());
+    }
+        
+    /// <summary>
+    /// Updates vision cone variables.
+    /// </summary>
+    private IEnumerator UpdateValuesCoroutine()
+    {
+        yield return new WaitForFixedUpdate();
+
+        if (enemy != null)
         {
-            enemy.VisionConeScript = visionCone;
-            enemy.VisionConeGameObject.SetActive(true);
-        }
-        else // If vision cone option is off
-        {
-            enemy.VisionConeGameObject.SetActive(false);
-            enemy.VisionConeScript = null;
+            // If vision cone option is on
+            if (enemy.Options.EnemyVisionCones)
+            {
+                enemy.VisionConeScript = visionCone;
+                enemy.VisionConeGameObject.SetActive(true);
+            }
+            else // If vision cone option is off
+            {
+                enemy.VisionConeGameObject.SetActive(false);
+                enemy.VisionConeScript = null;
+            }
         }
     }
 }

@@ -44,12 +44,6 @@ public class StateMachine
     /// </summary>
     public void FixedUpdate()
     {
-        if (currentState == null)
-        {
-            currentState = states?.First();
-            currentState?.OnEnter();
-        }
-
         IState nextState = currentState?.FixedUpdate();
 
         if (nextState != null &&
