@@ -9,8 +9,8 @@ public class FireLampIntensity : MonoBehaviour, IFindPlayer
     private Light spotLight;
     private Player player;
 
-    private readonly float MINIMUMINT = 7;
-    private readonly float MAXIMUMINT = 9; 
+    private readonly float MINIMUMINT = 20;
+    private readonly float MAXIMUMINT = 22; 
 
     private void Awake()
     {
@@ -20,27 +20,29 @@ public class FireLampIntensity : MonoBehaviour, IFindPlayer
     private IEnumerator Start()
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
+        float multiplier = 40;
+        spotLight.innerSpotAngle = 30;
 
+        yield return new WaitForSeconds(Random.Range(1f, 4f));
         while (true)
         {
             if (player != null)
             {
                 if (Vector3.Distance(transform.position, player.transform.position) < 30)
                 {
-                    spotLight.intensity = Random.Range(MINIMUMINT, MAXIMUMINT);
-                    spotLight.spotAngle = Random.Range(140f, 145f);
-                    yield return wffu;
+                    if (spotLight.innerSpotAngle < 15)
+                    {
+                        multiplier *= -1;
+                        spotLight.innerSpotAngle = 20;
+                    }
 
-                    spotLight.intensity--;
-                    spotLight.spotAngle -= 2;
-                    yield return wffu;
+                    if (spotLight.innerSpotAngle > 60)
+                    {
+                        multiplier *= -1;
+                        spotLight.innerSpotAngle = 59;
+                    }
 
-                    spotLight.intensity--;
-                    spotLight.spotAngle -= 2;
-                    yield return wffu;
-
-                    spotLight.intensity--;
-                    spotLight.spotAngle -= 2;
+                    spotLight.innerSpotAngle += Time.fixedDeltaTime * multiplier;
                     yield return wffu;
                 }
                 else
