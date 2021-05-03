@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Class responsible for breakable objects.
+/// Class responsible for breakable boxs.
 /// </summary>
 public class BreakableBox : MonoBehaviour, IBreakable
 {

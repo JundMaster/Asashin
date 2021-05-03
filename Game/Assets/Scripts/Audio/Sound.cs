@@ -23,4 +23,6 @@ public enum Sound
     SwordHit,
     Roll,
     SlowMotion,
+    BoxBreak,
+    PlankHitFloor,
 }
