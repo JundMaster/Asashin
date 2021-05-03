@@ -1,5 +1,100 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &734584616
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 734584617}
+  - component: {fileID: 734584620}
+  - component: {fileID: 734584619}
+  - component: {fileID: 734584618}
+  m_Layer: 29
+  m_Name: Sphere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &734584617
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734584616}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 1.229}
+  m_LocalScale: {x: 0.37172, y: 0.37172, z: 0.37172}
+  m_Children: []
+  m_Father: {fileID: 168359083622578370}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &734584620
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734584616}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &734584619
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734584616}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 40dd18b4a4c5c9c428fa590cf41df9cb, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &734584618
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734584616}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &639318873893722115
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,12 +106,12 @@ GameObject:
   - component: {fileID: 168359083622578370}
   - component: {fileID: 4372052350286529188}
   - component: {fileID: 9067269405918888107}
-  m_Layer: 29
+  m_Layer: 14
   m_Name: Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &168359083622578370
 Transform:
@@ -26,9 +121,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639318873893722115}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1.57, z: 0}
+  m_LocalPosition: {x: 0, y: 4.108, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 734584617}
   m_Father: {fileID: 6773716129189102493}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -56,19 +152,19 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 0.8584906, g: 0.26039535, b: 0.052643314, a: 1}
-  m_Intensity: 5
-  m_Range: 6
-  m_SpotAngle: 144.00488
-  m_InnerSpotAngle: 64.00489
+  m_Intensity: 20
+  m_Range: 9.06
+  m_SpotAngle: 87.33203
+  m_InnerSpotAngle: 24
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 0.9
+    m_Strength: 0.681
     m_Bias: 0.05
     m_NormalBias: 0.4
-    m_NearPlane: 0.2
+    m_NearPlane: 0.0906
     m_CullingMatrixOverride:
       e00: 1
       e01: 0
@@ -116,12 +212,12 @@ GameObject:
   - component: {fileID: 2036996316312625896}
   - component: {fileID: 209667439732511360}
   - component: {fileID: 4321535925914325856}
-  m_Layer: 29
+  m_Layer: 14
   m_Name: lamp2_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &2036996316312625896
 Transform:
@@ -144,7 +240,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1315728970529154623}
-  m_Mesh: {fileID: 8914708901835989364, guid: 8c73f1e8909fb0a4bb5075c4f404a9af, type: 3}
+  m_Mesh: {fileID: 8914708901835989364, guid: df069e4e5e8c18546905bf4e3ba68f82, type: 3}
 --- !u!23 &4321535925914325856
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -197,7 +293,7 @@ GameObject:
   - component: {fileID: 5937830484582291204}
   - component: {fileID: 6166808309335578922}
   - component: {fileID: 1881215525411398845}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Fire VFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,7 +433,7 @@ GameObject:
   - component: {fileID: 6773716129189102493}
   - component: {fileID: 1376753251506729753}
   - component: {fileID: 253973240206836740}
-  m_Layer: 29
+  m_Layer: 14
   m_Name: Lamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
