@@ -21,19 +21,22 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Cliff_A Material
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_ShaderKeywords: _ALPHATEST_ON
+  m_Shader: {fileID: -6465566751694194690, guid: 296a1cea8a365ad4f9edfeb073337a9c, type: 3}
+  m_ShaderKeywords: _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
-  stringTagMap:
-    RenderType: TransparentCutout
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_6B1DF9A9:
+        m_Texture: {fileID: 2800000, guid: 4cc5117dfac9f974cbdb39ceb28e5059, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_DCAD990A:
         m_Texture: {fileID: 2800000, guid: 4cc5117dfac9f974cbdb39ceb28e5059, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -94,6 +97,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_1D7D9B2: 5
     - Vector1_42383810: 0.541
     - Vector1_60BE0B: 0.17
     - Vector1_63330E6D: 1
@@ -102,6 +106,7 @@ Material:
     - Vector1_AF235C83: 1
     - Vector1_CCE960B8: 0
     - Vector1_DA221B91: 0
+    - Vector1_E2A6AB: 0.4
     - Vector1_EE45A91D: 0.214
     - _AlphaClip: 1
     - _Blend: 0
@@ -133,6 +138,7 @@ Material:
     - Color_327B413C: {r: 0, g: 0, b: 0, a: 0}
     - Color_942779B8: {r: 0.16981131, g: 0.16981131, b: 0.16981131, a: 0}
     - Color_B48C64CF: {r: 1, g: 1, b: 1, a: 0}
+    - Color_CAC2A7F6: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
     - _BaseColor: {r: 0.9716981, g: 0.93666327, b: 0.7837753, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
