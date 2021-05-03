@@ -10,6 +10,8 @@ public class MusicCombatTransition : MonoBehaviour
 {
     [SerializeField] private AudioSource baseBackground;
     [SerializeField] private AudioSource combatBackground;
+    [SerializeField] private AudioSource alertAudioSource;
+    [SerializeField] private AbstractSoundScriptableObject alert;
     [Range(0.1f, 1f)][SerializeField] private float transitionTimeBetweenSongs;
 
     // Music management
@@ -80,6 +82,7 @@ public class MusicCombatTransition : MonoBehaviour
                         if (switchTracks != null) StopCoroutine(switchTracks);
                         switchTracks = SwitchToCombat();
                         StartCoroutine(switchTracks);
+                        alert.PlaySound(alertAudioSource);
                     }
                 }
             }

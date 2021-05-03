@@ -10,9 +10,11 @@ public class PlayerSounds : AbstractSoundBase
     [SerializeField] private AbstractSoundScriptableObject walkingStepGrass;
     [SerializeField] private AbstractSoundScriptableObject thinking;
     [SerializeField] private AbstractSoundScriptableObject swordSlash;
+    [SerializeField] private AbstractSoundScriptableObject swordHit;
     [SerializeField] private AbstractSoundScriptableObject voiceOnAttack;
     [SerializeField] private AbstractSoundScriptableObject laugh;
     [SerializeField] private AbstractSoundScriptableObject blockReflect;
+    [SerializeField] private AbstractSoundScriptableObject slowMotion;
 
     private PlayerMovement movement;
 
@@ -51,6 +53,12 @@ public class PlayerSounds : AbstractSoundBase
                 break;
             case Sound.BlockReflect:
                 blockReflect.PlaySound(audioSource);
+                break;
+            case Sound.SwordHit:
+                swordHit.PlaySound(audioSource);
+                break;
+            case Sound.SlowMotion:
+                slowMotion.PlaySound(audioSource);
                 break;
         }
     }

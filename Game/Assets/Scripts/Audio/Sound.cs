@@ -19,4 +19,8 @@ public enum Sound
     WaterStep,
     TookDamage,
     BlockReflect,
+    Alert,
+    SwordHit,
+    Roll,
+    SlowMotion,
 }

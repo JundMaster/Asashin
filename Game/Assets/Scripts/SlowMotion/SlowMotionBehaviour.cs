@@ -19,6 +19,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
 
     // Components
     private PlayerRoll playerRoll;
+    private PlayerSounds playerSounds;
     private PlayerDeathBehaviour playerDeath;
     private PauseSystem pauseSystem;
     private Volume postProcessing;
@@ -40,6 +41,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     private void Awake()
     {
         playerRoll = FindObjectOfType<PlayerRoll>();
+        playerSounds = FindObjectOfType<PlayerSounds>();
         playerDeath = FindObjectOfType<PlayerDeathBehaviour>();
         pauseSystem = FindObjectOfType<PauseSystem>();
         postProcessing = 
@@ -94,6 +96,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
         // Changes camera update mode.
         // Event for Cinemachine Target. Controls cinemachine brain.
         OnSlowMotionEvent(SlowMotionEnum.SlowMotion);
+        playerSounds.PlaySound(Sound.SlowMotion);
 
         Performing = true;
 
@@ -151,7 +154,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
                 Time.timeScale = Mathf.Lerp(
                     Time.timeScale, 
                     slowMotionSpeed, 
-                    slowMotionSmoothSpeed * 2);
+                    slowMotionSmoothSpeed * 8);
             }
 
             // Second half of the slow motion effect, returns to normal speed
@@ -160,7 +163,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
                 Time.timeScale = Mathf.Lerp(
                     Time.timeScale, 
                     defaultTimeScale, 
-                    slowMotionSmoothSpeed * 2);
+                    slowMotionSmoothSpeed * 9);
 
                 slowMotionMaterial.SetFloat("Vector1_1D53D2E0", 0f); // WaveSize
                 slowMotionMaterial.SetFloat("Vector1_34F127BD", 0f); // WaveStrength
@@ -228,6 +231,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     public void FindPlayer()
     {
         playerRoll = FindObjectOfType<PlayerRoll>();
+        playerSounds = FindObjectOfType<PlayerSounds>();
         playerDeath = FindObjectOfType<PlayerDeathBehaviour>();
         playerRoll.Dodge += TriggerSlowMotion;
         playerDeath.PlayerDied += StopSlowMotion;
