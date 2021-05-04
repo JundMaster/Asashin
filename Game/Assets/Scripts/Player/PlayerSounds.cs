@@ -16,6 +16,7 @@ public class PlayerSounds : AbstractSoundBase
     [SerializeField] private AbstractSoundScriptableObject blockReflect;
     [SerializeField] private AbstractSoundScriptableObject slowMotion;
     [SerializeField] private AbstractSoundScriptableObject rolling;
+    [SerializeField] private AbstractSoundScriptableObject drinking;
 
     private PlayerMovement movement;
 
@@ -67,6 +68,9 @@ public class PlayerSounds : AbstractSoundBase
                 break;
             case Sound.Roll:
                 rolling.PlaySound(audioSource);
+                break;
+            case Sound.Drink:
+                drinking.PlaySound(audioSource);
                 break;
         }
     }
