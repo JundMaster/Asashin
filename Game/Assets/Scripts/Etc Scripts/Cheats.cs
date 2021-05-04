@@ -61,42 +61,70 @@ public class Cheats : MonoBehaviour
         byte value = 0;
         while (value == 0 && Time.time - timePressed < timeToPressNext)
         {
+            if (buttonPressed != ButtonPressed.ItemLeft &&
+                buttonPressed != ButtonPressed.Block) 
+                StopCoroutine(cheatCoroutine);
+
             if (buttonPressed == ButtonPressed.Block) value = 1;
             yield return null;
         }
-        
+
         while (value == 1 && Time.time - timePressed < timeToPressNext)
         {
+            if (buttonPressed != ButtonPressed.Block &&
+                buttonPressed != ButtonPressed.Attack)
+                StopCoroutine(cheatCoroutine);
+
             if (buttonPressed == ButtonPressed.Attack) value = 2;
             yield return null;
         }
 
         while (value == 2 && Time.time - timePressed < timeToPressNext)
         {
+            if (buttonPressed != ButtonPressed.Attack &&
+                buttonPressed != ButtonPressed.ItemRight)
+                StopCoroutine(cheatCoroutine);
+
             if (buttonPressed == ButtonPressed.ItemRight) value = 3;
             yield return null;
         }
 
         while (value == 3 && Time.time - timePressed < timeToPressNext)
         {
+            if (buttonPressed != ButtonPressed.ItemRight &&
+                buttonPressed != ButtonPressed.Block)
+                StopCoroutine(cheatCoroutine);
+
             if (buttonPressed == ButtonPressed.Block) value = 4;
             yield return null;
         }
 
         while (value == 4 && Time.time - timePressed < timeToPressNext)
         {
+            if (buttonPressed != ButtonPressed.Block &&
+                buttonPressed != ButtonPressed.Attack)
+                StopCoroutine(cheatCoroutine);
+
             if (buttonPressed == ButtonPressed.Attack) value = 5;
             yield return null;
         }
 
         while (value == 5 && Time.time - timePressed < timeToPressNext)
         {
+            if (buttonPressed != ButtonPressed.Attack &&
+                buttonPressed != ButtonPressed.ItemRight)
+                StopCoroutine(cheatCoroutine);
+
             if (buttonPressed == ButtonPressed.ItemRight) value = 6;
             yield return null;
         }
 
         while (value == 6 && Time.time - timePressed < timeToPressNext)
         {
+            if (buttonPressed != ButtonPressed.ItemRight &&
+                buttonPressed != ButtonPressed.Roll)
+                StopCoroutine(cheatCoroutine);
+
             if (buttonPressed == ButtonPressed.Roll) value = 7;
             yield return null;
         }
