@@ -6,7 +6,7 @@
 [CreateAssetMenu(fileName = "Simple sound")]
 public class SimpleSoundScriptableObject : AbstractSoundScriptableObject
 {
-    [Range(0f, 1f)][SerializeField] private float volume;
+    [Range(0f, 2f)][SerializeField] private float volume;
     [Header("Leave 0 pitch to always play pitch 1")]
     [Range(0f, 1f)][SerializeField] private float pitch;
 
