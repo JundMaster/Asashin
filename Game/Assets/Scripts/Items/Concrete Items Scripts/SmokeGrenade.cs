@@ -14,7 +14,7 @@ public class SmokeGrenade : ItemBehaviour
             playerStats.transform.position.z + playerStats.transform.forward.z);
 
         Instantiate(smokePrefab, spawnPosition, Quaternion.identity);
-
+        
         // Gets enemies around the grenade
         Collider[] collisions =
                 Physics.OverlapSphere(transform.position, smokeRange, enemyLayer);
