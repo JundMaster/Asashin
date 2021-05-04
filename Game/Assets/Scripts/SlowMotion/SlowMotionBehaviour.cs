@@ -158,7 +158,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
             }
 
             // Second half of the slow motion effect, returns to normal speed
-            else if (!pauseSystem.PausedGame && currentTimePassed > slowMotionDuration - (slowMotionDuration * 0.25f))
+            else if (!pauseSystem.PausedGame && currentTimePassed > slowMotionDuration - (slowMotionDuration * 0.175))
             {
                 Time.timeScale = Mathf.Lerp(
                     Time.timeScale, 
@@ -171,11 +171,11 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
                 slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
 
                 if (chromaticA.intensity.value > 0)
-                    chromaticA.intensity.value -= Time.fixedUnscaledDeltaTime * 5;
+                    chromaticA.intensity.value -= Time.fixedUnscaledDeltaTime * 2f;
                 if (lensDistor.intensity.value < -0)
-                    lensDistor.intensity.value += Time.fixedUnscaledDeltaTime * 5;
+                    lensDistor.intensity.value += Time.fixedUnscaledDeltaTime * 2f;
                 if (colorAdj.saturation.value < 0)
-                    colorAdj.saturation.value += Time.fixedUnscaledDeltaTime * 150;
+                    colorAdj.saturation.value += Time.fixedUnscaledDeltaTime * 100;
             }
 
             if (pauseSystem.PausedGame)
