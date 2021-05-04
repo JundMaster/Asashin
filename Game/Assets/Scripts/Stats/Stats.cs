@@ -35,13 +35,11 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
             if (Health - damage > 0)
             {
                 Health -= damage;
-                Debug.Log("temp");
             }
             else
             {
                 Health = 0;
                 OnDie();
-                Debug.Log("died");
                 return;
             }
         }

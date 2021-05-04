@@ -70,17 +70,11 @@ public class PlayerAnimations : MonoBehaviour
     private void TriggerOnHitAnimation()
     {
         if (useItem.Performing == false && roll.Performing == false)
-        {
-            anim.ResetTrigger("Rolling");
             anim.SetTrigger("OnHit");
-        }
     }
 
-    private void TriggerDeath()
-    {
-        anim.ResetTrigger("Rolling");
+    private void TriggerDeath() =>
         anim.SetTrigger("Death");
-    }
 
     private void TriggerBlockReflect() => anim.SetTrigger("BlockReflect");
 

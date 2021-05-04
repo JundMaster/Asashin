@@ -50,7 +50,7 @@ public class PressurePlateKunaiBehaviour : KunaiBehaviour
                 else
                 {
                     damageableBody?.TakeDamage(
-                        50,
+                        5,
                         TypeOfDamage.EnemyRanged);
 
                     Destroy(gameObject);
