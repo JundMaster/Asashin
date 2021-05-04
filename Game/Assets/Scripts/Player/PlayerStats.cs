@@ -20,7 +20,7 @@ public sealed class PlayerStats : Stats, IPlayerDamage, IHealable
     { get => playerStats.SmokeGrenades; set => playerStats.SmokeGrenades = value; }
 
     // Stats
-    public float FirebombKunaiDamage => commonStats.RangedDamage * 2;
+    public float FirebombKunaiDamage => commonStats.RangedDamage * 4;
 
     public bool Dead { get; private set; }
 
