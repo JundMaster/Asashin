@@ -103,8 +103,15 @@ public class UIOptions : MonoBehaviour
     /// </summary>
     public void LoadingButton()
     {
-        FindObjectOfType<SpawnerController>().TypeOfRespawn(SpawnTypeEnum.Loadgame);
-        gameObject.SetActive(false);
+        SpawnerController spawnControl = FindObjectOfType<SpawnerController>();
+
+        if (spawnControl.GameState.FileExists(FilePath.SAVEFILECHECKPOINT))
+        {
+            spawnControl.TypeOfRespawn(SpawnTypeEnum.Loadgame);
+            gameObject.SetActive(false);
+        }
+        else
+        { }
     }
 
     public void BackToMenuButton()
