@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using System.Collections;
 
 /// <summary>
@@ -10,17 +9,11 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
 {
     // Components
     private PlayerAnimations playerAnims;
-    private EventSystem eventSys;
-    private GameObject lastSelectedGameObject;
 
     [SerializeField] private GameObject respawnUI;
-    [SerializeField] private GameObject confirmButton;
 
-    private void Awake()
-    {
+    private void Awake() =>
         playerAnims = FindObjectOfType<PlayerAnimations>();
-        eventSys = FindObjectOfType<EventSystem>();
-    }
 
     private void OnEnable()
     {
@@ -50,7 +43,6 @@ public class UIRespawn : MonoBehaviour, IFindPlayer
         yield return new WaitForSecondsRealtime(3f);
         OnRespawnButtonPressed(SpawnTypeEnum.Respawn);
     }
-
 
     protected virtual void OnRespawnButtonPressed(SpawnTypeEnum typeOfSpawn) =>
         RespawnButtonPressed?.Invoke(typeOfSpawn);
