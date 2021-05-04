@@ -9,6 +9,7 @@ public class EnemySounds : AbstractSoundBase
     [SerializeField] private AbstractSoundScriptableObject step;
     [SerializeField] private AbstractSoundScriptableObject laugh;
     [SerializeField] private AbstractSoundScriptableObject scream;
+    [SerializeField] private AbstractSoundScriptableObject hit;
 
     /// <summary>
     /// Called on animation events.
@@ -29,6 +30,9 @@ public class EnemySounds : AbstractSoundBase
                 break;
             case Sound.VoiceScream:
                 scream.PlaySound(audioSource);
+                break;
+            case Sound.Hit:
+                hit.PlaySound(audioSource);
                 break;
         }
     }

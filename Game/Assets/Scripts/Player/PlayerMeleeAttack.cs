@@ -23,7 +23,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private PlayerMovement movement;
     private SlowMotionBehaviour slowMotion;
     private PlayerValuesScriptableObj values;
-    private PlayerSounds sounds;
 
     // Weapon
     [SerializeField] private SphereCollider sword;
@@ -58,7 +57,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         movement = GetComponent<PlayerMovement>();
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         values = GetComponent<Player>().Values;
-        sounds = GetComponent<PlayerSounds>();
     }
 
     private void Start()
@@ -176,7 +174,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             if (body.TryGetComponent(out IDamageable damageableBody))
             {
                 damageableBody?.TakeDamage(stats.LightDamage, TypeOfDamage.PlayerMelee);
-                sounds.PlaySound(Sound.Hit);
             }
             else if (body.TryGetComponent(out IBreakable breakable))
             {
