@@ -60,7 +60,7 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
         slowMotionMaterial.SetFloat("Vector1_58B5DC2F", 0f); // TimeMultiplication
         slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
 
-        slowMotionSpeed = 0.1f;
+        slowMotionSpeed = 0.3f;
         slowMotionDuration = 5f;
         slowMotionSmoothSpeed = 0.005f;
 
@@ -171,11 +171,11 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
                 slowMotionMaterial.SetFloat("Vector1_24514F13", 0f); // WaveTime
 
                 if (chromaticA.intensity.value > 0)
-                    chromaticA.intensity.value -= Time.fixedUnscaledDeltaTime * 10;
+                    chromaticA.intensity.value -= Time.fixedUnscaledDeltaTime * 5;
                 if (lensDistor.intensity.value < -0)
-                    lensDistor.intensity.value += Time.fixedUnscaledDeltaTime * 10;
+                    lensDistor.intensity.value += Time.fixedUnscaledDeltaTime * 5;
                 if (colorAdj.saturation.value < 0)
-                    colorAdj.saturation.value += Time.fixedUnscaledDeltaTime * 200;
+                    colorAdj.saturation.value += Time.fixedUnscaledDeltaTime * 150;
             }
 
             if (pauseSystem.PausedGame)

@@ -223,11 +223,13 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         if (playerRoll != null)
         {
             if (playerRoll.PerformingTime > 0 && 
-                playerRoll.PerformingTime < 0.5f)
+                playerRoll.PerformingTime < 0.5f ||
+                playerRoll.PerformingTime > 1.5f)
             {
                 playerRoll.OnDodge();
             }
 
+            // Ignores everything else
             if (playerRoll.Performing)
                 return;
         }

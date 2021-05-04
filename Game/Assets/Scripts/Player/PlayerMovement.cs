@@ -226,11 +226,30 @@ public class PlayerMovement : MonoBehaviour, IAction
         switch (condition)
         {
             case SlowMotionEnum.SlowMotion:
-                turnSmooth = values.TurnSmoothInSlowMotion;
+                StartCoroutine(SmoothTransitionTurnSmoothValueCoroutine(SlowMotionEnum.SlowMotion));
                 break;
             case SlowMotionEnum.NormalTime:
-                turnSmooth = values.TurnSmooth;
+                StartCoroutine(SmoothTransitionTurnSmoothValueCoroutine(SlowMotionEnum.NormalTime));
                 break;
+        }
+    }
+
+    private IEnumerator SmoothTransitionTurnSmoothValueCoroutine(SlowMotionEnum condition)
+    {
+        YieldInstruction wffu = new WaitForFixedUpdate();
+        while (true)
+        {
+            if (condition == SlowMotionEnum.SlowMotion)
+            {
+                if (turnSmooth <= values.TurnSmoothInSlowMotion) break;
+                turnSmooth = Mathf.Lerp(turnSmooth, values.TurnSmoothInSlowMotion, Time.fixedUnscaledDeltaTime * 15f);
+            }
+            else if (condition == SlowMotionEnum.NormalTime)
+            {
+                if (turnSmooth >= values.TurnSmooth) break;
+                turnSmooth = Mathf.Lerp(turnSmooth, values.TurnSmooth, Time.fixedUnscaledDeltaTime * 15f);
+            }
+            yield return wffu;
         }
     }
 
