@@ -73,6 +73,17 @@ public static class TransformExtentions
     }
 
     /// <summary>
+    /// Returns direction to some position.
+    /// </summary>
+    /// <param name="from">Initial transform position.</param>
+    /// <param name="to">Final transform position.</param>
+    /// <returns>Returns a normalized vector3 with direction.</returns>
+    public static Vector3 Direction(this Transform from, Vector3 to)
+    {
+        return (to - from.position).normalized;
+    }
+
+    /// <summary>
     /// Checks if a transform is look at the same direction as another transform.
     /// </summary>
     /// <param name="from">From this transform.</param>
