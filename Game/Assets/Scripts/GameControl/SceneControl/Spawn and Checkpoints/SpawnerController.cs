@@ -10,6 +10,7 @@ using UnityEngine;
 /// if the player already has a save file, else it will load the first area.
 /// After loading the scene, it will spawn the player in the initial position
 /// or on the last checkpoint visited, and load his saved stats.
+/// -- IF NEW AREAS ARE ADDED, UPDATE METHOD DELETEFILES WITH THAT AREA --
 /// </summary>
 public class SpawnerController : MonoBehaviour
 {

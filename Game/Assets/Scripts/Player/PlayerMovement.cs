@@ -219,8 +219,9 @@ public class PlayerMovement : MonoBehaviour, IAction
     }
 
     /// <summary>
-    /// Changes turn smooth value after slow motion.
+    /// Invokes coroutine to smoothly changes turn speed to the final speed.
     /// </summary>
+    /// <param name="condition">Entering slow motion or entering normal time.</param>
     private void ChangeTurnSmoothValue(SlowMotionEnum condition)
     {
         switch (condition)
@@ -234,6 +235,11 @@ public class PlayerMovement : MonoBehaviour, IAction
         }
     }
 
+    /// <summary>
+    /// Smoothly changes turn speed to the final speed.
+    /// </summary>
+    /// <param name="condition">Entering slow motion or entering normal time.</param>
+    /// <returns>Wait for fixed update.</returns>
     private IEnumerator SmoothTransitionTurnSmoothValueCoroutine(SlowMotionEnum condition)
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
