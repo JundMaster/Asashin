@@ -11,7 +11,7 @@ public class SmokeGrenade : ItemBehaviour
         Vector3 spawnPosition = new Vector3
             (playerStats.transform.position.x,
             playerStats.transform.position.y + 1,
-            playerStats.transform.position.z);
+            playerStats.transform.position.z + playerStats.transform.forward.z);
 
         Instantiate(smokePrefab, spawnPosition, Quaternion.identity);
 
