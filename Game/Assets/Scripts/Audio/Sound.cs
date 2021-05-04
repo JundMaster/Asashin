@@ -20,9 +20,11 @@ public enum Sound
     TookDamage,
     BlockReflect,
     Alert,
-    SwordHit,
+    Hit,
     Roll,
     SlowMotion,
     BoxBreak,
     PlankHitFloor,
+    KunaiHit,
+    Explosion,
 }

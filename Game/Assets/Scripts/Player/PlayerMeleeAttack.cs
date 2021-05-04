@@ -176,7 +176,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             if (body.TryGetComponent(out IDamageable damageableBody))
             {
                 damageableBody?.TakeDamage(stats.LightDamage, TypeOfDamage.PlayerMelee);
-                sounds.PlaySound(Sound.SwordHit);
+                sounds.PlaySound(Sound.Hit);
             }
             else if (body.TryGetComponent(out IBreakable breakable))
             {
