@@ -109,6 +109,9 @@ public class UIOptions : MonoBehaviour
         {
             spawnControl.TypeOfRespawn(SpawnTypeEnum.Loadgame);
             gameObject.SetActive(false);
+
+            FindObjectOfType<PlayerInputCustom>().SwitchActionMapToDisable();
+            Time.timeScale = 0;
         }
         else
         { }
@@ -118,6 +121,9 @@ public class UIOptions : MonoBehaviour
     {
         FindObjectOfType<SceneControl>().LoadScene(SceneEnum.MainMenu);
         gameObject.SetActive(false);
+
+        FindObjectOfType<PlayerInputCustom>().SwitchActionMapToDisable();
+        Time.timeScale = 0;
     }
 
     /// <summary>

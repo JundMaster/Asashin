@@ -32,7 +32,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     private IEnumerator movementCoroutine;
 
     private Options options;
-    private EnemySounds enemySounds;
 
     /// <summary>
     /// Runs once on start.
@@ -59,7 +58,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         patrolPoints = enemy.PatrolPoints;
         patrolIndex = 0;
 
-        enemySounds = enemy.GetComponentInChildren<EnemySounds>();
         options = FindObjectOfType<Options>();
 
         // Updates options dependant values as soon as the enemy spawns

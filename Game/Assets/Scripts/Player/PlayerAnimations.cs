@@ -70,38 +70,17 @@ public class PlayerAnimations : MonoBehaviour
     private void TriggerOnHitAnimation()
     {
         if (useItem.Performing == false && roll.Performing == false)
+        {
+            anim.ResetTrigger("Rolling");
             anim.SetTrigger("OnHit");
+        }
     }
 
-    /// <summary>
-    /// This method is called with an animation event.
-    /// The method is triggered on the final of the animation.
-    /// Sets active SpawnUI and triggers pause.
-    /// </summary>
-    private void AnimationEventDeathBehaviour()
+    private void TriggerDeath()
     {
-        OnPlayerDiedEndOfAnimation();
-        OnPlayerDiedEndOfAnimation(PauseSystemEnum.Paused);
+        anim.ResetTrigger("Rolling");
+        anim.SetTrigger("Death");
     }
-
-    protected virtual void OnPlayerDiedEndOfAnimation() => 
-        PlayerDiedEndOfAnimationUIRespawn?.Invoke();
-    protected virtual void OnPlayerDiedEndOfAnimation(PauseSystemEnum condition) =>
-        PlayerDiedEndOfAnimationPauseSystem?.Invoke(condition);
-
-    /// <summary>
-    /// Event registered on UIRespawn. Only happens after the player death animation is over.
-    /// Calls respawn screen UI.
-    /// </summary>
-    public event Action PlayerDiedEndOfAnimationUIRespawn;
-
-    /// <summary>
-    /// Event registered on PauseSystem. Triggers pause after the animation is over.
-    /// Pauses game.
-    /// </summary>
-    public event Action<PauseSystemEnum> PlayerDiedEndOfAnimationPauseSystem;
-
-    private void TriggerDeath() => anim.SetTrigger("Death");
 
     private void TriggerBlockReflect() => anim.SetTrigger("BlockReflect");
 
@@ -138,4 +117,32 @@ public class PlayerAnimations : MonoBehaviour
     /// Its behaviour is called with animation events with a method on that class.
     /// </summary>
     public void TriggerSmokeGrenadeAnimation() => anim.SetTrigger("ThrowSmokeGrenade");
+
+    /// <summary>
+    /// This method is called with an animation event.
+    /// The method is triggered on the final of the animation.
+    /// Sets active SpawnUI and triggers pause.
+    /// </summary>
+    private void AnimationEventDeathBehaviour()
+    {
+        OnPlayerDiedEndOfAnimation();
+        OnPlayerDiedEndOfAnimation(PauseSystemEnum.Paused);
+    }
+
+    protected virtual void OnPlayerDiedEndOfAnimation() =>
+        PlayerDiedEndOfAnimationUIRespawn?.Invoke();
+    protected virtual void OnPlayerDiedEndOfAnimation(PauseSystemEnum condition) =>
+        PlayerDiedEndOfAnimationPauseSystem?.Invoke(condition);
+
+    /// <summary>
+    /// Event registered on UIRespawn. Only happens after the player death animation is over.
+    /// Calls respawn screen UI.
+    /// </summary>
+    public event Action PlayerDiedEndOfAnimationUIRespawn;
+
+    /// <summary>
+    /// Event registered on PauseSystem. Triggers pause after the animation is over.
+    /// Pauses game.
+    /// </summary>
+    public event Action<PauseSystemEnum> PlayerDiedEndOfAnimationPauseSystem;
 }
