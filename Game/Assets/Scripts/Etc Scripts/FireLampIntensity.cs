@@ -9,9 +9,6 @@ public class FireLampIntensity : MonoBehaviour, IFindPlayer
     private Light spotLight;
     private Player player;
 
-    private readonly float MINIMUMINT = 20;
-    private readonly float MAXIMUMINT = 22; 
-
     private void Awake()
     {
         spotLight = GetComponent<Light>();
@@ -23,13 +20,15 @@ public class FireLampIntensity : MonoBehaviour, IFindPlayer
         float multiplier = 40;
         spotLight.innerSpotAngle = 30;
 
-        yield return new WaitForSeconds(Random.Range(1f, 4f));
+        yield return new WaitForSeconds(Random.Range(0f, 1.5f));
         while (true)
         {
             if (player != null)
             {
-                if (Vector3.Distance(transform.position, player.transform.position) < 30)
+                if (Vector3.Distance(transform.position, player.transform.position) < 35)
                 {
+                    if (spotLight.intensity != 20) spotLight.intensity = 20;
+
                     if (spotLight.innerSpotAngle < 15)
                     {
                         multiplier *= -1;
