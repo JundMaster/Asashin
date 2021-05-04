@@ -15,10 +15,15 @@ public class PlayerSounds : AbstractSoundBase
     [SerializeField] private AbstractSoundScriptableObject laugh;
     [SerializeField] private AbstractSoundScriptableObject blockReflect;
     [SerializeField] private AbstractSoundScriptableObject slowMotion;
+    [SerializeField] private AbstractSoundScriptableObject rolling;
 
     private PlayerMovement movement;
 
-    private void Start() => movement = GetComponent<PlayerMovement>();
+    private new void Awake()
+    {
+        base.Awake();
+        movement = GetComponent<PlayerMovement>();
+    }
 
     /// <summary>
     /// Called on animation events.
@@ -59,6 +64,9 @@ public class PlayerSounds : AbstractSoundBase
                 break;
             case Sound.SlowMotion:
                 slowMotion.PlaySound(audioSource);
+                break;
+            case Sound.Roll:
+                rolling.PlaySound(audioSource);
                 break;
         }
     }

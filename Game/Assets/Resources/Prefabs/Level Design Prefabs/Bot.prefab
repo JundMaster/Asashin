@@ -12639,6 +12639,7 @@ MonoBehaviour:
   laugh: {fileID: 11400000, guid: d29ac8b65fd2f09488c27b16e109b35e, type: 2}
   blockReflect: {fileID: 11400000, guid: a621fbf29e314b74b8eadd3e75fbfa69, type: 2}
   slowMotion: {fileID: 11400000, guid: 7e73a69c39fce3b45abad06f8f2b0083, type: 2}
+  rolling: {fileID: 11400000, guid: 4c48aa7410aa75c49bd6ba558230244b, type: 2}
 --- !u!114 &48189607121074554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12654,7 +12655,15 @@ MonoBehaviour:
   m_RigLayers:
   - m_Rig: {fileID: 48189607191709018}
     m_Active: 1
-  m_Effectors: []
+  m_Effectors:
+  - m_Transform: {fileID: 0}
+    m_Style:
+      shape: {fileID: 4300000, guid: c6793350c150f456688e39a81f97364a, type: 2}
+      color: {r: 1, g: 0, b: 0, a: 0.5}
+      size: 0.1
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+    m_Visible: 1
 --- !u!114 &48189607121074538
 MonoBehaviour:
   m_ObjectHideFlags: 0

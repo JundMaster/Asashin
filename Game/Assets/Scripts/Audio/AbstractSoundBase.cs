@@ -6,7 +6,7 @@
 public abstract class AbstractSoundBase : MonoBehaviour
 {
     protected AudioSource audioSource;
-    private void Awake() => audioSource = GetComponent<AudioSource>();
+    protected void Awake() => audioSource = GetComponent<AudioSource>();
 
     /// <summary>
     /// Plays sounds.
