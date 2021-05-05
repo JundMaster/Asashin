@@ -17,8 +17,10 @@ public class PlayerSounds : AbstractSoundBase
     [SerializeField] private AbstractSoundScriptableObject slowMotion;
     [SerializeField] private AbstractSoundScriptableObject rolling;
     [SerializeField] private AbstractSoundScriptableObject drinking;
+    [SerializeField] private AbstractSoundScriptableObject pickupItem;
 
     private PlayerMovement movement;
+    private readonly int PICKABLELAYER = 19;
 
     private new void Awake()
     {
@@ -72,6 +74,15 @@ public class PlayerSounds : AbstractSoundBase
             case Sound.Drink:
                 drinking.PlaySound(audioSource);
                 break;
+            case Sound.PickupItem:
+                pickupItem.PlaySound(audioSource);
+                break;
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 19)
+            PlaySound(Sound.PickupItem);
     }
 }

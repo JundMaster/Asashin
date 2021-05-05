@@ -22,7 +22,7 @@ public class SimpleSoundWithProbabilityScriptableObject :
         int randomNum;
         randomNum = Random.Range(0, audioClips.Count);
 
-        audioSource.pitch = pitch + Random.Range(-0.1f, 0.1f);
+        audioSource.pitch = pitch;
         if (probabilty < chanceOfPlaying && audioSource.isPlaying == false)
             audioSource.PlayOneShot(audioClips[randomNum], volume);
     }

@@ -27,4 +27,6 @@ public enum Sound
     PlankHitFloor,
     KunaiHit,
     Explosion,
+    BoxOpen,
+    PickupItem,
 }

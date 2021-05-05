@@ -18,8 +18,7 @@ public class SimpleSoundScriptableObject : AbstractSoundScriptableObject
     {
         int randomNum;
         randomNum = Random.Range(0, audioClips.Count);
-        if (pitch != 0)
-            audioSource.pitch = pitch + Random.Range(-0.1f, 0.1f);
+        audioSource.pitch = pitch;
         audioSource.PlayOneShot(audioClips[randomNum], volume);
     }
 }

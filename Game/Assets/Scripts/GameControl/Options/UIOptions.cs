@@ -500,10 +500,10 @@ public class UIOptions : MonoBehaviour
         lightness.maxValue = configScriptableObj.MaxLightness;
         contrast.minValue = configScriptableObj.MinContrast;
         contrast.maxValue = configScriptableObj.MaxContrast;
-        musicVolume.minValue = configScriptableObj.MinMusicVolume;
-        musicVolume.maxValue = configScriptableObj.MaxMusicVolume;
         masterVolume.minValue = configScriptableObj.MinMasterVolume;
         masterVolume.maxValue = configScriptableObj.MaxMasterVolume;
+        musicVolume.minValue = configScriptableObj.MinMusicVolume;
+        musicVolume.maxValue = configScriptableObj.MaxMusicVolume;
         soundVolume.minValue = configScriptableObj.MinSoundVolume;
         soundVolume.maxValue = configScriptableObj.MaxSoundVolume;
         verticalSensiblity.minValue = configScriptableObj.MinVerticalSensibility;

@@ -14,4 +14,8 @@ public sealed class CommonStatsScriptableObj : ScriptableObject
 
     [SerializeField] private float rangedDamage;
     public float RangedDamage => rangedDamage;
+
+    [Header("Ranged damage is multiplied by this value in order to obtain firebomb kunai damage")]
+    [Range(1f, 5f)][SerializeField] private float firebombKunaiRangedDamageMultiplier;
+    public float FirebombKunaiRangedDamageMultiplier => firebombKunaiRangedDamageMultiplier;
 }

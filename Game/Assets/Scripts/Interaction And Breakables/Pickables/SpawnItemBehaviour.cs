@@ -90,9 +90,9 @@ public class SpawnItemBehaviour : MonoBehaviour, ISpawnItemBehaviour
 
         // Gives it a random force
         spawnedObjectRB.AddForce(
-            Random.Range(-75f, 75f), 
+            Random.Range(-90f, 90f), 
             90f, 
-            Random.Range(-75f, 75f), 
+            Random.Range(-90f, 90f), 
             ForceMode.Impulse);
     }
 }

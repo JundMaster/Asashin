@@ -11,6 +11,7 @@ public class TreasureBox : MonoBehaviour, IFindPlayer, IInterectable
     private PlayerInteract playerInteract;
     private SphereCollider sphereCollider;
     private Animator anim;
+    private TreasureChestAudio chestAudio;
 
     private ISpawnItemBehaviour spawnItemsBehaviour;
 
@@ -20,6 +21,7 @@ public class TreasureBox : MonoBehaviour, IFindPlayer, IInterectable
         sphereCollider = GetComponent<SphereCollider>();
         anim = GetComponent<Animator>();
         spawnItemsBehaviour = GetComponent<SpawnItemBehaviour>();
+        chestAudio = GetComponent<TreasureChestAudio>();
     }
 
     /// <summary>
@@ -28,7 +30,9 @@ public class TreasureBox : MonoBehaviour, IFindPlayer, IInterectable
     public void Execute()
     {
         anim.SetTrigger("OpenBox");
-        
+
+        chestAudio.PlaySound(Sound.BoxOpen);
+
         // Disables treasure collider
         sphereCollider.enabled = false;
 

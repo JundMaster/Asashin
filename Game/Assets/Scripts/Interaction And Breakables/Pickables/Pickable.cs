@@ -3,6 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Base class responsible for every pickable item.
+/// SpawnItemBehaviour.cs determines the quantity of this pickable object.
 /// </summary>
 [RequireComponent(typeof(SphereCollider))]
 public abstract class Pickable : MonoBehaviour, IPickable
