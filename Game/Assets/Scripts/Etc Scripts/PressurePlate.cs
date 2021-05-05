@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
+    // Components
     private Animator anim;
     private BoxCollider col;
+    private AbstractSoundBase pressurePlateSound;
 
     [SerializeField] private Kunai kunai;
     [SerializeField] private Transform[] kunaiSpawns;
@@ -14,14 +16,22 @@ public class PressurePlate : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         col = GetComponent<BoxCollider>();
+        pressurePlateSound = GetComponent<AbstractSoundBase>();
     }		
 
+    /// <summary>
+    /// Only triggers once. Every time the player enters the collider, the
+    /// collider is disabled.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 11)
         {
             anim.SetTrigger("Trigger");
-            
+
+            pressurePlateSound.PlaySound(Sound.PressurePlate);
+
             foreach (Transform kunaiSpawn in kunaiSpawns)
                 Instantiate(kunai, kunaiSpawn.position, Quaternion.identity);
         }
