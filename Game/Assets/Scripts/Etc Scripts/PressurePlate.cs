@@ -12,6 +12,11 @@ public class PressurePlate : MonoBehaviour
     [SerializeField] private Transform[] kunaiSpawns;
     [Range(2f, 10f)][SerializeField] private float plateTriggerDelay;
 
+    [Header("Alert variables")]
+    [SerializeField] protected LayerMask enemyLayer;
+    [SerializeField] private LayerMask wallsWithEnemy;
+    [SerializeField] private float sizeOfAlert;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -29,6 +34,8 @@ public class PressurePlate : MonoBehaviour
         if (other.gameObject.layer == 11)
         {
             anim.SetTrigger("Trigger");
+
+            AlertSurroundings();
 
             pressurePlateSound.PlaySound(Sound.PressurePlate);
 
@@ -61,6 +68,33 @@ public class PressurePlate : MonoBehaviour
         yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
 
         col.enabled = true;
+    }
+
+    /// <summary>
+    /// In case this enemy finds the player, it alerts the surrounding enemies
+    /// that this enemy can see.
+    /// </summary>
+    private void AlertSurroundings()
+    {
+        Collider[] enemiesAround =
+            Physics.OverlapSphere(transform.position, sizeOfAlert, enemyLayer);
+
+        if (enemiesAround.Length > 0)
+        {
+            foreach (Collider enemyCollider in enemiesAround)
+            {
+                if (enemyCollider.TryGetComponent(out EnemySimple otherEnemy))
+                {
+                    if (transform.CanSee(otherEnemy.transform, wallsWithEnemy))
+                    {
+                        if (otherEnemy.gameObject != gameObject)
+                        {
+                            otherEnemy.OnAlert();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void OnDrawGizmos()
