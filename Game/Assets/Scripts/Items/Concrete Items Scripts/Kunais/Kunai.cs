@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Class responsible for handling kunai behaviour.
@@ -7,7 +8,8 @@ public class Kunai : ItemBehaviour, IFindPlayer
 {
     [SerializeField] private KunaiBehaviour behaviour;
     public KunaiBehaviour Behaviour => behaviour;
-    /// //////////////////////////////////////
+
+    private IList<IDamageable> bodiesToDamage;
 
     // Movement variables
     private float rotation;
@@ -35,6 +37,8 @@ public class Kunai : ItemBehaviour, IFindPlayer
         playerRoll = FindObjectOfType<PlayerRoll>();
         behaviour.KunaiCurrentTarget = null;
         behaviour.ParentKunai = this;
+
+        bodiesToDamage = new List<IDamageable>();
 
         rotation = 0;
         timePassed = Time.time;
@@ -72,10 +76,8 @@ public class Kunai : ItemBehaviour, IFindPlayer
         if (Time.time - timePassed > timeUntilVanish) Hit(null);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other) =>
         Hit(other);
-    }
 
     /// <summary>
     /// What happens when the kunai hits something.
@@ -98,9 +100,16 @@ public class Kunai : ItemBehaviour, IFindPlayer
             {
                 if (body.TryGetComponent(out IDamageable damageableBody))
                 {
-                    // Trigers behaviour hit()
-                    behaviour.Hit(damageableBody, other, player);
+                    // Will only hit this body once
+                    if (bodiesToDamage.Contains(damageableBody) == false)
+                    {
+                        // Trigers behaviour hit()
+                        behaviour.Hit(damageableBody, other, player);
 
+                        bodiesToDamage.Add(damageableBody);
+                    }
+
+                    // Ignores player
                     if (playerRoll.Performing == false)
                         Instantiate(hitParticles, transform.position, Quaternion.identity);
                 }
