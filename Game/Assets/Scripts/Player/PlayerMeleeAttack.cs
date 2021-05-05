@@ -239,14 +239,14 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             }
 
             // Orders array with all VISIBLE enemies by distance
-            Transform[] organizedEnemiesByDistance =
-                allEnemies.OrderBy(i => (i.position - transform.position).magnitude).ToArray();
+            Transform organizedEnemiesByDistance =
+                allEnemies.OrderBy(i => (i.position - transform.position).magnitude).First();
 
-            Vector3 dir = transform.Direction(organizedEnemiesByDistance[0]);
+            Vector3 dir = transform.Direction(organizedEnemiesByDistance);
 
             // If the player is facing the enemy's forward, meaning it's
             // looking towards him while he has is back turned
-            if (Vector3.Dot(organizedEnemiesByDistance[0].forward, transform.forward) > 0f)
+            if (Vector3.Dot(organizedEnemiesByDistance.forward, transform.forward) > -0.25f)
             {
                 // Only happens if the player is BEHIND the enemy, prevents
                 // from doing instant kill while the enemy is behind the player
