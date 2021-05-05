@@ -57,7 +57,7 @@ public class EnemySimpleDeathState : EnemySimpleAbstractState
             smokeParticles,
             new Vector3(
                 enemy.transform.position.x,
-                enemy.transform.position.y + 1.5f,
+                enemy.transform.position.y + 0.5f,
                 enemy.transform.position.z),
             Quaternion.identity);
 
