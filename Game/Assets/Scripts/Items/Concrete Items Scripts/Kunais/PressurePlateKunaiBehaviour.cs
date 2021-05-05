@@ -5,12 +5,20 @@
 /// </summary>
 public class PressurePlateKunaiBehaviour : KunaiBehaviour
 {
+    [SerializeField] private GameObject kunaiThrowSound;
+
     [SerializeField] protected LayerMask hittableLayersWithPlayer;
     private const int HITTABLELAYERWITHPLAYER = 22;
 
     public override Transform KunaiCurrentTarget { get; set; }
     private Transform playerTarget;
     private PlayerRoll playerRoll;
+
+    /// <summary>
+    /// Instantiates an object with a sound.
+    /// </summary>
+    private void Awake() =>
+        Instantiate(kunaiThrowSound, transform.position, Quaternion.identity);
 
     /// <summary>
     /// Happens on start.
