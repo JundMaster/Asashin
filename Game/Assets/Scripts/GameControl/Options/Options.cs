@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -68,8 +69,14 @@ public class Options : MonoBehaviour
     /// </summary>
     /// <param name="scene">Null.</param>
     /// <param name="mode">Null.</param>
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) =>
+        StartCoroutine(UpdateValuesAfterFixedUpdate());
+
+    private IEnumerator UpdateValuesAfterFixedUpdate()
     {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForFixedUpdate();
+
         CurrentLevelDefinitions levelDefinitions = FindObjectOfType<CurrentLevelDefinitions>();
         postProcess.profile = levelDefinitions.ThisArea.PostProcess;
 

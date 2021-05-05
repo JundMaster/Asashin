@@ -85,8 +85,8 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     {
         float masterSound = options.MasterVolume;
 
-        UpdateMusicVolume();
-        UpdateSoundVolume();
+        //UpdateMusicVolume();
+        //UpdateSoundVolume();
 
         while (masterSound > options.MinMasterVolume)
         {
@@ -104,8 +104,8 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     {
         float masterSound = options.MinMasterVolume;
 
-        UpdateMusicVolume();
-        UpdateSoundVolume();
+        //UpdateMusicVolume();
+        //UpdateSoundVolume();
 
         YieldInstruction wffu = new WaitForFixedUpdate();
         while (masterSound < options.MasterVolume)
