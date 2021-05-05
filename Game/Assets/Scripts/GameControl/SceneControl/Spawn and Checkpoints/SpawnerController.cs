@@ -24,7 +24,6 @@ public class SpawnerController : MonoBehaviour
     // Components
     public GameState GameState { get; private set; }
     private Checkpoint[] childrenCheckpoints;
-    
     private SceneControl sceneControl;
     private LevelChanger levelChanger;
 
@@ -234,7 +233,8 @@ public class SpawnerController : MonoBehaviour
     /// </summary>
     /// <param name="numberOfCheckpoint">Current checkpoint.</param>
     /// <param name="nameOfScene">Current scene.</param>
-    public void SaveCheckpoint(byte numberOfCheckpoint, SceneEnum nameOfScene)
+    /// <param name="checkpointThatTriggeredThis">Checkpoint that called this method.</param>
+    public void SaveCheckpoint(byte numberOfCheckpoint, SceneEnum nameOfScene, Checkpoint checkpointThatTriggeredThis)
     {
         if (GameState.FileExists(FilePath.SAVEFILECHECKPOINT))
         {
@@ -245,6 +245,7 @@ public class SpawnerController : MonoBehaviour
                 GameState.SaveCheckpointScene(nameOfScene);
                 GameState.SavePlayerStats();
                 OnCheckPointReached();
+                checkpointThatTriggeredThis.CheckpointAudio.PlaySound(Sound.Checkpoint);
             }
             // Else if this scene is the same
             else
@@ -256,6 +257,7 @@ public class SpawnerController : MonoBehaviour
                     GameState.SaveCheckpointScene(nameOfScene);
                     GameState.SavePlayerStats();
                     OnCheckPointReached();
+                    checkpointThatTriggeredThis.CheckpointAudio.PlaySound(Sound.Checkpoint);
                 }
             }
         }
@@ -266,6 +268,7 @@ public class SpawnerController : MonoBehaviour
             GameState.SaveCheckpointScene(nameOfScene);
             GameState.SavePlayerStats();
             OnCheckPointReached();
+            checkpointThatTriggeredThis.CheckpointAudio.PlaySound(Sound.Checkpoint);
         }
     }
 
