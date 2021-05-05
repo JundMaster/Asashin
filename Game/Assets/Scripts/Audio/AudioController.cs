@@ -77,9 +77,16 @@ public class AudioController : MonoBehaviour, IUpdateOptions
 
     private void FadeOutMaster() => StartCoroutine(FadeOutMasterCoroutine());
 
+    /// <summary>
+    /// Fades out master volume.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator FadeOutMasterCoroutine()
     {
         float masterSound = options.MasterVolume;
+
+        UpdateMusicVolume();
+        UpdateSoundVolume();
 
         while (masterSound > options.MinMasterVolume)
         {
@@ -89,9 +96,17 @@ public class AudioController : MonoBehaviour, IUpdateOptions
         }
     }
 
+    /// <summary>
+    /// Fades master sound to normal volume.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator FadeInMasterCoroutine()
     {
         float masterSound = options.MinMasterVolume;
+
+        UpdateMusicVolume();
+        UpdateSoundVolume();
+
         YieldInstruction wffu = new WaitForFixedUpdate();
         while (masterSound < options.MasterVolume)
         {
@@ -124,6 +139,18 @@ public class AudioController : MonoBehaviour, IUpdateOptions
         masterVolume.SetFloat("musicVolume", options.MusicVolume);
         masterVolume.SetFloat("soundVolume", options.SoundVolume);
     }
+
+    /// <summary>
+    /// Updates music value on the beggining of the scene.
+    /// </summary>
+    private void UpdateMusicVolume() =>
+        masterVolume.SetFloat("musicVolume", options.MusicVolume);
+
+    /// <summary>
+    /// Updates sound value on the beggining of the scene.
+    /// </summary>
+    private void UpdateSoundVolume() =>
+        masterVolume.SetFloat("soundVolume", options.SoundVolume);
 
     /// <summary>
     /// Updates audio values in realtime.
