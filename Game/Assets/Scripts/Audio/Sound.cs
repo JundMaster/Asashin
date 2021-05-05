@@ -29,4 +29,5 @@ public enum Sound
     Explosion,
     BoxOpen,
     PickupItem,
+    Checkpoint,
 }
