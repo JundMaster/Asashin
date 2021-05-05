@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Class responsible for FirebombKunai's behaviour.
@@ -41,10 +42,13 @@ public class FirebombKunaiBehaviour : FriendlyKunaiBehaviour
             }
         }
 
+        HashSet<IDamageable> bodiesToDamage = new HashSet<IDamageable>();
+
         // Gets all enemies around explosion range
         Collider[] collisions =
             Physics.OverlapSphere(transform.position, explosionRange, enemyLayer);
 
+        // Gets every damageable body and adds it to a hashset
         foreach (Collider col in collisions)
         {
             // If it's an enemy, the kundai does damage = to firebombKunaiDamage
@@ -52,9 +56,13 @@ public class FirebombKunaiBehaviour : FriendlyKunaiBehaviour
             if (col.gameObject.TryGetComponent(out IDamageable body) &&
                 col.gameObject.TryGetComponent(out EnemyBase en))
             {
-                body.TakeDamage(playerStats.FirebombKunaiDamage, TypeOfDamage.PlayerRanged);
+                bodiesToDamage.Add(body);
             }
-        }  
+        }
+
+        // Damages all bodies
+        foreach(IDamageable body in bodiesToDamage)
+            body.TakeDamage(playerStats.FirebombKunaiDamage, TypeOfDamage.PlayerRanged);
 
         Destroy(gameObject);
     }

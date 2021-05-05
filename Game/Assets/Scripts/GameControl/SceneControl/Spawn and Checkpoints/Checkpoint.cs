@@ -8,8 +8,12 @@ public class Checkpoint : MonoBehaviour
 {
     [SerializeField] private SpawnerController checkpointController;
     [SerializeField] private byte checkpointNumber;
+  
     private CurrentLevelDefinitions definitions;
     public AbstractSoundBase CheckpointAudio { get; private set; }
+
+    [SerializeField] private Transform spawnPlayerHere;
+    public Transform SpawnPlayerHere => spawnPlayerHere;
 
     private void Awake()
     {
@@ -40,5 +44,8 @@ public class Checkpoint : MonoBehaviour
     {
         Gizmos.color = new Color(0, 1, 0, 0.15f);
         Gizmos.DrawCube(transform.position, GetComponent<BoxCollider>().size);
+
+        Gizmos.DrawSphere(SpawnPlayerHere.position, 0.25f);
+        Gizmos.DrawLine(SpawnPlayerHere.position, SpawnPlayerHere.position + SpawnPlayerHere.forward);
     }
 }
