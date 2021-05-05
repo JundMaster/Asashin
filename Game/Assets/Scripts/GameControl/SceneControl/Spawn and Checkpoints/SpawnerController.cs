@@ -193,8 +193,8 @@ public class SpawnerController : MonoBehaviour
                         if (FindObjectOfType<Player>() == null)
                             Instantiate(
                                 playerPrefab,
-                                transform.position + checkpoint.transform.position,
-                                checkpoint.transform.rotation);
+                                transform.position + checkpoint.SpawnPlayerHere.position,
+                                checkpoint.SpawnPlayerHere.rotation);
                     }
                 }
             }      
