@@ -85,9 +85,6 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     {
         float masterSound = options.MasterVolume;
 
-        //UpdateMusicVolume();
-        //UpdateSoundVolume();
-
         while (masterSound > options.MinMasterVolume)
         {
             masterSound -= Time.fixedUnscaledDeltaTime * 25;
@@ -103,9 +100,6 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     private IEnumerator FadeInMasterCoroutine()
     {
         float masterSound = options.MinMasterVolume;
-
-        //UpdateMusicVolume();
-        //UpdateSoundVolume();
 
         YieldInstruction wffu = new WaitForFixedUpdate();
         while (masterSound < options.MasterVolume)

@@ -5,6 +5,8 @@
 /// </summary>
 public class FriendlyKunaiBehaviour : KunaiBehaviour
 {
+    [SerializeField] private GameObject kunaiSoundGameobject;
+
     public override Transform KunaiCurrentTarget { get; set; }
 
     [SerializeField] protected LayerMask enemyLayer;
@@ -62,6 +64,11 @@ public class FriendlyKunaiBehaviour : KunaiBehaviour
     public override void Hit(IDamageable damageableBody, Collider collider, Transform player)
     {
         damageableBody?.TakeDamage(playerStats.RangedDamage, TypeOfDamage.PlayerRanged);
+
+        // If it hits a wall, plays a sound
+        if (damageableBody == null)
+            Instantiate(kunaiSoundGameobject, transform.position, Quaternion.identity);
+
         Destroy(gameObject);
     }
 

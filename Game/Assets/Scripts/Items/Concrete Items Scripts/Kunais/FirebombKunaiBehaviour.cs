@@ -27,9 +27,18 @@ public class FirebombKunaiBehaviour : FriendlyKunaiBehaviour
         if (numberOfExplosions == 0)
         {
             numberOfExplosions++;
-            Vector3 expPos = 
-                new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z);
-            Instantiate(explosion, expPos, Quaternion.identity);
+
+            if (collider != null)
+            {
+                Vector3 expPos =
+                    new Vector3(
+                        transform.position.x, 
+                        transform.position.y + 1f, 
+                        transform.position.z) + 
+                        transform.Direction(player) * 1.5f;
+
+                Instantiate(explosion, expPos, Quaternion.identity);
+            }
         }
 
         // Gets all enemies around explosion range
