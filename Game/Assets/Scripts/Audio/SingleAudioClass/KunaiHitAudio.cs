@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Class responsible for playing smoke grenade audio.
+/// Class responsible for playing kunai hit audio.
 /// </summary>
 public class KunaiHitAudio : AbstractSoundBase
 {

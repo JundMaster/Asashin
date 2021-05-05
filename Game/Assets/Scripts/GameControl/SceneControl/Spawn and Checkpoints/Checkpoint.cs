@@ -9,28 +9,31 @@ public class Checkpoint : MonoBehaviour
     [SerializeField] private SpawnerController checkpointController;
     [SerializeField] private byte checkpointNumber;
     private CurrentLevelDefinitions definitions;
+    public AbstractSoundBase CheckpointAudio { get; private set; }
 
     private void Awake()
     {
         definitions = FindObjectOfType<CurrentLevelDefinitions>();
+        CheckpointAudio = GetComponent<AbstractSoundBase>();
     }
+
 
     public byte CheckpointNumber => checkpointNumber;
 
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other) =>
         StartCoroutine(SaveGame());
-    }
 
     /// <summary>
     /// Coroutine waits for fixed update so the player won't be null, instead
     /// it gives time to load everything.
+    /// Saves a checkpoint with its current number + current level area.
     /// </summary>
     /// <returns></returns>
     private IEnumerator SaveGame()
     {
-        yield return new WaitForSeconds(1);
-        checkpointController.SaveCheckpoint(checkpointNumber, definitions.ThisArea.Name);
+        yield return new WaitForFixedUpdate();
+
+        checkpointController.SaveCheckpoint(checkpointNumber, definitions.ThisArea.Name, this);
     }
 
     private void OnDrawGizmos()

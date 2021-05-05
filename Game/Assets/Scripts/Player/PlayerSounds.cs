@@ -18,6 +18,7 @@ public class PlayerSounds : AbstractSoundBase
     [SerializeField] private AbstractSoundScriptableObject rolling;
     [SerializeField] private AbstractSoundScriptableObject drinking;
     [SerializeField] private AbstractSoundScriptableObject pickupItem;
+    [SerializeField] private AbstractSoundScriptableObject kunaiThrow;
 
     private PlayerMovement movement;
     private readonly int PICKABLELAYER = 19;
@@ -77,12 +78,15 @@ public class PlayerSounds : AbstractSoundBase
             case Sound.PickupItem:
                 pickupItem.PlaySound(audioSource);
                 break;
+            case Sound.Kunai:
+                kunaiThrow.PlaySound(audioSource);
+                break;
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 19)
+        if (other.gameObject.layer == PICKABLELAYER)
             PlaySound(Sound.PickupItem);
     }
 }
