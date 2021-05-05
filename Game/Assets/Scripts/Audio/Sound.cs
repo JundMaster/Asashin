@@ -30,4 +30,5 @@ public enum Sound
     BoxOpen,
     PickupItem,
     Checkpoint,
+    PressurePlate,
 }

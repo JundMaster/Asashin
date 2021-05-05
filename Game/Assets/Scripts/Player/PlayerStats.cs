@@ -9,6 +9,9 @@ public sealed class PlayerStats : Stats, IPlayerDamage, IHealable
     [SerializeField] private CommonStatsScriptableObj playerCommonStats;
     [SerializeField] private PlayerSavedStatsScriptableObj playerStats;
 
+    [Header("Particles to spawn on player heal")]
+    [SerializeField] private GameObject healParticles;
+
     // Items
     public int Kunais 
     { get => playerStats.Kunais; set => playerStats.Kunais = value; }
@@ -20,25 +23,21 @@ public sealed class PlayerStats : Stats, IPlayerDamage, IHealable
     { get => playerStats.SmokeGrenades; set => playerStats.SmokeGrenades = value; }
 
     // Stats
-    public float FirebombKunaiDamage => commonStats.RangedDamage * 
-        commonStats.FirebombKunaiRangedDamageMultiplier;
+    public float FirebombKunaiDamage => commonStats.FirebombKunaiDamage;
 
+    /// <summary>
+    /// Get setter to make sure there are no other animations after the player dies.
+    /// </summary>
     public bool Dead { get; private set; }
 
-    private void Awake()
-    {
+    private void Awake() =>
         commonStats = playerCommonStats;
-    }
 
-    private void OnEnable()
-    {
+    private void OnEnable() =>
         base.Die += DisablePlayerCollisions;
-    }
 
-    private void OnDisable()
-    {
+    private void OnDisable() =>
         base.Die -= DisablePlayerCollisions;
-    }
 
     private new void Start()
     {
@@ -70,10 +69,18 @@ public sealed class PlayerStats : Stats, IPlayerDamage, IHealable
         {
             Health += health;
         }
+
         OnHealedDamage();
+
+        GameObject healParticlesGameObject = 
+            Instantiate(healParticles, transform.position, Quaternion.identity);
+        healParticlesGameObject.transform.parent = gameObject.transform;
     }
 
     private void OnHealedDamage() => HealedDamage?.Invoke();
 
+    /// <summary>
+    /// Event registered on UIHealthBar.
+    /// </summary>
     public event Action HealedDamage;
 }
