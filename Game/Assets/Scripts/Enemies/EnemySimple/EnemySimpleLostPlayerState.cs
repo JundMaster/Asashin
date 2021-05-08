@@ -18,6 +18,8 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     // State variables
     private IEnumerator lookForPlayerCoroutine;
     private bool breakState;
+    private Vector3 enteredInPosition;
+    private float distanceFromPositionToCheck;
 
     // Components
     private VisionCone visionCone;
@@ -34,6 +36,8 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         visionCone = enemy.VisionConeScript;
 
+        distanceFromPositionToCheck = 1f;
+
         // Updates options dependant values as soon as the enemy spawns
         enemy.StartCoroutine(UpdateValuesCoroutine());
     }
@@ -45,6 +49,10 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     public override void OnEnter()
     {
         base.OnEnter();
+
+        // So the enemy will only start checking the final destination after
+        // leaving the initial position
+        enteredInPosition = enemy.transform.position;
 
         lookForPlayerCoroutine = null;
 
@@ -82,7 +90,9 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         // If the enemy reached the player last known position
         // starts looking for him
-        if (ReachedLastKnownPosition())
+        if (ReachedLastKnownPosition() && 
+            Vector3.Distance(enemy.transform.position, enteredInPosition) >
+            distanceFromPositionToCheck)
         {
             if (lookForPlayerCoroutine == null)
             {
@@ -127,7 +137,8 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     /// <returns>True if it is.</returns>
     private bool ReachedLastKnownPosition()
     {
-        if (agent.remainingDistance < 1f) return true;
+        if (agent.remainingDistance < distanceFromPositionToCheck)
+            return true;
         return false;
     }
 
