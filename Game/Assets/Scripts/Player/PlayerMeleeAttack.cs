@@ -9,6 +9,7 @@ using System.Linq;
 public class PlayerMeleeAttack : MonoBehaviour, IAction
 {
     [SerializeField] private LayerMask enemyLayers;
+    [Range(-1, 1)][SerializeField] private float minDotProductToStealthKill;
 
     // Components
     private PlayerInputCustom input;
@@ -39,6 +40,9 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     public bool Performing { get; set; }
     public bool InInstantKill { get; set; }
 
+    private EnemySimple enemyToInstakill;
+    private bool executeInstaKill;
+
     // Rotation
     private float smoothTimeRotation;
     private float turnSmooth;
@@ -62,6 +66,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private void Start()
     {
         turnSmooth = values.TurnSmooth;
+        executeInstaKill = false;
 
         foreach (ParticleSystem particle in particles)
             particle.Stop();
@@ -81,7 +86,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
     public void ComponentUpdate()
     {
-
+        //
     }
 
     public void ComponentFixedUpdate()
@@ -173,6 +178,14 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         {
             if (body.TryGetComponent(out IDamageable damageableBody))
             {
+                // If player performed instantkill, it instakills enemy and sets variables to default
+                if (executeInstaKill)
+                {
+                    enemyToInstakill.OnInstanteDeath();
+                    enemyToInstakill = null;
+                    executeInstaKill = false;
+                }
+
                 damageableBody?.TakeDamage(stats.LightDamage, TypeOfDamage.PlayerMelee);
             }
             else if (body.TryGetComponent(out IBreakable breakable))
@@ -209,6 +222,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// <summary>
     /// Triggers light melee attack. Normal or instant kill Animation
     /// depending on the condition.
+    /// Happens as soon as the player pressed the attack key.
     /// </summary>
     protected virtual void OnMeleeAttack()
     {
@@ -221,14 +235,24 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         // ELSE
         // happens if the player is walking or an enemy is in blindness state
 
-        // Creates a list with all enemies around the player
-        List<Transform> allEnemies = new List<Transform>();
+        // Checks all enemies around the player
         Collider[] enemies =
                 Physics.OverlapSphere(transform.position, 2f, enemyLayers);
 
+        Transform enemyToAttack = null;
         // If there are enemies
-        if (enemies.Length > 0)
+        if (enemies.Length == 0)
         {
+            // Else
+            // Normal attack Anim
+            OnLightMeleeAttack(true);
+            return;
+        }
+        else // more than one
+        {
+            // Creates a list for all enemies around the player
+            List<Transform> allEnemies = new List<Transform>();
+
             // If enemy has an Enemy script
             for (int i = 0; i < enemies.Length; i++)
             {
@@ -239,26 +263,28 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             }
 
             // Orders array with all VISIBLE enemies by distance
-            Transform organizedEnemiesByDistance =
+            enemyToAttack =
                 allEnemies.OrderBy(i => (i.position - transform.position).magnitude).First();
 
-            Vector3 dir = transform.Direction(organizedEnemiesByDistance);
+            enemyToInstakill = enemyToAttack.GetComponent<EnemySimple>();
+        }
 
-            // If the player is facing the enemy's forward, meaning it's
-            // looking towards him while he has is back turned
-            if (Vector3.Dot(organizedEnemiesByDistance.forward, transform.forward) > -0.25f)
+        // If there is any enemy to attack
+        Vector3 dir = transform.Direction(enemyToAttack);
+
+        // If the player is facing the enemy's forward, meaning it's
+        // looking towards him while he has is back turned
+        if (Vector3.Dot(enemyToAttack.forward, transform.forward) >= 
+            minDotProductToStealthKill)
+        {
+            // Only happens if the player is BEHIND the enemy, prevents
+            // from doing instant kill while the enemy is behind the player
+            if (Vector3.Angle(dir, transform.forward) < 20)
             {
-                // Only happens if the player is BEHIND the enemy, prevents
-                // from doing instant kill while the enemy is behind the player
-                if (Vector3.Angle(dir, transform.forward) < 50)
-                {
-                    // Instant kill Anim.
-                    OnLightMeleeAttack(false);
-                    return;
-                }
-                // Else
-                // Normal attack Anim
-                OnLightMeleeAttack(true);
+                executeInstaKill = true;
+
+                // Instant kill Anim.
+                OnLightMeleeAttack(false);
                 return;
             }
             // Else
@@ -277,13 +303,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// <summary>
     /// Event registered on PlayerAnimations.
     /// Event registered on PlayerMovement.
-    /// /// <summary>
     /// Triggers light melee attack. Normal or instant kill Animation
     /// depending on the condition.
-    /// </summary>
-    /// <param name="condition">If true, it triggers normal attacks, else
-    /// it triggers instant kill Animation.</param>
-    /// </summary>
     public event Action<bool> LightMeleeAttack;
 
     #region Gizmos

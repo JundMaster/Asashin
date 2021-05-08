@@ -6,21 +6,23 @@ using System.Collections;
 /// </summary>
 public class Checkpoint : MonoBehaviour
 {
-    [SerializeField] private SpawnerController checkpointController;
-    [SerializeField] private byte checkpointNumber;
-  
-    private CurrentLevelDefinitions definitions;
     public AbstractSoundBase CheckpointAudio { get; private set; }
+    private CurrentLevelDefinitions definitions;
+    private SpawnerController checkpointController;
 
+    [Header("Must start 0 and increment it with each checkpoint")]
+    [SerializeField] private byte checkpointNumber;
+
+    [Header("Player spawns in this position")]
     [SerializeField] private Transform spawnPlayerHere;
     public Transform SpawnPlayerHere => spawnPlayerHere;
 
     private void Awake()
     {
+        checkpointController = GetComponentInParent<SpawnerController>();
         definitions = FindObjectOfType<CurrentLevelDefinitions>();
         CheckpointAudio = GetComponent<AbstractSoundBase>();
     }
-
 
     public byte CheckpointNumber => checkpointNumber;
 
@@ -37,7 +39,8 @@ public class Checkpoint : MonoBehaviour
     {
         yield return new WaitForFixedUpdate();
 
-        checkpointController.SaveCheckpoint(checkpointNumber, definitions.ThisArea.Name, this);
+        checkpointController.SaveCheckpoint(
+            checkpointNumber, definitions.ThisArea.Name, this);
     }
 
     private void OnDrawGizmos()

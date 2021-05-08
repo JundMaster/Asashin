@@ -28,7 +28,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     private EnemyPatrolPoint[] patrolPoints;
     private byte patrolIndex;
     private bool breakState;
-    private bool hitFromBehind;
+    
     private IEnumerator movementCoroutine;
 
     private Options options;
@@ -73,7 +73,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     {
         base.OnEnter();
         breakState = false;
-        hitFromBehind = false;
         agent.isStopped = false;
         enemy.InCombat = false;
         
@@ -114,7 +113,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
 
         if (die)
             return enemy.DeathState;
-
+        
         if (alert)
             return enemy.DefenseState;
 
@@ -268,7 +267,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     protected override void TakeImpact()
     {
         breakState = false;
-        hitFromBehind = true;
         base.TakeImpact();
     }
 

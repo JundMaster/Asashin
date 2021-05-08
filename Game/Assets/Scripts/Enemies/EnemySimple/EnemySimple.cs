@@ -126,6 +126,12 @@ public sealed class EnemySimple : EnemyBase
         CollisionWithPlayer?.Invoke();
 
     /// <summary>
+    /// Invokes InstantDeath event.
+    /// </summary>
+    public void OnInstanteDeath() =>
+        InstantDeath?.Invoke();
+
+    /// <summary>
     /// On trigger enter it invokes CollisionWithPlayer event.
     /// </summary>
     /// <param name="other">Other collider.</param>
@@ -146,6 +152,12 @@ public sealed class EnemySimple : EnemyBase
     /// Event registered on enemy states in order to alert all enemies.
     /// </summary>
     public event Action Alert;
+
+    /// <summary>
+    /// Triggered when PlayerMeleeAttack performs stealth kill.
+    /// Event registered by enemy abstract state.
+    /// </summary>
+    public event Action InstantDeath;
 
     #region Gizmos with patrol points
     private void OnDrawGizmos()

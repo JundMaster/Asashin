@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Abstract Scriptable object responsible for controlling simple enemy states.
@@ -13,6 +13,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     protected EnemySimple enemy;
 
     protected bool alert;
+    protected bool hitFromBehind;
 
     /// <summary>
     /// Method that defines what happens when this state is initialized.
@@ -32,6 +33,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     {
         base.Start();
         alert = false;
+        hitFromBehind = false;
     }
 
     /// <summary>
@@ -45,7 +47,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
         base.OnEnter();
         alert = false;
 
-        stats.MeleeDamageOnEnemy += CheckForInstantKill;
+        enemy.InstantDeath += SwitchToDeathState;
         enemy.Alert += AlertEnemies;
     }
 
@@ -57,11 +59,13 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     {
         base.OnExit();
 
+        hitFromBehind = false;
+
         if (playerTarget != null)
             enemy.PlayerLastKnownPosition = playerTarget.position;
 
         enemy.Alert -= AlertEnemies;
-        stats.MeleeDamageOnEnemy -= CheckForInstantKill;
+        enemy.InstantDeath -= SwitchToDeathState;
     }
 
     /// <summary>
@@ -101,31 +105,11 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
 
             yield return wffu;
         }
+
+        // Triggers hit from behind and sets it to false OnExit
+        // (after the state reacts to hit)
+        hitFromBehind = true;
         agent.isStopped = false;
-    }
-
-    /// <summary>
-    /// If the enemy has his back turned and the player is sneaking,
-    /// the enemy dies instantly.
-    /// </summary>
-    protected void CheckForInstantKill()
-    {
-        PlayerMovement playerMovement = 
-            enemy.Player.GetComponent<PlayerMovement>();
-
-        if (playerMovement != null)
-        {
-            // Checks if enemy has his back turned to the player
-            // If the player forward is similiar to the enemy's forward
-            // This means the player successfully instantly killed the enemy
-            // Only happens if player is sneaking.
-            if (Vector3.Dot(
-                enemy.transform.forward, playerMovement.transform.forward) > -0.25f
-                && playerMovement.Walking)
-            {
-                SwitchToDeathState();
-            }
-        }
     }
 
     /// <summary>
