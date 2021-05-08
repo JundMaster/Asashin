@@ -19,10 +19,8 @@ public class LevelChanger : MonoBehaviour
     private float smoothTimeRotation;
     private readonly float TURNSPEED = 0.125f;
 
-    private void Awake()
-    {
+    private void Awake() =>
         input = FindObjectOfType<PlayerInputCustom>();
-    }
 
     private void Start()
     {

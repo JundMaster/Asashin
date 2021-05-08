@@ -5,8 +5,10 @@
 /// </summary>
 public class BlockerOnLevelChanger : MonoBehaviour, IFindPlayer
 {
-    [SerializeField] private BoxCollider boxCollider;
-    private BoxCollider triggerBoxCollider;
+    [SerializeField] private LayerMask playerLayer;
+
+    private BoxCollider boxCollider; // blocks player
+    private BoxCollider triggerBoxCollider; // shows warning text
 
     // Components
     private Player player;
@@ -15,11 +17,15 @@ public class BlockerOnLevelChanger : MonoBehaviour, IFindPlayer
     private float timerSincePlayerWasFighting;
     private float delayAfterPlayerStoppedFighting;
     private bool showingText;
+    private bool playerAlreadyInsideBlocker;
 
     private void Awake()
     {
+        boxCollider = GetComponent<BoxCollider>();
         player = FindObjectOfType<Player>();
         anim = GetComponent<Animator>();
+
+        // Box col to show text
         triggerBoxCollider = gameObject.AddComponent<BoxCollider>();
     }
 
@@ -28,8 +34,10 @@ public class BlockerOnLevelChanger : MonoBehaviour, IFindPlayer
         boxCollider.enabled = false;
         boxCollider.isTrigger = false;
         showingText = false;
-        delayAfterPlayerStoppedFighting = 2f;
+        playerAlreadyInsideBlocker = false;
+        delayAfterPlayerStoppedFighting = 5f;
 
+        // Box col to show text
         triggerBoxCollider.enabled = true;
         triggerBoxCollider.isTrigger = true;
         triggerBoxCollider.size = boxCollider.size + Vector3.one;
@@ -40,22 +48,46 @@ public class BlockerOnLevelChanger : MonoBehaviour, IFindPlayer
         anim.SetBool("ShowText", showingText);
 
         // If player is fighting, starts a timer and activates box collider
-        if (player?.PlayerCurrentlyFighting > 0)
+        if (player != null)
         {
-            timerSincePlayerWasFighting = Time.time;
-
-            if (boxCollider.enabled == false)
+            // Only if player is close
+            if (player.PlayerCurrentlyFighting > 0 && 
+                Vector3.Distance(transform.position, player.transform.position) < 30)
             {
-                boxCollider.enabled = true;
+                timerSincePlayerWasFighting = Time.time;
+
+                // Checks if player is already inside the blocker
+                Collider[] boxCollisions =
+                    Physics.OverlapBox(transform.position, boxCollider.size / 2, Quaternion.identity, playerLayer);
+
+                // Only activates the blocker if the player isn't already inside it
+                if (boxCollisions.Length == 0)
+                {
+                    playerAlreadyInsideBlocker = false;
+
+                    if (boxCollider.enabled == false)
+                    {
+                        boxCollider.enabled = true;
+                    }
+                }
+                else
+                {
+                    playerAlreadyInsideBlocker = true;
+                }
+
                 return;
             }
-            return;
         }
         // else if the player isn't fighting, and the delay after fighting
         // is over, it deactivates the box collider, in case it is activated
         if (boxCollider.enabled)
+        {
             if (Time.time - timerSincePlayerWasFighting > delayAfterPlayerStoppedFighting)
+            {
+                playerAlreadyInsideBlocker = false;
                 boxCollider.enabled = false;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
