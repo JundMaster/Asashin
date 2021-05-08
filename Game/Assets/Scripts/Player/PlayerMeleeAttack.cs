@@ -250,7 +250,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             {
                 // Only happens if the player is BEHIND the enemy, prevents
                 // from doing instant kill while the enemy is behind the player
-                if (Vector3.Angle(dir, transform.forward) < 25)
+                if (Vector3.Angle(dir, transform.forward) < 50)
                 {
                     // Instant kill Anim.
                     OnLightMeleeAttack(false);
