@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 /// Class responsible for handling music transitions when the player enters or
 /// leaves combat. Has singleton from audio controller.
 /// </summary>
-public class MusicCombatTransition : MonoBehaviour
+public class MusicControlAndTransition : MonoBehaviour
 {
     [SerializeField] private AudioSource baseBackground;
     [SerializeField] private AudioSource combatBackground;
@@ -61,7 +61,6 @@ public class MusicCombatTransition : MonoBehaviour
         levelDefinitions = FindObjectOfType<CurrentLevelDefinitions>();
         
         yield return wffu;
-        player = FindObjectOfType<Player>();
 
         SwitchBackgroundToThisLevel();
         SwitchToBackgroundMusic();
@@ -69,6 +68,8 @@ public class MusicCombatTransition : MonoBehaviour
 
     private void Update()
     {
+        if (player == null) player = FindObjectOfType<Player>();
+
         if (bossCutscene == null || 
             (bossCutscene != null && bossCutscene.OnBossFight == false))
         {
@@ -97,28 +98,21 @@ public class MusicCombatTransition : MonoBehaviour
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
 
-        while (true)
+        // Resets combat music
+        combatBackground.Stop();
+
+        while (baseBackground.volume > 0)
         {
-            // Resets combat music
-            combatBackground.Stop();
-
-            while (baseBackground.volume > 0)
-            {
-                baseBackground.volume -= Time.fixedUnscaledDeltaTime * (1 - transitionTimeBetweenSongs);
-                yield return wffu;
-            }
-            baseBackground.Pause();
-
-            combatBackground.Play();
-            while (combatBackground.volume < combatDefaultVolume)
-            {
-                combatBackground.volume += Time.fixedUnscaledDeltaTime * (1 - transitionTimeBetweenSongs);
-                yield return wffu;
-            }
-
+            baseBackground.volume -= Time.fixedUnscaledDeltaTime * (1 - transitionTimeBetweenSongs);
             yield return wffu;
+        }
+        baseBackground.Pause();
 
-            break;
+        combatBackground.Play();
+        while (combatBackground.volume < combatDefaultVolume)
+        {
+            combatBackground.volume += Time.fixedUnscaledDeltaTime * (1 - transitionTimeBetweenSongs);
+            yield return wffu;
         }
     }
 
@@ -198,15 +192,5 @@ public class MusicCombatTransition : MonoBehaviour
             baseBackground.clip = levelDefinitions.ThisArea.Music;
             baseBackground.Play();
         }
-    }
-
-    public void FindPlayer()
-    {
-        player = FindObjectOfType<Player>();
-    }
-
-    public void PlayerLost()
-    {
-        // Left blank on purpose
     }
 }

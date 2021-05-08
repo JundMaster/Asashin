@@ -39,7 +39,7 @@ public sealed class EnemySimple : EnemyBase
 
     public VisionCone VisionConeScript { get; set; }
 
-    private MusicCombatTransition combatMusic;
+    private MusicControlAndTransition combatMusic;
 
     private bool inCombat;
     public bool InCombat
@@ -97,7 +97,7 @@ public sealed class EnemySimple : EnemyBase
         yield return new WaitForFixedUpdate();
         // Finds combat music after singleton destroys the one that exists
         // on this scene
-        combatMusic = FindObjectOfType<MusicCombatTransition>();
+        combatMusic = FindObjectOfType<MusicControlAndTransition>();
 
         // Initializes states after options singleton takes effect
         stateMachine?.Initialize();
