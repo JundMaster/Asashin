@@ -33,6 +33,7 @@ public class LevelChanger : MonoBehaviour
         if (other.gameObject.layer == 11)
         {
             boxCollider.enabled = false;
+            FindObjectOfType<Player>().gameObject.layer = 31;
             input.SwitchActionMapToDisable();
             StartCoroutine(ChangeSceneCoroutine());
         }

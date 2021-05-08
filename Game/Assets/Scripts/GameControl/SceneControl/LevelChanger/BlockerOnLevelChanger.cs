@@ -17,7 +17,6 @@ public class BlockerOnLevelChanger : MonoBehaviour, IFindPlayer
     private float timerSincePlayerWasFighting;
     private float delayAfterPlayerStoppedFighting;
     private bool showingText;
-    private bool playerAlreadyInsideBlocker;
 
     private void Awake()
     {
@@ -34,7 +33,6 @@ public class BlockerOnLevelChanger : MonoBehaviour, IFindPlayer
         boxCollider.enabled = false;
         boxCollider.isTrigger = false;
         showingText = false;
-        playerAlreadyInsideBlocker = false;
         delayAfterPlayerStoppedFighting = 5f;
 
         // Box col to show text
@@ -63,16 +61,10 @@ public class BlockerOnLevelChanger : MonoBehaviour, IFindPlayer
                 // Only activates the blocker if the player isn't already inside it
                 if (boxCollisions.Length == 0)
                 {
-                    playerAlreadyInsideBlocker = false;
-
                     if (boxCollider.enabled == false)
                     {
                         boxCollider.enabled = true;
                     }
-                }
-                else
-                {
-                    playerAlreadyInsideBlocker = true;
                 }
 
                 return;
@@ -81,13 +73,8 @@ public class BlockerOnLevelChanger : MonoBehaviour, IFindPlayer
         // else if the player isn't fighting, and the delay after fighting
         // is over, it deactivates the box collider, in case it is activated
         if (boxCollider.enabled)
-        {
             if (Time.time - timerSincePlayerWasFighting > delayAfterPlayerStoppedFighting)
-            {
-                playerAlreadyInsideBlocker = false;
                 boxCollider.enabled = false;
-            }
-        }
     }
 
     private void OnTriggerEnter(Collider other)

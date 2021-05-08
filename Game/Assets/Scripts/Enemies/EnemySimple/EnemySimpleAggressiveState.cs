@@ -220,6 +220,8 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     {
         // If player just started rolling , while the enemy is attacking, it 
         // means the player was able to dodge, so it will trigger slow motion.
+        // Checks if it's greater than 1.5 in case it's still transitioning
+        // between animations
         if (playerRoll != null)
         {
             if (playerRoll.PerformingTime > 0 && 
@@ -229,7 +231,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
                 playerRoll.OnDodge();
             }
 
-            // Ignores everything else
+            // If player is rolling ignores everything else
             if (playerRoll.Performing)
                 return;
         }
