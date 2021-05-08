@@ -62,7 +62,14 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         agent.isStopped = false;
 
-        agent.SetDestination(enemy.PlayerLastKnownPosition);            
+        // Sets random position + agent's destination
+        Vector3 finalDestination = enemy.PlayerLastKnownPosition +
+            new Vector3(
+                Random.Range(-5, 5),
+                0,
+                Random.Range(-5, 5));
+
+        agent.SetDestination(finalDestination);            
 
         enemy.CollisionWithPlayer += TakeImpact;
         options.UpdatedValues += UpdateValues;
