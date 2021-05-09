@@ -16,8 +16,9 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     [SerializeField] private Material coneMaterial;
     private VisionCone visionCone;
 
-    [Header("Exclamation mark prefab")]
+    [Header("Exclamation and interrogation mark prefabs")]
     [SerializeField] private GameObject exclamationMarkPrefab;
+    [SerializeField] private GameObject interrogationMarkPrefab;
     [SerializeField] private Vector3 offset;
 
     [Header("Rotation speed after reaching final point (less means faster)")]
@@ -116,10 +117,28 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
             return enemy.DeathState;
         
         if (alert)
+        {
+            // Instantiates an exclamation mark
+            GameObject exclMark = Instantiate(
+                exclamationMarkPrefab,
+                enemy.transform.position + offset,
+                Quaternion.identity);
+            exclMark.transform.parent = enemy.transform;
+
             return enemy.DefenseState;
+        }
 
         if (hitFromBehind || followSound)
+        {
+            // Instantiates an exclamation mark
+            GameObject interrMark = Instantiate(
+                interrogationMarkPrefab,
+                enemy.transform.position + offset,
+                Quaternion.identity);
+            interrMark.transform.parent = enemy.transform;
+         
             return enemy.LostPlayerState;
+        }
 
         // Calculates vision cone if the player isn't too far
         if (playerTarget != null)
@@ -170,12 +189,20 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
             // in case the enemy doesn't have defense
             if (PlayerInRange())
             {
+                // Instantiates an exclamation mark
+                GameObject exclMark = Instantiate(
+                    exclamationMarkPrefab,
+                    enemy.transform.position + offset,
+                    Quaternion.identity);
+                exclMark.transform.parent = enemy.transform;
+
                 return 
                     enemy.DefenseState ?? 
                     enemy.AggressiveState ?? 
                     enemy.PatrolState;
             }
         }
+
         return enemy.PatrolState;
     }
 
@@ -198,13 +225,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
 
         if (movementCoroutine != null)
             enemy.StopCoroutine(movementCoroutine);
-
-        // Instantiates an exclamation mark
-        GameObject exclMark = Instantiate(
-            exclamationMarkPrefab, 
-            enemy.transform.position + offset, 
-            Quaternion.identity);
-        exclMark.transform.parent = enemy.transform;
 
         agent.speed = runningSpeed;
 

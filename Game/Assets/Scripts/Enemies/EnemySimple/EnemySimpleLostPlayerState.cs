@@ -69,7 +69,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         // Sets random position + agent's destination
         // If the agent heard a sound, sets that destination depending on the 
-        // sound's intensity
+        // sound's distance
         Vector3 finalDestination = Vector3.zero;
 
         if (followSound)
@@ -313,9 +313,9 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         else
         {
             randomPosition = new Vector3(
-                Random.Range(-5, 5),
+                Random.Range(-6, 6),
                 0,
-                Random.Range(-5, 5));
+                Random.Range(-6, 6));
         }
             
         return randomPosition;

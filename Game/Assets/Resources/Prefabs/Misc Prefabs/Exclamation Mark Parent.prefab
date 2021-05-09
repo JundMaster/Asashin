@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2754991680580982657}
   - component: {fileID: 3242939086897376947}
   - component: {fileID: 1544127950776092291}
-  - component: {fileID: 988652517911387080}
   m_Layer: 0
   m_Name: Top Part
   m_TagString: Untagged
@@ -82,19 +81,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &988652517911387080
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3799682430598094148}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6000884739750298489
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,6 +92,7 @@ GameObject:
   - component: {fileID: 6323007927757568814}
   - component: {fileID: 5566347006042938121}
   - component: {fileID: 2168744584441256915}
+  - component: {fileID: 4874199293679966461}
   m_Layer: 0
   m_Name: Exclamation Mark Parent
   m_TagString: Untagged
@@ -121,7 +108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6000884739750298489}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.573, y: 2.571, z: 10.513}
+  m_LocalPosition: {x: 0, y: 2.571, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2754991680580982657}
@@ -161,6 +148,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyAfterThisTime: 0
+--- !u!114 &4874199293679966461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6000884739750298489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb0e64870f25c94abbc93c19c08e2a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7147402464922802327
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +171,6 @@ GameObject:
   - component: {fileID: 1314677895857511424}
   - component: {fileID: 6239336461380555793}
   - component: {fileID: 2415700020827985778}
-  - component: {fileID: 6571946055979606773}
   m_Layer: 0
   m_Name: Dot
   m_TagString: Untagged
@@ -243,16 +241,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6571946055979606773
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7147402464922802327}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
