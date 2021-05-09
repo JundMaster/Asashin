@@ -7,10 +7,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Enemy Common Aggressive State")]
 public class EnemySimpleAggressiveState : EnemySimpleAbstractState
 {
-    [Header("Player check ranges")]
-    [Range(1,30)][SerializeField] private float checkForPlayerRange;
+    private readonly float CHECKFORPLAYERRANGE = 20;
     private readonly float CLOSETOPLAYERRANGE = 2;
     private readonly float DISTANCEFROMPLAYER = 1;
+
+    [Header("Collision layers")]
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private LayerMask collisionLayers;
 
@@ -300,10 +301,10 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     /// <returns>Returns true if player is still in enemy's range,
     /// else returns false.</returns>
     private bool IsPlayerInMyRange(float distance)
-    {
-        if (distance <= checkForPlayerRange)
+    {        
+        if (distance <= CHECKFORPLAYERRANGE)
             return true;
- 
+
         return false;
     }
     

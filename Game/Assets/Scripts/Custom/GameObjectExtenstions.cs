@@ -22,7 +22,7 @@ public static class GameObjectExtenstions
                     sizeOfAlert = 5;
                     break;
                 case IntensityOfSound.Normal:
-                    sizeOfAlert = 10;
+                    sizeOfAlert = 13;
                     break;
                 case IntensityOfSound.Extreme:
                     sizeOfAlert = 20;

@@ -27,9 +27,9 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     // Movement
     private EnemyPatrolPoint[] patrolPoints;
     private byte patrolIndex;
-    private bool breakState;
-    
     private IEnumerator movementCoroutine;
+
+    private bool breakState;
 
     private Options options;
 
