@@ -110,9 +110,12 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
                 { 
                     // If the enemy is not inside attacking anim, it rotates
                     if (attackingAnimation == false)
+                    {
                         enemy.transform.RotateToSmoothly(
-                            playerTarget.position, ref smoothTimeRotation, 
+                            playerTarget.position, 
+                            ref smoothTimeRotation,
                             turnSpeed);
+                    }
 
                     // If the enemy has not performing an attack yet
                     // It starts attacking coroutine
@@ -307,7 +310,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
 
         return false;
     }
-    
+
     /// <summary>
     /// Moves towards the player.
     /// </summary>

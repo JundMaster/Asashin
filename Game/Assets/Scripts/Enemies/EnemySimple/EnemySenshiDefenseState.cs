@@ -109,6 +109,8 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
 
     /// <summary>
     /// Moves the enemy towards the desired defense position.
+    /// If the enemy is already in the desired position, it will starting
+    /// to walk in circles around the player.
     /// </summary>
     /// <returns>Returns true if it needs to move. 
     /// Returns false if it's in the desired position.</returns>
@@ -121,6 +123,9 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
         if (distance > randomDistance + 2 || 
             distance < randomDistance - 2)
         {
+            // If the enemy is moving to end position, it keeps updating time
+            CancelWalkSideWaysVariables();
+
             if (distance < randomDistance - 2)
             {
                 agent.speed = walkingSpeed;
@@ -158,7 +163,7 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
                 if (whileThrowingKunai == false)
                 {
                     agent.SetDestination(
-                    myTarget.position + desiredDirection * 1.1f);
+                        myTarget.position + desiredDirection * 1.1f);
                     return true;
                 }
                 // Stops enemy, only happens if the enemy is throwing a kunai
@@ -175,12 +180,13 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
                 agent.SetDestination(myTarget.position);
                 agent.speed = 0;
                 runningBack = false;
+                CancelWalkSideWaysVariables();
                 agent.isStopped = true;
                 return false;
             }
         }
         // Else if the enemy is in the final destination
-        agent.isStopped = true;
+        WalkSideways();
         runningBack = false;
         return false;
     }
@@ -198,6 +204,7 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
             yield return wfd;
 
             whileThrowingKunai = true;
+            agent.isStopped = true;
 
             enemy.transform.RotateTo(playerTarget.position);
             anim.SetTrigger("ThrowKunai");
@@ -226,6 +233,8 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
 
             break;
         }
+        
+        agent.isStopped = false;
         kunaiCoroutine = null;
     }
 }

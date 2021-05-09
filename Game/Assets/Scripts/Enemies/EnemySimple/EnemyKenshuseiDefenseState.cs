@@ -42,8 +42,6 @@ public class EnemyKenshuseiDefenseState : EnemySimpleAbstractDefenseState
                 return enemy.LostPlayerState ?? enemy.PatrolState;
             }
 
-            WalkSideways();
-
             // Keeps rotating the enemy towards the player
             enemy.transform.RotateTo(playerTarget.position);
         }
@@ -58,6 +56,8 @@ public class EnemyKenshuseiDefenseState : EnemySimpleAbstractDefenseState
 
     /// <summary>
     /// Moves the enemy towards the desired defense position.
+    /// If the enemy is already in the desired position, it will starting
+    /// to walk in circles around the player.
     /// </summary>
     /// <returns>Returns true if it needs to move. 
     /// Returns false if it's in the desired position.</returns>
@@ -71,10 +71,7 @@ public class EnemyKenshuseiDefenseState : EnemySimpleAbstractDefenseState
             distance < randomDistance - 2)
         {
             // If the enemy is moving to end position, it keeps updating time
-            timeAfterReachingPos = Time.time;
-            walkingSideways = false;
-            walkingLeft = false;
-            walkingRight = false;
+            CancelWalkSideWaysVariables();
 
             if (distance < randomDistance - 2)
             {
@@ -120,77 +117,14 @@ public class EnemyKenshuseiDefenseState : EnemySimpleAbstractDefenseState
                 agent.SetDestination(myTarget.position);
                 agent.speed = 0;
                 runningBack = false;
-                walkingSideways = false;
-                walkingLeft = false;
-                walkingRight = false;
+                CancelWalkSideWaysVariables();
                 agent.isStopped = true;
                 return false;
             }
         }
         // Else if the enemy is in the final destination
+        WalkSideways();
         runningBack = false;
         return false;
-    }
-
-    private void WalkSideways()
-    {
-        // While the time passed is lower than the random walking time
-        if (Time.time - timeAfterReachingPos >
-            timeToWalkSideways * 2)
-        {
-            directionToWalk = Direction.Default;
-            walkingLeft = false;
-            walkingRight = false;
-
-            // Resets timer
-            timeAfterReachingPos = Time.time;
-
-            // Gets new time for the next time walking sideways
-            timeToWalkSideways = Random.Range(
-                timeToWalkSidewaysFromPlayer.x,
-                timeToWalkSidewaysFromPlayer.y);
-
-            return;
-        }
-
-        if (Time.time - timeAfterReachingPos > timeToWalkSideways)
-        {
-            agent.speed = walkingSpeed;
-            walkingSideways = true;
- 
-            // Sets a new direction
-            if (directionToWalk == Direction.Default)
-            {
-                int randomNum = Random.Range(0, 2);
-                switch (randomNum)
-                {
-                    case 0:
-                        directionToWalk = Direction.Left;
-                        break;
-                    case 1:
-                        directionToWalk = Direction.Right;
-                        break;
-                }
-            }
-
-            // Starts walking Right
-            if (directionToWalk == Direction.Right)
-            {
-                agent.SetDestination(
-                    enemy.transform.position + enemy.transform.right * 2);
-
-                walkingLeft = false;
-                walkingRight = true;
-            }
-            // Starts walking left
-            else
-            {
-                agent.SetDestination(
-                    enemy.transform.position - enemy.transform.right * 2);
-
-                walkingLeft = true;
-                walkingRight = false;
-            }
-        }
     }
 }

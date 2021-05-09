@@ -14,13 +14,12 @@ public abstract class EnemySimpleAbstractDefenseState :
     protected bool runningBack;
 
     [Header("Min and Max time to walk sideways after reaching destination")]
-    [SerializeField] protected CustomVector2 timeToWalkSidewaysFromPlayer;
-    protected float timeAfterReachingPos;
-    protected float timeToWalkSideways;
-    protected Direction directionToWalk;
-    protected bool walkingSideways;
-    protected bool walkingLeft;
-    protected bool walkingRight;
+    [SerializeField] private CustomVector2 timeToWalkSidewaysFromPlayer;
+    private float timeToWalkSideways;
+    private Direction directionToWalk;
+    private float timeAfterReachingPos;
+    private bool walkingLeft;
+    private bool walkingRight;
 
     protected float smoothRotation;
     protected readonly float ROTATIONSPEED = 0.01f;
@@ -103,8 +102,7 @@ public abstract class EnemySimpleAbstractDefenseState :
     {
         base.OnExit();
         runningBack = false;
-        walkingLeft = false;
-        walkingRight = false;
+        CancelWalkSideWaysVariables();
         anim.SetBool("RunningBack", runningBack);
         anim.SetBool("WalkingLeft", walkingLeft);
         anim.SetBool("WalkingRight", walkingRight);
@@ -113,6 +111,8 @@ public abstract class EnemySimpleAbstractDefenseState :
 
     /// <summary>
     /// Moves the enemy towards the desired defense position.
+    /// If the enemy is already in the desired position, it will starting
+    /// to walk in circles around the player.
     /// </summary>
     /// <returns>Returns true if it needs to move. 
     /// Returns false if it's in the desired position.</returns>
@@ -128,5 +128,75 @@ public abstract class EnemySimpleAbstractDefenseState :
             return true;
 
         return false;
+    }
+
+    /// <summary>
+    /// Makes the enemy walk sideways.
+    /// </summary>
+    protected void WalkSideways()
+    {
+        // While the time passed is lower than the random walking time
+        if (Time.time - timeAfterReachingPos >
+            timeToWalkSideways * 2)
+        {
+            directionToWalk = Direction.Default;
+            CancelWalkSideWaysVariables();
+
+            // Gets new time for the next time walking sideways
+            timeToWalkSideways = Random.Range(
+                timeToWalkSidewaysFromPlayer.x,
+                timeToWalkSidewaysFromPlayer.y);
+
+            return;
+        }
+
+        if (Time.time - timeAfterReachingPos > timeToWalkSideways)
+        {
+            agent.speed = walkingSpeed;
+
+            // Sets a new direction
+            if (directionToWalk == Direction.Default)
+            {
+                int randomNum = Random.Range(0, 2);
+                switch (randomNum)
+                {
+                    case 0:
+                        directionToWalk = Direction.Left;
+                        break;
+                    case 1:
+                        directionToWalk = Direction.Right;
+                        break;
+                }
+            }
+
+            // Starts walking Right
+            if (directionToWalk == Direction.Right)
+            {
+                agent.SetDestination(
+                    enemy.transform.position + enemy.transform.right * 2);
+
+                walkingLeft = false;
+                walkingRight = true;
+            }
+            // Starts walking left
+            else
+            {
+                agent.SetDestination(
+                    enemy.transform.position - enemy.transform.right * 2);
+
+                walkingLeft = true;
+                walkingRight = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Cancels walking sideways variables.
+    /// </summary>
+    protected void CancelWalkSideWaysVariables()
+    {
+        timeAfterReachingPos = Time.time;
+        walkingLeft = false;
+        walkingRight = false;
     }
 }
