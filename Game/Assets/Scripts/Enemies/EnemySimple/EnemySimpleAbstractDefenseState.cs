@@ -7,11 +7,20 @@ public abstract class EnemySimpleAbstractDefenseState :
     EnemySimpleAbstractStateWithVision
 {
     [Header("Distance from player. X => min. distance, Y => max. distance")]
-    [SerializeField] protected Vector2 randomDistanceFromPlayer;
+    [SerializeField] protected CustomVector2 randomDistanceFromPlayer;
 
     // Movement variables
     protected float randomDistance;
     protected bool runningBack;
+
+    [Header("Min and Max time to walk sideways after reaching destination")]
+    [SerializeField] protected CustomVector2 timeToWalkSidewaysFromPlayer;
+    protected float timeAfterReachingPos;
+    protected float timeToWalkSideways;
+    protected Direction directionToWalk;
+    protected bool walkingSideways;
+    protected bool walkingLeft;
+    protected bool walkingRight;
 
     protected float smoothRotation;
     protected readonly float ROTATIONSPEED = 0.01f;
@@ -25,13 +34,33 @@ public abstract class EnemySimpleAbstractDefenseState :
     {
         base.Start();
 
+        // Sets values in case they are not valid
         if (randomDistanceFromPlayer.y < randomDistanceFromPlayer.x)
             randomDistanceFromPlayer.y = randomDistanceFromPlayer.x;
         if (randomDistanceFromPlayer.x > randomDistanceFromPlayer.y)
             randomDistanceFromPlayer.x = randomDistanceFromPlayer.y;
 
+        if (timeToWalkSidewaysFromPlayer.y < timeToWalkSidewaysFromPlayer.x)
+            timeToWalkSidewaysFromPlayer.y = timeToWalkSidewaysFromPlayer.x;
+        if (timeToWalkSidewaysFromPlayer.x > timeToWalkSidewaysFromPlayer.y)
+            timeToWalkSidewaysFromPlayer.x = timeToWalkSidewaysFromPlayer.y;
+
         randomDistance = Random.Range(
             randomDistanceFromPlayer.x, randomDistanceFromPlayer.y);
+
+        timeToWalkSideways = Random.Range(
+            timeToWalkSidewaysFromPlayer.x, timeToWalkSidewaysFromPlayer.y);
+
+        // Sets a random direction to walk intialially
+        switch (Random.Range(0, 2))
+        {
+            case 0:
+                directionToWalk = Direction.Left;
+                break;
+            case 1:
+                directionToWalk = Direction.Right;
+                break;
+        }
 
         runningBack = false;
     }
@@ -60,6 +89,9 @@ public abstract class EnemySimpleAbstractDefenseState :
     {
         base.FixedUpdate();
         anim.SetBool("RunningBack", runningBack);
+        anim.SetBool("WalkingLeft", walkingLeft);
+        anim.SetBool("WalkingRight", walkingRight);
+
         return null;
     }
 
@@ -71,7 +103,11 @@ public abstract class EnemySimpleAbstractDefenseState :
     {
         base.OnExit();
         runningBack = false;
+        walkingLeft = false;
+        walkingRight = false;
         anim.SetBool("RunningBack", runningBack);
+        anim.SetBool("WalkingLeft", walkingLeft);
+        anim.SetBool("WalkingRight", walkingRight);
         agent.speed = runningSpeed;
     }
 
