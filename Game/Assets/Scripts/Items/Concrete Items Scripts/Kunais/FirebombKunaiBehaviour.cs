@@ -12,10 +12,8 @@ public class FirebombKunaiBehaviour : FriendlyKunaiBehaviour
 
     private byte numberOfExplosions;
 
-    private void Start()
-    {
+    private void Start() =>
         numberOfExplosions = 0;
-    }
 
     /// <summary>
     /// Happens after kunai hits something.

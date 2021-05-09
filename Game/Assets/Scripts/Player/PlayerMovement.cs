@@ -58,10 +58,12 @@ public class PlayerMovement : MonoBehaviour, IAction
     private Vector3 moveDirection;
     public float MovementSpeed { get; set; }
     private bool stopMovementAfterWallHug;
+    [SerializeField] private IntensityOfSound sprintIntensityVolume;
 
     // Layers
     private const byte PLAYERLAYER = 11;
     private const byte PLAYERHIDDENLAYER = 15;
+    [SerializeField] private LayerMask enemyLayer;
 
     // Rotation Variables
     private float turnSmooth;
@@ -455,15 +457,27 @@ public class PlayerMovement : MonoBehaviour, IAction
     /// </summary>
     public event Action<bool> Hide;
 
+    /// <summary>
+    /// Happens when left foot touches the ground.
+    /// </summary>
     public void InstantiateLeftFootImpact()
     {
+        if (Sprinting)
+            gameObject.EmitSound(player, sprintIntensityVolume, enemyLayer);
+
         // Forest
         if ((byte)currentScene < 3)
             Instantiate(footImpactParticles, leftFoot.position, Quaternion.identity);
     }
 
+    /// <summary>
+    /// Happens when right foot touches the ground.
+    /// </summary>
     public void InstantiateRightFootImpact()
     {
+        if (Sprinting)
+            gameObject.EmitSound(player, sprintIntensityVolume, enemyLayer);
+
         // Forest
         if ((byte)currentScene < 3)
             Instantiate(footImpactParticles, rightFoot.position, Quaternion.identity);

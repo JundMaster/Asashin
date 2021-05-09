@@ -15,8 +15,7 @@ using UnityEngine.AI;
 
 public abstract class EnemyBase : MonoBehaviour, IFindPlayer
 {
-    // Fields and their getters
-    [SerializeField] protected LayerMask myLayer;
+    [SerializeField] private LayerMask myLayer;
     [SerializeField] private LayerMask wallsWithEnemy;
 
     [Header("Enemy target")]

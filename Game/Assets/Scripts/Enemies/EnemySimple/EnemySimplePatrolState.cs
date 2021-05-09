@@ -75,7 +75,8 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         breakState = false;
         agent.isStopped = false;
         enemy.InCombat = false;
-        
+        followSound = false;
+
         // If vision cone option is on
         if (enemy.Options.EnemyVisionCones)
             enemy.VisionConeScript = visionCone;
@@ -117,9 +118,9 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         if (alert)
             return enemy.DefenseState;
 
-        if (hitFromBehind)
+        if (hitFromBehind || followSound)
             return enemy.LostPlayerState;
-            
+
         // Calculates vision cone if the player isn't too far
         if (playerTarget != null)
         {

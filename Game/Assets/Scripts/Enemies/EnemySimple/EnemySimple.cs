@@ -7,7 +7,7 @@ using UnityEngine;
 /// Class responsible for handling a simple enemy script.
 /// </summary>
 [RequireComponent(typeof(SpawnItemBehaviour))]
-public sealed class EnemySimple : EnemyBase
+public sealed class EnemySimple : EnemyBase, IHearSound
 {
     [Header("Simple enemy states")]
     [SerializeField] private EnemyAbstractState patrolStateOriginal;
@@ -35,13 +35,18 @@ public sealed class EnemySimple : EnemyBase
     [SerializeField] private OptionsScriptableObj options;
     public OptionsScriptableObj Options => options;
 
-    public Vector3 PlayerLastKnownPosition { get; set; }
+    public Vector3 PositionOnLostPlayerState { get; set; }
 
     public VisionCone VisionConeScript { get; set; }
 
     private MusicControlAndTransition combatMusic;
 
     private bool inCombat;
+
+    /// <summary>
+    /// Needs to switch music here because it's better than the script
+    /// finding all enemies.
+    /// </summary>
     public bool InCombat
     {
         get => inCombat;
@@ -54,6 +59,9 @@ public sealed class EnemySimple : EnemyBase
         }
     }
 
+    /// <summary>
+    /// Instantiates states.
+    /// </summary>
     private new void Awake()
     {
         base.Awake();
@@ -92,8 +100,8 @@ public sealed class EnemySimple : EnemyBase
     /// </summary>
     private IEnumerator Start()
     {
-        PlayerLastKnownPosition = default;
-
+        PositionOnLostPlayerState = default;
+             
         yield return new WaitForFixedUpdate();
         // Finds combat music after singleton destroys the one that exists
         // on this scene
@@ -132,15 +140,12 @@ public sealed class EnemySimple : EnemyBase
         InstantDeath?.Invoke();
 
     /// <summary>
-    /// On trigger enter it invokes CollisionWithPlayer event.
+    /// Invokes ReactToSound event. 
+    /// Called by gameobjects with IDoSound interfaces.
     /// </summary>
-    /// <param name="other">Other collider.</param>
-    private void OnTriggerEnter(Collider other)
-    {
-        if (Player != null)
-            if (other.gameObject.layer == Player.gameObject.layer)
-                OnCollisionWithPlayer();
-    }
+    /// <param name="positionOfSound">Position of the sound.</param>
+    public void OnReactToSound(Vector3 positionOfSound) =>
+        ReactToSound?.Invoke(positionOfSound);
 
     /// <summary>
     /// Happens when the enemy collides with player.
@@ -158,6 +163,22 @@ public sealed class EnemySimple : EnemyBase
     /// Event registered by enemy abstract state.
     /// </summary>
     public event Action InstantDeath;
+
+    /// <summary>
+    /// Event triggered by enemy states that react to sound.
+    /// </summary>
+    public event Action<Vector3> ReactToSound;
+
+    /// <summary>
+    /// On trigger enter it invokes CollisionWithPlayer event.
+    /// </summary>
+    /// <param name="other">Other collider.</param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (Player != null)
+            if (other.gameObject.layer == Player.gameObject.layer)
+                OnCollisionWithPlayer();
+    }
 
     #region Gizmos with patrol points
     private void OnDrawGizmos()

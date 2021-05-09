@@ -46,6 +46,7 @@ public sealed class EnemySimpleTemporaryBlindnessState :
         {
             return enemy.TemporaryBlindnessState;
         }
+        // After blind is over
 
         return enemy.LostPlayerState ?? enemy.PatrolState;
     }

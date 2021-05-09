@@ -15,6 +15,10 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     protected bool alert;
     protected bool hitFromBehind;
 
+    // Sound variables
+    protected bool followSound;
+    protected Vector3 positionOfSound;
+
     /// <summary>
     /// Method that defines what happens when this state is initialized.
     /// </summary>
@@ -34,6 +38,8 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
         base.Start();
         alert = false;
         hitFromBehind = false;
+        followSound = false;
+        positionOfSound = enemy.transform.position;
     }
 
     /// <summary>
@@ -49,6 +55,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
 
         enemy.InstantDeath += SwitchToDeathState;
         enemy.Alert += AlertEnemies;
+        enemy.ReactToSound += SetPositionOfSound;
     }
 
     /// <summary>
@@ -59,11 +66,21 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     {
         base.OnExit();
 
+        // Every time the enemy leaves a state, it will have a position
+        // in case it's lost.
+        if (playerTarget != null)
+        {
+            // Sets target to sound if the enemy heard something and
+            // didn't get hit
+            if (followSound && hitFromBehind == false)
+                enemy.PositionOnLostPlayerState = positionOfSound;
+            else
+                enemy.PositionOnLostPlayerState = playerTarget.position;
+        }  
+
         hitFromBehind = false;
 
-        if (playerTarget != null)
-            enemy.PlayerLastKnownPosition = playerTarget.position;
-
+        enemy.ReactToSound -= SetPositionOfSound;
         enemy.Alert -= AlertEnemies;
         enemy.InstantDeath -= SwitchToDeathState;
     }
@@ -110,6 +127,16 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
         // (after the state reacts to hit)
         hitFromBehind = true;
         agent.isStopped = false;
+    }
+
+    /// <summary>
+    /// Sets position of sound the enemy heard.
+    /// </summary>
+    /// <param name="position">Position to set sound to.</param>
+    private void SetPositionOfSound(Vector3 position)
+    {
+        followSound = true;
+        positionOfSound = position;
     }
 
     /// <summary>

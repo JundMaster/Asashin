@@ -103,7 +103,8 @@ public class MusicControlAndTransition : MonoBehaviour
 
         while (baseBackground.volume > 0)
         {
-            baseBackground.volume -= Time.fixedUnscaledDeltaTime * (1 - transitionTimeBetweenSongs);
+            baseBackground.volume -= Time.fixedUnscaledDeltaTime * 
+                (1 - transitionTimeBetweenSongs);
             yield return wffu;
         }
         baseBackground.Pause();
@@ -111,7 +112,8 @@ public class MusicControlAndTransition : MonoBehaviour
         combatBackground.Play();
         while (combatBackground.volume < combatDefaultVolume)
         {
-            combatBackground.volume += Time.fixedUnscaledDeltaTime * (1 - transitionTimeBetweenSongs);
+            combatBackground.volume += Time.fixedUnscaledDeltaTime * 
+                (1 - transitionTimeBetweenSongs);
             yield return wffu;
         }
     }

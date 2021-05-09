@@ -5,6 +5,7 @@
 /// </summary>
 public class FriendlyKunaiBehaviour : KunaiBehaviour
 {
+    [Header("NOT FOR EXPLOSIVE KUNAIS")]
     [SerializeField] private GameObject kunaiSoundGameobject;
 
     public override Transform KunaiCurrentTarget { get; set; }

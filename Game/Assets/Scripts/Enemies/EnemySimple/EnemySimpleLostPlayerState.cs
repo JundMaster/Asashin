@@ -63,13 +63,22 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         agent.isStopped = false;
 
         // Sets random position + agent's destination
-        Vector3 finalDestination = enemy.PlayerLastKnownPosition +
-            new Vector3(
-                Random.Range(-5, 5),
-                0,
-                Random.Range(-5, 5));
+        // If the agent heard a sound, sets that destination depending on the 
+        // sound's intensity
+        Vector3 finalDestination = Vector3.zero;
 
-        agent.SetDestination(finalDestination);            
+        if (followSound)
+            finalDestination = enemy.PositionOnLostPlayerState +
+                GetRandomPositionWithSound();
+        else
+            finalDestination = enemy.PositionOnLostPlayerState + new Vector3(
+                    Random.Range(-5, 5),
+                    0,
+                    Random.Range(-5, 5));
+
+        agent.SetDestination(finalDestination);
+
+        followSound = false;
 
         enemy.CollisionWithPlayer += TakeImpact;
         options.UpdatedValues += UpdateValues;
@@ -90,6 +99,25 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         if (alert)
             return enemy.DefenseState;
+
+        // Listened to a sound
+        if (followSound)
+        {
+            // Stops coroutine in case it's already searching for the player
+            if (lookForPlayerCoroutine != null)
+            {
+                enemy.StopCoroutine(lookForPlayerCoroutine);
+                lookForPlayerCoroutine = null;
+            }
+
+            // Moves the agent to a position close to the sound
+            Vector3 finalDestination = 
+                positionOfSound + GetRandomPositionWithSound();
+
+            agent.SetDestination(finalDestination);
+
+            followSound = false;
+        }
 
         // If enemy is in range, it stops looking for player coroutine
         if (PlayerInRange())
@@ -211,6 +239,36 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
             yield return wffu;
         }
         breakState = true;
+    }
+
+    /// <summary>
+    /// Sets new destination if the enemy listened to a sound.
+    /// </summary>
+    private Vector3 GetRandomPositionWithSound()
+    {
+        float distance = Vector3.Distance(positionOfSound, myTarget.position);
+
+        Vector3 randomPosition;
+        if(distance < 5)
+        {
+            randomPosition = Vector3.zero;
+        }
+        else if (distance < 10)
+        {
+            randomPosition = new Vector3(
+                Random.Range(-3, 3),
+                0,
+                Random.Range(-3, 3));
+        } 
+        else
+        {
+            randomPosition = new Vector3(
+                Random.Range(-5, 5),
+                0,
+                Random.Range(-5, 5));
+        }
+            
+        return randomPosition;
     }
 
     /// <summary>
