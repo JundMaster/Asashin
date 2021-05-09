@@ -82,6 +82,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
             visionCone.SetActive(false);
 
         animationEvents.Hit += WeaponHit;
+        animationEvents.AgentCanMove += AgentCanMove;
     }
 
     /// <summary>
@@ -166,6 +167,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         agent.isStopped = false;
         agent.speed = runningSpeed;
 
+        animationEvents.AgentCanMove -= AgentCanMove;
         animationEvents.Hit -= WeaponHit;
     }
 
@@ -182,7 +184,6 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         // While in range with the player
         while (attacking)
         {
-            agent.speed = 0;
             yield return wfd;
 
             // Only checks this once in a while, so it won't do it every frame
@@ -203,6 +204,8 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
             // Starts atacking animation
             attackingAnimation = true;
             anim.SetTrigger("MeleeAttack");
+            agent.speed = 0;
+            agent.isStopped = true;
 
             // WeaponHit() happens here with animation events from
             // EnemyAnimationEvents
@@ -271,9 +274,6 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
                             0f, TypeOfDamage.PlayerBlockDamage);
 
                         anim.SetTrigger("BlockReflected");
-
-                        // Pushes enemy back
-                        TakeImpact();
                     }
                     // If the player was NOT able to block
                     else
@@ -322,27 +322,15 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         // If the enemy is not close to the player
         if (distance > CLOSETOPLAYERRANGE)
         {
-            // Only happens if the enemy is not doing something else
-            // for example, it doesn't happen while atacking
-            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
+            Vector3 dir =
+                myTarget.position.InvertedDirection(playerTarget.position);
+
+            if (attackingAnimation == false)
             {
-                // If enemy is reaching player's radius
-                if (distance < CLOSETOPLAYERRANGE + 0.5f)
-                    agent.speed = Mathf.Lerp(
-                        agent.speed, walkingSpeed, Time.fixedDeltaTime * 50);
-                else
-                    agent.speed = Mathf.Lerp(
-                        agent.speed, runningSpeed, Time.fixedDeltaTime * 50);
-
-                Vector3 dir =
-                    myTarget.position.InvertedDirection(playerTarget.position);
-
-                if (attackingAnimation == false)
-                {
-                    agent.SetDestination(
-                        playerTarget.position + dir * DISTANCEFROMPLAYER);
-                }
+                agent.SetDestination(
+                    playerTarget.position + dir * DISTANCEFROMPLAYER);
             }
+
             return false;
         }
         // Else if the enemy is close to the player
@@ -367,5 +355,14 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Sets agent.isStopped to true and its speed to walkingspeed.
+    /// </summary>
+    private void AgentCanMove()
+    {
+        agent.isStopped = false;
+        agent.speed = runningSpeed;
     }
 }

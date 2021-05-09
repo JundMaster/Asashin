@@ -7,12 +7,22 @@ using System;
 public class EnemyAnimationEvents : MonoBehaviour
 {
     /// <summary>
-    /// Invoeks Hit event.
+    /// Invokes Hit event.
     /// </summary>
     protected virtual void OnHit() => Hit?.Invoke();
 
     /// <summary>
-    /// Event registered on Enemy class.
+    /// Invokes AgentCanMove event.
+    /// </summary>
+    protected virtual void OnAgentCanMove() => AgentCanMove?.Invoke();
+
+    /// <summary>
+    /// Event registered on Enemy agressive state.
     /// </summary>
     public event Action Hit;
+
+    /// <summary>
+    /// Event registered on Enemy agressive state.
+    /// </summary>
+    public event Action AgentCanMove;
 }
