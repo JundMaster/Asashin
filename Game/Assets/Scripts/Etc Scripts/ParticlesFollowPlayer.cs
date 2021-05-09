@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Class responsible for handling rain position.
+/// Class responsible for handling particles positions (ex: rain, dust particles).
 /// </summary>
 public class ParticlesFollowPlayer : MonoBehaviour, IFindPlayer
 {
     private Player player;
 
-    public void FindPlayer()
-    {
+    private void Awake() =>
         player = FindObjectOfType<Player>();
-    }
+
+    public void FindPlayer() =>
+        player = FindObjectOfType<Player>();
 
     public void PlayerLost()
     {

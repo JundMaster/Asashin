@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class PressurePlate : MonoBehaviour
+public class PressurePlate : MonoBehaviour, IFindPlayer
 {
     // Components
     private Animator anim;
@@ -12,16 +12,17 @@ public class PressurePlate : MonoBehaviour
     [SerializeField] private Transform[] kunaiSpawns;
     [Range(2f, 10f)][SerializeField] private float plateTriggerDelay;
 
-    [Header("Alert variables")]
+    [Header("Sound emission variables")]
     [SerializeField] protected LayerMask enemyLayer;
-    [SerializeField] private LayerMask wallsWithEnemy;
-    [SerializeField] private float sizeOfAlert;
+    [SerializeField] private IntensityOfSound intensityOfSound;
+    private Player player;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
         col = GetComponent<BoxCollider>();
         pressurePlateSound = GetComponent<AbstractSoundBase>();
+        player = FindObjectOfType<Player>();
     }		
 
     /// <summary>
@@ -35,7 +36,7 @@ public class PressurePlate : MonoBehaviour
         {
             anim.SetTrigger("Trigger");
 
-            AlertSurroundings();
+            gameObject.EmitSound(player, intensityOfSound, enemyLayer);
 
             pressurePlateSound.PlaySound(Sound.PressurePlate);
 
@@ -70,37 +71,18 @@ public class PressurePlate : MonoBehaviour
         col.enabled = true;
     }
 
-    /// <summary>
-    /// In case this enemy finds the player, it alerts the surrounding enemies
-    /// that this enemy can see.
-    /// </summary>
-    private void AlertSurroundings()
-    {
-        Collider[] enemiesAround =
-            Physics.OverlapSphere(transform.position, sizeOfAlert, enemyLayer);
-
-        if (enemiesAround.Length > 0)
-        {
-            foreach (Collider enemyCollider in enemiesAround)
-            {
-                if (enemyCollider.TryGetComponent(out EnemySimple otherEnemy))
-                {
-                    if (transform.CanSee(otherEnemy.transform, wallsWithEnemy))
-                    {
-                        if (otherEnemy.gameObject != gameObject)
-                        {
-                            otherEnemy.OnAlert();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = new Color(0.25f, 0.25f, 0.75f, 0.5f);
         foreach (Transform kunaiSpawn in kunaiSpawns)
             Gizmos.DrawSphere(kunaiSpawn.position, 0.25f);
+    }
+
+    public void FindPlayer() =>
+        player = FindObjectOfType<Player>();
+
+    public void PlayerLost()
+    {
+        // Left blank on purpose
     }
 }

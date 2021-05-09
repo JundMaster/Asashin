@@ -458,9 +458,9 @@ public class PlayerMovement : MonoBehaviour, IAction
     public event Action<bool> Hide;
 
     /// <summary>
-    /// Happens when left foot touches the ground.
+    /// Happens when left foot touches the ground through animation event.
     /// </summary>
-    public void InstantiateLeftFootImpact()
+    public void LeftFootImpact()
     {
         if (Sprinting)
             gameObject.EmitSound(player, sprintIntensityVolume, enemyLayer);
@@ -471,9 +471,9 @@ public class PlayerMovement : MonoBehaviour, IAction
     }
 
     /// <summary>
-    /// Happens when right foot touches the ground.
+    /// Happens when right foot touches the ground through animation event.
     /// </summary>
-    public void InstantiateRightFootImpact()
+    public void RightFootImpact()
     {
         if (Sprinting)
             gameObject.EmitSound(player, sprintIntensityVolume, enemyLayer);
