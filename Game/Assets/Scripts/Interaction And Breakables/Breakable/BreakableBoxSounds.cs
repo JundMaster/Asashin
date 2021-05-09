@@ -12,6 +12,12 @@ public class BreakableBoxSounds : AbstractSoundBase, IFindPlayer
     [SerializeField] private IntensityOfSound intensityOfSound;
     private Player player;
 
+    protected new void Awake()
+    {
+        base.Awake();
+        player = FindObjectOfType<Player>();
+    }
+
     public override void PlaySound(Sound sound)
     {
         if (sound == Sound.BoxBreak)
@@ -29,16 +35,5 @@ public class BreakableBoxSounds : AbstractSoundBase, IFindPlayer
     public void PlayerLost()
     {
         // Left blank on purpose
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (intensityOfSound == IntensityOfSound.None) { }
-        else if (intensityOfSound == IntensityOfSound.Low)
-            Gizmos.DrawWireSphere(transform.position, 5);
-        else if (intensityOfSound == IntensityOfSound.Normal)
-            Gizmos.DrawWireSphere(transform.position, 13);
-        else
-            Gizmos.DrawWireSphere(transform.position, 20);
     }
 }
