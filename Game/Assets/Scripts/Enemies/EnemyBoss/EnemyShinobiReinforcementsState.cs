@@ -7,13 +7,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Enemy Shinobi Reinforcements State")]
 public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
 {
-    [SerializeField] private GameObject smokePrefab;
-
-    private Transform[] limitPositions;
     private GameObject[] minionsPrefabs;
 
     private byte timesEnteredThisState;
     private bool breakState;
+    private IEnumerator enteredState;
 
     /// <summary>
     /// Runs once on start. Gets enemy variables.
@@ -21,7 +19,6 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
     public override void Start()
     {
         base.Start();
-        limitPositions = enemy.Corners;
         minionsPrefabs = enemy.MinionsPrefabs;
         timesEnteredThisState = 0;
     }
@@ -34,10 +31,11 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
     {
         base.OnEnter();
         breakState = false;
-
+       
         enemy.SpawnedMinions = new GameObject[++timesEnteredThisState];
 
-        enemy.StartCoroutine(EnteredState());
+        enteredState = EnteredState();
+        enemy.StartCoroutine(enteredState);
     }
 
     /// <summary>
@@ -57,9 +55,18 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
         return enemy.ReinforcementsState;
     }
 
+    /// <summary>
+    /// Runs once on exit. Stops coroutine, if playing.
+    /// </summary>
     public override void OnExit()
     {
         base.OnExit();
+
+        if (enteredState != null)
+        {
+            enemy.StopCoroutine(enteredState);
+            enteredState = null;
+        }
     }
 
     /// <summary>
@@ -68,10 +75,6 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
     /// </summary>
     private IEnumerator EnteredState()
     {
-        YieldInstruction wffu = new WaitForFixedUpdate();
-
-        agent.SetDestination(myTarget.position);
-
         Vector2 spawnPos;
         
         // Spawns minions and sets them as boss' minions
@@ -89,18 +92,13 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
                 enemy.transform.RotateTo(playerTarget.position));
         }
 
-        yield return wffu;
-        enemy.AlertSurroundings();
+        if (teleportBoss == null)
+        {
+            teleportBoss = TeleportBoss();
+            enemy.StartCoroutine(teleportBoss);
+        }
 
-        enemy.CineTarget.CancelCurrentTarget();
-        Vector3 offset = new Vector3(0, 0.5f, 0);
-        Instantiate(
-            smokePrefab, enemy.transform.position + offset, Quaternion.identity);
-
-        // Teleports boss enemy to a random position and stops him
-        spawnPos = Custom.RandomPositionInSquare(limitPositions);
-        enemy.transform.position = new Vector3(spawnPos.x, 0, spawnPos.y);
-        agent.SetDestination(myTarget.position);
+        yield return wfs;
 
         breakState = true;
     }

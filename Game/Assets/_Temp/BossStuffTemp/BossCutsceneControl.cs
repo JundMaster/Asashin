@@ -102,7 +102,8 @@ public class BossCutsceneControl : MonoBehaviour
     /// </summary>
     public void SpawnBoss()
     {
-        Instantiate(smokeParticles, bossPosition.transform.position, Quaternion.identity);
+        Vector3 offset = new Vector3(0, 0.5f, 0);
+        Instantiate(smokeParticles, bossPosition.transform.position + offset, Quaternion.identity);
         spawnedBoss = 
             Instantiate(bossPrefab, bossPosition.transform.position, Quaternion.Euler(0, 90, 0));
     }
@@ -131,7 +132,7 @@ public class BossCutsceneControl : MonoBehaviour
         bossPos.SetTrigger("MoveBoss");
 
         // While boss position isn't similiar to final position updates boss's position
-        while (!bossPosition.transform.position.Similiar(finalBossPosition.position))
+        while (!bossPosition.transform.position.Similiar(finalBossPosition.position, 0.5f))
         {
             agent.transform.position = bossPosition.transform.position;
             yield return wffu;

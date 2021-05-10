@@ -16,12 +16,13 @@ MonoBehaviour:
   takeDamageDistancePower: 2.5
   runningSpeed: 4.5
   walkingSpeed: 1.5
+  smokePrefab: {fileID: 0}
+  timeToWait: 0
   playerLayer:
     serializedVersion: 2
     m_Bits: 2048
   attackingDelay: 1
   afterAttackDelay: 2
-  turnSpeed: 0.15
+  turnSpeed: 0.25
   meleeHitParticles: {fileID: 3664975949699414532, guid: 0e1f38f4938bdf244b886fcfd61635b5, type: 3}
-  delayTimerToInvokeAlert: 2
-  timeToChangeState: 10
+  maxTimeToChangeState: 10

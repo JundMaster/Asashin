@@ -124,6 +124,7 @@ MonoBehaviour:
   step: {fileID: 11400000, guid: 7bb95a1ccbdb73a49b5f6a0c581aaf32, type: 2}
   laugh: {fileID: 11400000, guid: cd0646ee2d042084b8bf8b5a9e9a3213, type: 2}
   scream: {fileID: 11400000, guid: 73f4d94229282244db9e62969aa3350f, type: 2}
+  hit: {fileID: 0}
 --- !u!1 &1009517688641600681
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,7 +278,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0.0125
+  m_BaseOffset: -0.11
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!54 &1009517688832808617
@@ -364,7 +365,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4476931563121593968}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.2, y: -3.7, z: 13}
+  m_LocalPosition: {x: 0, y: -3.7, z: 13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1009517688641600686}

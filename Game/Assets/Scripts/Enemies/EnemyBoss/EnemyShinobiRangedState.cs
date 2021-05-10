@@ -7,9 +7,6 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
     [Header("Minimum distance to be close to player")]
     [Range(1, 10)] [SerializeField] private float closeToPlayerRange;
 
-    private Transform[] limitPositions;
-    private IEnumerator teleportEnemy;
-
     [Header("Kunai to spawn")]
     [SerializeField] private GameObject kunai;
 
@@ -21,18 +18,10 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
     private const byte KUNAILAYER = 15;
     private float usedKunaiTime;
 
-    [SerializeField] private GameObject smokePrefab;
-
+    [Range(1f, 20f)][Header("Max time to stay on this state")]
+    [SerializeField] private float maxTimeToChangeState;
+    private float timeWhileOnCurrentState;
     private int minionsAlive;
-
-    /// <summary>
-    /// Runs once on start. Gets enemy variables.
-    /// </summary>
-    public override void Start()
-    {
-        base.Start();
-        limitPositions = enemy.Corners;
-    }
 
     /// <summary>
     /// Runs every time the enemy enters this state. Registers to event.
@@ -43,6 +32,7 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
 
         kunaiCoroutine = null;
         usedKunaiTime = Time.time;
+        timeWhileOnCurrentState = Time.time;
         minionsAlive = enemy.SpawnedMinions.Length;
 
         foreach (GameObject minion in enemy.SpawnedMinions)
@@ -65,6 +55,26 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
         if (die)
             return enemy.DeathState;
 
+        // If counter reaches its limit, all minions will die and boss will
+        // subsequently go back to agressive state.
+        if (Time.time - timeWhileOnCurrentState > maxTimeToChangeState)
+        {
+            for (int i = 0; i < enemy.SpawnedMinions.Length; i++)
+            {
+                if (enemy.SpawnedMinions[i] != null)
+                {
+                    EnemySimple minionSpawned =
+                        enemy.SpawnedMinions[i].
+                        GetComponentInChildren<EnemySimple>();
+
+                    minionSpawned.OnInstanteDeath();
+                }
+
+                if (i == enemy.SpawnedMinions.Length - 1)
+                    return enemy.AggressiveState;
+            }
+        }
+
         if (minionsAlive == 0)
             return enemy.AggressiveState;
 
@@ -74,8 +84,9 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
             Vector3.Distance(playerTarget.position, myTarget.position);
 
         // If the player is close to the enemy, the enemy will teleport
-        if (IsCloseToPlayer(currentDistanceFromPlayer) && teleportEnemy == null)
+        if (IsCloseToPlayer(currentDistanceFromPlayer) && teleportBoss == null)
         {
+            // If throwing a kunai, it will stop throwing
             if (kunaiCoroutine != null)
             {
                 enemy.StopCoroutine(kunaiCoroutine);
@@ -83,11 +94,16 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
             }
 
             usedKunaiTime = Time.time;
-            teleportEnemy = TeleportEnemy();
-            enemy.StartCoroutine(teleportEnemy);
+
+            // If it can teleport the boss, it will teleport him
+            if (teleportBoss == null)
+            {
+                teleportBoss = TeleportBoss();
+                enemy.StartCoroutine(teleportBoss);
+            }
         }
 
-        // If kunai delat is over, the enemy will throw a kunai
+        // If kunai delay is over, the enemy will throw a kunai
         if (Time.time - usedKunaiTime > kunaiDelay && kunaiCoroutine == null)
         {
             kunaiCoroutine = ThrowKunaiCoroutine();
@@ -105,42 +121,19 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
     {
         base.OnExit();
 
+        // If throwing a kunai, it will stop throwing
+        if (kunaiCoroutine != null)
+        {
+            enemy.StopCoroutine(kunaiCoroutine);
+            kunaiCoroutine = null;
+        }
+
         foreach (GameObject minion in enemy.SpawnedMinions)
         {
             EnemySimple minionSpawned = minion.GetComponent<EnemySimple>();
             if (minionSpawned != null)
                 minionSpawned.Die -= () => minionsAlive--;
         }
-    }
-
-    /// <summary>
-    /// Teleports enemy to a random position inside its area.
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator TeleportEnemy()
-    {
-        YieldInstruction wfs = new WaitForSeconds(2);
-
-        enemy.CineTarget.CancelCurrentTarget();
-
-        agent.SetDestination(myTarget.position);
-        agent.enabled = false;
-
-        Vector3 offset = new Vector3(0, 0.5f, 0);
-        Instantiate(
-            smokePrefab, enemy.transform.position + offset, Quaternion.identity);
-
-        // Makes the enemy disappear for wfs
-        enemy.transform.position = new Vector3(100000, 100000, 100000);
-        yield return wfs;
-
-        // Teleports enemy to a random position and stops him
-        Vector2 teleportTo = Custom.RandomPositionInSquare(limitPositions);
-        enemy.transform.position = new Vector3(teleportTo.x, 0, teleportTo.y);
-        agent.enabled = true;
-        agent.SetDestination(myTarget.position);
-
-        teleportEnemy = null;
     }
 
     /// <summary>

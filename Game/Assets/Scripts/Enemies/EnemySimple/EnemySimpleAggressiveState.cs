@@ -322,6 +322,14 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         // If the enemy is not close to the player
         if (distance > CLOSETOPLAYERRANGE)
         {
+            // If enemy is reaching player's radius
+            if (distance < CLOSETOPLAYERRANGE + 0.2f)
+                agent.speed = Mathf.Lerp(
+                    agent.speed, walkingSpeed, Time.fixedDeltaTime * 30);
+            else
+                agent.speed = Mathf.Lerp(
+                    agent.speed, runningSpeed, Time.fixedDeltaTime * 30);
+
             Vector3 dir =
                 myTarget.position.InvertedDirection(playerTarget.position);
 
@@ -363,6 +371,5 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     private void AgentCanMove()
     {
         agent.isStopped = false;
-        agent.speed = runningSpeed;
     }
 }

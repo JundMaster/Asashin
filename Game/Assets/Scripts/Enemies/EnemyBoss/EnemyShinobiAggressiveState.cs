@@ -29,13 +29,9 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
     private PlayerRoll playerRoll;
     private EnemyAnimationEvents animationEvents;
 
-    [Tooltip("Must wait this time to alert enemies again")]
-    [Range(0f, 5f)][SerializeField] private float delayTimerToInvokeAlert;
-    private float currentTimerToInvokeAlert;
-
-    [Header("Timer to change to reinforcements state")]
-    [SerializeField] private float timeToChangeState;
-    private float timeEnteringThisState;
+    [Range(1f, 20f)] [Header("Max time to stay on this state")]
+    [SerializeField] private float maxTimeToChangeState;
+    private float timeWhileOnCurrentState;
 
     /// <summary>
     /// Runs once on start. Gets enemy variables.
@@ -57,11 +53,12 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
     /// </summary>
     public override void OnEnter()
     {
+        base.OnEnter();
+
         attacking = false;
         attackingAnimation = false;
-        currentTimerToInvokeAlert = 0;
 
-        timeEnteringThisState = Time.time;
+        timeWhileOnCurrentState = Time.time;
 
         if (enemy.Player != null)
             playerRoll = enemy.Player.GetComponent<PlayerRoll>();
@@ -83,7 +80,7 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         if (die)
             return enemy.DeathState;
 
-        if (Time.time - timeEnteringThisState > timeToChangeState)
+        if (Time.time - timeWhileOnCurrentState > maxTimeToChangeState)
             return enemy.ReinforcementsState;
 
         float currentDistanceFromPlayer = 0;
@@ -131,6 +128,8 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
     /// </summary>
     public override void OnExit()
     {
+        base.OnExit();
+
         if (attackingCoroutine != null)
             enemy.StopCoroutine(attackingCoroutine);
         attackingAnimation = false;
@@ -156,13 +155,6 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         while (attacking)
         {
             yield return wfd;
-
-            // Only checks this once in a while, so it won't do it every frame
-            if (Time.time - currentTimerToInvokeAlert > delayTimerToInvokeAlert)
-            {
-                enemy.AlertSurroundings();
-                currentTimerToInvokeAlert = Time.time;
-            }
 
             // Checks if player is still in range
             if (Vector3.Distance(playerTarget.position, myTarget.position) >
@@ -279,6 +271,14 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         // If the enemy is not close to the player
         if (distance > CLOSETOPLAYERRANGE)
         {
+            // If enemy is reaching player's radius
+            if (distance < CLOSETOPLAYERRANGE + 0.2f)
+                agent.speed = Mathf.Lerp(
+                    agent.speed, walkingSpeed, Time.fixedDeltaTime * 30);
+            else
+                agent.speed = Mathf.Lerp(
+                    agent.speed, runningSpeed, Time.fixedDeltaTime * 30);
+
             Vector3 dir =
                 myTarget.position.InvertedDirection(playerTarget.position);
 
