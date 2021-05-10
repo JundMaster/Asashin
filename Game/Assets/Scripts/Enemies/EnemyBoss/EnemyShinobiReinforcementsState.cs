@@ -24,7 +24,6 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
         limitPositions = enemy.Corners;
         minionsPrefabs = enemy.MinionsPrefabs;
         timesEnteredThisState = 0;
-        
     }
 
     /// <summary>
@@ -85,8 +84,9 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
             else enemyPrefab = 1;
 
             enemy.SpawnedMinions[i] = Instantiate(
-            minionsPrefabs[enemyPrefab], new Vector3(spawnPos.x, 0, spawnPos.y),
-            enemy.transform.RotateTo(playerTarget.position));
+                minionsPrefabs[enemyPrefab], 
+                new Vector3(spawnPos.x, 0, spawnPos.y),
+                enemy.transform.RotateTo(playerTarget.position));
         }
 
         yield return wffu;

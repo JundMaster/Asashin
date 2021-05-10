@@ -67,6 +67,7 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
             playerRoll = enemy.Player.GetComponent<PlayerRoll>();
 
         animationEvents.Hit += WeaponHit;
+        animationEvents.AgentCanMove += AgentCanMove;
     }
 
     /// <summary>
@@ -137,6 +138,7 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         agent.isStopped = false;
         agent.speed = runningSpeed;
 
+        animationEvents.AgentCanMove -= AgentCanMove;
         animationEvents.Hit -= WeaponHit;
     }
 
@@ -174,6 +176,8 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
             // Starts atacking animation
             attackingAnimation = true;
             anim.SetTrigger("MeleeAttack");
+            agent.speed = 0;
+            agent.isStopped = true;
 
             // WeaponHit() happens here with animation events from
             // EnemyAnimationEvents
@@ -195,14 +199,18 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
     {
         // If player just started rolling , while the enemy is attacking, it 
         // means the player was able to dodge, so it will trigger slow motion.
+        // Checks if it's greater than 1.5 in case it's still transitioning
+        // between animations
         if (playerRoll != null)
         {
             if (playerRoll.PerformingTime > 0 &&
-                playerRoll.PerformingTime < 0.5f)
+                playerRoll.PerformingTime < 0.5f ||
+                playerRoll.PerformingTime > 1.5f)
             {
                 playerRoll.OnDodge();
             }
 
+            // If player is rolling ignores everything else
             if (playerRoll.Performing)
                 return;
         }
@@ -238,9 +246,6 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
                             0f, TypeOfDamage.PlayerBlockDamage);
 
                         anim.SetTrigger("BlockReflected");
-
-                        // Pushes enemy back
-                        TakeImpact();
                     }
                     // If the player was NOT able to block
                     else
@@ -275,27 +280,15 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         // If the enemy is not close to the player
         if (distance > CLOSETOPLAYERRANGE)
         {
-            // Only happens if the enemy is not doing something else
-            // for example, it doesn't happen while atacking
-            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
+            Vector3 dir =
+                myTarget.position.InvertedDirection(playerTarget.position);
+
+            if (attackingAnimation == false)
             {
-                // If enemy is reaching player's radius
-                if (distance < CLOSETOPLAYERRANGE + 0.5f)
-                    agent.speed = Mathf.Lerp(
-                        agent.speed, walkingSpeed, Time.fixedDeltaTime * 50);
-                else
-                    agent.speed = Mathf.Lerp(
-                        agent.speed, runningSpeed, Time.fixedDeltaTime * 50);
-
-                Vector3 dir =
-                    myTarget.position.InvertedDirection(playerTarget.position);
-
-                if (attackingAnimation == false)
-                {
-                    agent.SetDestination(
-                        playerTarget.position + dir * DISTANCEFROMPLAYER);
-                }
+                agent.SetDestination(
+                    playerTarget.position + dir * DISTANCEFROMPLAYER);
             }
+
             return false;
         }
         // Else if the enemy is close to the player
@@ -320,5 +313,14 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Sets agent.isStopped to true and its speed to walkingspeed.
+    /// </summary>
+    private void AgentCanMove()
+    {
+        agent.isStopped = false;
+        agent.speed = runningSpeed;
     }
 }

@@ -184,6 +184,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         // While in range with the player
         while (attacking)
         {
+            agent.speed = 0;
             yield return wfd;
 
             // Only checks this once in a while, so it won't do it every frame
