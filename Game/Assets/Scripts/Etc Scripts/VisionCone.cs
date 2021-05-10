@@ -71,7 +71,7 @@ public class VisionCone
 
         vertices[0] = Vector3.zero;
 
-        for (var i = 0; i < vertices.Length; i++)
+        for (int i = 0; i < vertices.Length; i++)
         {       
             // If it hits something
             if (Physics.Raycast(currentPos, direction, out RaycastHit hit,
@@ -80,8 +80,11 @@ public class VisionCone
                 if (i != 0)
                 {
                     // Sets this vertice's position for that collision
-                    vertices[i] =
-                        parent.transform.InverseTransformPoint(hit.point);
+                    vertices[i] = 
+                        Vector3.MoveTowards(
+                            vertices[i], 
+                            parent.transform.InverseTransformPoint(hit.point), 
+                            Time.fixedDeltaTime * 22);
                 }
 
             }
@@ -91,9 +94,12 @@ public class VisionCone
                 if (i != 0)
                 {
                     // Sets this vertice's position to final range
-                    vertices[i] =
-                        parent.transform.InverseTransformPoint(
-                            currentPos + direction * coneRange);
+                    vertices[i] = 
+                        Vector3.MoveTowards(
+                            vertices[i], 
+                            parent.transform.InverseTransformPoint(
+                            currentPos + direction * coneRange), 
+                            Time.fixedDeltaTime * 22);
                 }
             }
             direction = stepAngle * direction;

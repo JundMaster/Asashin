@@ -108,11 +108,11 @@ NavMeshSettings:
     agentTypeID: 0
     agentRadius: 0.25
     agentHeight: 2
-    agentSlope: 45
-    agentClimb: 0.4
+    agentSlope: 40
+    agentClimb: 0.3
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
-    minRegionArea: 2
+    minRegionArea: 1
     manualCellSize: 0
     cellSize: 0.083333336
     manualTileSize: 0
@@ -1138,7 +1138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossPrefab: {fileID: 1009517688641600681, guid: 922d62be689f42c4e85b4ae8c6db8176, type: 3}
-  smokeParticles: {fileID: 1129694466352766, guid: 84835b4944c12d646b92e2ad429cf747, type: 3}
+  smokeParticles: {fileID: 4268148893531148905, guid: eadda4fc4a48af047a4a3f6e431595c0, type: 3}
   bossPosition: {fileID: 1529571932}
   finalBossPosition: {fileID: 2092654983}
   bossMusic: {fileID: 8300000, guid: e8de418eea26a634083ae527ed15f58f, type: 3}
@@ -5522,7 +5522,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2092654982}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.53, z: 6.18}
+  m_LocalPosition: {x: 0, y: -3.15, z: 6.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 777112267}
@@ -5768,7 +5768,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5032892760097546422, guid: ceb4a91bc2a786f4b88b40f4f5ecfee2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8497699
+      value: 0.84976995
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ceb4a91bc2a786f4b88b40f4f5ecfee2, type: 3}
