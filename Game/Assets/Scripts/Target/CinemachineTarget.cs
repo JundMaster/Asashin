@@ -21,17 +21,8 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     [SerializeField] private CinemachineFreeLook thirdPersonCamera;
     [SerializeField] private CinemachineVirtualCamera targetCamera;
     [SerializeField] private CinemachineVirtualCamera pauseMenuCamera;
-    [SerializeField] private CinemachineVirtualCamera wallHugCamera;
     [SerializeField] private CinemachineVirtualCamera sceneChangerCamera;
     [SerializeField] private CinemachineBrain mainCameraBrain;
-    private CinemachineFramingTransposer wallHugCameraTransposer;
-    private CinemachineComposer wallHugCameraComposer;
-    private float framingTranspX;
-    private float framingTranspXDefault;
-    private float framingDampingX;
-    private float framingDampingXDefault;
-    private float compX;
-    private float compXDefault;
 
     // Current target from player
     [SerializeField] private Transform currentTarget;
@@ -67,10 +58,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         pauseSystem = FindObjectOfType<PauseSystem>();
         optionsScript = FindObjectOfType<Options>();
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
-        wallHugCameraTransposer = 
-            wallHugCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
-        wallHugCameraComposer =
-            wallHugCamera.GetCinemachineComponent<CinemachineComposer>();
         blackBordersFadeIn = FindObjectOfType<BlackBordersFadeIn>();
     }
 
@@ -80,12 +67,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         targetYOffset = new Vector3(0, 1, 0);
         blendingCoroutine = null;
         isLerpingTargetCoroutine = null;
-        framingTranspXDefault = 0.5f;
-        framingTranspX = framingTranspXDefault;
-        framingDampingXDefault = 25f;
-        framingDampingX = framingDampingXDefault;
-        compXDefault = 0.5f;
-        compX = compXDefault;
 
         allEnemies = new List<EnemyBase>();
 
@@ -145,18 +126,12 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
     private void OnDisable()
     {
-
         input.TargetSet -= HandleTarget;
         input.TargetChange -= SwitchTarget;
         pauseSystem.GamePaused -= SwitchBetweenPauseCamera;
         slowMotion.SlowMotionEvent -= SlowMotionCamera;
         optionsScript.UpdatedValues -= UpdateValues;
         blackBordersFadeIn.EnteredArea -= SwitchToSceneChangerCamera;
-        if (playerWallHug != null)
-        {
-            playerWallHug.Border -= AdjustWallHugCamera;
-            playerWallHug.WallHug -= SetWallHugCameraPriority;
-        }
     }
 
     /// <summary>
@@ -590,8 +565,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             targetCamera.Follow = playerTargetForCinemachine;
             pauseMenuCamera.Follow = playerTargetForCinemachine;
             pauseMenuCamera.LookAt = playerTargetForCinemachine;
-            wallHugCamera.Follow = playerFrontTarget.transform;
-            wallHugCamera.LookAt = playerBackTarget.transform;
         }
     }
 
@@ -623,25 +596,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     }
 
     /// <summary>
-    /// Sets wall hug camera priority.
-    /// </summary>
-    /// <param name="condition">Condition to check if player is wall hugging.</param>
-    private void SetWallHugCameraPriority(bool condition)
-    {
-        if (condition)
-        {
-            mainCameraBrain.m_DefaultBlend.m_Time = 0.5f;
-            wallHugCamera.Priority = 50;
-        }
-        else
-        {
-            mainCameraBrain.m_DefaultBlend.m_Time = 0.5f;
-            wallHugCamera.Priority = 0;
-        }
-    }
-
-
-    /// <summary>
     /// Checks if camera is blending.
     /// </summary>
     /// <returns>Returns true if camera is blending.</returns>
@@ -649,37 +603,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     {
         if (mainCameraBrain.IsBlending) return true;
         return false;
-    }
-
-    /// <summary>
-    /// Adjusts values when the player is on a wall border and huging a wall.
-    /// </summary>
-    /// <param name="dir">Direction to push the camera to.</param>
-    private void AdjustWallHugCamera(Direction dir)
-    {
-        if (dir == Direction.Left)
-        {
-            framingDampingX = Mathf.Lerp(framingDampingX, 0, Time.fixedDeltaTime * 10f);
-            framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault + 0.3f, Time.fixedDeltaTime * 4);
-            compX = Mathf.Lerp(compX, compXDefault + 0.2f, Time.fixedDeltaTime * 4);
-        }
-        else if (dir == Direction.Right)
-        {
-            framingDampingX = Mathf.Lerp(framingDampingX, 0, Time.fixedDeltaTime * 10f);
-            framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault - 0.3f, Time.fixedDeltaTime * 4);
-            compX = Mathf.Lerp(compX, compXDefault - 0.2f, Time.fixedDeltaTime * 4);
-        }
-        else
-        {
-            framingDampingX = Mathf.Lerp(framingDampingX, framingDampingXDefault, Time.fixedDeltaTime * 5f);
-            framingTranspX = Mathf.Lerp(framingTranspX, framingTranspXDefault, Time.fixedDeltaTime * 4);
-            compX = Mathf.Lerp(compX, compXDefault, Time.fixedDeltaTime * 4);
-
-        }
-
-        wallHugCameraTransposer.m_XDamping = framingDampingX;
-        wallHugCameraTransposer.m_ScreenX = framingTranspX;
-        wallHugCameraComposer.m_ScreenX = compX;
     }
 
     /// <summary>
@@ -699,12 +622,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             GameObject.FindGameObjectWithTag("playerTargetForCinemachine").transform;
         SetAllCamerasTargets();
         mainCameraBrain.enabled = true;
-
-        if (playerWallHug != null)
-        {
-            playerWallHug.Border += AdjustWallHugCamera;
-            playerWallHug.WallHug += SetWallHugCameraPriority;
-        }
     }
 
     /// <summary>

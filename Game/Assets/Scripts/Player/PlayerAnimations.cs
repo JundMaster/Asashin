@@ -59,9 +59,12 @@ public class PlayerAnimations : MonoBehaviour
         anim.SetBool("IsGrounded", movement.IsGrounded());
         anim.SetBool("Block", block.Performing);
         anim.SetBool("Walking", movement.Walking);
-        anim.SetFloat("WallHugSpeed", input.Movement.x * controller.velocity.magnitude);
-        anim.SetBool("BotWallHug", wallHug.Performing);
         anim.SetBool("Dead", stats.Dead);
+        if (wallHug.InvertedAnimation == false)
+            anim.SetFloat("WallHugSpeed", input.Movement.x * controller.velocity.magnitude);
+        else
+            anim.SetFloat("WallHugSpeed", -input.Movement.x * controller.velocity.magnitude);
+        anim.SetBool("BotWallHug", wallHug.Performing);
     }
 
     /// <summary>

@@ -29,7 +29,10 @@ public class PlayerWallHug : MonoBehaviour, IAction
     private Collider[] wallsCollidersRight;
     private Collider[] wallsCollidersLeft;
 
+    private Camera cam;
+
     public bool Performing { get; private set; }
+    public bool InvertedAnimation { get; private set; }
 
     // Rotation variables
     private float smoothTimeRotation;
@@ -47,6 +50,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
         cinemachineTarget = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
         movement = GetComponent<PlayerMovement>();
+        cam = Camera.main;
     }
 
     private void Start()
@@ -191,40 +195,30 @@ public class PlayerWallHug : MonoBehaviour, IAction
 
             // Move direction perpendicular to player's back
             Vector3 moveDirection =
-            Quaternion.Euler(0f, -90, 0f) * transform.forward;
+                Quaternion.Euler(0f, -90, 0f) * transform.forward;
 
             // Pressing a direction with walls on the sides
             if ((input.Movement.x > 0 && wallsCollidersLeft.Length > 0) ||
                 (input.Movement.x < 0 && wallsCollidersRight.Length > 0))
             {
-                controller.Move(
+                if (Vector3.Dot(cam.transform.forward, transform.forward) <= 0)
+                {
+                    controller.Move(
                     input.Movement.x *
                     moveDirection *
                     Time.fixedUnscaledDeltaTime);
 
-                OnBorder(Direction.Default);
-            }
-            // Pressing right with no wall
-            else if (input.Movement.x > 0 && wallsCollidersLeft.Length == 0)
-            {
-                OnBorder(Direction.Right);
-            }
-            // Pressing left with no wall
-            else if (input.Movement.x < 0 && wallsCollidersRight.Length == 0)
-            {
-                OnBorder(Direction.Left);
-            }
-            // Not pressing anything with no walls
-            else if (wallsCollidersLeft.Length == 0 || 
-                wallsCollidersRight.Length == 0 &&
-                input.Movement.x == 0)
-            {
-                OnBorder(Direction.Default);
-            }
-            // Else if the player isn't pressing anything
-            else
-            {
-                OnBorder(Direction.Default);
+                    InvertedAnimation = false;
+                }
+                else
+                {
+                    controller.Move(
+                    -input.Movement.x *
+                    moveDirection *
+                    Time.fixedUnscaledDeltaTime);
+
+                    InvertedAnimation = true;
+                }
             }
 
             // If the player leaves the wall, cancels wall hug
@@ -235,17 +229,10 @@ public class PlayerWallHug : MonoBehaviour, IAction
         }
     }
 
-    protected virtual void OnBorder(Direction dir) => Border?.Invoke(dir);
-
-    /// <summary>
-    /// Event registered on CinemachineTarget.
-    /// </summary>
-    public event Action<Direction> Border;
-
     protected virtual void OnWallHug(bool condition) => WallHug?.Invoke(condition);
 
     /// <summary>
-    /// Event registered on CinemachineTarget.
+    /// Event registered on PlayerMovement.
     /// </summary>
     public event Action<bool> WallHug;
 }
