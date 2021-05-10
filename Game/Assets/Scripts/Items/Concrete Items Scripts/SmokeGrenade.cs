@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class SmokeGrenade : ItemBehaviour
 {
@@ -19,15 +20,19 @@ public class SmokeGrenade : ItemBehaviour
         Collider[] collisions =
                 Physics.OverlapSphere(transform.position, smokeRange, enemyLayer);
 
+        HashSet<EnemySimple> enemiesToBlind = new HashSet<EnemySimple>();
+
         foreach (Collider col in collisions)
         {
             // Only applies if it's an an enemy
             if (col.gameObject.TryGetComponent(out EnemySimple en))
             {
-                // Blinds enemies
-                en.BlindEnemy();
+                enemiesToBlind.Add(en);                
             }
         }
+
+        foreach (EnemySimple enemy in enemiesToBlind)
+            enemy.BlindEnemy();
 
         playerStats.SmokeGrenades--;
         base.Execute();

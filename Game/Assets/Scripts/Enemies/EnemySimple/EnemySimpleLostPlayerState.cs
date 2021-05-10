@@ -15,6 +15,12 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     [Header("Rotation speed after reaching final point (less means faster)")]
     [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
 
+    [Header("Exclamation and interrogation mark prefabs")]
+    [SerializeField] private GameObject exclamationMarkPrefab;
+    [SerializeField] private GameObject interrogationMarkPrefab;
+    [SerializeField] private Vector3 offset;
+    private enum TypeOfMark { Interrogation, Exclamation };
+
     // State variables
     private IEnumerator lookForPlayerCoroutine;
     private bool breakState;
@@ -60,30 +66,18 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         enteredInPosition = enemy.transform.position;
 
         lookForPlayerCoroutine = null;
-
         breakState = false;
-
         enemy.InCombat = true;
-
         agent.isStopped = false;
 
-        // Sets random position + agent's destination
-        // If the agent heard a sound, sets that destination depending on the 
-        // sound's distance
-        Vector3 finalDestination = Vector3.zero;
-
-        if (followSound)
-            finalDestination = enemy.PositionOnLostPlayerState +
-                GetRandomPositionWithSound();
-        else
-            finalDestination = enemy.PositionOnLostPlayerState + new Vector3(
-                    Random.Range(-5, 5),
-                    0,
-                    Random.Range(-5, 5));
+        // Moves the agent to a position + a random offset
+        Vector3 finalDestination = enemy.PositionOnLostPlayerState + 
+            new Vector3(
+                Random.Range(-5, 5),
+                0,
+                Random.Range(-5, 5));
 
         agent.SetDestination(finalDestination);
-
-        followSound = false;
 
         enemy.CollisionWithPlayer += TakeImpact;
         options.UpdatedValues += UpdateValues;
@@ -110,12 +104,16 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
             SetNewPosition(TypeOfMovement.FollowSound);
 
         // If it got hit from afar inside this state
-        if (hitFromBehind)
+        else if (followSound == false && hitFromBehind)
             SetNewPosition(TypeOfMovement.HitFromBehind);
 
         // If enemy is in range, it stops looking for player coroutine
         if (PlayerInRange())
+        {
+            // Instantiates an interrogation mark
+            InstantiatePunctuationMark(TypeOfMark.Exclamation);
             return enemy.DefenseState ?? enemy.PatrolState;
+        }
 
         // If the enemy reached the player last known position and is not near
         // the entrance position, starts looking for player
@@ -161,6 +159,31 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     }
 
     /// <summary>
+    /// Instantiates an interrogation or exclamation mark.
+    /// </summary>
+    private void InstantiatePunctuationMark(TypeOfMark type)
+    {
+        GameObject mark;
+        // Instantiates an exclamation mark
+        if (type == TypeOfMark.Interrogation)
+        {
+            mark = Instantiate(
+            interrogationMarkPrefab,
+            enemy.transform.position + offset,
+            Quaternion.identity);
+        }
+        else
+        {
+            mark = Instantiate(
+            exclamationMarkPrefab,
+            enemy.transform.position + offset,
+            Quaternion.identity);
+        }
+
+        mark.transform.parent = enemy.transform;
+    }
+
+    /// <summary>
     /// Method to check if the enemy is at player's last known position.
     /// If it didn't not reach the last position, it deactivates the vision cone.
     /// </summary>
@@ -186,6 +209,9 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     private void SetNewPosition(TypeOfMovement type)
     {
         enteredInPosition = enemy.transform.position;
+
+        // Instantiates an interrogation mark
+        InstantiatePunctuationMark(TypeOfMark.Interrogation);
 
         // Stops coroutine in case it's already searching for the player
         if (lookForPlayerCoroutine != null)
@@ -213,9 +239,40 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         agent.SetDestination(finalDestination);
 
+        positionOfSound = default;
         hitFromBehind = false;
         followSound = false;
         breakState = false;
+    }
+
+    /// <summary>
+    /// Sets new destination if the enemy listened to a sound.
+    /// </summary>
+    private Vector3 GetRandomPositionWithSound()
+    {
+        float distance = Vector3.Distance(positionOfSound, myTarget.position);
+
+        Vector3 randomPosition;
+        if (distance < 5)
+        {
+            randomPosition = Vector3.zero;
+        }
+        else if (distance < 10)
+        {
+            randomPosition = new Vector3(
+                Random.Range(-3, 3),
+                0,
+                Random.Range(-3, 3));
+        }
+        else
+        {
+            randomPosition = new Vector3(
+                Random.Range(-6, 6),
+                0,
+                Random.Range(-6, 6));
+        }
+
+        return randomPosition;
     }
 
     /// <summary>
@@ -289,36 +346,6 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
             yield return wffu;
         }
         breakState = true;
-    }
-
-    /// <summary>
-    /// Sets new destination if the enemy listened to a sound.
-    /// </summary>
-    private Vector3 GetRandomPositionWithSound()
-    {
-        float distance = Vector3.Distance(positionOfSound, myTarget.position);
-
-        Vector3 randomPosition;
-        if(distance < 5)
-        {
-            randomPosition = Vector3.zero;
-        }
-        else if (distance < 10)
-        {
-            randomPosition = new Vector3(
-                Random.Range(-3, 3),
-                0,
-                Random.Range(-3, 3));
-        } 
-        else
-        {
-            randomPosition = new Vector3(
-                Random.Range(-6, 6),
-                0,
-                Random.Range(-6, 6));
-        }
-            
-        return randomPosition;
     }
 
     /// <summary>

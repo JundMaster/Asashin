@@ -76,9 +76,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
                 enemy.PositionOnLostPlayerState = positionOfSound;
             else
                 enemy.PositionOnLostPlayerState = playerTarget.position;
-        }  
-
-        hitFromBehind = false;
+        }
 
         enemy.ReactToSound -= SetPositionOfSound;
         enemy.Alert -= AlertEnemies;

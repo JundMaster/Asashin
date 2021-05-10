@@ -118,6 +118,7 @@ public sealed class EnemySimple : EnemyBase, IHearSound
     {
         if (TemporaryBlindnessState != null)
             stateMachine?.SwitchToNewState(TemporaryBlindnessState);
+        Debug.Log("blind");
     }
 
     /// <summary>

@@ -16,9 +16,8 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     [SerializeField] private Material coneMaterial;
     private VisionCone visionCone;
 
-    [Header("Exclamation and interrogation mark prefabs")]
+    [Header("Exclamation mark prefab")]
     [SerializeField] private GameObject exclamationMarkPrefab;
-    [SerializeField] private GameObject interrogationMarkPrefab;
     [SerializeField] private Vector3 offset;
 
     [Header("Rotation speed after reaching final point (less means faster)")]
@@ -76,6 +75,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         breakState = false;
         agent.isStopped = false;
         enemy.InCombat = false;
+        hitFromBehind = false;
         followSound = false;
 
         // If vision cone option is on
@@ -118,27 +118,12 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         
         if (alert)
         {
-            // Instantiates an exclamation mark
-            GameObject exclMark = Instantiate(
-                exclamationMarkPrefab,
-                enemy.transform.position + offset,
-                Quaternion.identity);
-            exclMark.transform.parent = enemy.transform;
-
+            InstantiateExclamationMark();
             return enemy.DefenseState;
         }
 
-        if (hitFromBehind || followSound)
-        {
-            // Instantiates an exclamation mark
-            GameObject interrMark = Instantiate(
-                interrogationMarkPrefab,
-                enemy.transform.position + offset,
-                Quaternion.identity);
-            interrMark.transform.parent = enemy.transform;
-         
+        if ((hitFromBehind || followSound))
             return enemy.LostPlayerState;
-        }
 
         // Calculates vision cone if the player isn't too far
         if (playerTarget != null)
@@ -280,6 +265,19 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
             }
             yield return wffu;
         }
+    }
+
+    /// <summary>
+    /// Instantiates an exclamation mark.
+    /// </summary>
+    private void InstantiateExclamationMark()
+    {
+        // Instantiates an exclamation mark
+        GameObject exclMark = Instantiate(
+            exclamationMarkPrefab,
+            enemy.transform.position + offset,
+            Quaternion.identity);
+        exclMark.transform.parent = enemy.transform;
     }
 
     /// <summary>
