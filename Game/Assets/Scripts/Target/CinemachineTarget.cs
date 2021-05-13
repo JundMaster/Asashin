@@ -29,8 +29,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     public Transform CurrentTarget => currentTarget;
 
     // Player targets
-    private Transform playerFrontTarget;
-    private Transform playerBackTarget;
     private Transform playerTarget;
     private Transform playerTargetForCinemachine;
 
@@ -614,10 +612,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         playerWallHug = FindObjectOfType<PlayerWallHug>();
         playerTarget =
             GameObject.FindGameObjectWithTag("playerTarget").transform;
-        playerBackTarget = 
-            GameObject.FindGameObjectWithTag("playerBackTarget").transform;
-        playerFrontTarget =
-            GameObject.FindGameObjectWithTag("playerFrontTarget").transform;
         playerTargetForCinemachine =
             GameObject.FindGameObjectWithTag("playerTargetForCinemachine").transform;
         SetAllCamerasTargets();
