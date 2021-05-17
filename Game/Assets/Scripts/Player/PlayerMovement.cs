@@ -302,7 +302,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         YieldInstruction wffu = new WaitForFixedUpdate();
         gameObject.layer = PLAYERHIDDENLAYER;
 
-        OnTutorialSprint(TypeOfTutorial.Sprint);
+        OnTutorialHidden(TypeOfTutorial.Hidden);
 
         // Post process variables
         if (postProcessing.profile.TryGet(out Vignette vignette))
