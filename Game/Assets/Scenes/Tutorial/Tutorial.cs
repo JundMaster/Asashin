@@ -10,18 +10,23 @@ public class Tutorial : MonoBehaviour
     private byte objectivesPassed;
 
     [SerializeField] private bool walk;
+    [SerializeField] private bool hidden;
     [SerializeField] private bool run;
     [SerializeField] private bool sprint;
     [SerializeField] private bool roll;
     [SerializeField] private bool changeItemLeft;
     [SerializeField] private bool changeItemRight;
     [SerializeField] private bool useItem;
+    [SerializeField] private bool wallHug;
+    [SerializeField] private bool wallHugLeft;
+    [SerializeField] private bool wallHugRight;
 
     private PlayerStats playerStats;
     private PlayerMovement playerMovement;
     private ItemControl itemControl;
     private PlayerUseItem playerUseItem;
     private PlayerRoll playerRoll;
+    private PlayerWallHug playerWallHug;
 
     private void Awake()
     {
@@ -31,11 +36,6 @@ public class Tutorial : MonoBehaviour
         playerRoll = FindObjectOfType<PlayerRoll>();
         playerStats = FindObjectOfType<PlayerStats>();
 
-
-        playerStats.FirebombKunais += 10000;
-        playerStats.Kunais += 10000;
-        playerStats.HealthFlasks += 10000;
-        playerStats.SmokeGrenades += 10000;
     }
 
     private void OnEnable()
@@ -45,6 +45,7 @@ public class Tutorial : MonoBehaviour
             if (walk) playerMovement.TutorialWalk += TutorialPassed;
             if (run) playerMovement.TutorialRun += TutorialPassed;
             if (sprint) playerMovement.TutorialSprint += TutorialPassed;
+            if (hidden) playerMovement.TutorialHidden += TutorialPassed;
         }
 
         if (playerRoll != null) 
@@ -58,6 +59,18 @@ public class Tutorial : MonoBehaviour
 
         if (playerUseItem != null)
             if (useItem) playerUseItem.TutorialItemUse += TutorialPassed;
+
+        if (playerWallHug != null)
+        {
+            if (wallHug) playerWallHug.TutorialWallHug += TutorialPassed;
+            if (wallHugLeft) playerWallHug.TutorialWallHugLeft += TutorialPassed;
+            if (wallHugRight) playerWallHug.TutorialWallHugRight += TutorialPassed;
+        }
+    }
+
+    private void OnDisable()
+    {
+        
     }
 
     private void Start()
@@ -65,13 +78,22 @@ public class Tutorial : MonoBehaviour
         loadingScene = false;
         objectivesPassed = 0;
 
+        playerStats.FirebombKunais += 10000;
+        playerStats.Kunais += 10000;
+        playerStats.HealthFlasks += 10000;
+        playerStats.SmokeGrenades += 10000;
+
         if (walk) objectivesRequired++;
+        if (hidden) objectivesRequired++;
         if (run) objectivesRequired++;
         if (sprint) objectivesRequired++;
         if (changeItemLeft) objectivesRequired++;
         if (changeItemRight) objectivesRequired++;
         if (useItem) objectivesRequired++;
         if (roll) objectivesRequired++;
+        if (wallHug) objectivesRequired++;
+        if (wallHugLeft) objectivesRequired++;
+        if (wallHugRight) objectivesRequired++;
     }
 
     private void TutorialPassed(TypeOfTutorial typeOfTutorial)
@@ -80,6 +102,9 @@ public class Tutorial : MonoBehaviour
         {
             case TypeOfTutorial.Walk:
                 playerMovement.TutorialWalk -= TutorialPassed;
+                break;
+            case TypeOfTutorial.Hidden:
+                playerMovement.TutorialHidden -= TutorialPassed;
                 break;
             case TypeOfTutorial.Run:
                 playerMovement.TutorialRun -= TutorialPassed;
@@ -98,6 +123,15 @@ public class Tutorial : MonoBehaviour
                 break;
             case TypeOfTutorial.Roll:
                 playerRoll.TutorialRoll -= TutorialPassed;
+                break;
+            case TypeOfTutorial.WallHug:
+                playerWallHug.TutorialWallHug -= TutorialPassed;
+                break;
+            case TypeOfTutorial.WallHugLeft:
+                playerWallHug.TutorialWallHugLeft -= TutorialPassed;
+                break;
+            case TypeOfTutorial.WallHugRight:
+                playerWallHug.TutorialWallHugRight -= TutorialPassed;
                 break;
         }
 

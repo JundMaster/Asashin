@@ -2,11 +2,14 @@
 {
     Run,
     Sprint,
+    Walk,
+    Hidden,
+    WallHug,
+    WallHugLeft,
+    WallHugRight,
     ItemChangeLeft,
     ItemChangeRight,
     ItemUse,
     Roll,
     SlowMotion,
-    Walk,
-    Hide,
 }

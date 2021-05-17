@@ -103,6 +103,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
                     cinemachineTarget.CancelCurrentTarget();
                     Performing = true;
                     OnWallHug(true);
+                    OnTutorialWallHug(TypeOfTutorial.WallHug);
 
                     // Finds closest point between collisions
                     Vector3 closesestPoint
@@ -203,6 +204,8 @@ public class PlayerWallHug : MonoBehaviour, IAction
             {
                 if (Vector3.Dot(cam.transform.forward, transform.forward) <= 0)
                 {
+                    OnTutorialWallHugRight(TypeOfTutorial.WallHugRight);
+
                     controller.Move(
                     input.Movement.x *
                     moveDirection *
@@ -212,6 +215,8 @@ public class PlayerWallHug : MonoBehaviour, IAction
                 }
                 else
                 {
+                    OnTutorialWallHugLeft(TypeOfTutorial.WallHugLeft);
+
                     controller.Move(
                     -input.Movement.x *
                     moveDirection *
@@ -235,4 +240,20 @@ public class PlayerWallHug : MonoBehaviour, IAction
     /// Event registered on PlayerMovement.
     /// </summary>
     public event Action<bool> WallHug;
+
+
+    ///////////////////// Tutorial methods and events //////////////////////////
+    protected virtual void OnTutorialWallHug(TypeOfTutorial typeOfTut) =>
+        TutorialWallHug?.Invoke(typeOfTut);
+
+    protected virtual void OnTutorialWallHugLeft(TypeOfTutorial typeOfTut) =>
+        TutorialWallHugLeft?.Invoke(typeOfTut);
+
+    protected virtual void OnTutorialWallHugRight(TypeOfTutorial typeOfTut) =>
+        TutorialWallHugRight?.Invoke(typeOfTut);
+
+    public event Action<TypeOfTutorial> TutorialWallHug;
+    public event Action<TypeOfTutorial> TutorialWallHugLeft;
+    public event Action<TypeOfTutorial> TutorialWallHugRight;
+    ////////////////////////////////////////////////////////////////////////////
 }

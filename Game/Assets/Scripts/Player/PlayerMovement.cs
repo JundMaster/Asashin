@@ -302,6 +302,8 @@ public class PlayerMovement : MonoBehaviour, IAction
         YieldInstruction wffu = new WaitForFixedUpdate();
         gameObject.layer = PLAYERHIDDENLAYER;
 
+        OnTutorialSprint(TypeOfTutorial.Sprint);
+
         // Post process variables
         if (postProcessing.profile.TryGet(out Vignette vignette))
         {
@@ -490,17 +492,21 @@ public class PlayerMovement : MonoBehaviour, IAction
 
 
     ///////////////////// Tutorial methods and events //////////////////////////
-    protected virtual void OnTutorialWalk(TypeOfTutorial typeOfTut) => 
-        TutorialWalk?.Invoke(typeOfTut);
-
     protected virtual void OnTutorialRun(TypeOfTutorial typeOfTut) =>
         TutorialRun?.Invoke(typeOfTut);
 
     protected virtual void OnTutorialSprint(TypeOfTutorial typeOfTut) =>
         TutorialSprint?.Invoke(typeOfTut);
 
-    public event Action<TypeOfTutorial> TutorialWalk;
+    protected virtual void OnTutorialWalk(TypeOfTutorial typeOfTut) =>
+        TutorialWalk?.Invoke(typeOfTut);
+
+    protected virtual void OnTutorialHidden(TypeOfTutorial typeOfTut) =>
+        TutorialHidden?.Invoke(typeOfTut);
+
     public event Action<TypeOfTutorial> TutorialRun;
     public event Action<TypeOfTutorial> TutorialSprint;
+    public event Action<TypeOfTutorial> TutorialWalk;
+    public event Action<TypeOfTutorial> TutorialHidden;
     ////////////////////////////////////////////////////////////////////////////
 }
