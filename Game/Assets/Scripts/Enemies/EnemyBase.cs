@@ -76,10 +76,8 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
     /// <summary>
     /// Runs on state machine states.
     /// </summary>
-    private void FixedUpdate()
-    {
+    private void FixedUpdate() =>
         stateMachine?.FixedUpdate();
-    }
 
     /// <summary>
     /// In case this enemy finds the player, it alerts the surrounding enemies

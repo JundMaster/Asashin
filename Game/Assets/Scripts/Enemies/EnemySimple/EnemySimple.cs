@@ -118,7 +118,6 @@ public sealed class EnemySimple : EnemyBase, IHearSound
     {
         if (TemporaryBlindnessState != null)
             stateMachine?.SwitchToNewState(TemporaryBlindnessState);
-        Debug.Log("blind");
     }
 
     /// <summary>
@@ -149,8 +148,15 @@ public sealed class EnemySimple : EnemyBase, IHearSound
         ReactToSound?.Invoke(positionOfSound);
 
     /// <summary>
+    /// Method that invokes Tutorial Alert.
+    /// Happens every time the enemy finds the player on tutorial.
+    /// </summary>
+    public void OnTutorialAlert() => TutorialAlert?.Invoke();
+
+    /// <summary>
     /// Happens when the enemy collides with player.
     /// Event registered on PatrolState and LostPlayerState.
+    /// Event registered on Tutorial.
     /// </summary>
     public event Action CollisionWithPlayer;
 
@@ -169,6 +175,11 @@ public sealed class EnemySimple : EnemyBase, IHearSound
     /// Event triggered by enemy states that react to sound.
     /// </summary>
     public event Action<Vector3> ReactToSound;
+
+    /// <summary>
+    /// Event registered on Tutorial script. Happens when enemy finds player,
+    /// </summary>
+    public event Action TutorialAlert;
 
     /// <summary>
     /// On trigger enter it invokes CollisionWithPlayer event.

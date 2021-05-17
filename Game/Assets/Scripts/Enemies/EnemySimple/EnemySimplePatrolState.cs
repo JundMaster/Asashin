@@ -24,6 +24,9 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
     private float smoothTimeRotation;
 
+    [Header("Turn on on tutorial dummies")]
+    [SerializeField] private bool isTutorialDummy;
+
     // Movement
     private EnemyPatrolPoint[] patrolPoints;
     private byte patrolIndex;
@@ -118,12 +121,18 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         
         if (alert)
         {
+            if (isTutorialDummy) enemy.OnTutorialAlert();
+
             InstantiateExclamationMark();
             return enemy.DefenseState;
         }
 
         if ((hitFromBehind || followSound))
+        {
+            if (isTutorialDummy) enemy.OnTutorialAlert();
+
             return enemy.LostPlayerState;
+        }
 
         // Calculates vision cone if the player isn't too far
         if (playerTarget != null)
@@ -180,6 +189,8 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
                     enemy.transform.position + offset,
                     Quaternion.identity);
                 exclMark.transform.parent = enemy.transform;
+
+                if (isTutorialDummy) enemy.OnTutorialAlert();
 
                 return 
                     enemy.DefenseState ?? 

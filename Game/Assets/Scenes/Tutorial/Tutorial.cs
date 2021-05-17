@@ -20,6 +20,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private bool wallHug;
     [SerializeField] private bool wallHugLeft;
     [SerializeField] private bool wallHugRight;
+    [SerializeField] private bool alert;
 
     private PlayerStats playerStats;
     private PlayerMovement playerMovement;
@@ -27,6 +28,7 @@ public class Tutorial : MonoBehaviour
     private PlayerUseItem playerUseItem;
     private PlayerRoll playerRoll;
     private PlayerWallHug playerWallHug;
+    private EnemySimple enemySimple;
 
     private void Awake()
     {
@@ -36,6 +38,7 @@ public class Tutorial : MonoBehaviour
         playerRoll = FindObjectOfType<PlayerRoll>();
         playerStats = FindObjectOfType<PlayerStats>();
         playerWallHug = FindObjectOfType<PlayerWallHug>();
+        enemySimple = FindObjectOfType<EnemySimple>();
     }
 
     private void OnEnable()
@@ -66,6 +69,10 @@ public class Tutorial : MonoBehaviour
             if (wallHugLeft) playerWallHug.TutorialWallHugLeft += TutorialPassed;
             if (wallHugRight) playerWallHug.TutorialWallHugRight += TutorialPassed;
         }
+
+        if (enemySimple != null)
+            if (alert)
+                enemySimple.TutorialAlert += TutorialFailed;
     }
 
     private void OnDisable()
@@ -96,6 +103,23 @@ public class Tutorial : MonoBehaviour
         if (wallHugRight) objectivesRequired++;
     }
 
+    /// <summary>
+    /// Loads current scene.
+    /// </summary>
+    private void TutorialFailed()
+    {
+        if (loadingScene == false)
+        {
+            SceneControl sceneControl = FindObjectOfType<SceneControl>();
+            sceneControl.LoadScene(sceneControl.CurrentSceneEnum());
+            loadingScene = true;
+        }
+    }
+
+    /// <summary>
+    /// Increments a value and unregisters from current event.
+    /// </summary>
+    /// <param name="typeOfTutorial">Type of tutorial passed.</param>
     private void TutorialPassed(TypeOfTutorial typeOfTutorial)
     {
         switch (typeOfTutorial)
