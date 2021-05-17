@@ -27,4 +27,6 @@ public enum SceneEnum
 
     TutorialMovement,
     TutorialItemUse,
+    TutorialWallHug,
+    TutorialWalkAndHidden
 }

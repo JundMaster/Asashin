@@ -81,7 +81,6 @@ public class PlayerWallHug : MonoBehaviour, IAction
         anim.applyRootMotion = false;
         Performing = false;
         OnWallHug(false);
- 
     }
 
     /// <summary>
@@ -190,7 +189,6 @@ public class PlayerWallHug : MonoBehaviour, IAction
 
                     // Rotates player agaisnt that direction
                     transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
                 }
             }
 
@@ -205,6 +203,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
                 if (Vector3.Dot(cam.transform.forward, transform.forward) <= 0)
                 {
                     OnTutorialWallHugRight(TypeOfTutorial.WallHugRight);
+                    OnTutorialWallHugLeft(TypeOfTutorial.WallHugLeft);
 
                     controller.Move(
                     input.Movement.x *
@@ -215,6 +214,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
                 }
                 else
                 {
+                    OnTutorialWallHugRight(TypeOfTutorial.WallHugRight);
                     OnTutorialWallHugLeft(TypeOfTutorial.WallHugLeft);
 
                     controller.Move(

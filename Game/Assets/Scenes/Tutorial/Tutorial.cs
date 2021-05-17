@@ -35,7 +35,7 @@ public class Tutorial : MonoBehaviour
         playerUseItem = FindObjectOfType<PlayerUseItem>();
         playerRoll = FindObjectOfType<PlayerRoll>();
         playerStats = FindObjectOfType<PlayerStats>();
-
+        playerWallHug = FindObjectOfType<PlayerWallHug>();
     }
 
     private void OnEnable()
