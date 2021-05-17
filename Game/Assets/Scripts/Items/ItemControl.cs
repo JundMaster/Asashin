@@ -22,10 +22,8 @@ public class ItemControl : MonoBehaviour
     [SerializeField] private ItemBehaviour healthFlask;
     [SerializeField] private ItemBehaviour smokeGrenade;
 
-    private void Awake()
-    {
+    private void Awake() =>
         input = FindObjectOfType<PlayerInputCustom>();
-    }
 
     private void Start()
     {
@@ -62,6 +60,8 @@ public class ItemControl : MonoBehaviour
         // Switches current activated item to the next one
         if (direction == Direction.Right)
         {
+            OnTutorialItemRight(TypeOfTutorial.ItemChangeRight);
+
             if (index < allItemsInventory.Count - 1)
             {
                 index++;
@@ -73,6 +73,8 @@ public class ItemControl : MonoBehaviour
         }
         else // Switches current activated item to the one on the left
         {
+            OnTutorialItemLeft(TypeOfTutorial.ItemChangeLeft);
+
             if (index > 0)
             {
                 index--;
@@ -111,4 +113,16 @@ public class ItemControl : MonoBehaviour
     /// Event registered on ItemUIParent class.
     /// </summary>
     public event Action ChangedCurrentItem;
+
+
+    ///////////////////// Tutorial methods and events //////////////////////////
+    protected virtual void OnTutorialItemLeft(TypeOfTutorial typeOfTut) =>
+        TutorialItemLeft?.Invoke(typeOfTut);
+
+    protected virtual void OnTutorialItemRight(TypeOfTutorial typeOfTut) =>
+        TutorialItemRight?.Invoke(typeOfTut);
+
+    public event Action<TypeOfTutorial> TutorialItemLeft;
+    public event Action<TypeOfTutorial> TutorialItemRight;
+    ////////////////////////////////////////////////////////////////////////////
 }

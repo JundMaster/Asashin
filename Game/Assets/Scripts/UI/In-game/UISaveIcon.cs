@@ -13,12 +13,14 @@ public class UISaveIcon : MonoBehaviour
 
     private void OnEnable()
     {
-        spawnerController.CheckpointReached += ShowSaveIcon;
+        if (spawnerController != null)
+            spawnerController.CheckpointReached += ShowSaveIcon;
     }
 
     private void OnDisable()
     {
-        spawnerController.CheckpointReached -= ShowSaveIcon;
+        if (spawnerController != null)
+            spawnerController.CheckpointReached -= ShowSaveIcon;
     }
 
     private void ShowSaveIcon()

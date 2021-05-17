@@ -119,7 +119,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         pauseSystem.GamePaused += SwitchBetweenPauseCamera;
         slowMotion.SlowMotionEvent += SlowMotionCamera;
         optionsScript.UpdatedValues += UpdateValues;
-        blackBordersFadeIn.EnteredArea += SwitchToSceneChangerCamera;
+
+        if (blackBordersFadeIn != null)
+            blackBordersFadeIn.EnteredArea += SwitchToSceneChangerCamera;
     }
 
     private void OnDisable()
@@ -129,7 +131,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         pauseSystem.GamePaused -= SwitchBetweenPauseCamera;
         slowMotion.SlowMotionEvent -= SlowMotionCamera;
         optionsScript.UpdatedValues -= UpdateValues;
-        blackBordersFadeIn.EnteredArea -= SwitchToSceneChangerCamera;
+
+        if (blackBordersFadeIn != null)
+            blackBordersFadeIn.EnteredArea -= SwitchToSceneChangerCamera;
     }
 
     /// <summary>

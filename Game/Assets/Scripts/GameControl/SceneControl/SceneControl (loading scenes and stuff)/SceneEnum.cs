@@ -23,4 +23,8 @@ public enum SceneEnum
     ProgrammingTests = 7,
     TESTAREA = 8,
     EndOfDemo = 9,
+
+
+    TutorialMovement,
+    TutorialItemUse,
 }

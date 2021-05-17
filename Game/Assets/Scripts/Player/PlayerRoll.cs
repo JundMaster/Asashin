@@ -59,6 +59,7 @@ public class PlayerRoll : MonoBehaviour, IAction
             && wallHug.Performing == false)
         {
             OnRoll();
+            OnTutorialRoll(TypeOfTutorial.Roll);
         }
     }
 
@@ -82,4 +83,11 @@ public class PlayerRoll : MonoBehaviour, IAction
     /// Event registered on SlowMotionBehaviour.
     /// </summary>
     public event Action Dodge;
+
+    ///////////////////// Tutorial methods and events //////////////////////////
+    protected virtual void OnTutorialRoll(TypeOfTutorial typeOfTutorial) => 
+        TutorialRoll?.Invoke(typeOfTutorial);
+
+    public event Action<TypeOfTutorial> TutorialRoll;
+    ////////////////////////////////////////////////////////////////////////////
 }

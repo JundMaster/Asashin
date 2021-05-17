@@ -101,6 +101,8 @@ public class PlayerUseItem : MonoBehaviour, IAction
             roll.Performing == false &&
             block.Performing == false && wallHug.Performing == false)
         {
+            OnTutorialItemUse(TypeOfTutorial.ItemUse);
+
             // Plays an animation depending on the item used
             switch (itemControl.CurrentItem.ItemType)
             {
@@ -183,18 +185,14 @@ public class PlayerUseItem : MonoBehaviour, IAction
     /// <summary>
     /// Called on animation event.
     /// </summary>
-    private void AnimationEventExecuteItemLeftHand()
-    {
+    private void AnimationEventExecuteItemLeftHand() =>
         leftHandSpawnedItem.GetComponent<IUsableItem>().Execute();
-    }
 
     /// <summary>
     /// Called on animation event.
     /// </summary>
-    private void AnimationEventDestroyItemLeftHand()
-    {
+    private void AnimationEventDestroyItemLeftHand() =>
         Destroy(leftHandSpawnedItem);
-    }
 
     /// <summary>
     /// Called on item use animation events.
@@ -228,4 +226,12 @@ public class PlayerUseItem : MonoBehaviour, IAction
             leftHandSpawnedItem.transform.rotation = leftHand.rotation;
         }
     }
+
+
+    ///////////////////// Tutorial methods and events //////////////////////////
+    protected virtual void OnTutorialItemUse(TypeOfTutorial typeOfTut) =>
+        TutorialItemUse?.Invoke(typeOfTut);
+
+    public event Action<TypeOfTutorial> TutorialItemUse;
+    ////////////////////////////////////////////////////////////////////////////
 }

@@ -206,6 +206,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     {
         if (condition == true)
         {
+            OnTutorialWalk(TypeOfTutorial.Walk);
             Walking = true;
             return;
         }
@@ -363,6 +364,8 @@ public class PlayerMovement : MonoBehaviour, IAction
             // Transition to sprinting
             else if (Walking == false && Sprinting)
             {
+                OnTutorialSprint(TypeOfTutorial.Sprint);
+
                 Controller.Move(
                     moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
 
@@ -372,6 +375,8 @@ public class PlayerMovement : MonoBehaviour, IAction
             // If it's stopped and starts moving
             else
             {
+                OnTutorialRun(TypeOfTutorial.Run);
+
                 Controller.Move(
                     moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);
 
@@ -482,4 +487,20 @@ public class PlayerMovement : MonoBehaviour, IAction
         if ((byte)currentScene < 3)
             Instantiate(footImpactParticles, rightFoot.position, Quaternion.identity);
     }
+
+
+    ///////////////////// Tutorial methods and events //////////////////////////
+    protected virtual void OnTutorialWalk(TypeOfTutorial typeOfTut) => 
+        TutorialWalk?.Invoke(typeOfTut);
+
+    protected virtual void OnTutorialRun(TypeOfTutorial typeOfTut) =>
+        TutorialRun?.Invoke(typeOfTut);
+
+    protected virtual void OnTutorialSprint(TypeOfTutorial typeOfTut) =>
+        TutorialSprint?.Invoke(typeOfTut);
+
+    public event Action<TypeOfTutorial> TutorialWalk;
+    public event Action<TypeOfTutorial> TutorialRun;
+    public event Action<TypeOfTutorial> TutorialSprint;
+    ////////////////////////////////////////////////////////////////////////////
 }
