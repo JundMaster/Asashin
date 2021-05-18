@@ -7,7 +7,7 @@ using UnityEngine;
 /// Class responsible for handling a simple enemy.
 /// </summary>
 [RequireComponent(typeof(SpawnItemBehaviour))]
-public sealed class EnemySimple : EnemyBase, IHearSound
+public class EnemySimple : EnemyBase, IHearSound
 {
     [Header("Simple enemy states")]
     [SerializeField] private EnemyAbstractState patrolStateOriginal;

@@ -107,7 +107,7 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
         if (die && canDie)
             return enemy.DeathState;
 
-        if ((hitFromBehind || followSound))
+        if ((hitFromBehind || followSound) && canDie == false)
         {
             enemy.OnTutorialAlert();
 

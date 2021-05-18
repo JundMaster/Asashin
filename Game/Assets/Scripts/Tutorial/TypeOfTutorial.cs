@@ -15,4 +15,5 @@
     LootTreasure,
     LootWoodenBox,
     Block,
+    InstantKill,
 }

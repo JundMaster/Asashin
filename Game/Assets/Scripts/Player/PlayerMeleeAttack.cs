@@ -24,6 +24,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private PlayerMovement movement;
     private SlowMotionBehaviour slowMotion;
     private PlayerValuesScriptableObj values;
+    private Player player;
 
     // Weapon
     [SerializeField] private SphereCollider sword;
@@ -61,6 +62,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         movement = GetComponent<PlayerMovement>();
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         values = GetComponent<Player>().Values;
+        player = GetComponent<Player>();
     }
 
     private void Start()
@@ -181,6 +183,9 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
                 // If player performed instantkill, it instakills enemy and sets variables to default
                 if (executeInstaKill)
                 {
+                    if (player.InTutorial)
+                        OnTutorialInstantKill(TypeOfTutorial.InstantKill);
+
                     enemyToInstakill.OnInstanteDeath();
                     enemyToInstakill = null;
                     executeInstaKill = false;
@@ -300,12 +305,17 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     protected virtual void OnLightMeleeAttack(bool condition) =>
         LightMeleeAttack?.Invoke(condition);
 
+    protected virtual void OnTutorialInstantKill(TypeOfTutorial typeOfTutorial) =>
+        TutorialInstantKill?.Invoke(typeOfTutorial);
+
     /// <summary>
     /// Event registered on PlayerAnimations.
     /// Event registered on PlayerMovement.
     /// Triggers light melee attack. Normal or instant kill Animation
     /// depending on the condition.
     public event Action<bool> LightMeleeAttack;
+
+    public event Action<TypeOfTutorial> TutorialInstantKill;
 
     #region Gizmos
     private void OnDrawGizmosSelected()

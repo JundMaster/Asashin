@@ -30,6 +30,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private bool block;
     [SerializeField] private bool woodenBox;
     [SerializeField] private bool treasure;
+    [SerializeField] private bool instantKill;
 
     // Components
     private PlayerStats playerStats;
@@ -38,6 +39,7 @@ public class Tutorial : MonoBehaviour
     private PlayerUseItem playerUseItem;
     private PlayerRoll playerRoll;
     private PlayerWallHug playerWallHug;
+    private PlayerMeleeAttack playerAttack;
     private EnemyTutorial enemyTutorial;
     private BreakableBox breakableBox;
     private TreasureBox treasureBox;
@@ -51,6 +53,7 @@ public class Tutorial : MonoBehaviour
         playerRoll = FindObjectOfType<PlayerRoll>();
         playerStats = FindObjectOfType<PlayerStats>();
         playerWallHug = FindObjectOfType<PlayerWallHug>();
+        playerAttack = FindObjectOfType<PlayerMeleeAttack>();
         enemyTutorial = FindObjectOfType<EnemyTutorial>();
         breakableBox = FindObjectOfType<BreakableBox>();
         treasureBox = FindObjectOfType<TreasureBox>();
@@ -85,6 +88,9 @@ public class Tutorial : MonoBehaviour
             if (wallHugLeft) playerWallHug.TutorialWallHugLeft += TutorialPassed;
             if (wallHugRight) playerWallHug.TutorialWallHugRight += TutorialPassed;
         }
+
+        if (playerAttack != null)
+            if (instantKill) playerAttack.TutorialInstantKill += TutorialPassed;
 
         if (enemyTutorial != null)
         {
@@ -130,6 +136,7 @@ public class Tutorial : MonoBehaviour
         if (roll) objectivesRequired++;
         if (slowMotion) objectivesRequired++;
         if (wallHug) objectivesRequired++;
+        if (instantKill) objectivesRequired++;
         if (wallHugLeft) objectivesRequired++;
         if (wallHugRight) objectivesRequired++;
         if (woodenBox) objectivesRequired++;
@@ -193,6 +200,9 @@ public class Tutorial : MonoBehaviour
                 break;
             case TypeOfTutorial.WallHugRight:
                 playerWallHug.TutorialWallHugRight -= TutorialPassed;
+                break;
+            case TypeOfTutorial.InstantKill:
+                playerAttack.TutorialInstantKill -= TutorialPassed;
                 break;
             case TypeOfTutorial.LootWoodenBox:
                 breakableBox.TutorialBrokenBox -= TutorialPassed;
