@@ -206,7 +206,9 @@ public class PlayerMovement : MonoBehaviour, IAction
     {
         if (condition == true)
         {
-            OnTutorialWalk(TypeOfTutorial.Walk);
+            if (player.InTutorial)
+                OnTutorialWalk(TypeOfTutorial.Walk);
+
             Walking = true;
             return;
         }
@@ -302,7 +304,8 @@ public class PlayerMovement : MonoBehaviour, IAction
         YieldInstruction wffu = new WaitForFixedUpdate();
         gameObject.layer = PLAYERHIDDENLAYER;
 
-        OnTutorialHidden(TypeOfTutorial.Hidden);
+        if (player.InTutorial)
+            OnTutorialHidden(TypeOfTutorial.Hidden);
 
         // Post process variables
         if (postProcessing.profile.TryGet(out Vignette vignette))
@@ -366,7 +369,8 @@ public class PlayerMovement : MonoBehaviour, IAction
             // Transition to sprinting
             else if (Walking == false && Sprinting)
             {
-                OnTutorialSprint(TypeOfTutorial.Sprint);
+                if (player.InTutorial)
+                    OnTutorialSprint(TypeOfTutorial.Sprint);
 
                 Controller.Move(
                     moveDirection.normalized * values.SprintSpeed * Time.fixedUnscaledDeltaTime);
@@ -377,7 +381,8 @@ public class PlayerMovement : MonoBehaviour, IAction
             // If it's stopped and starts moving
             else
             {
-                OnTutorialRun(TypeOfTutorial.Run);
+                if (player.InTutorial)
+                    OnTutorialRun(TypeOfTutorial.Run);
 
                 Controller.Move(
                     moveDirection.normalized * values.Speed * Time.fixedUnscaledDeltaTime);

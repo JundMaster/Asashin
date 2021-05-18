@@ -28,7 +28,7 @@ public class Tutorial : MonoBehaviour
     private PlayerUseItem playerUseItem;
     private PlayerRoll playerRoll;
     private PlayerWallHug playerWallHug;
-    private EnemySimple enemySimple;
+    private EnemyTutorial enemyTutorial;
 
     private void Awake()
     {
@@ -38,7 +38,7 @@ public class Tutorial : MonoBehaviour
         playerRoll = FindObjectOfType<PlayerRoll>();
         playerStats = FindObjectOfType<PlayerStats>();
         playerWallHug = FindObjectOfType<PlayerWallHug>();
-        enemySimple = FindObjectOfType<EnemySimple>();
+        enemyTutorial = FindObjectOfType<EnemyTutorial>();
     }
 
     private void OnEnable()
@@ -70,9 +70,9 @@ public class Tutorial : MonoBehaviour
             if (wallHugRight) playerWallHug.TutorialWallHugRight += TutorialPassed;
         }
 
-        if (enemySimple != null)
+        if (enemyTutorial != null)
             if (alert)
-                enemySimple.TutorialAlert += TutorialFailed;
+                enemyTutorial.TutorialAlert += TutorialFailed;
     }
 
     private void OnDisable()

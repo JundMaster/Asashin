@@ -2,17 +2,16 @@
 using System.Collections;
 
 /// <summary>
-/// Scriptable object responsible for controlling enemy patrol state.
+/// Scriptable object responsible for controlling tutorial enemy patrol state.
 /// </summary>
-[CreateAssetMenu(fileName = "Enemy Common Patrol State")]
-public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
-    IUpdateOptions
+[CreateAssetMenu(fileName = "Enemy Tutorial Patrol State")]
+public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
 {
     [Header("Checks if player is in cone range every X seconds")]
-    [Range(0.01f,2f)][SerializeField] private float searchCheckDelay;
+    [Range(0.01f, 2f)] [SerializeField] private float searchCheckDelay;
 
     [Header("Enemy cone render variables")]
-    [Range(0, 255)][SerializeField] private byte amountOfVertices;
+    [Range(0, 255)] [SerializeField] private byte amountOfVertices;
     [SerializeField] private Material coneMaterial;
     private VisionCone visionCone;
 
@@ -31,8 +30,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
 
     private bool breakState;
 
-    private Options options;
-
     /// <summary>
     /// Runs once on start.
     /// </summary>
@@ -44,7 +41,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         if (amountOfVertices > desiredConeAngle)
             amountOfVertices = desiredConeAngle;
 
-        MeshFilter meshFilter = 
+        MeshFilter meshFilter =
             enemy.VisionConeGameObject.GetComponent<MeshFilter>();
         MeshRenderer meshRenderer =
             enemy.VisionConeGameObject.GetComponent<MeshRenderer>();
@@ -57,11 +54,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         breakState = false;
         patrolPoints = enemy.PatrolPoints;
         patrolIndex = 0;
-
-        options = FindObjectOfType<Options>();
-
-        // Updates options dependant values as soon as the enemy spawns
-        enemy.StartCoroutine(UpdateValuesCoroutine());
     }
 
     /// <summary>
@@ -101,7 +93,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         agent.speed = walkingSpeed;
 
         enemy.CollisionWithPlayer += TakeImpact;
-        options.UpdatedValues += UpdateValues;
     }
 
     /// <summary>
@@ -115,15 +106,13 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
 
         if (die)
             return enemy.DeathState;
-        
-        if (alert)
-        {
-            InstantiateExclamationMark();
-            return enemy.DefenseState;
-        }
 
         if ((hitFromBehind || followSound))
+        {
+            enemy.OnTutorialAlert();
+
             return enemy.LostPlayerState;
+        }
 
         // Calculates vision cone if the player isn't too far
         if (playerTarget != null)
@@ -181,9 +170,11 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
                     Quaternion.identity);
                 exclMark.transform.parent = enemy.transform;
 
-                return 
-                    enemy.DefenseState ?? 
-                    enemy.AggressiveState ?? 
+                enemy.OnTutorialAlert();
+
+                return
+                    enemy.DefenseState ??
+                    enemy.AggressiveState ??
                     enemy.PatrolState;
             }
         }
@@ -214,7 +205,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         agent.speed = runningSpeed;
 
         enemy.CollisionWithPlayer -= TakeImpact;
-        options.UpdatedValues -= UpdateValues;
     }
 
     /// <summary>
@@ -235,13 +225,13 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         while (breakState == false)
         {
             // If agent reached the destination or is stopped
-            if (agent.remainingDistance <= 0.1f || 
+            if (agent.remainingDistance <= 0.1f ||
                 agent.velocity.magnitude < 0.1f)
             {
                 // Sets destination to where the agent is
                 agent.SetDestination(enemy.transform.position);
 
-                YieldInstruction wfpd = 
+                YieldInstruction wfpd =
                     new WaitForSeconds(patrolPoints[patrolIndex].WaitingTime);
 
                 // Increments the patrol point
@@ -287,38 +277,5 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     {
         breakState = false;
         base.TakeImpact();
-    }
-
-    /// <summary>
-    /// Invokes coroutine to update vision cone variables.
-    /// </summary>
-    public void UpdateValues()
-    {
-        // Will only call if enemy already respawned
-        // (will only happen if the player changes options in pause menu)
-        if (enemy != null) enemy.StartCoroutine(UpdateValuesCoroutine());
-    }
-        
-    /// <summary>
-    /// Updates vision cone variables.
-    /// </summary>
-    private IEnumerator UpdateValuesCoroutine()
-    {
-        yield return new WaitForFixedUpdate();
-
-        if (enemy != null)
-        {
-            // If vision cone option is on
-            if (enemy.Options.EnemyVisionCones)
-            {
-                enemy.VisionConeScript = visionCone;
-                enemy.VisionConeGameObject.SetActive(true);
-            }
-            else // If vision cone option is off
-            {
-                enemy.VisionConeGameObject.SetActive(false);
-                enemy.VisionConeScript = null;
-            }
-        }
     }
 }

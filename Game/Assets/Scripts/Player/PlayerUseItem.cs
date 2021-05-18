@@ -27,6 +27,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
     private PlayerStats stats;
     private PlayerBlock block;
     private PlayerWallHug wallHug;
+    private Player player;
 
     public float TimeItemWasUsed { get; private set; }
     private bool canUseItemDelayOver;
@@ -46,6 +47,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
         stats = GetComponent<PlayerStats>();
         block = GetComponent<PlayerBlock>();
         wallHug = GetComponent<PlayerWallHug>();
+        player = GetComponent<Player>();
     }
 
     private void Start()
@@ -101,7 +103,8 @@ public class PlayerUseItem : MonoBehaviour, IAction
             roll.Performing == false &&
             block.Performing == false && wallHug.Performing == false)
         {
-            OnTutorialItemUse(TypeOfTutorial.ItemUse);
+            if (player.InTutorial)
+                OnTutorialItemUse(TypeOfTutorial.ItemUse);
 
             // Plays an animation depending on the item used
             switch (itemControl.CurrentItem.ItemType)

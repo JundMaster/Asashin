@@ -7,6 +7,8 @@ using System;
 /// </summary>
 public class ItemControl : MonoBehaviour
 {
+    [SerializeField] private bool inTutorial;
+
     // Components
     private PlayerInputCustom input;
 
@@ -60,7 +62,8 @@ public class ItemControl : MonoBehaviour
         // Switches current activated item to the next one
         if (direction == Direction.Right)
         {
-            OnTutorialItemRight(TypeOfTutorial.ItemChangeRight);
+            if (inTutorial)
+                OnTutorialItemRight(TypeOfTutorial.ItemChangeRight);
 
             if (index < allItemsInventory.Count - 1)
             {
@@ -73,7 +76,8 @@ public class ItemControl : MonoBehaviour
         }
         else // Switches current activated item to the one on the left
         {
-            OnTutorialItemLeft(TypeOfTutorial.ItemChangeLeft);
+            if (inTutorial)
+                OnTutorialItemLeft(TypeOfTutorial.ItemChangeLeft);
 
             if (index > 0)
             {

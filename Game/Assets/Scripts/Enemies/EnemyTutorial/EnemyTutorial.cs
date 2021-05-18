@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Class responsible for handling a simple enemy.
+/// Class responsible for handling a tutorial enemy.
 /// </summary>
-[RequireComponent(typeof(SpawnItemBehaviour))]
-public sealed class EnemySimple : EnemyBase, IHearSound
+public class EnemyTutorial : EnemyBase, IHearSound
 {
     [Header("Simple enemy states")]
     [SerializeField] private EnemyAbstractState patrolStateOriginal;
@@ -101,7 +100,7 @@ public sealed class EnemySimple : EnemyBase, IHearSound
     private IEnumerator Start()
     {
         PositionOnLostPlayerState = default;
-             
+
         yield return new WaitForFixedUpdate();
         // Finds combat music after singleton destroys the one that exists
         // on this scene
@@ -124,13 +123,13 @@ public sealed class EnemySimple : EnemyBase, IHearSound
     /// Method called from AlertSurroundings, called from enemy states,
     /// in order to invoke Alert event.
     /// </summary>
-    public void OnAlert() => 
+    public void OnAlert() =>
         Alert?.Invoke();
 
     /// <summary>
     /// Invokes CollisionWithPlayer event.
     /// </summary>
-    private void OnCollisionWithPlayer() => 
+    private void OnCollisionWithPlayer() =>
         CollisionWithPlayer?.Invoke();
 
     /// <summary>
@@ -146,6 +145,12 @@ public sealed class EnemySimple : EnemyBase, IHearSound
     /// <param name="positionOfSound">Position of the sound.</param>
     public void OnReactToSound(Vector3 positionOfSound) =>
         ReactToSound?.Invoke(positionOfSound);
+
+    /// <summary>
+    /// Method that invokes Tutorial Alert.
+    /// Happens every time the enemy finds the player on tutorial.
+    /// </summary>
+    public void OnTutorialAlert() => TutorialAlert?.Invoke();
 
     /// <summary>
     /// Happens when the enemy collides with player.
@@ -169,6 +174,11 @@ public sealed class EnemySimple : EnemyBase, IHearSound
     /// Event triggered by enemy states that react to sound.
     /// </summary>
     public event Action<Vector3> ReactToSound;
+
+    /// <summary>
+    /// Event registered on Tutorial script. Happens when enemy finds player,
+    /// </summary>
+    public event Action TutorialAlert;
 
     /// <summary>
     /// On trigger enter it invokes CollisionWithPlayer event.
@@ -205,7 +215,7 @@ public sealed class EnemySimple : EnemyBase, IHearSound
             Gizmos.DrawLine(patrolPoint.transform.position + offset,
                 patrolPoint.transform.position + offset +
                 patrolPoint.transform.forward);
-        }  
+        }
     }
     #endregion
 }

@@ -7,9 +7,9 @@ public class PlayerRoll : MonoBehaviour, IAction
     public Animator Anim { get; private set; }
     private PlayerInputCustom input;
     private PlayerUseItem useItem;
-    private PlayerBlock block;
     private PlayerWallHug wallHug;
     private PlayerMovement movement;
+    private Player player;
 
     public bool Performing { get; set; }
     public float PerformingTime { get; set; }
@@ -19,34 +19,28 @@ public class PlayerRoll : MonoBehaviour, IAction
         input = FindObjectOfType<PlayerInputCustom>();
         Anim = GetComponent<Animator>();
         useItem = GetComponent<PlayerUseItem>();
-        block = GetComponent<PlayerBlock>();
         wallHug = GetComponent<PlayerWallHug>();
         movement = GetComponent<PlayerMovement>();
+        player = GetComponent<Player>();
     }
 
-    private void Start()
-    {
+    private void Start() =>
         Performing = false;
-    }
 
-    private void OnEnable()
-    {
+    private void OnEnable() =>
         input.Roll += HandleRoll;
-    }
 
-    private void OnDisable()
-    {
+    private void OnDisable() =>
         input.Roll -= HandleRoll;
-    }
 
     public void ComponentUpdate()
     {
-
+        // Left blank on purpose
     }
 
     public void ComponentFixedUpdate()
     {
-        
+        // Left blank on purpose
     }
 
     /// <summary>
@@ -59,7 +53,9 @@ public class PlayerRoll : MonoBehaviour, IAction
             && wallHug.Performing == false)
         {
             OnRoll();
-            OnTutorialRoll(TypeOfTutorial.Roll);
+
+            if (player.InTutorial)
+                OnTutorialRoll(TypeOfTutorial.Roll);
         }
     }
 

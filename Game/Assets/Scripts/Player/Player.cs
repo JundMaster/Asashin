@@ -6,7 +6,9 @@ using UnityEngine;
 /// </summary>
 public class Player : MonoBehaviour
 {
-    // Components
+    [SerializeField] private bool inTutorial;
+    public bool InTutorial => inTutorial;
+
     [SerializeField] private PlayerValuesScriptableObj values;
     public PlayerValuesScriptableObj Values => values;
 

@@ -24,6 +24,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
     private CinemachineTarget cinemachineTarget;
     private PlayerStats stats;
     private PlayerMovement movement;
+    private Player player;
 
     private Collider[] wallsColliders;
     private Collider[] wallsCollidersRight;
@@ -50,6 +51,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
         cinemachineTarget = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
         movement = GetComponent<PlayerMovement>();
+        player = GetComponent<Player>();
         cam = Camera.main;
     }
 
@@ -102,7 +104,9 @@ public class PlayerWallHug : MonoBehaviour, IAction
                     cinemachineTarget.CancelCurrentTarget();
                     Performing = true;
                     OnWallHug(true);
-                    OnTutorialWallHug(TypeOfTutorial.WallHug);
+
+                    if (player.InTutorial)
+                        OnTutorialWallHug(TypeOfTutorial.WallHug);
 
                     // Finds closest point between collisions
                     Vector3 closesestPoint
@@ -202,8 +206,11 @@ public class PlayerWallHug : MonoBehaviour, IAction
             {
                 if (Vector3.Dot(cam.transform.forward, transform.forward) <= 0)
                 {
-                    OnTutorialWallHugRight(TypeOfTutorial.WallHugRight);
-                    OnTutorialWallHugLeft(TypeOfTutorial.WallHugLeft);
+                    if (player.InTutorial)
+                    {
+                        OnTutorialWallHugRight(TypeOfTutorial.WallHugRight);
+                        OnTutorialWallHugLeft(TypeOfTutorial.WallHugLeft);
+                    }
 
                     controller.Move(
                     input.Movement.x *
@@ -214,8 +221,11 @@ public class PlayerWallHug : MonoBehaviour, IAction
                 }
                 else
                 {
-                    OnTutorialWallHugRight(TypeOfTutorial.WallHugRight);
-                    OnTutorialWallHugLeft(TypeOfTutorial.WallHugLeft);
+                    if (player.InTutorial)
+                    {
+                        OnTutorialWallHugRight(TypeOfTutorial.WallHugRight);
+                        OnTutorialWallHugLeft(TypeOfTutorial.WallHugLeft);
+                    }
 
                     controller.Move(
                     -input.Movement.x *

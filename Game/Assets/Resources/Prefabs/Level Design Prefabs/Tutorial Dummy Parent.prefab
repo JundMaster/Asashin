@@ -278,7 +278,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1009517688832808619}
-  - component: {fileID: 1009517688832808610}
+  - component: {fileID: 4337937447791927621}
   - component: {fileID: 1009517688832808621}
   - component: {fileID: 1009517688832808623}
   - component: {fileID: 1009517688832808616}
@@ -310,7 +310,7 @@ Transform:
   m_Father: {fileID: 1009517688641600686}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1009517688832808610
+--- !u!114 &4337937447791927621
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1009517688832808618}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37f368b10a232444e9e3ecd996acd3fa, type: 3}
+  m_Script: {fileID: 11500000, guid: c516479ff8d7cf147b5b4e6e9d761bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myLayer:
@@ -331,8 +331,8 @@ MonoBehaviour:
   myTarget: {fileID: 1009517689644205632}
   sizeOfAlert: 20
   weapon: {fileID: 2422374830460432009}
-  deathStateOriginal: {fileID: 11400000, guid: 6426dea4efe0b2c48a00b7676d9f5d44, type: 2}
-  patrolStateOriginal: {fileID: 11400000, guid: 2446942bb53985e4a828421d95c92422, type: 2}
+  deathStateOriginal: {fileID: 11400000, guid: 5ed64d3c336090d44a586cb89714f8e6, type: 2}
+  patrolStateOriginal: {fileID: 11400000, guid: 77168a80c5c33204ba1a44bb5e5a87d5, type: 2}
   defenseStateOriginal: {fileID: 0}
   lostPlayerStateOriginal: {fileID: 0}
   aggressiveStateOriginal: {fileID: 0}
@@ -402,7 +402,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: -0.11
+  m_BaseOffset: -0.04
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!54 &1009517688832808617
