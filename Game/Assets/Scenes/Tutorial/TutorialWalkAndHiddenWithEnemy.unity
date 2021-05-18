@@ -1303,9 +1303,14 @@ MonoBehaviour:
   wallHugRight: 0
   alert: 1
   block: 0
+  attack: 0
   woodenBox: 0
   treasure: 0
   instantKill: 0
+  enemyDie: 0
+  target: 0
+  targetLeft: 0
+  targetRight: 0
 --- !u!4 &545580583
 Transform:
   m_ObjectHideFlags: 0
@@ -2484,7 +2489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47506c29f57be044da778a1419c7e038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: 1
+  sceneToLoad: 20
   col: {fileID: 1334450495}
 --- !u!1001 &1343389716
 PrefabInstance:

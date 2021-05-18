@@ -346,13 +346,9 @@ public class Tutorial : MonoBehaviour
         yield return new WaitForSeconds(timeToWaitForObjectiveDone);
         objectivesPassed++;
 
-        if (loadingScene == false)
+        if (objectivesPassed == objectivesRequired)
         {
-            if (objectivesPassed == objectivesRequired)
-            {
-                tutorialDoor.SetTrigger("OpenDoor");
-                loadingScene = true;
-            }
+            tutorialDoor.SetTrigger("OpenDoor");
         }
     }
 }
