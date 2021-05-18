@@ -67,6 +67,9 @@ public class Tutorial : MonoBehaviour
         targetCinemachine = FindObjectOfType<CinemachineTarget>();
     }
 
+    /// <summary>
+    /// Registers events.
+    /// </summary>
     private void OnEnable()
     {
         if (playerMovement != null)
@@ -132,9 +135,73 @@ public class Tutorial : MonoBehaviour
         }   
     }
 
+    /// <summary>
+    /// Unregisters from events.
+    /// </summary>
     private void OnDisable()
     {
-        
+        if (playerMovement != null)
+        {
+            if (walk) playerMovement.TutorialWalk -= TutorialPassed;
+            if (run) playerMovement.TutorialRun -= TutorialPassed;
+            if (sprint) playerMovement.TutorialSprint -= TutorialPassed;
+            if (hidden) playerMovement.TutorialHidden -= TutorialPassed;
+        }
+
+        if (playerRoll != null)
+            if (roll) playerRoll.TutorialRoll -= TutorialPassed;
+
+        if (itemControl != null)
+        {
+            if (changeItemLeft) itemControl.TutorialItemLeft -= TutorialPassed;
+            if (changeItemRight) itemControl.TutorialItemRight -= TutorialPassed;
+        }
+
+        if (playerUseItem != null)
+            if (useItem) playerUseItem.TutorialItemUse -= TutorialPassed;
+
+        if (playerWallHug != null)
+        {
+            if (wallHug) playerWallHug.TutorialWallHug -= TutorialPassed;
+            if (wallHugLeft) playerWallHug.TutorialWallHugLeft -= TutorialPassed;
+            if (wallHugRight) playerWallHug.TutorialWallHugRight -= TutorialPassed;
+        }
+
+        if (playerAttack != null)
+        {
+            if (instantKill) playerAttack.TutorialInstantKill -= TutorialPassed;
+            if (attack) playerAttack.TutorialAttack -= TutorialPassed;
+        }
+
+        if (enemyTutorial != null)
+        {
+            foreach (EnemyTutorial enemy in enemyTutorial)
+            {
+                if (enemy != null)
+                {
+                    if (enemyDie) enemy.TutorialDie -= TutorialPassed;
+                    if (block) enemy.TutorialBlock -= TutorialPassed;
+                    if (alert) enemy.TutorialAlert -= TutorialFailed;
+                }
+            }
+        }
+
+        if (breakableBox != null)
+            if (woodenBox) breakableBox.TutorialBrokenBox -= TutorialPassed;
+
+        if (treasureBox != null)
+            if (treasure) treasureBox.TutorialTreasure -= TutorialPassed;
+
+        if (slowMotionBehaviour != null)
+            if (slowMotion) slowMotionBehaviour.TutorialSlowMotion -= TutorialPassed;
+
+        if (targetCinemachine != null)
+        {
+            if (target) targetCinemachine.TutorialTarget -= TutorialPassed;
+            if (targetLeft) targetCinemachine.TutorialTargetLeft -= TutorialPassed;
+            if (targetRight) targetCinemachine.TutorialTargetRight -= TutorialPassed;
+        }
+
     }
 
     /// <summary>
@@ -151,26 +218,26 @@ public class Tutorial : MonoBehaviour
         playerStats.SmokeGrenades += 10000;
 
         if (walk) objectivesRequired++;
-        if (hidden) objectivesRequired++;
         if (run) objectivesRequired++;
         if (sprint) objectivesRequired++;
+        if (hidden) objectivesRequired++;
+        if (wallHug) objectivesRequired++;
+        if (wallHugLeft) objectivesRequired++;
+        if (wallHugRight) objectivesRequired++;
         if (changeItemLeft) objectivesRequired++;
         if (changeItemRight) objectivesRequired++;
         if (useItem) objectivesRequired++;
-        if (roll) objectivesRequired++;
-        if (slowMotion) objectivesRequired++;
-        if (wallHug) objectivesRequired++;
-        if (instantKill) objectivesRequired++;
-        if (wallHugLeft) objectivesRequired++;
-        if (wallHugRight) objectivesRequired++;
         if (woodenBox) objectivesRequired++;
+        if (roll) objectivesRequired++;
         if (treasure) objectivesRequired++;
+        if (slowMotion) objectivesRequired++;
+        if (instantKill) objectivesRequired++;
         if (block) objectivesRequired++;
         if (attack) objectivesRequired++;
-        if (enemyDie) objectivesRequired++;
         if (target) objectivesRequired++;
         if (targetLeft) objectivesRequired++;
         if (targetRight) objectivesRequired++;
+        if (enemyDie) objectivesRequired++;
 
         if (objectivesPassed == objectivesRequired)
             tutorialDoor.SetTrigger("OpenDoor");
