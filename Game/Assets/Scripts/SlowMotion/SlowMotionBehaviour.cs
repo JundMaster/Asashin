@@ -9,6 +9,8 @@ using UnityEngine.Rendering.Universal;
 /// </summary>
 public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
 {
+    [SerializeField] private bool inTutorial;
+
     // Slowmotion Variables
     private float defaultTimeScale;
     private float defaultFixedDeltaTime;
@@ -97,6 +99,9 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
         // Event for Cinemachine Target. Controls cinemachine brain.
         OnSlowMotionEvent(SlowMotionEnum.SlowMotion);
         playerSounds.PlaySound(Sound.SlowMotion);
+
+        if (inTutorial)
+            OnTutorialSlowMotion(TypeOfTutorial.SlowMotion);
 
         Performing = true;
 
@@ -252,4 +257,12 @@ public class SlowMotionBehaviour : MonoBehaviour, IFindPlayer
     /// Event registered on AudioController.
     /// </summary>
     public event Action<SlowMotionEnum> SlowMotionEvent;
+
+
+    ///////////////////// Tutorial methods and events //////////////////////////
+    protected virtual void OnTutorialSlowMotion(TypeOfTutorial typeOfTut) =>
+        TutorialSlowMotion?.Invoke(typeOfTut);
+
+    public event Action<TypeOfTutorial> TutorialSlowMotion;
+    ////////////////////////////////////////////////////////////////////////////
 }

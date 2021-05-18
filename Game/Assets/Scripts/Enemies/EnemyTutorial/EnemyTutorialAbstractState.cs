@@ -14,6 +14,8 @@ public class EnemyTutorialAbstractState : EnemyAbstractState
 
     protected bool hitFromBehind;
 
+    [SerializeField] protected bool canDie;
+
     // Sound variables
     protected bool followSound;
     protected Vector3 positionOfSound;

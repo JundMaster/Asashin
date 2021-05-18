@@ -1294,6 +1294,7 @@ MonoBehaviour:
   run: 0
   sprint: 0
   roll: 0
+  slowMotion: 0
   changeItemLeft: 0
   changeItemRight: 0
   useItem: 0
@@ -1301,6 +1302,8 @@ MonoBehaviour:
   wallHugLeft: 0
   wallHugRight: 0
   alert: 1
+  woodenBox: 0
+  treasure: 0
 --- !u!4 &545580583
 Transform:
   m_ObjectHideFlags: 0
@@ -4656,6 +4659,10 @@ PrefabInstance:
     - target: {fileID: 7432806370208017081, guid: 9b62fa8b1cefb0544b430d43d3a98db3, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7432806370263757459, guid: 9b62fa8b1cefb0544b430d43d3a98db3, type: 3}
+      propertyPath: inTutorial
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7747712102537981981, guid: 9b62fa8b1cefb0544b430d43d3a98db3, type: 3}
       propertyPath: thisArea

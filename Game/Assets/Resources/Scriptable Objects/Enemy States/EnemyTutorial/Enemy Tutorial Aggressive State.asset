@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2cadccf8cd7e7b48836477990fe2823, type: 3}
+  m_Name: Enemy Tutorial Aggressive State
+  m_EditorClassIdentifier: 
+  timeToTravelAfterHit: 0.25
+  takeDamageDistancePower: 2.5
+  runningSpeed: 3.8
+  walkingSpeed: 1
+  turnSpeedAfterBeingHit: 0.1
+  canDie: 1
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 537942016
+  attackingDelay: 1.25
+  afterAttackDelay: 1.15
+  turnSpeed: 0.15
+  meleeHitParticles: {fileID: 3664975949699414532, guid: 0e1f38f4938bdf244b886fcfd61635b5, type: 3}

@@ -31,4 +31,6 @@ public enum SceneEnum
     TutorialWalkAndHidden,
     TutorialWalkAndHiddenWithEnemy,
     TutorialLoot,
+    TutorialRoll,
+    TutorialSlowMotion,
 }

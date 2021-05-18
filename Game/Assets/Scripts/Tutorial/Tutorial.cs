@@ -19,6 +19,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private bool run;
     [SerializeField] private bool sprint;
     [SerializeField] private bool roll;
+    [SerializeField] private bool slowMotion;
     [SerializeField] private bool changeItemLeft;
     [SerializeField] private bool changeItemRight;
     [SerializeField] private bool useItem;
@@ -28,7 +29,6 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private bool alert;
     [SerializeField] private bool woodenBox;
     [SerializeField] private bool treasure;
-
 
     // Components
     private PlayerStats playerStats;
@@ -40,6 +40,7 @@ public class Tutorial : MonoBehaviour
     private EnemyTutorial enemyTutorial;
     private BreakableBox breakableBox;
     private TreasureBox treasureBox;
+    private SlowMotionBehaviour slowMotionBehaviour;
 
     private void Awake()
     {
@@ -52,6 +53,7 @@ public class Tutorial : MonoBehaviour
         enemyTutorial = FindObjectOfType<EnemyTutorial>();
         breakableBox = FindObjectOfType<BreakableBox>();
         treasureBox = FindObjectOfType<TreasureBox>();
+        slowMotionBehaviour = FindObjectOfType<SlowMotionBehaviour>();
     }
 
     private void OnEnable()
@@ -91,6 +93,9 @@ public class Tutorial : MonoBehaviour
 
         if (treasureBox != null)
             if (treasure) treasureBox.TutorialTreasure += TutorialPassed;
+
+        if (slowMotionBehaviour != null)
+            if (slowMotion) slowMotionBehaviour.TutorialSlowMotion += TutorialPassed;
     }
 
     private void OnDisable()
@@ -119,6 +124,7 @@ public class Tutorial : MonoBehaviour
         if (changeItemRight) objectivesRequired++;
         if (useItem) objectivesRequired++;
         if (roll) objectivesRequired++;
+        if (slowMotion) objectivesRequired++;
         if (wallHug) objectivesRequired++;
         if (wallHugLeft) objectivesRequired++;
         if (wallHugRight) objectivesRequired++;
@@ -170,6 +176,9 @@ public class Tutorial : MonoBehaviour
                 break;
             case TypeOfTutorial.Roll:
                 playerRoll.TutorialRoll -= TutorialPassed;
+                break;
+            case TypeOfTutorial.SlowMotion:
+                slowMotionBehaviour.TutorialSlowMotion -= TutorialPassed;
                 break;
             case TypeOfTutorial.WallHug:
                 playerWallHug.TutorialWallHug -= TutorialPassed;

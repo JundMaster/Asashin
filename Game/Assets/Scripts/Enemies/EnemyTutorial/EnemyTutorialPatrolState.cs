@@ -104,14 +104,14 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
     {
         base.FixedUpdate();
 
-        if (die)
+        if (die && canDie)
             return enemy.DeathState;
 
         if ((hitFromBehind || followSound))
         {
             enemy.OnTutorialAlert();
 
-            return enemy.LostPlayerState;
+            return enemy.AggressiveState;
         }
 
         // Calculates vision cone if the player isn't too far
@@ -173,7 +173,6 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
                 enemy.OnTutorialAlert();
 
                 return
-                    enemy.DefenseState ??
                     enemy.AggressiveState ??
                     enemy.PatrolState;
             }
