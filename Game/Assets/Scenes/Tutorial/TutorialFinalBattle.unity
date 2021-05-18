@@ -378,7 +378,105 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 155233359}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &181437237
+--- !u!1 &545580581
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 545580583}
+  - component: {fileID: 545580582}
+  m_Layer: 0
+  m_Name: Tutorial
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &545580582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545580581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 124d4fdf667ef5f4b8259289ce62e76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialDoor: {fileID: 120488929}
+  timeToWaitForObjectiveDone: 2
+  walk: 0
+  hidden: 0
+  run: 0
+  sprint: 0
+  roll: 0
+  slowMotion: 0
+  changeItemLeft: 0
+  changeItemRight: 0
+  useItem: 0
+  wallHug: 0
+  wallHugLeft: 0
+  wallHugRight: 0
+  alert: 0
+  block: 0
+  attack: 0
+  woodenBox: 0
+  treasure: 0
+  instantKill: 0
+  enemyDie: 1
+--- !u!4 &545580583
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545580581}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1334450494}
+  - {fileID: 120488928}
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &703160019
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 703160020}
+  m_Layer: 0
+  m_Name: Lights
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &703160020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703160019}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1974639790}
+  - {fileID: 2039878688}
+  m_Father: {fileID: 1888325194}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &764820056
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -433,110 +531,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1009517688832808621, guid: 86af4758d1ead0249b7467ae3bb1eac5, type: 3}
+      propertyPath: hardDifficulty
+      value: 
+      objectReference: {fileID: 11400000, guid: 7de68b2c46a53124a8e367344ddb4f9f, type: 2}
+    - target: {fileID: 1009517688832808621, guid: 86af4758d1ead0249b7467ae3bb1eac5, type: 3}
+      propertyPath: normalDifficulty
+      value: 
+      objectReference: {fileID: 11400000, guid: 7de68b2c46a53124a8e367344ddb4f9f, type: 2}
+    - target: {fileID: 4337937447791927621, guid: 86af4758d1ead0249b7467ae3bb1eac5, type: 3}
+      propertyPath: patrolStateOriginal
+      value: 
+      objectReference: {fileID: 11400000, guid: c67c506eae1df124aaa1b9f15dc5c2a9, type: 2}
     - target: {fileID: 4337937447791927621, guid: 86af4758d1ead0249b7467ae3bb1eac5, type: 3}
       propertyPath: aggressiveStateOriginal
       value: 
-      objectReference: {fileID: 11400000, guid: 2013f0bce8b20474d8e2d7591192447a, type: 2}
+      objectReference: {fileID: 11400000, guid: 8c02f369dc63d1c489b6ff1cf3d5b7f9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86af4758d1ead0249b7467ae3bb1eac5, type: 3}
---- !u!1 &545580581
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 545580583}
-  - component: {fileID: 545580582}
-  m_Layer: 0
-  m_Name: Tutorial
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &545580582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 545580581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 124d4fdf667ef5f4b8259289ce62e76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tutorialDoor: {fileID: 120488929}
-  timeToWaitForObjectiveDone: 2
-  walk: 0
-  hidden: 0
-  run: 0
-  sprint: 0
-  roll: 0
-  slowMotion: 0
-  changeItemLeft: 0
-  changeItemRight: 0
-  useItem: 0
-  wallHug: 0
-  wallHugLeft: 0
-  wallHugRight: 0
-  alert: 0
-  block: 1
-  attack: 1
-  woodenBox: 0
-  treasure: 0
-  instantKill: 0
-  enemyDie: 0
---- !u!4 &545580583
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 545580581}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 20}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1334450494}
-  - {fileID: 120488928}
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &703160019
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 703160020}
-  m_Layer: 0
-  m_Name: Lights
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &703160020
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 703160019}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1974639790}
-  - {fileID: 2039878688}
-  m_Father: {fileID: 1888325194}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &827504983 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5967915184954310017, guid: 0034956325071c74fa782dc3b58753bc, type: 3}

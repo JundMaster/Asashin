@@ -280,7 +280,6 @@ GameObject:
   - component: {fileID: 1009517688832808619}
   - component: {fileID: 4337937447791927621}
   - component: {fileID: 1009517688832808621}
-  - component: {fileID: 1009517688832808623}
   - component: {fileID: 1009517688832808616}
   - component: {fileID: 1009517688832808622}
   - component: {fileID: 1009517688832808617}
@@ -356,20 +355,6 @@ MonoBehaviour:
   options: {fileID: 11400000, guid: f6b5564f096ffe64590e2ab28646e6c7, type: 2}
   normalDifficulty: {fileID: 11400000, guid: d55d16840b0ce6e41812d1b2ffe55f7d, type: 2}
   hardDifficulty: {fileID: 11400000, guid: d55d16840b0ce6e41812d1b2ffe55f7d, type: 2}
---- !u!114 &1009517688832808623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1009517688832808618}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da14cb1302d5bab438310145c631ff71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemsScriptableObj: {fileID: 11400000, guid: f044ca726dc62fe4eacd7ff51f48b97e, type: 2}
-  typeOfDrop: 2
 --- !u!114 &1009517688832808616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1994,6 +1979,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54543be746191b640aed6c711d4f6538, type: 3}
+--- !u!1 &199265784671885976 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 54543be746191b640aed6c711d4f6538, type: 3}
+  m_PrefabInstance: {fileID: 1009517687724632009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &686868764275343394 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 54543be746191b640aed6c711d4f6538, type: 3}
+  m_PrefabInstance: {fileID: 1009517687724632009}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &6874766086849190488 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 54543be746191b640aed6c711d4f6538, type: 3}
@@ -2002,15 +1997,5 @@ Animator:
 --- !u!4 &8879013555908834103 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8447082967072642302, guid: 54543be746191b640aed6c711d4f6538, type: 3}
-  m_PrefabInstance: {fileID: 1009517687724632009}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &686868764275343394 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 54543be746191b640aed6c711d4f6538, type: 3}
-  m_PrefabInstance: {fileID: 1009517687724632009}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &199265784671885976 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 54543be746191b640aed6c711d4f6538, type: 3}
   m_PrefabInstance: {fileID: 1009517687724632009}
   m_PrefabAsset: {fileID: 0}

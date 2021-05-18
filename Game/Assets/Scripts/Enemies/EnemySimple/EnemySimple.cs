@@ -6,7 +6,6 @@ using UnityEngine;
 /// <summary>
 /// Class responsible for handling a simple enemy.
 /// </summary>
-[RequireComponent(typeof(SpawnItemBehaviour))]
 public class EnemySimple : EnemyBase, IHearSound
 {
     [Header("Simple enemy states")]

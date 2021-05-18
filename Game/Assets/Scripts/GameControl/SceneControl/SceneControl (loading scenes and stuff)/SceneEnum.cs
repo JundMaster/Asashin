@@ -36,4 +36,5 @@ public enum SceneEnum
     TutorialBlockAndAttack,
     TutorialInstantKill,
     TutorialStealth,
+    TutorialFinalBattle,
 }

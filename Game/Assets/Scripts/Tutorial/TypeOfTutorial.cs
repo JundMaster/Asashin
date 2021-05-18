@@ -17,4 +17,5 @@
     Block,
     InstantKill,
     Attack,
+    EnemyDie,
 }

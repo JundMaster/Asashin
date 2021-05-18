@@ -32,6 +32,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private bool woodenBox;
     [SerializeField] private bool treasure;
     [SerializeField] private bool instantKill;
+    [SerializeField] private bool enemyDie;
 
     // Components
     private PlayerStats playerStats;
@@ -102,6 +103,7 @@ public class Tutorial : MonoBehaviour
             {
                 if (enemy != null)
                 {
+                    if (enemyDie) enemy.TutorialDie += TutorialPassed;
                     if (block) enemy.TutorialBlock += TutorialPassed;
                     if (alert) enemy.TutorialAlert += TutorialFailed;
                 }  
@@ -153,6 +155,7 @@ public class Tutorial : MonoBehaviour
         if (treasure) objectivesRequired++;
         if (block) objectivesRequired++;
         if (attack) objectivesRequired++;
+        if (enemyDie) objectivesRequired++;
 
         if (objectivesPassed == objectivesRequired)
             tutorialDoor.SetTrigger("OpenDoor");
@@ -231,6 +234,11 @@ public class Tutorial : MonoBehaviour
                 break;
             case TypeOfTutorial.Attack:
                 playerAttack.TutorialAttack -= TutorialPassed;
+                break;
+            case TypeOfTutorial.EnemyDie:
+                foreach (EnemyTutorial enemy in enemyTutorial)
+                    if (enemy != null)
+                        if (enemyDie) enemy.TutorialDie -= TutorialPassed;
                 break;
         }
 

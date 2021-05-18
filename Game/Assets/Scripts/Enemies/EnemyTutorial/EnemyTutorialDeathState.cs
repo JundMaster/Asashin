@@ -25,6 +25,8 @@ public class EnemyTutorialDeathState : EnemyTutorialAbstractState
 
         enemy.StopAllCoroutines();
         enemy.StartCoroutine(Die());
+
+        enemy.OnTutorialDie(TypeOfTutorial.EnemyDie);
     }
 
     /// <summary>
