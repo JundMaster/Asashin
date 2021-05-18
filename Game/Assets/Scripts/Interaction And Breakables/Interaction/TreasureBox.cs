@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
+using UnityEngine;
 
 [RequireComponent(typeof(SpawnItemBehaviour))]
 /// <summary>
@@ -7,6 +8,8 @@ using System.Collections;
 /// </summary>
 public class TreasureBox : MonoBehaviour, IFindPlayer, IInterectable
 {
+    [SerializeField] private bool inTutorial;
+
     // Components
     private PlayerInteract playerInteract;
     private SphereCollider sphereCollider;
@@ -35,6 +38,9 @@ public class TreasureBox : MonoBehaviour, IFindPlayer, IInterectable
 
         // Disables treasure collider
         sphereCollider.enabled = false;
+
+        if (inTutorial)
+            OnTutorialTreasure(TypeOfTutorial.LootTreasure);
 
         spawnItemsBehaviour.ExecuteBehaviour();
 
@@ -83,4 +89,11 @@ public class TreasureBox : MonoBehaviour, IFindPlayer, IInterectable
     {
         //
     }
+
+    ///////////////////// Tutorial methods and events //////////////////////////
+    protected virtual void OnTutorialTreasure(TypeOfTutorial typeOfTutorial) =>
+        TutorialTreasure?.Invoke(typeOfTutorial);
+
+    public event Action<TypeOfTutorial> TutorialTreasure;
+    ////////////////////////////////////////////////////////////////////////////
 }

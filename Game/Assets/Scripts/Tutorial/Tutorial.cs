@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Class responsible for controling tutorial levels.
+/// </summary>
 public class Tutorial : MonoBehaviour
 {
+    [Header("Last door animator")]
     [SerializeField] private Animator tutorialDoor;
     [SerializeField] private float timeToWaitForObjectiveDone;
+
     private bool loadingScene;
     private byte objectivesRequired;
     private byte objectivesPassed;
@@ -21,7 +26,11 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private bool wallHugLeft;
     [SerializeField] private bool wallHugRight;
     [SerializeField] private bool alert;
+    [SerializeField] private bool woodenBox;
+    [SerializeField] private bool treasure;
 
+
+    // Components
     private PlayerStats playerStats;
     private PlayerMovement playerMovement;
     private ItemControl itemControl;
@@ -29,6 +38,8 @@ public class Tutorial : MonoBehaviour
     private PlayerRoll playerRoll;
     private PlayerWallHug playerWallHug;
     private EnemyTutorial enemyTutorial;
+    private BreakableBox breakableBox;
+    private TreasureBox treasureBox;
 
     private void Awake()
     {
@@ -39,6 +50,8 @@ public class Tutorial : MonoBehaviour
         playerStats = FindObjectOfType<PlayerStats>();
         playerWallHug = FindObjectOfType<PlayerWallHug>();
         enemyTutorial = FindObjectOfType<EnemyTutorial>();
+        breakableBox = FindObjectOfType<BreakableBox>();
+        treasureBox = FindObjectOfType<TreasureBox>();
     }
 
     private void OnEnable()
@@ -71,8 +84,13 @@ public class Tutorial : MonoBehaviour
         }
 
         if (enemyTutorial != null)
-            if (alert)
-                enemyTutorial.TutorialAlert += TutorialFailed;
+            if (alert) enemyTutorial.TutorialAlert += TutorialFailed;
+
+        if (breakableBox != null)
+            if (woodenBox) breakableBox.TutorialBrokenBox += TutorialPassed;
+
+        if (treasureBox != null)
+            if (treasure) treasureBox.TutorialTreasure += TutorialPassed;
     }
 
     private void OnDisable()
@@ -80,6 +98,9 @@ public class Tutorial : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Gives infinite items. Increments objectives required to pass this level.
+    /// </summary>
     private void Start()
     {
         loadingScene = false;
@@ -101,10 +122,12 @@ public class Tutorial : MonoBehaviour
         if (wallHug) objectivesRequired++;
         if (wallHugLeft) objectivesRequired++;
         if (wallHugRight) objectivesRequired++;
+        if (woodenBox) objectivesRequired++;
+        if (treasure) objectivesRequired++;
     }
 
     /// <summary>
-    /// Loads current scene.
+    /// Loads current tutorial scene.
     /// </summary>
     private void TutorialFailed()
     {
@@ -157,19 +180,27 @@ public class Tutorial : MonoBehaviour
             case TypeOfTutorial.WallHugRight:
                 playerWallHug.TutorialWallHugRight -= TutorialPassed;
                 break;
+            case TypeOfTutorial.LootWoodenBox:
+                breakableBox.TutorialBrokenBox -= TutorialPassed;
+                break;
+            case TypeOfTutorial.LootTreasure:
+                treasureBox.TutorialTreasure -= TutorialPassed;
+                break;
         }
 
+        // After x seconds, increments objectives passed to open the last door
         StartCoroutine(TutorialPassedCoroutine());
     }
 
+    /// <summary>
+    /// After x seconds, increments objectives passed to open the last door.
+    /// </summary>
+    /// <returns>Null.</returns>
     private IEnumerator TutorialPassedCoroutine()
     {
         yield return new WaitForSeconds(timeToWaitForObjectiveDone);
-        objectivesPassed++;  
-    }
+        objectivesPassed++;
 
-    private void Update()
-    {
         if (loadingScene == false)
         {
             if (objectivesPassed == objectivesRequired)

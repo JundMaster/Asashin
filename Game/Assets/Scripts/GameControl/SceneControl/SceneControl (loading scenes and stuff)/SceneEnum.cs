@@ -30,5 +30,5 @@ public enum SceneEnum
     TutorialWallHug,
     TutorialWalkAndHidden,
     TutorialWalkAndHiddenWithEnemy,
-
+    TutorialLoot,
 }

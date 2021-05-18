@@ -12,4 +12,6 @@
     ItemUse,
     Roll,
     SlowMotion,
+    LootTreasure,
+    LootWoodenBox,
 }
