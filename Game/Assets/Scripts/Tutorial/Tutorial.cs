@@ -40,7 +40,7 @@ public class Tutorial : MonoBehaviour
     private PlayerRoll playerRoll;
     private PlayerWallHug playerWallHug;
     private PlayerMeleeAttack playerAttack;
-    private EnemyTutorial enemyTutorial;
+    private EnemyTutorial[] enemyTutorial;
     private BreakableBox breakableBox;
     private TreasureBox treasureBox;
     private SlowMotionBehaviour slowMotionBehaviour;
@@ -54,7 +54,7 @@ public class Tutorial : MonoBehaviour
         playerStats = FindObjectOfType<PlayerStats>();
         playerWallHug = FindObjectOfType<PlayerWallHug>();
         playerAttack = FindObjectOfType<PlayerMeleeAttack>();
-        enemyTutorial = FindObjectOfType<EnemyTutorial>();
+        enemyTutorial = FindObjectsOfType<EnemyTutorial>();
         breakableBox = FindObjectOfType<BreakableBox>();
         treasureBox = FindObjectOfType<TreasureBox>();
         slowMotionBehaviour = FindObjectOfType<SlowMotionBehaviour>();
@@ -94,8 +94,14 @@ public class Tutorial : MonoBehaviour
 
         if (enemyTutorial != null)
         {
-            if (block) enemyTutorial.TutorialBlock += TutorialPassed;
-            if (alert) enemyTutorial.TutorialAlert += TutorialFailed;
+            foreach (EnemyTutorial enemy in enemyTutorial)
+            {
+                if (enemy != null)
+                {
+                    if (block) enemy.TutorialBlock += TutorialPassed;
+                    if (alert) enemy.TutorialAlert += TutorialFailed;
+                }  
+            }
         }
 
         if (breakableBox != null)
@@ -142,6 +148,10 @@ public class Tutorial : MonoBehaviour
         if (woodenBox) objectivesRequired++;
         if (treasure) objectivesRequired++;
         if (block) objectivesRequired++;
+
+
+        if (objectivesPassed == objectivesRequired)
+            tutorialDoor.SetTrigger("OpenDoor");
     }
 
     /// <summary>
@@ -211,7 +221,9 @@ public class Tutorial : MonoBehaviour
                 treasureBox.TutorialTreasure -= TutorialPassed;
                 break;
             case TypeOfTutorial.Block:
-                enemyTutorial.TutorialBlock -= TutorialPassed;
+                foreach (EnemyTutorial enemy in enemyTutorial)
+                    if (enemy != null)
+                        if (block) enemy.TutorialBlock -= TutorialPassed;
                 break;
         }
 
