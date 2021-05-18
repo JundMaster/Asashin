@@ -14,4 +14,5 @@
     SlowMotion,
     LootTreasure,
     LootWoodenBox,
+    Block,
 }

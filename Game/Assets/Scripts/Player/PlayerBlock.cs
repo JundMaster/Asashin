@@ -7,7 +7,6 @@ public class PlayerBlock : MonoBehaviour, IAction
 {
     // Components
     private PlayerInputCustom input;
-    private Animator anim;
     private PlayerRoll roll;
     private PlayerUseItem useItem;
     private CinemachineTarget cineTarget;
@@ -17,21 +16,16 @@ public class PlayerBlock : MonoBehaviour, IAction
     private void Awake()
     {
         input = FindObjectOfType<PlayerInputCustom>();
-        anim = GetComponent<Animator>();
         roll = GetComponent<PlayerRoll>();
         useItem = GetComponent<PlayerUseItem>();
         cineTarget = FindObjectOfType<CinemachineTarget>();
     }
 
-    private void OnEnable()
-    {
+    private void OnEnable() =>
         input.Block += Block;
-    }
 
-    private void OnDisable()
-    {
+    private void OnDisable() =>
         input.Block -= Block;
-    }
 
     /// <summary>
     /// Sets block state to true or false.

@@ -27,6 +27,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private bool wallHugLeft;
     [SerializeField] private bool wallHugRight;
     [SerializeField] private bool alert;
+    [SerializeField] private bool block;
     [SerializeField] private bool woodenBox;
     [SerializeField] private bool treasure;
 
@@ -86,7 +87,10 @@ public class Tutorial : MonoBehaviour
         }
 
         if (enemyTutorial != null)
+        {
             if (alert) enemyTutorial.TutorialAlert += TutorialFailed;
+            if (block) enemyTutorial.TutorialBlock += TutorialPassed;
+        }
 
         if (breakableBox != null)
             if (woodenBox) breakableBox.TutorialBrokenBox += TutorialPassed;
@@ -130,6 +134,7 @@ public class Tutorial : MonoBehaviour
         if (wallHugRight) objectivesRequired++;
         if (woodenBox) objectivesRequired++;
         if (treasure) objectivesRequired++;
+        if (block) objectivesRequired++;
     }
 
     /// <summary>
@@ -194,6 +199,9 @@ public class Tutorial : MonoBehaviour
                 break;
             case TypeOfTutorial.LootTreasure:
                 treasureBox.TutorialTreasure -= TutorialPassed;
+                break;
+            case TypeOfTutorial.Block:
+                enemyTutorial.TutorialBlock -= TutorialPassed;
                 break;
         }
 

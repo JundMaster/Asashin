@@ -252,6 +252,7 @@ public class EnemyTutorialAgressiveState : EnemyTutorialAbstractState
                             0f, TypeOfDamage.PlayerBlockDamage);
 
                         anim.SetTrigger("BlockReflected");
+                        enemy.OnTutorialBlock(TypeOfTutorial.Block);
                     }
                     // If the player was NOT able to block
                     else

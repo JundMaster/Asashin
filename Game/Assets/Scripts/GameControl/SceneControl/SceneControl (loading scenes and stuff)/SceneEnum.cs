@@ -33,4 +33,5 @@ public enum SceneEnum
     TutorialLoot,
     TutorialRoll,
     TutorialSlowMotion,
+    TutorialBlock,
 }
