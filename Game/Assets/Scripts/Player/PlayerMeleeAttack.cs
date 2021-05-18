@@ -138,6 +138,9 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             }
 
             OnMeleeAttack();
+
+            if (player.InTutorial)
+                OnTutorialAttack(TypeOfTutorial.Attack);
         }
     }
 
@@ -305,9 +308,6 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     protected virtual void OnLightMeleeAttack(bool condition) =>
         LightMeleeAttack?.Invoke(condition);
 
-    protected virtual void OnTutorialInstantKill(TypeOfTutorial typeOfTutorial) =>
-        TutorialInstantKill?.Invoke(typeOfTutorial);
-
     /// <summary>
     /// Event registered on PlayerAnimations.
     /// Event registered on PlayerMovement.
@@ -315,7 +315,16 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     /// depending on the condition.
     public event Action<bool> LightMeleeAttack;
 
+    ///////////////////// Tutorial methods and events //////////////////////////
+    protected virtual void OnTutorialInstantKill(TypeOfTutorial typeOfTutorial) =>
+        TutorialInstantKill?.Invoke(typeOfTutorial);
+
+    protected virtual void OnTutorialAttack(TypeOfTutorial typeOfTutorial) =>
+        TutorialAttack?.Invoke(typeOfTutorial);
+
     public event Action<TypeOfTutorial> TutorialInstantKill;
+    public event Action<TypeOfTutorial> TutorialAttack;
+    ////////////////////////////////////////////////////////////////////////////
 
     #region Gizmos
     private void OnDrawGizmosSelected()

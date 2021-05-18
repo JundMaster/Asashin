@@ -28,6 +28,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private bool wallHugRight;
     [SerializeField] private bool alert;
     [SerializeField] private bool block;
+    [SerializeField] private bool attack;
     [SerializeField] private bool woodenBox;
     [SerializeField] private bool treasure;
     [SerializeField] private bool instantKill;
@@ -90,7 +91,10 @@ public class Tutorial : MonoBehaviour
         }
 
         if (playerAttack != null)
+        {
             if (instantKill) playerAttack.TutorialInstantKill += TutorialPassed;
+            if (attack) playerAttack.TutorialAttack += TutorialPassed;
+        }
 
         if (enemyTutorial != null)
         {
@@ -148,7 +152,7 @@ public class Tutorial : MonoBehaviour
         if (woodenBox) objectivesRequired++;
         if (treasure) objectivesRequired++;
         if (block) objectivesRequired++;
-
+        if (attack) objectivesRequired++;
 
         if (objectivesPassed == objectivesRequired)
             tutorialDoor.SetTrigger("OpenDoor");
@@ -224,6 +228,9 @@ public class Tutorial : MonoBehaviour
                 foreach (EnemyTutorial enemy in enemyTutorial)
                     if (enemy != null)
                         if (block) enemy.TutorialBlock -= TutorialPassed;
+                break;
+            case TypeOfTutorial.Attack:
+                playerAttack.TutorialAttack -= TutorialPassed;
                 break;
         }
 

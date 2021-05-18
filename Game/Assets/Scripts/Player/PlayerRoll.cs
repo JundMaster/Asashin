@@ -3,6 +3,10 @@ using System;
 
 public class PlayerRoll : MonoBehaviour, IAction
 {
+    // Sound emission
+    [SerializeField] private IntensityOfSound rollIntensityVolume;
+    [SerializeField] private LayerMask enemyLayer;
+
     // Components
     public Animator Anim { get; private set; }
     private PlayerInputCustom input;
@@ -59,6 +63,9 @@ public class PlayerRoll : MonoBehaviour, IAction
         }
     }
 
+    public void EmitRollNoise() =>
+        gameObject.EmitSound(player, rollIntensityVolume, enemyLayer);
+
     /// <summary>
     /// Invokes Roll event.
     /// </summary>
@@ -79,6 +86,7 @@ public class PlayerRoll : MonoBehaviour, IAction
     /// Event registered on SlowMotionBehaviour.
     /// </summary>
     public event Action Dodge;
+
 
     ///////////////////// Tutorial methods and events //////////////////////////
     protected virtual void OnTutorialRoll(TypeOfTutorial typeOfTutorial) => 

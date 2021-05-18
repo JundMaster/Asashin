@@ -33,7 +33,7 @@ public enum SceneEnum
     TutorialLoot,
     TutorialRoll,
     TutorialSlowMotion,
-    TutorialBlock,
+    TutorialBlockAndAttack,
     TutorialInstantKill,
     TutorialStealth,
 }

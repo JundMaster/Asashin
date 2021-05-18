@@ -100,8 +100,8 @@ public class PlayerUseItem : MonoBehaviour, IAction
     private void HandleItemUse()
     {
         if (canUseItemDelayOver && attack.Performing == false && 
-            roll.Performing == false &&
-            block.Performing == false && wallHug.Performing == false)
+            roll.Performing == false && block.Performing == false && 
+            wallHug.Performing == false && movement.Walking == false)
         {
             if (player.InTutorial)
                 OnTutorialItemUse(TypeOfTutorial.ItemUse);

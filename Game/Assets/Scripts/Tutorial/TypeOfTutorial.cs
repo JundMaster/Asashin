@@ -16,4 +16,5 @@
     LootWoodenBox,
     Block,
     InstantKill,
+    Attack,
 }
