@@ -107,7 +107,7 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
         if (die && canDie)
             return enemy.DeathState;
 
-        if ((hitFromBehind || followSound) && canDie == false)
+        if (hitFromBehind || followSound)
         {
             enemy.OnTutorialAlert();
 
@@ -254,19 +254,6 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
             }
             yield return wffu;
         }
-    }
-
-    /// <summary>
-    /// Instantiates an exclamation mark.
-    /// </summary>
-    private void InstantiateExclamationMark()
-    {
-        // Instantiates an exclamation mark
-        GameObject exclMark = Instantiate(
-            exclamationMarkPrefab,
-            enemy.transform.position + offset,
-            Quaternion.identity);
-        exclMark.transform.parent = enemy.transform;
     }
 
     /// <summary>

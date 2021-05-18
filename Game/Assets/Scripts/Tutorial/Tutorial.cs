@@ -94,8 +94,8 @@ public class Tutorial : MonoBehaviour
 
         if (enemyTutorial != null)
         {
-            if (alert) enemyTutorial.TutorialAlert += TutorialFailed;
             if (block) enemyTutorial.TutorialBlock += TutorialPassed;
+            if (alert) enemyTutorial.TutorialAlert += TutorialFailed;
         }
 
         if (breakableBox != null)

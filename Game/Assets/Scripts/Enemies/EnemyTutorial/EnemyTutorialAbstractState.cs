@@ -51,7 +51,6 @@ public class EnemyTutorialAbstractState : EnemyAbstractState
     public override void OnEnter()
     {
         base.OnEnter();
-
         enemy.InstantDeath += SwitchToDeathState;
         enemy.ReactToSound += SetPositionOfSound;
     }
@@ -89,10 +88,6 @@ public class EnemyTutorialAbstractState : EnemyAbstractState
         YieldInstruction wffu = new WaitForFixedUpdate();
         float timeEntered = Time.time;
 
-        // Triggers hit from behind and sets it to false OnExit
-        // (after the state reacts to hit)
-        hitFromBehind = true;
-
         // Direction from player to enemy
         Vector3 dir =
             myTarget.position.Direction(playerTarget.position);
@@ -121,6 +116,10 @@ public class EnemyTutorialAbstractState : EnemyAbstractState
 
             yield return wffu;
         }
+
+        // Triggers hit from behind and sets it to false OnExit
+        // (after the state reacts to hit)
+        hitFromBehind = true;
 
         agent.isStopped = false;
     }

@@ -19,7 +19,7 @@ public static class GameObjectExtenstions
             switch (intensity)
             {
                 case IntensityOfSound.Low:
-                    sizeOfAlert = 5;
+                    sizeOfAlert = 3;
                     break;
                 case IntensityOfSound.Normal:
                     sizeOfAlert = 13;

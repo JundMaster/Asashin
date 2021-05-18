@@ -58,6 +58,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private Vector3 moveDirection;
     public float MovementSpeed { get; set; }
     private bool stopMovementAfterWallHug;
+    [SerializeField] private IntensityOfSound runIntensityVolume;
     [SerializeField] private IntensityOfSound sprintIntensityVolume;
 
     // Layers
@@ -474,8 +475,10 @@ public class PlayerMovement : MonoBehaviour, IAction
     /// </summary>
     public void LeftFootImpact()
     {
-        if (Sprinting)
+        if (Sprinting && Walking == false)
             gameObject.EmitSound(player, sprintIntensityVolume, enemyLayer);
+        else if (Sprinting == false && Walking == false)
+            gameObject.EmitSound(player, runIntensityVolume, enemyLayer);
 
         // Forest
         if ((byte)currentScene < 3)
@@ -487,8 +490,10 @@ public class PlayerMovement : MonoBehaviour, IAction
     /// </summary>
     public void RightFootImpact()
     {
-        if (Sprinting)
+        if (Sprinting && Walking == false)
             gameObject.EmitSound(player, sprintIntensityVolume, enemyLayer);
+        else if (Sprinting == false && Walking == false)
+            gameObject.EmitSound(player, runIntensityVolume, enemyLayer);
 
         // Forest
         if ((byte)currentScene < 3)
