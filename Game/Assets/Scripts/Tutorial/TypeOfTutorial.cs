@@ -18,4 +18,7 @@
     InstantKill,
     Attack,
     EnemyDie,
+    Target,
+    TargetLeft,
+    TargetRight,
 }

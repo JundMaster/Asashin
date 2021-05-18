@@ -33,6 +33,9 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private bool treasure;
     [SerializeField] private bool instantKill;
     [SerializeField] private bool enemyDie;
+    [SerializeField] private bool target;
+    [SerializeField] private bool targetLeft;
+    [SerializeField] private bool targetRight;
 
     // Components
     private PlayerStats playerStats;
@@ -46,6 +49,7 @@ public class Tutorial : MonoBehaviour
     private BreakableBox breakableBox;
     private TreasureBox treasureBox;
     private SlowMotionBehaviour slowMotionBehaviour;
+    private CinemachineTarget targetCinemachine;
 
     private void Awake()
     {
@@ -60,6 +64,7 @@ public class Tutorial : MonoBehaviour
         breakableBox = FindObjectOfType<BreakableBox>();
         treasureBox = FindObjectOfType<TreasureBox>();
         slowMotionBehaviour = FindObjectOfType<SlowMotionBehaviour>();
+        targetCinemachine = FindObjectOfType<CinemachineTarget>();
     }
 
     private void OnEnable()
@@ -118,6 +123,13 @@ public class Tutorial : MonoBehaviour
 
         if (slowMotionBehaviour != null)
             if (slowMotion) slowMotionBehaviour.TutorialSlowMotion += TutorialPassed;
+
+        if (targetCinemachine != null)
+        {
+            if (target) targetCinemachine.TutorialTarget += TutorialPassed;
+            if (targetLeft) targetCinemachine.TutorialTargetLeft += TutorialPassed;
+            if (targetRight) targetCinemachine.TutorialTargetRight += TutorialPassed;
+        }   
     }
 
     private void OnDisable()
@@ -156,6 +168,9 @@ public class Tutorial : MonoBehaviour
         if (block) objectivesRequired++;
         if (attack) objectivesRequired++;
         if (enemyDie) objectivesRequired++;
+        if (target) objectivesRequired++;
+        if (targetLeft) objectivesRequired++;
+        if (targetRight) objectivesRequired++;
 
         if (objectivesPassed == objectivesRequired)
             tutorialDoor.SetTrigger("OpenDoor");
@@ -234,6 +249,15 @@ public class Tutorial : MonoBehaviour
                 break;
             case TypeOfTutorial.Attack:
                 playerAttack.TutorialAttack -= TutorialPassed;
+                break;
+            case TypeOfTutorial.Target:
+                targetCinemachine.TutorialTarget -= TutorialPassed;
+                break;
+            case TypeOfTutorial.TargetLeft:
+                targetCinemachine.TutorialTargetLeft -= TutorialPassed;
+                break;
+            case TypeOfTutorial.TargetRight:
+                targetCinemachine.TutorialTargetRight -= TutorialPassed;
                 break;
             case TypeOfTutorial.EnemyDie:
                 foreach (EnemyTutorial enemy in enemyTutorial)

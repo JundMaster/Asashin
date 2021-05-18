@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Cinemachine;
-using System.Linq;
-using System.Collections;
 
 public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 {
+    [SerializeField] private bool inTutorial;
+
     [SerializeField] private OptionsScriptableObj configScriptableObj;
 
     // Components
@@ -146,7 +149,6 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             currentTarget.position =
                 FindCurrentTargetedEnemy().transform.position + targetYOffset;
         }
-            
     }
 
     private void Update()
@@ -231,6 +233,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                     UpdateTargetCameraLookAt();
                     FindCurrentTargetedEnemy();
 
+                    if (inTutorial)
+                        OnTutorialTarget(TypeOfTutorial.Target);
+
                     Targeting = true;
                 }
             }
@@ -270,6 +275,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                             shortestDistance = distanceFromTarget;
 
                             definitiveTarget = allEnemies[i];
+
+                            if (inTutorial)
+                                OnTutorialTargetLeft(TypeOfTutorial.TargetLeft);
                         }
                     }
                 }
@@ -285,6 +293,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
                             shortestDistance = distanceFromTarget;
 
                             definitiveTarget = allEnemies[i];
+
+                            if (inTutorial)
+                                OnTutorialTargetRight(TypeOfTutorial.TargetRight);
                         }
                     }
                 }
@@ -643,4 +654,20 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         thirdPersonCamera.m_YAxis.m_MaxSpeed = configScriptableObj.VerticalSensibility;
         thirdPersonCamera.m_XAxis.m_MaxSpeed = configScriptableObj.HorizontalSensibility;
     }
+
+
+    ///////////////////// Tutorial methods and events //////////////////////////
+    protected virtual void OnTutorialTarget(TypeOfTutorial typeOfTut) =>
+        TutorialTarget?.Invoke(typeOfTut);
+
+    protected virtual void OnTutorialTargetLeft(TypeOfTutorial typeOfTut) =>
+        TutorialTargetLeft?.Invoke(typeOfTut);
+
+    protected virtual void OnTutorialTargetRight(TypeOfTutorial typeOfTut) =>
+        TutorialTargetRight?.Invoke(typeOfTut);
+
+    public event Action<TypeOfTutorial> TutorialTarget;
+    public event Action<TypeOfTutorial> TutorialTargetLeft;
+    public event Action<TypeOfTutorial> TutorialTargetRight;
+    ////////////////////////////////////////////////////////////////////////////
 }
