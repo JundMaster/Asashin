@@ -19,8 +19,13 @@ public class TutorialNext : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == PLAYERLAYER)
-            sceneControl.LoadScene(sceneToLoad);
+            NextTutorial();
     }
+
+    public void NextTutorial() => sceneControl.LoadScene(sceneToLoad);
+
+    public void QuitTutorial() => sceneControl.LoadScene(SceneEnum.Area1);
+
 
     private void OnDrawGizmos()
     {
