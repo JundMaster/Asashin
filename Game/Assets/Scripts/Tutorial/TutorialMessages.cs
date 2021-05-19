@@ -4,10 +4,12 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using TMPro;
 
-public class DisplayTutMessage : MonoBehaviour
+/// <summary>
+/// Class responsible for handling tutorial messages.
+/// </summary>
+public class TutorialMessages : MonoBehaviour
 {
-    [SerializeField] private GameObject initialSelectedButton;
-    private GameObject lastSelectedGameObject;
+    [SerializeField] private GameObject tutorialClose;
 
     [Header("Tutorial Text")]
     [SerializeField] TextMeshProEffect textEffect;
@@ -54,6 +56,9 @@ public class DisplayTutMessage : MonoBehaviour
     private readonly string KEYBOARDROLL        = "SPACE";
     private readonly string GAMEPADROLL         = "X";
 
+    private readonly string KEYBOARDKEYTOCONTINUE = "enter";
+    private readonly string GAMEPADKEYTOCONTINUE = "x";
+
     private string movement;
     private string sprint;
     private string walk;
@@ -70,6 +75,8 @@ public class DisplayTutMessage : MonoBehaviour
     private string targetRight;
     private string roll;
 
+    private string keyToContinue;
+
     private void Awake()
     {
         eventSys = FindObjectOfType<EventSystem>();
@@ -78,13 +85,16 @@ public class DisplayTutMessage : MonoBehaviour
 
     private IEnumerator Start()
     {
+        input.SwitchActionMapToGameplay();
+        eventSys.SetSelectedGameObject(null);
+
+        yield return new WaitForFixedUpdate();
+        input.SwitchActionMapToGamePaused();
+
         // Transparent text
         textMeshPro.color = new Color(0, 0, 0, 0);
 
-        yield return new WaitForEndOfFrame();
-        eventSys.SetSelectedGameObject(initialSelectedButton);
-
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.75f);
         // White text
         textMeshPro.color = new Color(1, 1, 1, 1);
         textEffect.Play();
@@ -94,26 +104,19 @@ public class DisplayTutMessage : MonoBehaviour
     {
         // Enables gameplay controls
         input.SwitchActionMapToGameplay();
+        eventSys.SetSelectedGameObject(null);
     }
 
+    /// <summary>
+    /// Disables controls. Updates text variables.
+    /// </summary>
     private void Update()
     {
         // Disables gameplay controls
         input.SwitchActionMapToGamePaused();
 
-        #region Always keeps close button selected
-        // Keeps last selected gameobject
-        if (eventSys.currentSelectedGameObject != null &&
-            eventSys.currentSelectedGameObject != lastSelectedGameObject)
-        {
-            lastSelectedGameObject = eventSys.currentSelectedGameObject;
-        }
-        // If the button is null, it selects the last selected button
-        if (eventSys.currentSelectedGameObject == null)
-        {
-            eventSys.SetSelectedGameObject(lastSelectedGameObject);
-        }
-        #endregion
+        input.EnableInputModule(true);
+        eventSys.SetSelectedGameObject(tutorialClose);
 
         // Checks if there is any gamepad connected and updates text
         var gamePads = Gamepad.all;
@@ -126,6 +129,7 @@ public class DisplayTutMessage : MonoBehaviour
             block = GAMEPADBLOCK;
             loot = GAMEPADLOOT;
             wallHug = GAMEPADWALLHUG;
+            wallHugMovement = GAMEPADWALLHUGMOVEMENT;
             itemUse = GAMEPADITEMUSE;
             itemLeft = GAMEPADITEMLEFT;
             itemRight = GAMEPADITEMRIGHT;
@@ -133,8 +137,8 @@ public class DisplayTutMessage : MonoBehaviour
             targetLeft = GAMEPADTARGETLEFT;
             targetRight = GAMEPADTARGETRIGHT;
             roll = GAMEPADROLL;
-
-            closeTextMeshPro.text = "x";
+            
+            keyToContinue = GAMEPADKEYTOCONTINUE;
         }
         else
         {
@@ -147,6 +151,7 @@ public class DisplayTutMessage : MonoBehaviour
             block = KEYBOARDBLOCK;
             loot = KEYBOARDLOOT;
             wallHug = KEYBOARDWALLHUG;
+            wallHugMovement = KEYBOARDWALLHUGMOVEMENT;
             itemUse = KEYBOARDITEMUSE;
             itemLeft = KEYBOARDITEMLEFT;
             itemRight = KEYBOARDITEMRIGHT;
@@ -155,19 +160,24 @@ public class DisplayTutMessage : MonoBehaviour
             targetRight = KEYBOARDTARGETRIGHT;
             roll = KEYBOARDROLL;
 
-            closeTextMeshPro.text = "enter";
+            keyToContinue = KEYBOARDKEYTOCONTINUE;
         }
 
         DisplayTutorialText();
     }
 
+    /// <summary>
+    /// Updates current tutorial text.
+    /// </summary>
     private void DisplayTutorialText()
     {
+        closeTextMeshPro.text = keyToContinue;
+
         switch (currentTutorial)
         {
             case CurrentTutorial._1:
                 textMeshPro.text = 
-                    $"In order to move your character, use {movement} to run. You can also use {sprint} to sprint while running.";
+                    $"In order to move your character, use {movement} to run. You can also use {sprint} to sprint while running. You may pause the tutorial and choose to repeat the current one, skip to the next one, or quit the tutorial. Press {keyToContinue.ToUpper()} to continue the tutorial.";
                 break;
             case CurrentTutorial._2:
                 textMeshPro.text =

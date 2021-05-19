@@ -586,6 +586,17 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""1bc2428e-5f18-4e72-b807-4598540996e2"",
+                    ""path"": ""<Keyboard>/numpadEnter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""976d51e2-66cb-40fa-84da-3dfed536753b"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",

@@ -15,10 +15,8 @@ public class SceneControl : MonoBehaviour
     // Components
     private Animator anim;
 
-    private void Awake()
-    {
+    private void Awake() =>
         anim = GetComponent<Animator>();
-    }
 
     private void OnEnable() => 
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -91,10 +89,8 @@ public class SceneControl : MonoBehaviour
     /// </summary>
     /// <param name="scene">Null.</param>
     /// <param name="mode">Null.</param>
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) =>
         StartCoroutine(EnableControls());
-    }
 
     /// <summary>
     /// Enables base module input.

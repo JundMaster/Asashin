@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Changes tutorial to next scene.
+/// Changes tutorial scenes.
 /// </summary>
-public class TutorialNext : MonoBehaviour
+public class TutorialScenesControl : MonoBehaviour
 {
     [SerializeField] private SceneEnum sceneToLoad;
+    public SceneEnum SceneToLoad => sceneToLoad;
 
     [SerializeField] private BoxCollider col;
 
@@ -19,13 +20,8 @@ public class TutorialNext : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == PLAYERLAYER)
-            NextTutorial();
+            sceneControl.LoadScene(sceneToLoad);
     }
-
-    public void NextTutorial() => sceneControl.LoadScene(sceneToLoad);
-
-    public void QuitTutorial() => sceneControl.LoadScene(SceneEnum.Area1);
-
 
     private void OnDrawGizmos()
     {
