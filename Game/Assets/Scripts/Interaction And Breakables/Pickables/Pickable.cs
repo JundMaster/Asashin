@@ -73,7 +73,7 @@ public abstract class Pickable : MonoBehaviour, IPickable
             PlayerStats playerStats = other.GetComponent<PlayerStats>();
             ItemUIParent itemsUI = FindObjectOfType<ItemUIParent>();
             Execute(playerStats);
-            itemsUI.UpdateAllItemUI();
+            itemsUI?.UpdateAllItemUI();
             Destroy(gameObject);
         }
     }

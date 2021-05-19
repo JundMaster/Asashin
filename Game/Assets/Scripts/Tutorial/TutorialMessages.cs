@@ -9,18 +9,9 @@ using TMPro;
 /// </summary>
 public class TutorialMessages : MonoBehaviour
 {
-    [SerializeField] private GameObject tutorialClose;
-
     [Header("Tutorial Text")]
     [SerializeField] TextMeshProEffect textEffect;
     [SerializeField] TextMeshProUGUI textMeshPro;
-
-    [Header("Close Button Text")]
-    [SerializeField] TextMeshProUGUI closeTextMeshPro;
-
-    // Components
-    private EventSystem eventSys;
-    private PlayerInputCustom input;
 
     private enum CurrentTutorial { _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13 }
     [SerializeField] private CurrentTutorial currentTutorial;
@@ -29,6 +20,8 @@ public class TutorialMessages : MonoBehaviour
     private readonly string GAMEPADMOVEMENT     = "LEFT ANALOG";
     private readonly string KEYBOARDSPRINT      = "LEFT SHIFT";
     private readonly string GAMEPADSPRINT       = "R2";
+    private readonly string KEYBOARDCAMERA      = "MOUSE";
+    private readonly string GAMEPADCAMERA       = "RIGHT ANALOG";
     private readonly string KEYBOARDWALK        = "CTRL";
     private readonly string GAMEPADWALK         = "L2";
     private readonly string KEYBOARDATTACK      = "LEFT MOUSE";
@@ -56,11 +49,9 @@ public class TutorialMessages : MonoBehaviour
     private readonly string KEYBOARDROLL        = "SPACE";
     private readonly string GAMEPADROLL         = "X";
 
-    private readonly string KEYBOARDKEYTOCONTINUE = "enter";
-    private readonly string GAMEPADKEYTOCONTINUE = "x";
-
     private string movement;
     private string sprint;
+    private string cameraRotation;
     private string walk;
     private string attack;
     private string block;
@@ -75,22 +66,9 @@ public class TutorialMessages : MonoBehaviour
     private string targetRight;
     private string roll;
 
-    private string keyToContinue;
-
-    private void Awake()
-    {
-        eventSys = FindObjectOfType<EventSystem>();
-        input = FindObjectOfType<PlayerInputCustom>();
-    }
 
     private IEnumerator Start()
     {
-        input.SwitchActionMapToGameplay();
-        eventSys.SetSelectedGameObject(null);
-
-        yield return new WaitForFixedUpdate();
-        input.SwitchActionMapToGamePaused();
-
         // Transparent text
         textMeshPro.color = new Color(0, 0, 0, 0);
 
@@ -100,30 +78,18 @@ public class TutorialMessages : MonoBehaviour
         textEffect.Play();
     }
 
-    private void OnDisable()
-    {
-        // Enables gameplay controls
-        input.SwitchActionMapToGameplay();
-        eventSys.SetSelectedGameObject(null);
-    }
-
     /// <summary>
     /// Disables controls. Updates text variables.
     /// </summary>
     private void Update()
     {
-        // Disables gameplay controls
-        input.SwitchActionMapToGamePaused();
-
-        input.EnableInputModule(true);
-        eventSys.SetSelectedGameObject(tutorialClose);
-
         // Checks if there is any gamepad connected and updates text
         var gamePads = Gamepad.all;
         if (gamePads.Count > 0)
         {
             movement = GAMEPADMOVEMENT;
             sprint = GAMEPADSPRINT;
+            cameraRotation = GAMEPADCAMERA;
             walk = GAMEPADWALK;
             attack = GAMEPADATTACK;
             block = GAMEPADBLOCK;
@@ -137,13 +103,12 @@ public class TutorialMessages : MonoBehaviour
             targetLeft = GAMEPADTARGETLEFT;
             targetRight = GAMEPADTARGETRIGHT;
             roll = GAMEPADROLL;
-            
-            keyToContinue = GAMEPADKEYTOCONTINUE;
         }
         else
         {
             movement = KEYBOARDMOVEMENT;
             sprint = KEYBOARDSPRINT;
+            cameraRotation = KEYBOARDCAMERA;
             movement = KEYBOARDMOVEMENT;
             sprint = KEYBOARDSPRINT;
             walk = KEYBOARDWALK;
@@ -159,8 +124,6 @@ public class TutorialMessages : MonoBehaviour
             targetLeft = KEYBOARDTARGETLEFT;
             targetRight = KEYBOARDTARGETRIGHT;
             roll = KEYBOARDROLL;
-
-            keyToContinue = KEYBOARDKEYTOCONTINUE;
         }
 
         DisplayTutorialText();
@@ -171,13 +134,11 @@ public class TutorialMessages : MonoBehaviour
     /// </summary>
     private void DisplayTutorialText()
     {
-        closeTextMeshPro.text = keyToContinue;
-
         switch (currentTutorial)
         {
             case CurrentTutorial._1:
                 textMeshPro.text = 
-                    $"In order to move your character, use {movement} to run. You can also use {sprint} to sprint while running. You may pause the tutorial and choose to repeat the current one, skip to the next one, or quit the tutorial. Press {keyToContinue.ToUpper()} to continue the tutorial.";
+                    $"In order to move your character, use {movement} to run. You can also use {sprint} to sprint while running. Rotate the camera by moving your {cameraRotation}. You may pause the tutorial and choose to repeat the current one, skip to the next one, or quit the tutorial. Every time you finish a tutorial the exit doors will open.";
                 break;
             case CurrentTutorial._2:
                 textMeshPro.text =
@@ -193,11 +154,11 @@ public class TutorialMessages : MonoBehaviour
                 break;
             case CurrentTutorial._5:
                 textMeshPro.text =
-                    $"You are able to attack or block attacks with your Ninjatō. To attack, choose a direction and press {attack}. To block, choose a direction and press {block}. Move towards the vision cone when you're ready.";
+                    $"You are able to attack or block attacks with your Ninjato. To attack, choose a direction and press {attack}. To block, choose a direction and press {block}. Move towards the vision cone when you're ready and perform a block and an attack.";
                 break;
             case CurrentTutorial._6:
                 textMeshPro.text =
-                    $"If you approach an enemy off-guard you will be able to perform an instant kill. In order to do this, approach the enemy while sneaking without alerting him and press {attack}.";
+                    $"If you approach an enemy off-guard you will be able to perform an instant kill. In order to do this, approach the enemy carefully without alerting him and press {attack} while sneaking.";
                 break;
             case CurrentTutorial._7:
                 textMeshPro.text =
@@ -213,7 +174,7 @@ public class TutorialMessages : MonoBehaviour
                 break;
             case CurrentTutorial._10:
                 textMeshPro.text =
-                    $"In order to have better control over your enemy, you are able to target him. While targeting the enemy, you are able to attack, block and use items in his direction. To target an enemy press {target}. To switch to next target press {targetLeft} or {targetRight}.";
+                    $"In order to have better control over your enemy, you are able to target him. While targeting the enemy, you are able to attack, block and use items in his direction. To target an enemy press {target}. To switch to next target press {targetLeft} or {targetRight}. You may try some techniques you've learned so far while targeting an enemy.";
                 break;
             case CurrentTutorial._11:
                 textMeshPro.text =
@@ -221,7 +182,7 @@ public class TutorialMessages : MonoBehaviour
                 break;
             case CurrentTutorial._12:
                 textMeshPro.text =
-                    $"If you roll in the exact moment an enemy is attacking, you'll perform a dodge. This dodge action will perform a slow motion over some seconds, giving you a big advantage in fights against various enemies. Move towards the vision cone when you're ready.";
+                    $"If you roll in the exact moment an enemy is attacking, you'll perform a dodge. This dodge action will perform a slow motion over some seconds, giving you a big advantage in fights against various enemies. Move towards the vision cone when you're ready and perform a dodge.";
                 break;
             case CurrentTutorial._13:
                 textMeshPro.text =

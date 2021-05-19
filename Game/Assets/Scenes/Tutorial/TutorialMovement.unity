@@ -574,16 +574,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 278909213}
   m_CullTransparentMesh: 0
---- !u!1 &293991718 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6402590595201610834, guid: 405000245d0c8d9449e91d64e78b083e, type: 3}
-  m_PrefabInstance: {fileID: 7363565003222399785}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &304733331 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 365783334025927622, guid: 405000245d0c8d9449e91d64e78b083e, type: 3}
-  m_PrefabInstance: {fileID: 7363565003222399785}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &393834467
 GameObject:
   m_ObjectHideFlags: 0
@@ -3210,10 +3200,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e8a0ca8dc08f6349bd3a3a0882f1891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorialClose: {fileID: 0}
   textEffect: {fileID: 2098291178}
   textMeshPro: {fileID: 2098291177}
-  closeTextMeshPro: {fileID: 445627166}
   currentTutorial: 0
 --- !u!222 &1432997332
 CanvasRenderer:
@@ -4749,7 +4737,7 @@ PrefabInstance:
     - target: {fileID: 5967915184954310016, guid: 0034956325071c74fa782dc3b58753bc, type: 3}
       propertyPath: m_FirstSelected
       value: 
-      objectReference: {fileID: 304733331}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0034956325071c74fa782dc3b58753bc, type: 3}
 --- !u!114 &5967915185734174868 stripped
@@ -5316,18 +5304,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6402590595201610834, guid: 405000245d0c8d9449e91d64e78b083e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7231675349041158728, guid: 405000245d0c8d9449e91d64e78b083e, type: 3}
       propertyPath: tutorialClose
       value: 
-      objectReference: {fileID: 293991718}
+      objectReference: {fileID: 0}
     - target: {fileID: 7231675349041158728, guid: 405000245d0c8d9449e91d64e78b083e, type: 3}
       propertyPath: tutorialWindow
       value: 
-      objectReference: {fileID: 293991718}
+      objectReference: {fileID: 0}
     - target: {fileID: 8689337899757766625, guid: 405000245d0c8d9449e91d64e78b083e, type: 3}
       propertyPath: m_Name
       value: UI - In Tutorial

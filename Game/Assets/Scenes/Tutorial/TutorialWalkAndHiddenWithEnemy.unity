@@ -562,7 +562,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 120488928}
-  - component: {fileID: 120488930}
   - component: {fileID: 120488929}
   m_Layer: 0
   m_Name: TutorialDoor
@@ -606,18 +605,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &120488930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120488927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07dd09f54500ba947b50f09dfc535693, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &130182243
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3902,10 +3889,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e8a0ca8dc08f6349bd3a3a0882f1891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialSelectedButton: {fileID: 895070520}
   textEffect: {fileID: 1922379531}
   textMeshPro: {fileID: 1922379530}
-  closeTextMeshPro: {fileID: 1684704787}
   currentTutorial: 0
 --- !u!1001 &978438760
 PrefabInstance:
