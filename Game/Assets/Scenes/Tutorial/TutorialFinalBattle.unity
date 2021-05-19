@@ -428,6 +428,9 @@ MonoBehaviour:
   treasure: 0
   instantKill: 0
   enemyDie: 1
+  target: 0
+  targetLeft: 0
+  targetRight: 0
 --- !u!4 &545580583
 Transform:
   m_ObjectHideFlags: 0
@@ -1128,6 +1131,10 @@ PrefabInstance:
     - target: {fileID: 1552824219, guid: 38b16c855840ec649aea56f14f1266d1, type: 3}
       propertyPath: m_Lens.FieldOfView
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028468781260369706, guid: 38b16c855840ec649aea56f14f1266d1, type: 3}
+      propertyPath: inTutorial
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6028468781260369708, guid: 38b16c855840ec649aea56f14f1266d1, type: 3}
       propertyPath: m_Name

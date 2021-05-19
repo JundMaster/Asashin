@@ -8,22 +8,28 @@ public class DisplayTutMessage : MonoBehaviour
 {
     [SerializeField] private GameObject initialSelectedButton;
 
+    // Components
     private EventSystem eventSys;
+    private PlayerInputCustom input;
+
     private GameObject lastSelectedGameObject;
-    // Start is called before the first frame update
+
     void Awake()
     {
         eventSys = FindObjectOfType<EventSystem>();
+        input = FindObjectOfType<PlayerInputCustom>();
     }
 
     void Start()
     {
-        StartCoroutine(SelectCloseButton());
+        StartCoroutine(SelectCloseButton());  
     }
 
     // Update is called once per frame
     void Update()
     {
+        input.SwitchActionMapToGamePaused();
+
         // Keeps last selected gameobject
         if (eventSys.currentSelectedGameObject != null &&
             eventSys.currentSelectedGameObject != lastSelectedGameObject)
@@ -37,12 +43,9 @@ public class DisplayTutMessage : MonoBehaviour
         }
     }
 
-    
-
     private IEnumerator SelectCloseButton()
     {
         yield return new WaitForEndOfFrame();
         eventSys.SetSelectedGameObject(initialSelectedButton);
     }
-
 }
