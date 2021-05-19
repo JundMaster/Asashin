@@ -10,13 +10,12 @@ using UnityEngine.EventSystems;
 public class PlayerInputCustom : MonoBehaviour, IFindPlayer
 {
     [SerializeField] private PlayerInput controls;
+    public PlayerInput Controls => controls;
 
     public Vector2 Movement { get; private set; }
 
-    private void Awake()
-    {
+    private void Awake() =>
         SwitchActionMapToGamePaused();
-    }
 
     private void Start()
     {
