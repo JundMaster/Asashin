@@ -3,4 +3,5 @@
     Respawn,
     Loadgame,
     Newgame,
+    Tutorial,
 }

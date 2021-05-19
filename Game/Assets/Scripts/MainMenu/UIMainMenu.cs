@@ -65,16 +65,19 @@ public class UIMainMenu : MonoBehaviour
     /// Starts a new game with x difficulty.
     /// </summary>
     /// <param name="difficulty">0 for normal, 1 for hard.</param>
-    public void NewGame(int difficulty)
+    public void SetDifficulty(int difficulty)
     {
         if (difficulty < 0 || difficulty > 1)
             throw new Exception("Invalid difficulty");
 
         options.SaveDifficulty(difficulty);
 
-        OnMainMenuSpawn(SpawnTypeEnum.Newgame);
+        
     }
 
+    public void NewGame() => OnMainMenuSpawn(SpawnTypeEnum.Newgame);
+
+    public void Tutorial() => OnMainMenuSpawn(SpawnTypeEnum.Tutorial);
     public void LoadGame() =>
         OnMainMenuSpawn(SpawnTypeEnum.Loadgame);
 

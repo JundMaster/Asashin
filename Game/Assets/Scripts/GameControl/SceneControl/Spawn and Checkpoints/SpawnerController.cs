@@ -82,6 +82,14 @@ public class SpawnerController : MonoBehaviour
             sceneControl.LoadScene(SceneEnum.Area1);
             return;
         }
+        else if ( typeOfSpawn == SpawnTypeEnum.Tutorial)
+        {
+            // left brank on purpose
+            DeleteFiles();
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Tutorial.ToString());
+            sceneControl.LoadScene(SceneEnum.TutorialMovement);
+            return;
+        }
 
         // If it's respawn or load game
         if (PlayerPrefs.GetString("TypeOfSpawn") != SpawnTypeEnum.Newgame.ToString())
