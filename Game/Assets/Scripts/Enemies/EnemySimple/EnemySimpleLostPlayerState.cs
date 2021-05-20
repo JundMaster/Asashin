@@ -33,11 +33,6 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     private Options options;
 
     /// <summary>
-    /// Type of movement after something happened.
-    /// </summary>
-    private enum TypeOfMovement { FollowSound, HitFromBehind }
-
-    /// <summary>
     /// Runs once on start. Sets vision cone to be the same as the enemy's one.
     /// </summary>
     public override void Start()
@@ -48,7 +43,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         visionCone = enemy.VisionConeScript;
 
-        distanceFromPositionToCheck = 0.6f;
+        distanceFromPositionToCheck = 1f;
 
         // Updates options dependant values as soon as the enemy spawns
         enemy.StartCoroutine(UpdateValuesCoroutine());
@@ -72,13 +67,12 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         agent.isStopped = false;
 
         // Moves the agent to a position + a random offset
-        Vector3 finalDestination = enemy.PositionOnLostPlayerState + 
-            new Vector3(
-                Random.Range(-5, 5),
-                0,
-                Random.Range(-5, 5));
-
-        agent.SetDestination(finalDestination);
+        if (enemy.CurrentReaction == TypeOfReaction.FollowSound)
+            SetNewPosition(TypeOfReaction.FollowSound);
+        else if (enemy.CurrentReaction == TypeOfReaction.HitFromBehind)
+            SetNewPosition(TypeOfReaction.HitFromBehind);
+        else
+            SetNewPosition(TypeOfReaction.None);
 
         enemy.CollisionWithPlayer += TakeImpact;
         options.UpdatedValues += UpdateValues;
@@ -102,12 +96,18 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         // Listened to a sound
         if (followSound && hitFromBehind == false)
-            SetNewPosition(TypeOfMovement.FollowSound);
+            SetNewPosition(TypeOfReaction.FollowSound);
 
         // If it got hit from afar inside this state
         else if (followSound == false && hitFromBehind)
-            SetNewPosition(TypeOfMovement.HitFromBehind);
-        
+            SetNewPosition(TypeOfReaction.HitFromBehind);
+
+        if (NearPlayer())
+        {
+            InstantiatePunctuationMark(TypeOfMark.Exclamation);
+            return enemy.DefenseState;
+        }
+
         // If enemy is in range, it stops looking for player coroutine
         if (PlayerInRange())
         {
@@ -191,7 +191,9 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     private bool ReachedLastKnownPosition()
     {
         if (agent.remainingDistance < distanceFromPositionToCheck)
+        {
             return true;
+        }
         else
         {
             if (enemy.VisionConeGameObject.activeSelf)
@@ -206,8 +208,9 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     /// coroutine, sets a new position depending on the type of movement.
     /// </summary>
     /// <param name="type">If the enemy is following a sound or was hit.</param>
-    private void SetNewPosition(TypeOfMovement type)
+    private void SetNewPosition(TypeOfReaction typeOfReaction)
     {
+        // So it doesn't recognize this position as last position
         enteredInPosition = enemy.transform.position;
 
         // Instantiates an interrogation mark
@@ -222,15 +225,15 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         Vector3 finalDestination;
 
-        if (type == TypeOfMovement.FollowSound)
+        if (typeOfReaction == TypeOfReaction.FollowSound)
         {
             // Moves the agent to a position close to the sound
             finalDestination =
-                positionOfSound + GetRandomPositionWithSound();
+                enemy.PositionOfSoundListened + GetRandomPositionWithSound();
         }
         else
         {
-            // Moves the agent to a position close to the sound
+            // Moves the agent to a position close to the hit
             finalDestination = playerTarget.position + new Vector3(
                     Random.Range(-4, 4),
                     0,
@@ -239,7 +242,8 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         agent.SetDestination(finalDestination);
 
-        positionOfSound = default;
+        // Resets variables
+        enemy.PositionOfSoundListened = enemy.transform.position;
         hitFromBehind = false;
         followSound = false;
         breakState = false;
@@ -252,7 +256,8 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     /// <returns>Returns a Vector3.</returns>
     private Vector3 GetRandomPositionWithSound()
     {
-        float distance = Vector3.Distance(positionOfSound, myTarget.position);
+        float distance = 
+            Vector3.Distance(enemy.PositionOfSoundListened, myTarget.position);
 
         Vector3 randomPosition;
         if (distance <= 7)

@@ -14,10 +14,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
 
     protected bool alert;
     protected bool hitFromBehind;
-
-    // Sound variables
     protected bool followSound;
-    protected Vector3 positionOfSound;
 
     /// <summary>
     /// Method that defines what happens when this state is initialized.
@@ -39,7 +36,6 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
         alert = false;
         hitFromBehind = false;
         followSound = false;
-        positionOfSound = enemy.transform.position;
     }
 
     /// <summary>
@@ -65,18 +61,6 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     public override void OnExit()
     {
         base.OnExit();
-
-        // Every time the enemy leaves a state, it will have a position
-        // in case it's lost.
-        if (playerTarget != null)
-        {
-            // Sets target to sound if the enemy heard something and
-            // didn't get hit
-            if (followSound && hitFromBehind == false)
-                enemy.PositionOnLostPlayerState = positionOfSound;
-            else
-                enemy.PositionOnLostPlayerState = playerTarget.position;
-        }
 
         enemy.ReactToSound -= SetPositionOfSound;
         enemy.Alert -= AlertEnemies;
@@ -135,7 +119,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     private void SetPositionOfSound(Vector3 position)
     {
         followSound = true;
-        positionOfSound = position;
+        enemy.PositionOfSoundListened = position;
     }
 
     /// <summary>
@@ -143,4 +127,16 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     /// </summary>
     protected void AlertEnemies() => 
         alert = true;
+
+    /// <summary>
+    /// Checks if enemy is near player.
+    /// </summary>
+    /// <returns>Returns true if the enemy is really close to the 
+    /// player.</returns>
+    protected bool NearPlayer()
+    {
+        if (Vector3.Distance(myTarget.position, playerTarget.position) < 1.3f)
+            return true;
+        return false;
+    }
 }

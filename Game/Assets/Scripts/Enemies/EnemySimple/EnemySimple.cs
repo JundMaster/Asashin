@@ -34,7 +34,13 @@ public class EnemySimple : EnemyBase, IHearSound
     [SerializeField] private OptionsScriptableObj options;
     public OptionsScriptableObj Options => options;
 
-    public Vector3 PositionOnLostPlayerState { get; set; }
+    /// <summary>
+    /// Get setter for current reaction of the enemy, meaning he's been hit or 
+    /// is following a sound.
+    /// </summary>
+    public TypeOfReaction CurrentReaction { get; set; } 
+
+    public Vector3 PositionOfSoundListened { get; set; }
 
     public VisionCone VisionConeScript { get; set; }
 
@@ -99,8 +105,9 @@ public class EnemySimple : EnemyBase, IHearSound
     /// </summary>
     private IEnumerator Start()
     {
-        PositionOnLostPlayerState = default;
-             
+        CurrentReaction = TypeOfReaction.None;
+        PositionOfSoundListened = transform.position;
+
         yield return new WaitForFixedUpdate();
         // Finds combat music after singleton destroys the one that exists
         // on this scene

@@ -122,8 +122,23 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
             return enemy.DefenseState;
         }
 
-        if ((hitFromBehind || followSound))
+        if (hitFromBehind)
+        {
+            enemy.CurrentReaction = TypeOfReaction.HitFromBehind;
             return enemy.LostPlayerState;
+        }
+
+        if (followSound)
+        {
+            enemy.CurrentReaction = TypeOfReaction.FollowSound;
+            return enemy.LostPlayerState;
+        }
+
+        if (NearPlayer())
+        {
+            InstantiateExclamationMark();
+            return enemy.DefenseState;
+        }
 
         // Calculates vision cone if the player isn't too far
         if (playerTarget != null)
@@ -201,7 +216,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         breakState = false;
 
         // Cancels all movement
-        agent.SetDestination(myTarget.position);
         agent.isStopped = true;
 
         agent.speed = runningSpeed;
@@ -296,7 +310,8 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     {
         // Will only call if enemy already respawned
         // (will only happen if the player changes options in pause menu)
-        if (enemy != null) enemy.StartCoroutine(UpdateValuesCoroutine());
+        if (enemy != null) 
+            enemy.StartCoroutine(UpdateValuesCoroutine());
     }
         
     /// <summary>
