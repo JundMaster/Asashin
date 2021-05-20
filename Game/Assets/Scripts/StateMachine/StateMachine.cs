@@ -42,7 +42,7 @@ public class StateMachine
     /// Runs on fixed update.
     /// Runs current state's fixed update.
     /// </summary>
-    public void FixedUpdate()
+    public void Update()
     {
         IState nextState = currentState?.FixedUpdate();
 
