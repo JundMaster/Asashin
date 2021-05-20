@@ -45,7 +45,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         visionCone = enemy.VisionConeScript;
 
-        distanceFromPositionToCheck = 1f;
+        distanceFromPositionToCheck = 0.7f;
 
         // Stops interrogation mark from spawning without delay
         punctuationMarkDelay = 1f;
@@ -160,6 +160,8 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         agent.isStopped = false;
         enemy.VisionConeGameObject.SetActive(false);
+
+        enemy.CurrentReaction = TypeOfReaction.None;
 
         enemy.CollisionWithPlayer -= TakeImpact;
         options.UpdatedValues -= UpdateValues;

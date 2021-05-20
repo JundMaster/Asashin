@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     private CinemachineTarget cineTarget;
     private PlayerStats stats;
     private SceneEnum currentScene;
+    private Transform myTarget;
 
     public bool Sprinting { get; private set; }
     public bool Performing { get; private set; }
@@ -88,6 +89,7 @@ public class PlayerMovement : MonoBehaviour, IAction
         postProcessing =
             GameObject.FindGameObjectWithTag("postProcessing").GetComponent<Volume>();
         currentScene = FindObjectOfType<SceneControl>().CurrentSceneEnum();
+        myTarget = GameObject.FindGameObjectWithTag("playerTarget").transform;
     }
 
     private void Start()
@@ -171,7 +173,8 @@ public class PlayerMovement : MonoBehaviour, IAction
     /// <param name="condition">False if cancelled wall hug.</param>
     private void StopMovementAfterWallHug(bool condition)
     {
-        if (condition == false) StartCoroutine(StopMovementAfterWallHugCoroutine());
+        if (condition == false) 
+            StartCoroutine(StopMovementAfterWallHugCoroutine());
     }
 
     /// <summary>
@@ -304,6 +307,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
         gameObject.layer = PLAYERHIDDENLAYER;
+        myTarget.gameObject.layer = PLAYERHIDDENLAYER;
 
         if (player.InTutorial)
             OnTutorialHidden(TypeOfTutorial.Hidden);
@@ -329,6 +333,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     {
         YieldInstruction wffu = new WaitForFixedUpdate();
         gameObject.layer = PLAYERLAYER;
+        myTarget.gameObject.layer = PLAYERLAYER;
 
         // Post process variables
         if (postProcessing.profile.TryGet(out Vignette vignette))

@@ -108,7 +108,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
             {
                 // Checks and moves enemy close to player
                 if (IsCloseToPlayer(currentDistanceFromPlayer))
-                { 
+                {
                     // If the enemy is not inside attacking anim, it rotates
                     if (attackingAnimation == false)
                     {

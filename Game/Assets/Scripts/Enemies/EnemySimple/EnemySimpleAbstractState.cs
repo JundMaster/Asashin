@@ -93,7 +93,8 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
             die == false)
         {
             // To be sure the coroutine doesn't run while the enemy is dying
-            if (die) break;
+            if (die) 
+                break;
 
             enemy.transform.RotateToSmoothly(playerTarget.position,
                 ref smoothTimeRotationAfterBeingHit, turnSpeedAfterBeingHit);
