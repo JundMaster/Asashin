@@ -76,7 +76,6 @@ public class SpawnerController : MonoBehaviour
         }
         else if (typeOfSpawn == SpawnTypeEnum.Newgame)
         {
-            // left brank on purpose
             DeleteFiles();
             PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString());
             sceneControl.LoadScene(SceneEnum.Area1);
@@ -84,9 +83,8 @@ public class SpawnerController : MonoBehaviour
         }
         else if ( typeOfSpawn == SpawnTypeEnum.Tutorial)
         {
-            // left brank on purpose
             DeleteFiles();
-            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Tutorial.ToString());
+            PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString()); // TypeOfSpawn player prefs must also be Newgame in here <
             sceneControl.LoadScene(SceneEnum.TutorialMovement);
             return;
         }

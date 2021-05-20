@@ -71,13 +71,14 @@ public class UIMainMenu : MonoBehaviour
             throw new Exception("Invalid difficulty");
 
         options.SaveDifficulty(difficulty);
-
-        
     }
 
-    public void NewGame() => OnMainMenuSpawn(SpawnTypeEnum.Newgame);
+    public void NewGame() => 
+        OnMainMenuSpawn(SpawnTypeEnum.Newgame);
 
-    public void Tutorial() => OnMainMenuSpawn(SpawnTypeEnum.Tutorial);
+    public void Tutorial() => 
+        OnMainMenuSpawn(SpawnTypeEnum.Tutorial);
+
     public void LoadGame() =>
         OnMainMenuSpawn(SpawnTypeEnum.Loadgame);
 
