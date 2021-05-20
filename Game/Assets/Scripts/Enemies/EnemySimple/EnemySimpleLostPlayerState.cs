@@ -20,6 +20,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     [SerializeField] private GameObject interrogationMarkPrefab;
     [SerializeField] private Vector3 offset;
     private enum TypeOfMark { Interrogation, Exclamation };
+    private GameObject currentPunctuationMark;
 
     // State variables
     private IEnumerator lookForPlayerCoroutine;
@@ -106,11 +107,11 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         // If it got hit from afar inside this state
         else if (followSound == false && hitFromBehind)
             SetNewPosition(TypeOfMovement.HitFromBehind);
-
+        
         // If enemy is in range, it stops looking for player coroutine
         if (PlayerInRange())
         {
-            // Instantiates an interrogation mark
+            // Instantiates an exclamation mark
             InstantiatePunctuationMark(TypeOfMark.Exclamation);
             return enemy.DefenseState ?? enemy.PatrolState;
         }
@@ -163,24 +164,23 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     /// </summary>
     private void InstantiatePunctuationMark(TypeOfMark type)
     {
-        GameObject mark;
         // Instantiates an exclamation mark
         if (type == TypeOfMark.Interrogation)
         {
-            mark = Instantiate(
-            interrogationMarkPrefab,
-            enemy.transform.position + offset,
-            Quaternion.identity);
+            currentPunctuationMark = Instantiate(
+                interrogationMarkPrefab,
+                enemy.transform.position + offset,
+                Quaternion.identity);
         }
         else
         {
-            mark = Instantiate(
-            exclamationMarkPrefab,
-            enemy.transform.position + offset,
-            Quaternion.identity);
+            currentPunctuationMark = Instantiate(
+                exclamationMarkPrefab,
+                enemy.transform.position + offset,
+                Quaternion.identity);
         }
 
-        mark.transform.parent = enemy.transform;
+        currentPunctuationMark.transform.parent = enemy.transform;
     }
 
     /// <summary>
@@ -232,9 +232,9 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         {
             // Moves the agent to a position close to the sound
             finalDestination = playerTarget.position + new Vector3(
-                    Random.Range(-5, 5),
+                    Random.Range(-4, 4),
                     0,
-                    Random.Range(-5, 5));
+                    Random.Range(-4, 4));
         }
 
         agent.SetDestination(finalDestination);
@@ -246,30 +246,32 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     }
 
     /// <summary>
-    /// Sets new destination if the enemy listened to a sound.
+    /// Returns a random position depending on the distance between
+    /// the enemy and the sound.
     /// </summary>
+    /// <returns>Returns a Vector3.</returns>
     private Vector3 GetRandomPositionWithSound()
     {
         float distance = Vector3.Distance(positionOfSound, myTarget.position);
 
         Vector3 randomPosition;
-        if (distance < 5)
+        if (distance <= 7)
         {
             randomPosition = Vector3.zero;
         }
-        else if (distance < 10)
+        else if (distance <= 13)
         {
             randomPosition = new Vector3(
-                Random.Range(-3, 3),
+                Random.Range(-2, 2),
                 0,
-                Random.Range(-3, 3));
+                Random.Range(-2, 2));
         }
         else
         {
             randomPosition = new Vector3(
-                Random.Range(-6, 6),
+                Random.Range(-4, 4),
                 0,
-                Random.Range(-6, 6));
+                Random.Range(-4, 4));
         }
 
         return randomPosition;

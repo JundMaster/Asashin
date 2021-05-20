@@ -12,34 +12,31 @@ public static class GameObjectExtenstions
     public static void EmitSound(this GameObject thisEmitter, Player player, 
         IntensityOfSound intensity, LayerMask enemyLayer)
     {
-        if (player.PlayerCurrentlyFighting == 0)
+        float sizeOfAlert = 0;
+
+        switch (intensity)
         {
-            float sizeOfAlert = 0;
+            case IntensityOfSound.Low:
+                sizeOfAlert = 3;
+                break;
+            case IntensityOfSound.Normal:
+                sizeOfAlert = 13;
+                break;
+            case IntensityOfSound.Extreme:
+                sizeOfAlert = 20;
+                break;
+        }
 
-            switch (intensity)
+        Collider[] enemiesAround =
+            Physics.OverlapSphere(thisEmitter.transform.position, sizeOfAlert, enemyLayer);
+
+        if (enemiesAround.Length > 0)
+        {
+            foreach (Collider enemyCollider in enemiesAround)
             {
-                case IntensityOfSound.Low:
-                    sizeOfAlert = 3;
-                    break;
-                case IntensityOfSound.Normal:
-                    sizeOfAlert = 13;
-                    break;
-                case IntensityOfSound.Extreme:
-                    sizeOfAlert = 20;
-                    break;
-            }
-
-            Collider[] enemiesAround =
-                Physics.OverlapSphere(thisEmitter.transform.position, sizeOfAlert, enemyLayer);
-
-            if (enemiesAround.Length > 0)
-            {
-                foreach (Collider enemyCollider in enemiesAround)
+                if (enemyCollider.TryGetComponent(out EnemySimple enemy))
                 {
-                    if (enemyCollider.TryGetComponent(out EnemySimple enemy))
-                    {
-                        enemy.OnReactToSound(thisEmitter.transform.position);
-                    }
+                    enemy.OnReactToSound(thisEmitter.transform.position);
                 }
             }
         }
