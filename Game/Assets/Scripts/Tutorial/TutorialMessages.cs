@@ -158,7 +158,7 @@ public class TutorialMessages : MonoBehaviour
                 break;
             case CurrentTutorial._4:
                 textMeshPro.text =
-                    $"In Asashin, keep in mind that every action produces noise. In order to avoid producing noise you can sneak instead of running. Try to pass through the guards without alerting them.";
+                    $"In Asashin, keep in mind that most actions produce noise. In order to avoid producing noise you can sneak instead of running. Try to pass through the guards without alerting them.";
                 break;
             case CurrentTutorial._5:
                 textMeshPro.text =
