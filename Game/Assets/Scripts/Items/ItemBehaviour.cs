@@ -27,13 +27,11 @@ public abstract class ItemBehaviour : MonoBehaviour, IUsableItem, IFindPlayer
     public virtual void Execute()
     {
         // Updates UI of all items.
-        itemUIParent.UpdateAllItemUI();
+        itemUIParent?.UpdateAllItemUI();
     }
 
-    public void FindPlayer()
-    {
+    public void FindPlayer() =>
         playerStats = FindObjectOfType<PlayerStats>();
-    }
 
     public void PlayerLost()
     {

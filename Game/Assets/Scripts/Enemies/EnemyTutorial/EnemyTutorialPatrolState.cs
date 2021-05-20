@@ -23,12 +23,16 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
     [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
     private float smoothTimeRotation;
 
+    [Header("If on, the enemy will ignore sound and hits on this state")]
+    [SerializeField] private bool ignoreSoundAndHit;
+
     // Movement
     private EnemyPatrolPoint[] patrolPoints;
     private byte patrolIndex;
     private IEnumerator movementCoroutine;
 
     private bool breakState;
+
 
     /// <summary>
     /// Runs once on start.
@@ -107,7 +111,7 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
         if (die && canDie)
             return enemy.DeathState;
 
-        if (hitFromBehind || followSound)
+        if ((hitFromBehind || followSound) && ignoreSoundAndHit == false)
         {
             enemy.OnTutorialAlert();
 

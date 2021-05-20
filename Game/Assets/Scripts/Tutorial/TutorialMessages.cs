@@ -66,7 +66,6 @@ public class TutorialMessages : MonoBehaviour
     private string targetRight;
     private string roll;
 
-
     private IEnumerator Start()
     {
         // Transparent text
@@ -76,12 +75,23 @@ public class TutorialMessages : MonoBehaviour
         // White text
         textMeshPro.color = new Color(1, 1, 1, 1);
         textEffect.Play();
+
+        UpdateControlsVariables();
+        DisplayTutorialText();
+
+        YieldInstruction wfs = new WaitForSeconds(2);
+        while (true)
+        {
+            UpdateControlsVariables();
+            DisplayTutorialText();
+            yield return wfs;
+        }
     }
 
     /// <summary>
-    /// Disables controls. Updates text variables.
+    /// Checks if a gamepad is connected and updates controls variables.
     /// </summary>
-    private void Update()
+    private void UpdateControlsVariables()
     {
         // Checks if there is any gamepad connected and updates text
         var gamePads = Gamepad.all;
@@ -125,8 +135,6 @@ public class TutorialMessages : MonoBehaviour
             targetRight = KEYBOARDTARGETRIGHT;
             roll = KEYBOARDROLL;
         }
-
-        DisplayTutorialText();
     }
 
     /// <summary>

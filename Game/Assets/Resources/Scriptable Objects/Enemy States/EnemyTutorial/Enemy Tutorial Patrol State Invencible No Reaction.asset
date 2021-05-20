@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e76eb353c0e71a442b67bc48a1d37b72, type: 3}
+  m_Name: Enemy Tutorial Patrol State Invencible No Reaction
+  m_EditorClassIdentifier: 
+  timeToTravelAfterHit: 0.25
+  takeDamageDistancePower: 2.5
+  runningSpeed: 3.8
+  walkingSpeed: 1
+  turnSpeedAfterBeingHit: 0.1
+  canDie: 0
+  coneRange: 20
+  desiredConeAngle: 20
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 537942016
+  searchCheckDelay: 0.1
+  amountOfVertices: 255
+  coneMaterial: {fileID: 2100000, guid: 07608defc6662a948bd0ecdad43bf97f, type: 2}
+  exclamationMarkPrefab: {fileID: 6000884739750298489, guid: bfe5833cecd003443878bb399176af7d, type: 3}
+  offset: {x: 0, y: 2.5, z: 0}
+  turnSpeed: 0.1
+  ignoreSoundAndHit: 1
