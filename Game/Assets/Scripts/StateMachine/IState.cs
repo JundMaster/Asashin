@@ -25,8 +25,8 @@ public interface IState
     void OnExit();
 
     /// <summary>
-    /// Method that defines what this state does. Runs on fixed update.
+    /// Method that defines what this state does. Runs on update.
     /// </summary>
     /// <returns>Returns an IState.</returns>
-    IState FixedUpdate();
+    IState Update();
 }

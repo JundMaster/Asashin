@@ -85,14 +85,14 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     }
 
     /// <summary>
-    /// Runs on fixed update.
+    /// Runs on update.
     /// Moves the enemy towards player's last known position. When the enemy
     /// reaches that position, it starts a coroutine to look for the player.
     /// </summary>
     /// <returns>An IState.</returns>
-    public override IState FixedUpdate()
+    public override IState Update()
     {
-        base.FixedUpdate();
+        base.Update();
 
         if (die)
             return enemy.DeathState;

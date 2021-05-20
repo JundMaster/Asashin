@@ -86,13 +86,13 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     }
 
     /// <summary>
-    /// Runs on fixed update. If the player is in enemy's range, the enemy will
+    /// Runs on update. If the player is in enemy's range, the enemy will
     /// attack, else it will change its state to LostPlayerState.
     /// </summary>
     /// <returns></returns>
-    public override IState FixedUpdate()
+    public override IState Update()
     {
-        base.FixedUpdate();
+        base.Update();
 
         if (die)
             return enemy.DeathState;

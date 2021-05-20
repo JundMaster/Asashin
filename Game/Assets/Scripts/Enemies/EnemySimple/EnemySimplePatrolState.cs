@@ -109,9 +109,9 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     /// Executes enemy's movement. Runs on fixed update.
     /// </summary>
     /// <returns>Returns an IState.</returns>
-    public override IState FixedUpdate()
+    public override IState Update()
     {
-        base.FixedUpdate();
+        base.Update();
 
         if (die)
             return enemy.DeathState;

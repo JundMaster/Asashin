@@ -39,12 +39,12 @@ public class StateMachine
     }
 
     /// <summary>
-    /// Runs on fixed update.
-    /// Runs current state's fixed update.
+    /// Runs on update.
+    /// Runs current state's update.
     /// </summary>
     public void Update()
     {
-        IState nextState = currentState?.FixedUpdate();
+        IState nextState = currentState?.Update();
 
         if (nextState != null &&
             nextState != currentState)

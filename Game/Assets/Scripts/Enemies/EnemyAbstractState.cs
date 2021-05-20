@@ -61,10 +61,10 @@ public abstract class EnemyAbstractState : StateBase
     }
 
     /// <summary>
-    /// Method that defines what this state does. Runs on fixed update.
+    /// Method that defines what this state does. Runs on update.
     /// </summary>
     /// <returns>Returns an IState.</returns>
-    public override IState FixedUpdate()
+    public override IState Update()
     {
         if (playerTarget == null) playerTarget = enemyBase.PlayerTarget;
 

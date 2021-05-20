@@ -39,12 +39,12 @@ public sealed class EnemyShinobiReinforcementsState : EnemyBossAbstractState
     }
 
     /// <summary>
-    /// Runs on fixed update.
+    /// Runs on update.
     /// </summary>
     /// <returns>IState.</returns>
-    public override IState FixedUpdate()
+    public override IState Update()
     {
-        base.FixedUpdate();
+        base.Update();
 
         if (die)
             return enemy.DeathState;

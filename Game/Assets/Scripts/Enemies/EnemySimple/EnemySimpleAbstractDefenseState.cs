@@ -81,12 +81,12 @@ public abstract class EnemySimpleAbstractDefenseState :
     }
 
     /// <summary>
-    /// Runs on fixed update.
+    /// Runs on update.
     /// </summary>
     /// <returns>Null.</returns>
-    public override IState FixedUpdate()
+    public override IState Update()
     {
-        base.FixedUpdate();
+        base.Update();
         anim.SetBool("RunningBack", runningBack);
         anim.SetBool("WalkingLeft", walkingLeft);
         anim.SetBool("WalkingRight", walkingRight);

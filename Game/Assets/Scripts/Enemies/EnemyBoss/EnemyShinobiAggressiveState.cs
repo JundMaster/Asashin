@@ -68,14 +68,14 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
     }
 
     /// <summary>
-    /// Runs every fixed update. Checks the distance between the enemy and the
+    /// Runs every update. Checks the distance between the enemy and the
     /// player and attacks or gets close to the player depending on that
     /// distance.
     /// </summary>
     /// <returns>IState.</returns>
-    public override IState FixedUpdate()
+    public override IState Update()
     {
-        base.FixedUpdate();
+        base.Update();
 
         if (die)
             return enemy.DeathState;

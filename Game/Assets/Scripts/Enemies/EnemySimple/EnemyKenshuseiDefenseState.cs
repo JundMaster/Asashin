@@ -10,10 +10,10 @@ public class EnemyKenshuseiDefenseState : EnemySimpleAbstractDefenseState
     /// Goes to defense position. If the player is fighting an enemy,
     /// it keeps throwing kunais.
     /// </summary>
-    /// <returns>An IState.</returns>
-    public override IState FixedUpdate()
+    /// <returns>Returns an IState.</returns>
+    public override IState Update()
     {
-        base.FixedUpdate();
+        base.Update();
 
         if (die)
             return enemy.DeathState;

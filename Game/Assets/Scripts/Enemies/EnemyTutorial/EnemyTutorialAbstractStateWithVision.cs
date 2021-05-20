@@ -21,8 +21,8 @@ public class EnemyTutorialAbstractStateWithVision :
     /// <summary>
     /// Gets player wall hugh component.
     /// </summary>
-    /// <returns></returns>
-    public override IState FixedUpdate()
+    /// <returns>Returns base.Update().</returns>
+    public override IState Update()
     {
         if (playerWallHug == null)
         {
@@ -32,7 +32,7 @@ public class EnemyTutorialAbstractStateWithVision :
             }
         }
 
-        return base.FixedUpdate();
+        return base.Update();
     }
 
     /// <summary>

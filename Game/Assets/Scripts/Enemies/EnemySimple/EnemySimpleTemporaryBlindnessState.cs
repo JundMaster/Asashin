@@ -31,13 +31,13 @@ public sealed class EnemySimpleTemporaryBlindnessState :
     }
 
     /// <summary>
-    /// Happens on fixed update. Checks if enemy is blind. After the limit time
+    /// Runs on update. Checks if enemy is blind. After the limit time
     /// passes, the enemy returns to LostPlayerState.
     /// </summary>
-    /// <returns></returns>
-    public override IState FixedUpdate()
+    /// <returns>Returns an IState.</returns>
+    public override IState Update()
     {
-        base.FixedUpdate();
+        base.Update();
 
         if (die)
             return enemy.DeathState;

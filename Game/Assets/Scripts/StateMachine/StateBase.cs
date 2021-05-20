@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
-using System.Collections;
 
 /// <summary>
 /// Abstract Scriptable base class of all enemy states.
@@ -31,8 +29,8 @@ public abstract class StateBase: ScriptableObject, IState
     public abstract void OnExit();
 
     /// <summary>
-    /// Method that defines what this state does. Runs on fixed update.
+    /// Method that defines what this state does. Runs on update.
     /// </summary>
     /// <returns>Returns an IState.</returns>
-    public abstract IState FixedUpdate();
+    public abstract IState Update();
 }

@@ -101,12 +101,12 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
 
     /// <summary>
     /// Searches for player in a vision cone.
-    /// Executes enemy's movement. Runs on fixed update.
+    /// Executes enemy's movement. Runs on update.
     /// </summary>
     /// <returns>Returns an IState.</returns>
-    public override IState FixedUpdate()
+    public override IState Update()
     {
-        base.FixedUpdate();
+        base.Update();
 
         if (die && canDie)
             return enemy.DeathState;
