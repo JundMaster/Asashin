@@ -21,6 +21,8 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     [SerializeField] private Vector3 offset;
     private enum TypeOfMark { Interrogation, Exclamation };
     private GameObject currentPunctuationMark;
+    private float punctuationMarkDelay;
+    private float punctuationMarkCurrentTimer;
 
     // State variables
     private IEnumerator lookForPlayerCoroutine;
@@ -44,6 +46,10 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         visionCone = enemy.VisionConeScript;
 
         distanceFromPositionToCheck = 1f;
+
+        // Stops interrogation mark from spawning without delay
+        punctuationMarkDelay = 1f;
+        punctuationMarkCurrentTimer = Time.time;
 
         // Updates options dependant values as soon as the enemy spawns
         enemy.StartCoroutine(UpdateValuesCoroutine());
@@ -167,13 +173,24 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         // Instantiates an exclamation mark
         if (type == TypeOfMark.Interrogation)
         {
-            currentPunctuationMark = Instantiate(
+            if (Time.time - punctuationMarkCurrentTimer > punctuationMarkDelay)
+            {
+                if (currentPunctuationMark != null)
+                    Destroy(currentPunctuationMark.gameObject);
+
+                currentPunctuationMark = Instantiate(
                 interrogationMarkPrefab,
                 enemy.transform.position + offset,
                 Quaternion.identity);
+
+                punctuationMarkCurrentTimer = Time.time;
+            }
         }
         else
         {
+            if (currentPunctuationMark != null)
+                Destroy(currentPunctuationMark.gameObject);
+
             currentPunctuationMark = Instantiate(
                 exclamationMarkPrefab,
                 enemy.transform.position + offset,
@@ -212,7 +229,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     {
         // So it doesn't recognize this position as last position
         enteredInPosition = enemy.transform.position;
-
+        
         // Instantiates an interrogation mark
         InstantiatePunctuationMark(TypeOfMark.Interrogation);
 
