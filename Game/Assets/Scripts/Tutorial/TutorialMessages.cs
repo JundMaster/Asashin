@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using TMPro;
 
@@ -10,8 +9,11 @@ using TMPro;
 public class TutorialMessages : MonoBehaviour
 {
     [Header("Tutorial Text")]
-    [SerializeField] TextMeshProEffect textEffect;
-    [SerializeField] TextMeshProUGUI textMeshPro;
+    [SerializeField] private TextMeshProEffect textEffect;
+    [SerializeField] private TextMeshProUGUI textMeshPro;
+    [SerializeField] private Canvas textCanvas;
+
+    private PauseSystem pauseSystem;
 
     private enum CurrentTutorial { _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13 }
     [SerializeField] private CurrentTutorial currentTutorial;
@@ -66,6 +68,9 @@ public class TutorialMessages : MonoBehaviour
     private string targetRight;
     private string roll;
 
+    private void Awake() =>
+        pauseSystem = FindObjectOfType<PauseSystem>();
+
     private IEnumerator Start()
     {
         // Transparent text
@@ -86,6 +91,17 @@ public class TutorialMessages : MonoBehaviour
             DisplayTutorialText();
             yield return wfs;
         }
+    }
+
+    private void OnEnable() => pauseSystem.GamePaused += ControlCanvas;
+    private void OnDisable() => pauseSystem.GamePaused -= ControlCanvas;
+
+    private void ControlCanvas(PauseSystemEnum pauseCondition)
+    {
+        if (pauseCondition == PauseSystemEnum.Paused)
+            textCanvas.enabled = false;
+        else
+            textCanvas.enabled = true;
     }
 
     /// <summary>
