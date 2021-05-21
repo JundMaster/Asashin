@@ -136,8 +136,11 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     /// player.</returns>
     protected bool NearPlayer()
     {
-        if (Vector3.Distance(myTarget.position, playerTarget.position) < 1.3f)
-            return true;
+        if (enemy.Player != null)
+            if (Vector3.Distance(
+                myTarget.position, playerTarget.position) < 1.3f)
+                return true;
+        
         return false;
     }
 }
