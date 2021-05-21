@@ -74,11 +74,7 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
         hitFromBehind = false;
         followSound = false;
 
-        // If vision cone option is on
-        if (enemy.Options.EnemyVisionCones)
-            enemy.VisionConeScript = visionCone;
-        else // else if it is off
-            enemy.VisionConeScript = null;
+        enemy.VisionConeScript = visionCone;
 
         enemy.VisionConeGameObject.SetActive(true);
 

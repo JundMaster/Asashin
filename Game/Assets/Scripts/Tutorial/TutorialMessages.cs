@@ -170,7 +170,7 @@ public class TutorialMessages : MonoBehaviour
                 break;
             case CurrentTutorial._3:
                 textMeshPro.text =
-                    $"Notice that the enemy has a vision cone in front of him (make sure you have Vision Cones option turned on). This cone represents his visible area. Sneak through the bushes without beeing seen.";
+                    $"Notice that the enemy has a vision cone in front of him (make sure you have Vision Cones option turned on during the game). This cone represents his visible area. Sneak through the bushes without beeing seen.";
                 break;
             case CurrentTutorial._4:
                 textMeshPro.text =
