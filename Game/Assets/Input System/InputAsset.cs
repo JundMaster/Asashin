@@ -506,7 +506,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""48ecb3e2-c2cc-4ff4-a127-eb1ee7954fdb"",
-                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
