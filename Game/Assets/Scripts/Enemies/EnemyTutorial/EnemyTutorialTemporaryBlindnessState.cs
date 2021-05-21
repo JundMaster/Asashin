@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Scriptable object for controlling enemy temporary blindness state.
+/// Scriptable object for controlling tutorial enemy temporary blindness state.
 /// </summary>
-[CreateAssetMenu(fileName = "Enemy Common Blindness State")]
-public sealed class EnemySimpleTemporaryBlindnessState : 
-    EnemySimpleAbstractState
+[CreateAssetMenu(fileName = "Enemy Tutorial Blindness State")]
+public class EnemyTutorialTemporaryBlindnessState : EnemyTutorialAbstractState
 {
     [Header("Enemy gets blind for x seconds")]
     [Range(0.5f, 10f)] [SerializeField] private float secondsToBeBlind;
@@ -22,8 +21,6 @@ public sealed class EnemySimpleTemporaryBlindnessState :
     /// </summary>
     public override void OnEnter()
     {
-        stats.MeleeDamageOnEnemy += SwitchToDeathState;
-
         enemy.InCombat = true;
         timePassed = Time.time;
         agent.isStopped = true;
@@ -40,16 +37,13 @@ public sealed class EnemySimpleTemporaryBlindnessState :
     {
         base.Update();
 
-        if (die)
-            return enemy.DeathState;
-
         if (Blind())
         {
             return enemy.TemporaryBlindnessState;
         }
         // After blind is over
 
-        return enemy.LostPlayerState ?? enemy.PatrolState;
+        return enemy.PatrolState;
     }
 
     /// <summary>
@@ -59,7 +53,6 @@ public sealed class EnemySimpleTemporaryBlindnessState :
     {
         agent.isStopped = false;
         anim.SetTrigger("CancelBlind");
-        stats.MeleeDamageOnEnemy -= SwitchToDeathState;
     }
 
     /// <summary>

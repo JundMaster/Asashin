@@ -10,6 +10,9 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private Animator tutorialDoor;
     [SerializeField] private float timeToWaitForObjectiveDone;
 
+    [SerializeField] private GameObject enemyVanishSmoke;
+    [SerializeField] private float timeToDestroyEnemies;
+
     private bool loadingScene;
     private byte objectivesRequired;
     private byte objectivesPassed;
@@ -349,6 +352,32 @@ public class Tutorial : MonoBehaviour
         if (objectivesPassed == objectivesRequired)
         {
             tutorialDoor.SetTrigger("OpenDoor");
+            StartCoroutine(DestroyEnemyAfterSeconds());
+        }
+    }
+
+    /// <summary>
+    /// Kills all enemies after some seconds.
+    /// </summary>
+    /// <returns>Returns wait for seconds.</returns>
+    private IEnumerator DestroyEnemyAfterSeconds()
+    {
+        yield return new WaitForSeconds(timeToDestroyEnemies);
+        Vector3 smokeOffset = new Vector3(0, 0.5f, 0);
+        FindObjectOfType<CinemachineTarget>().CancelCurrentTarget();
+
+        if (enemyTutorial != null)
+        {
+            foreach (EnemyTutorial enemy in enemyTutorial)
+            {
+                if (enemy != null)
+                {
+                    Instantiate(
+                        enemyVanishSmoke, enemy.transform.position + smokeOffset, Quaternion.identity);
+
+                    Destroy(enemy.gameObject);
+                }
+            }
         }
     }
 }

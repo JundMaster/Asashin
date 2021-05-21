@@ -20,7 +20,7 @@ public class EnemyTutorial : EnemySimple
 
     /// <summary>
     /// Method that invokes TutorialDie.
-    /// Happens every time the enemy finds the player on tutorial.
+    /// Happens every time the enemy dies on tutorial.
     /// </summary>
     public void OnTutorialDie(TypeOfTutorial typeOfTutorial) =>
         TutorialDie?.Invoke(typeOfTutorial);
