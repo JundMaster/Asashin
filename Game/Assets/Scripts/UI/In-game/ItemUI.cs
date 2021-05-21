@@ -61,7 +61,7 @@ public class ItemUI : MonoBehaviour, IItemUI, IFindPlayer
                 itemUI.image.color.r,
                 itemUI.image.color.g,
                 itemUI.image.color.b,
-                0.4f);
+                0.25f);
         }
     }
 
