@@ -27,7 +27,8 @@ public abstract class ItemBehaviour : MonoBehaviour, IUsableItem, IFindPlayer
     public virtual void Execute()
     {
         // Updates UI of all items.
-        itemUIParent?.UpdateAllItemUI();
+        if (itemUIParent != null)
+            itemUIParent.UpdateAllItemUI();
     }
 
     public void FindPlayer() =>

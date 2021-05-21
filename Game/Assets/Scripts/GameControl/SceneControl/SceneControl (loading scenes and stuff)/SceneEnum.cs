@@ -1,30 +1,19 @@
-﻿using System;
-
-/// <summary>
+﻿/// <summary>
 /// If you add scenes, add to the Delete method on SpawnerController.
+/// >>>>>>>>>>> DON'T CHANGE THE ORDER NOR DELETE A LINE <<<<<<<<<<<<<<<<<
 /// </summary>
-[Flags]
 public enum SceneEnum
 {
-    MainMenu = 0,
-    Area1 = 1,
-    Area2 = 2,
-    Area3 = 3,
-    Area4 = 4,
-    Area5 = 5,
-    Area6 = 6,
-
-
-
-
-
-
-
-    ProgrammingTests = 7,
-    TESTAREA = 8,
-    EndOfDemo = 9,
-
-
+    MainMenu,
+    Area1,
+    Area2,
+    Area3,
+    Area4,
+    Area5,
+    Area6,
+    ProgrammingTests,
+    TESTAREA,
+    EndOfDemo,
     TutorialMovement,
     TutorialItemUse,
     TutorialWallHug,
@@ -38,4 +27,5 @@ public enum SceneEnum
     TutorialStealth,
     TutorialFinalBattle,
     TutorialTarget,
+    IntroText,
 }

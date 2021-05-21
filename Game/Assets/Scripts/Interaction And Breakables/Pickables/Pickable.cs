@@ -58,7 +58,7 @@ public abstract class Pickable : MonoBehaviour, IPickable
             }
             yield return wffu;
         }
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
         sphereCollider.enabled = true;
     }
 
@@ -73,13 +73,17 @@ public abstract class Pickable : MonoBehaviour, IPickable
             PlayerStats playerStats = other.GetComponent<PlayerStats>();
             ItemUIParent itemsUI = FindObjectOfType<ItemUIParent>();
             Execute(playerStats);
-            itemsUI?.UpdateAllItemUI();
+
+            if (itemsUI != null)
+                itemsUI.UpdateAllItemUI();
+
             Destroy(gameObject);
         }
     }
 
     /// <summary>
     /// What happens when the player picks this item.
+    /// Increments an item's quantity.
     /// </summary>
     /// <param name="playerStats">Player stats variable.</param>
     public virtual void Execute(PlayerStats playerStats)
