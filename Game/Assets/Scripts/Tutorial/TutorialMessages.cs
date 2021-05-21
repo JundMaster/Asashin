@@ -15,7 +15,7 @@ public class TutorialMessages : MonoBehaviour
 
     private PauseSystem pauseSystem;
 
-    private enum CurrentTutorial { _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13 }
+    private enum CurrentTutorial { _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12 }
     [SerializeField] private CurrentTutorial currentTutorial;
 
     private readonly string KEYBOARDMOVEMENT    = "WASD";
@@ -202,13 +202,9 @@ public class TutorialMessages : MonoBehaviour
                 break;
             case CurrentTutorial._11:
                 textMeshPro.text =
-                    $"In order to avoid attacks you can roll by pressing {roll}.";
+                    $"In order to avoid attacks you can roll by pressing {roll}. If you roll in the exact moment an enemy is attacking, you'll perform a dodge. This dodge action will perform a slow motion over some seconds, giving you a big advantage in fights against various enemies. Move towards the vision cone when you're ready and perform a dodge.";
                 break;
             case CurrentTutorial._12:
-                textMeshPro.text =
-                    $"If you roll in the exact moment an enemy is attacking, you'll perform a dodge. This dodge action will perform a slow motion over some seconds, giving you a big advantage in fights against various enemies. Move towards the vision cone when you're ready and perform a dodge.";
-                break;
-            case CurrentTutorial._13:
                 textMeshPro.text =
                     $"In this last tutorial you'll fight an enemy using the techniques you have learned so far. Move towards the vision cone when you're ready.";
                 break;
