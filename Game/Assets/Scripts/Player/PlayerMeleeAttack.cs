@@ -142,12 +142,12 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             {
                 if (closestEnemyIcon != null)
                 {
-                    SpriteRenderer instantKillSprite =
+                    GameObject instantKillSprite =
                     closestEnemyIcon.gameObject.GetComponentInChildren<EnemyInstantKillIcon>().
-                    GetComponent<SpriteRenderer>();
+                    transform.GetChild(0).gameObject;
 
-                    if (instantKillSprite.enabled == true)
-                        instantKillSprite.enabled = false;
+                    if (instantKillSprite.activeSelf == true)
+                        instantKillSprite.SetActive(false);
 
                     closestEnemyIcon = null;
                 }
@@ -156,9 +156,9 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
             // If player is close to the enemy
             if (closestEnemyIcon != null)
             {
-                SpriteRenderer instantKillSprite = 
+                GameObject instantKillSprite =
                     closestEnemyIcon.gameObject.GetComponentInChildren<EnemyInstantKillIcon>().
-                    GetComponent<SpriteRenderer>();
+                    transform.GetChild(0).gameObject;
 
                 if (cineTarget.Targeting == false)
                 {
@@ -172,19 +172,19 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
                         if (Vector3.Angle(
                             transform.Direction(closestEnemyIcon.transform), transform.forward) < 20)
                         {
-                            if (instantKillSprite.enabled == false)
-                                instantKillSprite.enabled = true;
+                            if (instantKillSprite.activeSelf == false)
+                                instantKillSprite.SetActive(true);
                             return;
                         } // else if the player is in front of the enemy
 
-                        if (instantKillSprite.enabled == true)
-                            instantKillSprite.enabled = false;
+                        if (instantKillSprite.activeSelf == true)
+                            instantKillSprite.SetActive(false);
                         return;
 
                     } // else if player is not facing the enemy
 
-                    if (instantKillSprite.enabled == true)
-                        instantKillSprite.enabled = false;
+                    if (instantKillSprite.activeSelf == true)
+                        instantKillSprite.SetActive(false);
                     return;
                 }
                 else // if targetting is true
@@ -194,15 +194,15 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
                     if (Vector3.Dot(closestEnemyIcon.transform.forward, mainCam.transform.forward) >=
                         minDotProductToStealthKill + 0.35f)
                     {
-                        if (instantKillSprite.enabled == false)
-                            instantKillSprite.enabled = true;
+                        if (instantKillSprite.activeSelf == false)
+                            instantKillSprite.SetActive(true);
 
                         return;
                     }
                     else
                     {
-                        if (instantKillSprite.enabled == true)
-                            instantKillSprite.enabled = false;
+                        if (instantKillSprite.activeSelf == true)
+                            instantKillSprite.SetActive(false);
                     }
                 }
             }

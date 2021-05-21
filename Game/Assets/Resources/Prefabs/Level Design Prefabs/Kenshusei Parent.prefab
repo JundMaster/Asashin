@@ -226,7 +226,7 @@ Transform:
   - {fileID: 779452559810631377}
   - {fileID: 962524042848816545}
   - {fileID: 962524042342714883}
-  - {fileID: 4822903219540988691}
+  - {fileID: 3251251857483443200}
   m_Father: {fileID: 962524041426243526}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -524,7 +524,7 @@ Transform:
   m_Father: {fileID: 962524041467204856}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7753073951616047881
+--- !u!1 &1484230794368878813
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -532,39 +532,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4822903219540988691}
-  - component: {fileID: 5402360107117736801}
-  - component: {fileID: 5514271980733890350}
-  - component: {fileID: 881844826303594159}
+  - component: {fileID: 8459919302831663485}
+  - component: {fileID: 6153558776041301003}
+  - component: {fileID: 6781335706290435546}
   m_Layer: 0
-  m_Name: Instant Kill Icon
+  m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4822903219540988691
+  m_IsActive: 0
+--- !u!4 &8459919302831663485
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7753073951616047881}
+  m_GameObject: {fileID: 1484230794368878813}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 962524041467204856}
-  m_RootOrder: 3
+  m_Father: {fileID: 3251251857483443200}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &5402360107117736801
+--- !u!212 &6153558776041301003
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7753073951616047881}
-  m_Enabled: 0
+  m_GameObject: {fileID: 1484230794368878813}
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -597,7 +596,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b3bc4e4d69227f94483ce92b5367ae02, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 979ef06c14221134c8e62dc0a261b148, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -608,33 +607,83 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5514271980733890350
+--- !u!95 &6781335706290435546
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484230794368878813}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7f4c7329c7fdedd499eca3526f3ac068, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &7565554074554847649
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3251251857483443200}
+  - component: {fileID: 3583953480653494780}
+  - component: {fileID: 7063622111564654478}
+  m_Layer: 0
+  m_Name: Instant Kill Icon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3251251857483443200
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7565554074554847649}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8459919302831663485}
+  m_Father: {fileID: 962524041467204856}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3583953480653494780
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7753073951616047881}
+  m_GameObject: {fileID: 7565554074554847649}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebb0e64870f25c94abbc93c19c08e2a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &881844826303594159
+--- !u!114 &7063622111564654478
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7753073951616047881}
+  m_GameObject: {fileID: 7565554074554847649}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4cbae063bdab404aac138913458578f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerLayers:
-    serializedVersion: 2
-    m_Bits: 34816
+  instantKillSprite: {fileID: 1484230794368878813}
 --- !u!1001 &962524042289836346
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2054,14 +2103,14 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 54543be746191b640aed6c711d4f6538, type: 3}
   m_PrefabInstance: {fileID: 962524042289836346}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &6643098818285259947 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 54543be746191b640aed6c711d4f6538, type: 3}
-  m_PrefabInstance: {fileID: 962524042289836346}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8674359151191352772 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8447082967072642302, guid: 54543be746191b640aed6c711d4f6538, type: 3}
+  m_PrefabInstance: {fileID: 962524042289836346}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6643098818285259947 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 54543be746191b640aed6c711d4f6538, type: 3}
   m_PrefabInstance: {fileID: 962524042289836346}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8477543173002773720

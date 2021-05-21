@@ -5,21 +5,18 @@
 /// </summary>
 public class EnemyInstantKillIcon : MonoBehaviour, IFindPlayer
 {
+    [SerializeField] private GameObject instantKillSprite;
     private PlayerMovement playerMovement;
-    private SpriteRenderer instantKillSprite;
     private MarksLookAtCamera lookAtCamera;
-
-    [SerializeField] private LayerMask playerLayers;
 
     private void Awake()
     {
         playerMovement = FindObjectOfType<PlayerMovement>();
-        instantKillSprite = GetComponent<SpriteRenderer>();
         lookAtCamera = GetComponent<MarksLookAtCamera>();
     }
 
     private void Start() =>
-        instantKillSprite.enabled = false;
+        instantKillSprite.SetActive(false);
 
     private void Update()
     {
@@ -28,8 +25,8 @@ public class EnemyInstantKillIcon : MonoBehaviour, IFindPlayer
             // Turns stealth kill icon canvas on if stealth kill is possible 
             if (playerMovement.Walking == false)
             {
-                if (instantKillSprite.enabled == true)
-                    instantKillSprite.enabled = false;
+                if (instantKillSprite.activeSelf == true)
+                    instantKillSprite.SetActive(false);
             }
 
             // Only activates lookatcamera script if the player is close
@@ -50,5 +47,5 @@ public class EnemyInstantKillIcon : MonoBehaviour, IFindPlayer
         playerMovement = FindObjectOfType<PlayerMovement>();
 
     public void PlayerLost() =>
-        instantKillSprite.enabled = false;
+        instantKillSprite.SetActive(false);
 }
