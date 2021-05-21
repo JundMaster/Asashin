@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// Class responsible for handling player attack.
@@ -10,6 +10,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 {
     [SerializeField] private LayerMask enemyLayers;
     [Range(-1, 1)][SerializeField] private float minDotProductToStealthKill;
+    private float instantKillDistance;
+    private Transform closestEnemyIcon;
 
     // Components
     private PlayerInputCustom input;
@@ -25,6 +27,8 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private SlowMotionBehaviour slowMotion;
     private PlayerValuesScriptableObj values;
     private Player player;
+    private CinemachineTarget cineTarget;
+    private Camera mainCam;
 
     // Weapon
     [SerializeField] private SphereCollider sword;
@@ -63,10 +67,14 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         slowMotion = FindObjectOfType<SlowMotionBehaviour>();
         values = GetComponent<Player>().Values;
         player = GetComponent<Player>();
+        cineTarget = FindObjectOfType<CinemachineTarget>();
+        mainCam = Camera.main;
     }
 
     private void Start()
     {
+        closestEnemyIcon = null;
+        instantKillDistance = 2f;
         turnSmooth = values.TurnSmooth;
         executeInstaKill = false;
 
@@ -86,9 +94,119 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         slowMotion.SlowMotionEvent -= ChangeTurnSmoothValue;
     }
 
+    /// <summary>
+    /// Controls enemy instant kill icon.
+    /// This part of code MUST be in this script to be exactly the same
+    /// as stealthkill method. If this code is in another script the values
+    /// might not be 100% the same, which will cause some fails when the
+    /// icon pops up.
+    /// </summary>
     public void ComponentUpdate()
     {
-        //
+        // Turns stealth kill icon canvas on if stealth kill is possible 
+        if (movement.Walking)
+        {
+            // Checks if there is an enemy to insta kill
+            // Checks all enemies around the player
+            Collider[] enemies =
+                    Physics.OverlapSphere(transform.position, instantKillDistance, enemyLayers);
+
+            // Checks if it's an enemy
+            if (enemies.Length > 0)
+            {
+                List<Transform> enemyList = new List<Transform>();
+
+                // If enemy has an Enemy script
+                for (int i = 0; i < enemies.Length; i++)
+                {
+                    if (enemies[i].gameObject.TryGetComponent(out EnemySimple allens))
+                    {
+                        enemyList.Add(enemies[i].transform);
+                    }
+                }
+
+                float nearestEnemyDistance = float.MaxValue;
+                float distance;
+                // Orders enemies by distance to get the closest one
+                foreach (Transform enemy in enemyList)
+                {
+                    distance = (enemy.transform.position - transform.position).sqrMagnitude;
+                    if (distance < nearestEnemyDistance)
+                    {
+                        nearestEnemyDistance = distance;
+                        closestEnemyIcon = enemy;
+                    }
+                }
+            }
+            else // else if the player left stealth kill range
+            {
+                if (closestEnemyIcon != null)
+                {
+                    SpriteRenderer instantKillSprite =
+                    closestEnemyIcon.gameObject.GetComponentInChildren<EnemyInstantKillIcon>().
+                    GetComponent<SpriteRenderer>();
+
+                    if (instantKillSprite.enabled == true)
+                        instantKillSprite.enabled = false;
+
+                    closestEnemyIcon = null;
+                }
+            }
+
+            // If player is close to the enemy
+            if (closestEnemyIcon != null)
+            {
+                SpriteRenderer instantKillSprite = 
+                    closestEnemyIcon.gameObject.GetComponentInChildren<EnemyInstantKillIcon>().
+                    GetComponent<SpriteRenderer>();
+
+                if (cineTarget.Targeting == false)
+                {
+                    // If the player is facing the enemy's forward, meaning it's
+                    // looking towards him while he has is back turned
+                    if (Vector3.Dot(closestEnemyIcon.transform.forward, transform.forward) >=
+                        minDotProductToStealthKill)
+                    {
+                        // Only happens if the player is BEHIND the enemy, prevents
+                        // from doing instant kill while the enemy is behind the player
+                        if (Vector3.Angle(
+                            transform.Direction(closestEnemyIcon.transform), transform.forward) < 20)
+                        {
+                            if (instantKillSprite.enabled == false)
+                                instantKillSprite.enabled = true;
+                            return;
+                        } // else if the player is in front of the enemy
+
+                        if (instantKillSprite.enabled == true)
+                            instantKillSprite.enabled = false;
+                        return;
+
+                    } // else if player is not facing the enemy
+
+                    if (instantKillSprite.enabled == true)
+                        instantKillSprite.enabled = false;
+                    return;
+                }
+                else // if targetting is true
+                {
+                    // If camera is facing the enemy's forward, meaning it's
+                    // looking towards him while he has is back turned
+                    if (Vector3.Dot(closestEnemyIcon.transform.forward, mainCam.transform.forward) >=
+                        minDotProductToStealthKill + 0.35f)
+                    {
+                        if (instantKillSprite.enabled == false)
+                            instantKillSprite.enabled = true;
+
+                        return;
+                    }
+                    else
+                    {
+                        if (instantKillSprite.enabled == true)
+                            instantKillSprite.enabled = false;
+                    }
+                }
+            }
+        }
     }
 
     public void ComponentFixedUpdate()
@@ -245,18 +363,17 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
 
         // Checks all enemies around the player
         Collider[] enemies =
-                Physics.OverlapSphere(transform.position, 2f, enemyLayers);
+                Physics.OverlapSphere(transform.position, instantKillDistance, enemyLayers);
 
         Transform enemyToAttack = null;
-        // If there are enemies
+        // If there are no enemies
         if (enemies.Length == 0)
         {
-            // Else
             // Normal attack Anim
             OnLightMeleeAttack(true);
             return;
         }
-        else // more than one
+        else // else if there are enemies
         {
             // Creates a list for all enemies around the player
             List<Transform> allEnemies = new List<Transform>();

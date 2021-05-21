@@ -9,6 +9,7 @@ using UnityEngine.Rendering.Universal;
 /// </summary>
 public class PlayerMovement : MonoBehaviour, IAction
 {
+    [Header("Movement serialized variables")]
     [SerializeField] private GameObject footImpactParticles;
     [SerializeField] private Transform leftFoot;
     [SerializeField] private Transform rightFoot;

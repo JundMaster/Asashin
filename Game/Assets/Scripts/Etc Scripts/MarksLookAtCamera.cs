@@ -10,9 +10,6 @@ public class MarksLookAtCamera : MonoBehaviour
     private void Awake() =>
         cam = Camera.main;
 
-    private void FixedUpdate()
-    {
+    private void FixedUpdate() =>
         transform.LookAt(cam.transform);
-        transform.eulerAngles = new Vector3(0f, transform.rotation.y, 0f);
-    }
 }

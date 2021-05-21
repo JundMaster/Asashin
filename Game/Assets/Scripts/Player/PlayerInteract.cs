@@ -7,16 +7,17 @@ public class PlayerInteract : MonoBehaviour
 {
     private PlayerInputCustom input;
 
+    [Header("Icon when interaction is possible")]
+    [SerializeField] private SpriteRenderer interactionSprite;
+
     /// <summary>
     /// If the player is near an IInterectable, this variable becomes that object,
     /// else, this variable is null
     /// </summary>
     public IInterectable InterectableObject { get; set; }
 
-    private void Awake()
-    {
+    private void Awake() =>
         input = FindObjectOfType<PlayerInputCustom>();
-    }
 
     private void Start()
     {
