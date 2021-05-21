@@ -166,7 +166,7 @@ public class TutorialMessages : MonoBehaviour
                 break;
             case CurrentTutorial._2:
                 textMeshPro.text =
-                    $"Use {walk} to sneak. If you sneak inside a bush you won't be visibile by enemies.";
+                    $"Use {walk} to sneak. If you sneak inside a bush you won't be visibile to enemies.";
                 break;
             case CurrentTutorial._3:
                 textMeshPro.text =
@@ -182,11 +182,11 @@ public class TutorialMessages : MonoBehaviour
                 break;
             case CurrentTutorial._6:
                 textMeshPro.text =
-                    $"If you approach an enemy off-guard you will be able to perform an instant kill. In order to do this, approach the enemy carefully without alerting him and press {attack} while sneaking.";
+                    $"If you approach an enemy off-guard you will be able to perform an instant kill. When an instant kill is possible, an icon will appear above the enemy's head. In order to do this, approach the enemy carefully without alerting him and press {attack} while sneaking.";
                 break;
             case CurrentTutorial._7:
                 textMeshPro.text =
-                    $"While exploring, you'll find wooden boxes and treasures with random quantities of loot inside. You can attack and break the wooden boxes and interact with treasures by pressing {loot}.";
+                    $"While exploring, you'll find wooden boxes and treasures with random quantities of loot inside. You can attack and break the wooden boxes and interact with treasures by pressing {loot}. When close to a treasure, an icon will appear above the character's head.";
                 break;
             case CurrentTutorial._8:
                 textMeshPro.text =

@@ -8,7 +8,7 @@ public class PlayerInteract : MonoBehaviour
     private PlayerInputCustom input;
 
     [Header("Icon when interaction is possible")]
-    [SerializeField] private SpriteRenderer interactionSprite;
+    [SerializeField] private GameObject interactionSprite;
 
     /// <summary>
     /// If the player is near an IInterectable, this variable becomes that object,
@@ -19,19 +19,27 @@ public class PlayerInteract : MonoBehaviour
     private void Awake() =>
         input = FindObjectOfType<PlayerInputCustom>();
 
-    private void Start()
-    {
+    private void Start() =>
         InterectableObject = null;
-    }
 
-    private void OnEnable()
-    {
+    private void OnEnable() =>
         input.MeleeLightAttack += InteractWithObject;
-    }
 
-    private void OnDisable()
-    {
+    private void OnDisable() =>
         input.MeleeLightAttack -= InteractWithObject;
+
+    private void Update()
+    {
+        if (InterectableObject != null)
+        {
+            if (interactionSprite.activeSelf == false)
+                interactionSprite.SetActive(true);
+        }
+        else
+        {
+            if (interactionSprite.activeSelf == true)
+                interactionSprite.SetActive(false);
+        }
     }
 
     /// <summary>
