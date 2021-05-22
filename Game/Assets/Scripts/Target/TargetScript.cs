@@ -10,7 +10,7 @@ public class TargetScript : MonoBehaviour
     private Transform targetParent;
     private PauseSystem pause;
 
-    [SerializeField] private Canvas parentCanvas;
+    [SerializeField] private GameObject spriteGameObject;
     [SerializeField] private RawImage crosshair;
 
     private void Awake()
@@ -22,22 +22,22 @@ public class TargetScript : MonoBehaviour
     }
 
     private void OnEnable() =>
-        pause.GamePaused += UpdateCanvas;
+        pause.GamePaused += SetSpriteActive;
 
     private void OnDisable() =>
-        pause.GamePaused -= UpdateCanvas;
+        pause.GamePaused -= SetSpriteActive;
 
     private void FixedUpdate()
     {
         if (targetParent.gameObject.activeSelf)
         {
-            if (parentCanvas.enabled == false) 
-                parentCanvas.enabled = true;
+            if (spriteGameObject.activeSelf == false)
+                spriteGameObject.SetActive(true);
         }
         else
         {
-            if (parentCanvas.enabled) 
-                parentCanvas.enabled = false;
+            if (spriteGameObject.activeSelf == true)
+                spriteGameObject.SetActive(false);
         }
 
         // Gets target position in world space
@@ -52,14 +52,14 @@ public class TargetScript : MonoBehaviour
     /// Sets canvas on or off if the player enters pause menu.
     /// </summary>
     /// <param name="pauseEnum">Paused or unpaused.</param>
-    private void UpdateCanvas(PauseSystemEnum pauseEnum)
+    private void SetSpriteActive(PauseSystemEnum pauseEnum)
     {
         if (pauseEnum == PauseSystemEnum.Paused)
-            parentCanvas.enabled = false;
+            spriteGameObject.GetComponent<RawImage>().enabled = false;
         else
         {
             if (targetParent.gameObject.activeSelf)
-                    parentCanvas.enabled = true;
+                spriteGameObject.GetComponent<RawImage>().enabled = true;
         }
     }
 }
