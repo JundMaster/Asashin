@@ -7,13 +7,9 @@ public class EnemyInstantKillIcon : MonoBehaviour, IFindPlayer
 {
     [SerializeField] private GameObject instantKillSprite;
     private PlayerMovement playerMovement;
-    private MarksLookAtCamera lookAtCamera;
 
-    private void Awake()
-    {
+    private void Awake() =>
         playerMovement = FindObjectOfType<PlayerMovement>();
-        lookAtCamera = GetComponent<MarksLookAtCamera>();
-    }
 
     private void Start() =>
         instantKillSprite.SetActive(false);
@@ -27,18 +23,6 @@ public class EnemyInstantKillIcon : MonoBehaviour, IFindPlayer
             {
                 if (instantKillSprite.activeSelf == true)
                     instantKillSprite.SetActive(false);
-            }
-
-            // Only activates lookatcamera script if the player is close
-            if (Vector3.Distance(transform.position, playerMovement.transform.position) < 5)
-            {
-                if (lookAtCamera.enabled == false)
-                    lookAtCamera.enabled = true;
-            } 
-            else
-            {
-                if (lookAtCamera.enabled == true)
-                    lookAtCamera.enabled = false;
             }
         }
     }

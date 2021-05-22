@@ -15,10 +15,6 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
     [SerializeField] private Material coneMaterial;
     private VisionCone visionCone;
 
-    [Header("Exclamation mark prefab")]
-    [SerializeField] private GameObject exclamationMarkPrefab;
-    [SerializeField] private Vector3 offset;
-
     [Header("Rotation speed after reaching final point (less means faster)")]
     [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
     private float smoothTimeRotation;
@@ -163,12 +159,7 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
             // in case the enemy doesn't have defense
             if (PlayerInRange())
             {
-                // Instantiates an exclamation mark
-                GameObject exclMark = Instantiate(
-                    exclamationMarkPrefab,
-                    enemy.transform.position + offset,
-                    Quaternion.identity);
-                exclMark.transform.parent = enemy.transform;
+                enemy.ExclamationMark.SetActive(true);
 
                 enemy.OnTutorialAlert();
 

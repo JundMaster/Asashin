@@ -34,6 +34,12 @@ public class EnemySimple : EnemyBase, IHearSound
     [SerializeField] private OptionsScriptableObj options;
     public OptionsScriptableObj Options => options;
 
+    [Header("Punctuation Marks")]
+    [SerializeField] private GameObject interrogationMark;
+    [SerializeField] private GameObject exclamationMark;
+    public GameObject InterrogationMark => interrogationMark;
+    public GameObject ExclamationMark => exclamationMark;
+
     /// <summary>
     /// Get setter for current reaction of the enemy, meaning he's been hit or 
     /// is following a sound.

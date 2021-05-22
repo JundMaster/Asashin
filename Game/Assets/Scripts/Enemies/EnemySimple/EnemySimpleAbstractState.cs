@@ -17,6 +17,14 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     protected bool followSound;
 
     /// <summary>
+    /// Enum with possible punctuation marks.
+    /// </summary>
+    protected enum TypeOfMark { Interrogation, Exclamation };
+    private TypeOfMark currentPunctuationMark;
+    // Stops punctuation mark from spawning with delay
+    private float punctuationMarkCurrentTimer;
+
+    /// <summary>
     /// Method that defines what happens when this state is initialized.
     /// </summary>
     /// <param name="en">Parent object of this state.</param>
@@ -48,6 +56,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     {
         base.OnEnter();
         alert = false;
+        punctuationMarkCurrentTimer = 0;
 
         enemy.InstantDeath += SwitchToDeathState;
         enemy.Alert += AlertEnemies;
@@ -142,5 +151,38 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
                 return true;
         
         return false;
+    }
+
+    /// <summary>
+    /// Instantiates an interrogation or exclamation mark.
+    /// </summary>
+    protected void SpawnPunctuationMark(TypeOfMark type)
+    {
+        float punctuationMarkDelay = 1;
+
+        // Instantiates an exclamation mark
+        if (type == TypeOfMark.Interrogation)
+        {
+            // Interrogation mark has a delay so it will be prevented from
+            // spawning constantly while the enemy is reacting
+            if (Time.time - punctuationMarkCurrentTimer > punctuationMarkDelay)
+            {
+                if (currentPunctuationMark != TypeOfMark.Interrogation)
+                    enemy.ExclamationMark.SetActive(false);
+
+                enemy.InterrogationMark.SetActive(true);
+
+                punctuationMarkCurrentTimer = Time.time;
+                currentPunctuationMark = TypeOfMark.Interrogation;
+            }
+        }
+        else
+        {
+            if (currentPunctuationMark != TypeOfMark.Exclamation)
+                enemy.InterrogationMark.SetActive(false);
+
+            enemy.ExclamationMark.SetActive(true);
+            currentPunctuationMark = TypeOfMark.Exclamation;
+        }
     }
 }

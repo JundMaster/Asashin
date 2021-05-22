@@ -16,10 +16,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     [SerializeField] private Material coneMaterial;
     private VisionCone visionCone;
 
-    [Header("Exclamation mark prefab")]
-    [SerializeField] private GameObject exclamationMarkPrefab;
-    [SerializeField] private Vector3 offset;
-
     [Header("Rotation speed after reaching final point (less means faster)")]
     [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
     private float smoothTimeRotation;
@@ -118,7 +114,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
         
         if (alert)
         {
-            InstantiateExclamationMark();
+            SpawnPunctuationMark(TypeOfMark.Exclamation);
             return enemy.DefenseState;
         }
 
@@ -136,7 +132,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
 
         if (NearPlayer())
         {
-            InstantiateExclamationMark();
+            SpawnPunctuationMark(TypeOfMark.Exclamation);
             return enemy.DefenseState;
         }
 
@@ -189,12 +185,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
             // in case the enemy doesn't have defense
             if (PlayerInRange())
             {
-                // Instantiates an exclamation mark
-                GameObject exclMark = Instantiate(
-                    exclamationMarkPrefab,
-                    enemy.transform.position + offset,
-                    Quaternion.identity);
-                exclMark.transform.parent = enemy.transform;
+                SpawnPunctuationMark(TypeOfMark.Exclamation);
 
                 return 
                     enemy.DefenseState ?? 
@@ -279,19 +270,6 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
             }
             yield return wffu;
         }
-    }
-
-    /// <summary>
-    /// Instantiates an exclamation mark.
-    /// </summary>
-    private void InstantiateExclamationMark()
-    {
-        // Instantiates an exclamation mark
-        GameObject exclMark = Instantiate(
-            exclamationMarkPrefab,
-            enemy.transform.position + offset,
-            Quaternion.identity);
-        exclMark.transform.parent = enemy.transform;
     }
 
     /// <summary>

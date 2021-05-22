@@ -15,14 +15,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     [Header("Rotation speed after reaching final point (less means faster)")]
     [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
 
-    [Header("Exclamation and interrogation mark prefabs")]
-    [SerializeField] private GameObject exclamationMarkPrefab;
-    [SerializeField] private GameObject interrogationMarkPrefab;
-    [SerializeField] private Vector3 offset;
-    private enum TypeOfMark { Interrogation, Exclamation };
-    private GameObject currentPunctuationMark;
-    private float punctuationMarkDelay;
-    private float punctuationMarkCurrentTimer;
+    
 
     // State variables
     private IEnumerator lookForPlayerCoroutine;
@@ -46,10 +39,6 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         visionCone = enemy.VisionConeScript;
 
         distanceFromPositionToCheck = 0.7f;
-
-        // Stops interrogation mark from spawning without delay
-        punctuationMarkDelay = 1f;
-        punctuationMarkCurrentTimer = Time.time;
 
         // Updates options dependant values as soon as the enemy spawns
         enemy.StartCoroutine(UpdateValuesCoroutine());
@@ -110,7 +99,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         if (NearPlayer())
         {
-            InstantiatePunctuationMark(TypeOfMark.Exclamation);
+            SpawnPunctuationMark(TypeOfMark.Exclamation);
             return enemy.DefenseState;
         }
 
@@ -118,7 +107,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         if (PlayerInRange())
         {
             // Instantiates an exclamation mark
-            InstantiatePunctuationMark(TypeOfMark.Exclamation);
+            SpawnPunctuationMark(TypeOfMark.Exclamation);
             return enemy.DefenseState ?? enemy.PatrolState;
         }
 
@@ -168,41 +157,6 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     }
 
     /// <summary>
-    /// Instantiates an interrogation or exclamation mark.
-    /// </summary>
-    private void InstantiatePunctuationMark(TypeOfMark type)
-    {
-        // Instantiates an exclamation mark
-        if (type == TypeOfMark.Interrogation)
-        {
-            if (Time.time - punctuationMarkCurrentTimer > punctuationMarkDelay)
-            {
-                if (currentPunctuationMark != null)
-                    Destroy(currentPunctuationMark.gameObject);
-
-                currentPunctuationMark = Instantiate(
-                interrogationMarkPrefab,
-                enemy.transform.position + offset,
-                Quaternion.identity);
-
-                punctuationMarkCurrentTimer = Time.time;
-            }
-        }
-        else
-        {
-            if (currentPunctuationMark != null)
-                Destroy(currentPunctuationMark.gameObject);
-
-            currentPunctuationMark = Instantiate(
-                exclamationMarkPrefab,
-                enemy.transform.position + offset,
-                Quaternion.identity);
-        }
-
-        currentPunctuationMark.transform.parent = enemy.transform;
-    }
-
-    /// <summary>
     /// Method to check if the enemy is at player's last known position.
     /// If it didn't not reach the last position, it deactivates the vision cone.
     /// </summary>
@@ -231,9 +185,9 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     {
         // So it doesn't recognize this position as last position
         enteredInPosition = enemy.transform.position;
-        
+
         // Instantiates an interrogation mark
-        InstantiatePunctuationMark(TypeOfMark.Interrogation);
+        SpawnPunctuationMark(TypeOfMark.Interrogation);
 
         // Stops coroutine in case it's already searching for the player
         if (lookForPlayerCoroutine != null)
