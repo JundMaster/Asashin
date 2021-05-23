@@ -45,6 +45,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     public override void Start()
     {
         base.Start();
+        lastAttackTime = 0;
 
         visionCone = enemy.VisionConeGameObject;
         if (enemy.Player != null)
@@ -66,7 +67,6 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         attacking = false;
         attackingAnimation = false;
         agent.isStopped = false;
-        lastAttackTime = 0;
 
         if (playerTarget != null ) 
             agent.SetDestination(playerTarget.position);
@@ -183,9 +183,11 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         while (attacking)
         {
             enemy.AlertSurroundings();
-
             if (Time.time - lastAttackTime > attackingDelay)
             {
+                lastAttackTime = Time.time;
+                enemy.transform.RotateTo(playerTarget.position);
+
                 // Starts atacking animation
                 attackingAnimation = true;
                 anim.SetTrigger("MeleeAttack");
@@ -199,7 +201,6 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
                 // Delay after attack
 
                 attackingAnimation = false;
-                lastAttackTime = Time.time;
             }
 
             yield return wfd;
