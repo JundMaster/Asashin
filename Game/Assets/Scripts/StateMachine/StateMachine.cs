@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// Class responsible for handling states.
@@ -9,6 +10,9 @@ public class StateMachine
     private readonly IEnumerable<IState> states;
     private readonly object parentObject;
     private IState currentState;
+
+    private readonly float delayToLeaveState = 0.1f;
+    private float currentTimerToLeaveState;
 
     /// <summary>
     /// Constructor for StateMachine.
@@ -27,7 +31,7 @@ public class StateMachine
     public void Initialize()
     {
         currentState = states.First();
-        
+
         // Initializes and starts all states
         foreach (IState state in states)
         {
@@ -45,9 +49,12 @@ public class StateMachine
     public void Update()
     {
         IState nextState = currentState?.Update();
-
+        
+        // If the next state is different than the current one, it changes state
+        // Has a small delay to leave the current state
         if (nextState != null &&
-            nextState != currentState)
+            nextState != currentState &&
+            Time.time - currentTimerToLeaveState > delayToLeaveState)
         {
             SwitchToNewState(nextState);
         }
@@ -64,5 +71,7 @@ public class StateMachine
         currentState?.OnExit();
         currentState = nextState;
         currentState?.OnEnter();
+
+        currentTimerToLeaveState = Time.time;
     }
 }

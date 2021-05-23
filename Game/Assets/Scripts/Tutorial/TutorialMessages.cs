@@ -182,7 +182,7 @@ public class TutorialMessages : MonoBehaviour
                 break;
             case CurrentTutorial._6:
                 textMeshPro.text =
-                    $"If you approach an enemy off-guard you will be able to perform an instant kill. When an instant kill is possible, an icon will appear above the enemy's head. In order to do this, approach the enemy carefully without alerting him and press {attack} while sneaking.";
+                    $"If you approach an enemy off-guard you will be able to perform an instant kill. When it's possible to perform an instant kill, an icon will appear above the enemy's head. In order to do this, approach the enemy carefully without alerting him and press {attack} while sneaking.";
                 break;
             case CurrentTutorial._7:
                 textMeshPro.text =

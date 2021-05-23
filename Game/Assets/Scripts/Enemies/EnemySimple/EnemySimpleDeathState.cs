@@ -9,6 +9,9 @@ public class EnemySimpleDeathState : EnemySimpleAbstractState
 {
     [Header("Particles to spawn when the enemy dies")]
     [SerializeField] private GameObject smokeParticles;
+
+    // Components
+    private GameObject visionCone;
     private ISpawnItemBehaviour spawnItemBehaviour;
 
     /// <summary>
@@ -17,6 +20,7 @@ public class EnemySimpleDeathState : EnemySimpleAbstractState
     public override void Start()
     {
         spawnItemBehaviour = enemy.GetComponent<ISpawnItemBehaviour>();
+        visionCone = enemy.VisionConeGameObject;
     }
 
     /// <summary>
@@ -26,6 +30,9 @@ public class EnemySimpleDeathState : EnemySimpleAbstractState
     {
         if (enemy.InCombat == true)
             enemy.InCombat = false;
+
+        visionCone.SetActive(false);
+        SpawnPunctuationMark(TypeOfMark.None);
 
         // Variables to make sure the is no collision while the enemy is dying
         enemy.Agent.enabled = false;

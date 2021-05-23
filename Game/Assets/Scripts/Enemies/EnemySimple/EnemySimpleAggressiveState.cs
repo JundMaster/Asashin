@@ -45,7 +45,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     public override void Start()
     {
         base.Start();
-        lastAttackTime = 0;
+        lastAttackTime = Time.time;
 
         visionCone = enemy.VisionConeGameObject;
         if (enemy.Player != null)

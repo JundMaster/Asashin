@@ -19,7 +19,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     /// <summary>
     /// Enum with possible punctuation marks.
     /// </summary>
-    protected enum TypeOfMark { Interrogation, Exclamation };
+    protected enum TypeOfMark { Interrogation, Exclamation , None};
     private TypeOfMark currentPunctuationMark;
     // Stops punctuation mark from spawning with delay
     private float punctuationMarkCurrentTimer;
@@ -167,7 +167,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
             // spawning constantly while the enemy is reacting
             if (Time.time - punctuationMarkCurrentTimer > punctuationMarkDelay)
             {
-                if (currentPunctuationMark != TypeOfMark.Interrogation)
+                if (currentPunctuationMark == TypeOfMark.Exclamation)
                     enemy.ExclamationMark.SetActive(false);
 
                 enemy.InterrogationMark.SetActive(true);
@@ -176,13 +176,19 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
                 currentPunctuationMark = TypeOfMark.Interrogation;
             }
         }
-        else
+        else if (type == TypeOfMark.Exclamation)
         {
-            if (currentPunctuationMark != TypeOfMark.Exclamation)
+            if (currentPunctuationMark == TypeOfMark.Interrogation)
                 enemy.InterrogationMark.SetActive(false);
 
             enemy.ExclamationMark.SetActive(true);
             currentPunctuationMark = TypeOfMark.Exclamation;
+        }
+        else
+        {
+            enemy.InterrogationMark.SetActive(false);
+            enemy.ExclamationMark.SetActive(false);
+            currentPunctuationMark = TypeOfMark.None;
         }
     }
 }

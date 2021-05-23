@@ -42,10 +42,8 @@ public abstract class EnemyAbstractState : StateBase
     /// <summary>
     /// Runs once on start.
     /// </summary>
-    public override void Start()
-    {
+    public override void Start() =>
         die = false;
-    }
 
     /// <summary>
     /// Runs every time the state machine enters this state.
