@@ -33,10 +33,6 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     [Header("Prefab to spawn on melee attack hit")]
     [SerializeField] private GameObject meleeHitParticles;
 
-    [Tooltip("Must wait this time to alert enemies again")]
-    [Range(0f, 5f)] [SerializeField] private float delayTimerToInvokeAlert;
-    private float currentTimerToInvokeAlert;
-
     // Components
     private SphereCollider weapon;
     private PlayerRoll playerRoll;
@@ -70,7 +66,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         attacking = false;
         attackingAnimation = false;
         agent.isStopped = false;
-        currentTimerToInvokeAlert = 0;
+        lastAttackTime = 0;
 
         if (playerTarget != null ) 
             agent.SetDestination(playerTarget.position);
@@ -171,6 +167,8 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         animationEvents.Hit -= WeaponHit;
     }
 
+    private float lastAttackTime; 
+
     /// <summary>
     /// Coroutine that controls enemy's attack. Waits for a delay, triggers
     /// attack animations and checks if there is a gameobject to do damage to.
@@ -184,14 +182,27 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         // While in range with the player
         while (attacking)
         {
-            yield return wfd;
+            enemy.AlertSurroundings();
 
-            // Only checks this once in a while, so it won't do it every frame
-            if (Time.time - currentTimerToInvokeAlert > delayTimerToInvokeAlert)
+            if (Time.time - lastAttackTime > attackingDelay)
             {
-                enemy.AlertSurroundings();
-                currentTimerToInvokeAlert = Time.time;
+                // Starts atacking animation
+                attackingAnimation = true;
+                anim.SetTrigger("MeleeAttack");
+                agent.speed = 0;
+                agent.isStopped = true;
+
+                // WeaponHit() happens here with animation events from
+                // EnemyAnimationEvents
+
+                yield return wfdaa;
+                // Delay after attack
+
+                attackingAnimation = false;
+                lastAttackTime = Time.time;
             }
+
+            yield return wfd;
 
             // Checks if player is still in range
             if (Vector3.Distance(playerTarget.position, myTarget.position) >
@@ -200,20 +211,6 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
                 attackingCoroutine = null;
                 break;
             }
-
-            // Starts atacking animation
-            attackingAnimation = true;
-            anim.SetTrigger("MeleeAttack");
-            agent.speed = 0;
-            agent.isStopped = true;
-
-            // WeaponHit() happens here with animation events from
-            // EnemyAnimationEvents
-
-            yield return wfdaa;
-            // Delay after attack
-
-            attackingAnimation = false;
         }
     }
 
