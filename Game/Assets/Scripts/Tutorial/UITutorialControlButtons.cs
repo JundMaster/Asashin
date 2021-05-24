@@ -20,7 +20,7 @@ public class UITutorialControlButtons : MonoBehaviour
         sceneControl.LoadScene(sceneToLoad);
 
     public void QuitTutorial() =>
-        sceneControl.LoadScene(SceneEnum.Area1);
+        sceneControl.LoadScene(SceneEnum.IntroText);
 
     public void RepeatTutorial() =>
         sceneControl.LoadScene(sceneControl.CurrentSceneEnum());

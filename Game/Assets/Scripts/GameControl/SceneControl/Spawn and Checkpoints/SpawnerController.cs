@@ -78,7 +78,7 @@ public class SpawnerController : MonoBehaviour
         {
             DeleteFiles();
             PlayerPrefs.SetString("TypeOfSpawn", SpawnTypeEnum.Newgame.ToString());
-            sceneControl.LoadScene(SceneEnum.Area1);
+            sceneControl.LoadScene(SceneEnum.IntroText);
             return;
         }
         else if ( typeOfSpawn == SpawnTypeEnum.Tutorial)
