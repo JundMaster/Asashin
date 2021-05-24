@@ -78,7 +78,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         SetAllCamerasTargets();
 
         StartCoroutine(KeepsFindingClosestTarget());
-
+        
         UpdateValues();
     }
 
@@ -156,8 +156,9 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         if (Targeting)
         {
             // If distance becames too wide, it cancels the current target
+            // (uses findTargetSize + safe distance to prevent mistakes on calculations)
             if (Vector3.Distance(player.transform.position, currentTarget.transform.position) >
-                findTargetSize)
+                findTargetSize + 1f)
             {
                 CancelCurrentTarget();
             }
