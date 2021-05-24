@@ -13,9 +13,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
     [Range(0.1f,15)][SerializeField] private float timeToLookForPlayer;
 
     [Header("Rotation speed after reaching final point (less means faster)")]
-    [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
-
-    
+    [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;    
 
     // State variables
     private IEnumerator lookForPlayerCoroutine;
@@ -85,6 +83,9 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         if (die)
             return enemy.DeathState;
+
+        if (blind && enemy.TemporaryBlindnessState != null)
+            return enemy.TemporaryBlindnessState;
 
         if (alert)
             return enemy.DefenseState;

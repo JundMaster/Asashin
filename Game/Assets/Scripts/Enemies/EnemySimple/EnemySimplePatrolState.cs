@@ -111,7 +111,10 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
 
         if (die)
             return enemy.DeathState;
-        
+
+        if (blind)
+            return enemy.TemporaryBlindnessState;
+
         if (alert)
         {
             SpawnPunctuationMark(TypeOfMark.Exclamation);

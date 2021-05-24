@@ -44,6 +44,9 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
         if (die)
             return enemy.DeathState;
 
+        if (blind && enemy.TemporaryBlindnessState != null)
+            return enemy.TemporaryBlindnessState;
+
         // Only if the player isn't fighting an enemy yet
         if (enemy.PlayerCurrentlyFighting < 2)
         {
@@ -57,9 +60,7 @@ public class EnemySenshiDefenseState : EnemySimpleAbstractDefenseState
             // If the enemy loses sight of the player it instantly
             // stops kunai coroutine and goes to another state
             if (myTarget.CanSee(playerTarget, collisionLayers) == false)
-            {
                 return enemy.LostPlayerState;
-            }
 
             // If the enemy can see and is facing the player
             if (PlayerInRange() && FacingPlayer())

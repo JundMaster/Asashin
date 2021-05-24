@@ -13,6 +13,8 @@ public class EnemyTutorialAbstractState : EnemyAbstractState
     protected EnemyTutorial enemy;
 
     protected bool hitFromBehind;
+    protected bool blind;
+
 
     [SerializeField] protected bool canDie;
 
@@ -53,6 +55,7 @@ public class EnemyTutorialAbstractState : EnemyAbstractState
         base.OnEnter();
         enemy.InstantDeath += SwitchToDeathState;
         enemy.ReactToSound += SetPositionOfSound;
+        enemy.Blind += () => blind = true;
     }
 
     /// <summary>
@@ -62,8 +65,9 @@ public class EnemyTutorialAbstractState : EnemyAbstractState
     public override void OnExit()
     {
         base.OnExit();
-        enemy.ReactToSound -= SetPositionOfSound;
+        enemy.Blind -= () => blind = true;
         enemy.InstantDeath -= SwitchToDeathState;
+        enemy.ReactToSound -= SetPositionOfSound;
     }
 
     /// <summary>

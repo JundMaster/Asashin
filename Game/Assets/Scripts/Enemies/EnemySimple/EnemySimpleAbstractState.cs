@@ -15,6 +15,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     protected bool alert;
     protected bool hitFromBehind;
     protected bool followSound;
+    protected bool blind;
 
     /// <summary>
     /// Enum with possible punctuation marks.
@@ -44,6 +45,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
         alert = false;
         hitFromBehind = false;
         followSound = false;
+        blind = false;
     }
 
     /// <summary>
@@ -56,11 +58,13 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     {
         base.OnEnter();
         alert = false;
+        blind = false;
         punctuationMarkCurrentTimer = 0;
 
         enemy.InstantDeath += SwitchToDeathState;
         enemy.Alert += AlertEnemies;
         enemy.ReactToSound += SetPositionOfSound;
+        enemy.Blind += () => blind = true;
     }
 
     /// <summary>
@@ -71,6 +75,7 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     {
         base.OnExit();
 
+        enemy.Blind -= () => blind = true;
         enemy.ReactToSound -= SetPositionOfSound;
         enemy.Alert -= AlertEnemies;
         enemy.InstantDeath -= SwitchToDeathState;

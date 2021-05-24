@@ -18,6 +18,9 @@ public class EnemyKenshuseiDefenseState : EnemySimpleAbstractDefenseState
         if (die)
             return enemy.DeathState;
 
+        if (blind && enemy.TemporaryBlindnessState != null)
+            return enemy.TemporaryBlindnessState;
+
         // Only if the player isn't fighting an enemy yet
         if (enemy.PlayerCurrentlyFighting < 2)
         {
@@ -31,16 +34,12 @@ public class EnemyKenshuseiDefenseState : EnemySimpleAbstractDefenseState
             // If the enemy loses sight of the player it instantly
             // goes to another state
             if (myTarget.CanSee(playerTarget, collisionLayers) == false)
-            {
                 return enemy.LostPlayerState;
-            }
 
             // If the enemy can NOT see and is facing the player
             // Happens while the enemy is rotating after reaching final path
             if (PlayerInRange() == false && FacingPlayer())
-            {
                 return enemy.LostPlayerState ?? enemy.PatrolState;
-            }
 
             // Keeps rotating the enemy towards the player
             enemy.transform.RotateTo(playerTarget.position);

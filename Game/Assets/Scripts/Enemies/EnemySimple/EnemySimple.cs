@@ -126,29 +126,26 @@ public class EnemySimple : EnemyBase, IHearSound
     /// <summary>
     /// Method that changes current state to TemporaryBlindnessState.
     /// </summary>
-    public void BlindEnemy()
-    {
-        if (TemporaryBlindnessState != null)
-            stateMachine?.SwitchToNewState(TemporaryBlindnessState);
-    }
+    public virtual void BlindEnemy() =>
+        Blind.Invoke();
 
     /// <summary>
     /// Method called from AlertSurroundings, called from enemy states,
     /// in order to invoke Alert event.
     /// </summary>
-    public void OnAlert() => 
+    public virtual void OnAlert() => 
         Alert?.Invoke();
 
     /// <summary>
     /// Invokes CollisionWithPlayer event.
     /// </summary>
-    private void OnCollisionWithPlayer() => 
+    protected virtual void OnCollisionWithPlayer() => 
         CollisionWithPlayer?.Invoke();
 
     /// <summary>
     /// Invokes InstantDeath event.
     /// </summary>
-    public void OnInstanteDeath() =>
+    public virtual void OnInstanteDeath() =>
         InstantDeath?.Invoke();
 
     /// <summary>
@@ -165,6 +162,11 @@ public class EnemySimple : EnemyBase, IHearSound
     /// Event registered on Tutorial.
     /// </summary>
     public event Action CollisionWithPlayer;
+
+    /// <summary>
+    /// Event registered on enemy states in order to change to blindness state.
+    /// </summary>
+    public event Action Blind;
 
     /// <summary>
     /// Event registered on enemy states in order to alert all enemies.

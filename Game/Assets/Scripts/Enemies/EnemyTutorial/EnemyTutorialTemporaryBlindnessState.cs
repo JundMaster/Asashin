@@ -43,7 +43,7 @@ public class EnemyTutorialTemporaryBlindnessState : EnemyTutorialAbstractState
         }
         // After blind is over
 
-        return enemy.PatrolState;
+        return enemy.AggressiveState ?? enemy.PatrolState;
     }
 
     /// <summary>

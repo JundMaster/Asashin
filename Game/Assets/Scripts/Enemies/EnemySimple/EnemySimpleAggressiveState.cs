@@ -25,6 +25,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     private bool attacking;
     private bool attackingAnimation;
     private IEnumerator attackingCoroutine;
+    private float lastAttackTime;
 
     [Header("Rotation speed when close to the player (less means faster)")]
     [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
@@ -92,6 +93,9 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
 
         if (die)
             return enemy.DeathState;
+
+        if (blind && enemy.TemporaryBlindnessState != null)
+            return enemy.TemporaryBlindnessState;
 
         float currentDistanceFromPlayer =
             Vector3.Distance(playerTarget.position, myTarget.position);
@@ -166,8 +170,6 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
         animationEvents.AgentCanMove -= AgentCanMove;
         animationEvents.Hit -= WeaponHit;
     }
-
-    private float lastAttackTime; 
 
     /// <summary>
     /// Coroutine that controls enemy's attack. Waits for a delay, triggers

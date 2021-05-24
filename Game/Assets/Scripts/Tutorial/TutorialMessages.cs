@@ -206,7 +206,7 @@ public class TutorialMessages : MonoBehaviour
                 break;
             case CurrentTutorial._12:
                 textMeshPro.text =
-                    $"In this last tutorial you'll fight an enemy using the techniques you have learned so far. Move towards the vision cone when you're ready.";
+                    $"In this last tutorial you'll fight an enemy using the techniques you have learned so far. For tutorial purposes, this enemy is immune to instant kills. Move towards the vision cone when you're ready.";
                 break;
         }
     }
