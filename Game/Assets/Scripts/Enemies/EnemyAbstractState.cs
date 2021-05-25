@@ -98,6 +98,8 @@ public abstract class EnemyAbstractState : StateBase
         Vector3 dir =
             myTarget.position.Direction(playerTarget.position);
 
+        anim.SetTrigger("TakeHit");
+
         // Waits for fixed update to check if the enemy died meanwhile
         yield return wffu;
 
