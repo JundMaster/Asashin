@@ -103,17 +103,22 @@ public abstract class EnemyAbstractState : StateBase
 
         while (Time.time - timeEntered < timeToTravelAfterHit)
         {
-            agent.isStopped = true;
+            if (agent.isOnNavMesh)
+            {
+                agent.isStopped = true;
 
-            // Pushes enemy back
-            enemyBase.transform.position +=
-                -(dir) *
-                Time.fixedDeltaTime *
-                takeDamageDistancePower;
-
+                // Pushes enemy back
+                enemyBase.transform.position +=
+                    -(dir) *
+                    Time.fixedDeltaTime *
+                    takeDamageDistancePower;
+            }
+            
             yield return wffu;
         }
-        agent.isStopped = false;
+
+        if (agent.isOnNavMesh)
+            agent.isStopped = false;
     }
 
     /// <summary>

@@ -196,7 +196,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
                 agent.speed = 0;
                 agent.isStopped = true;
 
-                // WeaponHit() happens here with animation events from
+                // WeaponHit() happens in here with animation events from
                 // EnemyAnimationEvents
 
                 yield return wfdaa;

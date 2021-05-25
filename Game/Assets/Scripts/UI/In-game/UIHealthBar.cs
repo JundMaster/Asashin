@@ -16,10 +16,8 @@ public class UIHealthBar : MonoBehaviour, IFindPlayer
     // Components
     private PlayerStats playerStats;
 
-    private void Awake()
-    {
+    private void Awake() =>
         playerStats = FindObjectOfType<PlayerStats>();
-    }
 
     private void OnEnable()
     {
@@ -60,13 +58,13 @@ public class UIHealthBar : MonoBehaviour, IFindPlayer
             healthBarFill.color = green;
         }
 
-        while (healthBarFill.fillAmount < (playerStats.Health / 100) - 0.005f ||
-            healthBarFill.fillAmount > (playerStats.Health / 100) + 0.005f)
+        while (healthBarFill.fillAmount < (playerStats.Health / playerStats.MaxHealth) - 0.005f ||
+            healthBarFill.fillAmount > (playerStats.Health / playerStats.MaxHealth) + 0.005f)
         {
             healthBarFill.fillAmount =
                 Mathf.Lerp(
                     healthBarFill.fillAmount,
-                    playerStats.Health / 100,
+                    playerStats.Health / playerStats.MaxHealth,
                     Time.unscaledDeltaTime * 2.5f);
 
             yield return null;

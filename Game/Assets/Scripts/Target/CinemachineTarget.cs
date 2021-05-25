@@ -37,6 +37,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
     // Target variables
     [SerializeField] private float findTargetSize;
+    public float FindTargetSize => findTargetSize;
     public bool Targeting { get; private set; }
     private Vector3 targetYOffset;
 
@@ -93,7 +94,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
 
         while(true)
         {
-            FindAllEnemiesAroundPlayer();
+            FindAllEnemiesAroundPlayer(findTargetSize);
 
             // If there are enemies around and the camera is not blending
             if (allEnemies.Count > 0 && 
@@ -212,7 +213,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
             mainCameraBrain.m_DefaultBlend.m_Time = 0.5f;
             if (Targeting == false)
             {
-                FindAllEnemiesAroundPlayer();
+                FindAllEnemiesAroundPlayer(findTargetSize);
                 if (allEnemies.Count > 0)
                 {
                     // Orders array with all VISIBLE enemies by distance
@@ -255,7 +256,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         EnemyBase definitiveTarget = default;
         float shortestDistance = Mathf.Infinity;
 
-        FindAllEnemiesAroundPlayer();
+        FindAllEnemiesAroundPlayer(findTargetSize);
 
         for (int i = 0; i < allEnemies.Count; i++)
         {
@@ -340,7 +341,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// <summary>
     /// Finds all enemies around the player.
     /// </summary>
-    private void FindAllEnemiesAroundPlayer()
+    private void FindAllEnemiesAroundPlayer(float sizeToSearch)
     {
         allEnemies = new List<EnemyBase>();
 
@@ -348,7 +349,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         if (player != null)
         {
             enemies =
-                Physics.OverlapSphere(player.transform.position, findTargetSize, enemyLayer);
+                Physics.OverlapSphere(player.transform.position, sizeToSearch, enemyLayer);
 
             // If enemy has an Enemy script
             for (int i = 0; i < enemies.Length; i++)
@@ -439,7 +440,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     private IEnumerator CancelCurrentTargetOnDeathCoroutine()
     {
         yield return new WaitForSecondsRealtime(0.5f);
-        FindAllEnemiesAroundPlayer();
+        FindAllEnemiesAroundPlayer(findTargetSize);
         if (allEnemies.Count == 0)
         {
             // Switches camera back to third person camera
@@ -452,14 +453,14 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
     /// Invokes coroutine to find the second closest target automatically. 
     /// This method is used when an enemy dies.
     /// </summary>
-    public void AutomaticallyFindTargetCall()
-        => StartCoroutine(AutomaticallyFindTarget());
+    public void AutomaticallyFindTargetCall(float sizeToFindTarget)
+        => StartCoroutine(AutomaticallyFindTarget(sizeToFindTarget));
 
     /// <summary>
     /// Finds second closest target automatically after ending the current frame. 
     /// </summary>
     /// <returns>Wait for end of frame.</returns>
-    private IEnumerator AutomaticallyFindTarget()
+    private IEnumerator AutomaticallyFindTarget(float sizeToFindTarget)
     {
         yield return new WaitForEndOfFrame();
 
@@ -468,7 +469,7 @@ public class CinemachineTarget : MonoBehaviour, IFindPlayer, IUpdateOptions
         {
             currentTarget.gameObject.SetActive(true);
 
-            FindAllEnemiesAroundPlayer();
+            FindAllEnemiesAroundPlayer(sizeToFindTarget);
 
             // Orders array with all VISIBLE enemies by distance
             EnemyBase[] organizedEnemiesByDistance =

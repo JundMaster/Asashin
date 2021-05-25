@@ -55,7 +55,9 @@ public class EnemySimpleDeathState : EnemySimpleAbstractState
         // If the player is targetting this enemy and if there are more enemies 
         // around, it changes target to next enemy
         enemy.CineTarget.CancelCurrentTargetOnDeath();
-        enemy.CineTarget.AutomaticallyFindTargetCall();
+
+        enemy.CineTarget.AutomaticallyFindTargetCall(
+            enemy.CineTarget.FindTargetSize);
 
         // Random chance of spawning items.
         spawnItemBehaviour.ExecuteBehaviour();

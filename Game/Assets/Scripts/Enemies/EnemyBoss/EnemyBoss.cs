@@ -38,6 +38,16 @@ public sealed class EnemyBoss : EnemyBase
     }
 
     /// <summary>
+    /// "Connects" this boss to boss ui health bar.
+    /// </summary>
+    private void Start()
+    {
+        UIBossHealthBar myHpBar = FindObjectOfType<UIBossHealthBar>();
+        myHpBar.EnemyStats = base.Stats;
+        myHpBar.RegisterEvents();
+    }
+
+    /// <summary>
     /// Initializes states, state machine and calls base awake.
     /// </summary>
     public void InitializeStateMachine()

@@ -7,6 +7,7 @@ public class BossCutsceneControl : MonoBehaviour
 {
     [Header("Boss stuff")]
     [SerializeField] private GameObject bossPrefab;
+    [SerializeField] private GameObject bossHealthBar;
     [SerializeField] private GameObject smokeParticles;
     [SerializeField] private GameObject bossPosition;
     [SerializeField] private Transform finalBossPosition;
@@ -104,8 +105,11 @@ public class BossCutsceneControl : MonoBehaviour
     {
         Vector3 offset = new Vector3(0, 0.5f, 0);
         Instantiate(smokeParticles, bossPosition.transform.position + offset, Quaternion.identity);
+
         spawnedBoss = 
             Instantiate(bossPrefab, bossPosition.transform.position, Quaternion.Euler(0, 90, 0));
+
+        bossHealthBar.SetActive(true);
     }
 
     /// <summary>

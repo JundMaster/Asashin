@@ -61,7 +61,7 @@ public abstract class EnemyBossAbstractState : EnemyAbstractState
     /// <returns>Returns wait for seconds.</returns>
     protected IEnumerator TeleportBoss()
     {
-        enemy.CineTarget.CancelCurrentTarget();
+        enemy.CineTarget.AutomaticallyFindTargetCall(100f);
 
         agent.SetDestination(myTarget.position);
         agent.enabled = false;
@@ -71,7 +71,7 @@ public abstract class EnemyBossAbstractState : EnemyAbstractState
             smokePrefab, enemy.transform.position + offset, Quaternion.identity);
 
         // Makes the enemy disappear for wfs
-        enemy.transform.position = new Vector3(100000, 100000, 100000);
+        enemy.transform.position = new Vector3(100000, enemy.transform.position.y, 100000);
         yield return wfs;
 
         // Teleports enemy to a random position and stops him

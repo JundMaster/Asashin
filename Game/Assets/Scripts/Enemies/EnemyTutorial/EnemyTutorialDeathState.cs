@@ -41,7 +41,9 @@ public class EnemyTutorialDeathState : EnemyTutorialAbstractState
         // If the player is targetting this enemy and if there are more enemies 
         // around, it changes target to next enemy
         enemy.CineTarget.CancelCurrentTargetOnDeath();
-        enemy.CineTarget.AutomaticallyFindTargetCall();
+
+        enemy.CineTarget.AutomaticallyFindTargetCall(
+            enemy.CineTarget.FindTargetSize);
 
         Instantiate(
             smokeParticles,

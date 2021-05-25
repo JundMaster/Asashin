@@ -17,6 +17,7 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
     private bool attacking;
     private bool attackingAnimation;
     private IEnumerator attackingCoroutine;
+    private float lastAttackTime;
 
     [Header("Rotation speed when close to the player (less means faster)")]
     [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
@@ -154,6 +155,31 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
         // While in range with the player
         while (attacking)
         {
+            enemy.AlertSurroundings();
+            if (Time.time - lastAttackTime > attackingDelay)
+            {
+                lastAttackTime = Time.time;
+                enemy.transform.RotateTo(playerTarget.position);
+
+                // Starts atacking animation
+                attackingAnimation = true;
+                anim.SetTrigger("MeleeAttack");
+
+                if (agent.isOnNavMesh)
+                {
+                    agent.speed = 0;
+                    agent.isStopped = true;
+                }
+
+                // WeaponHit() happens in here with animation events from
+                // EnemyAnimationEvents
+
+                yield return wfdaa;
+                // Delay after attack
+
+                attackingAnimation = false;
+            }
+
             yield return wfd;
 
             // Checks if player is still in range
@@ -163,20 +189,6 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
                 attackingCoroutine = null;
                 break;
             }
-
-            // Starts atacking animation
-            attackingAnimation = true;
-            anim.SetTrigger("MeleeAttack");
-            agent.speed = 0;
-            agent.isStopped = true;
-
-            // WeaponHit() happens here with animation events from
-            // EnemyAnimationEvents
-
-            yield return wfdaa;
-            // Delay after attack
-
-            attackingAnimation = false;
         }
     }
 
@@ -284,8 +296,11 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
 
             if (attackingAnimation == false)
             {
-                agent.SetDestination(
-                    playerTarget.position + dir * DISTANCEFROMPLAYER);
+                if (agent.isOnNavMesh)
+                {
+                    agent.SetDestination(
+                        playerTarget.position + dir * DISTANCEFROMPLAYER);
+                }
             }
 
             return false;
@@ -319,7 +334,10 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
     /// </summary>
     private void AgentCanMove()
     {
-        agent.isStopped = false;
-        agent.speed = runningSpeed;
+        if (agent.isOnNavMesh)
+        {
+            agent.isStopped = false;
+            agent.speed = runningSpeed;
+        }
     }
 }

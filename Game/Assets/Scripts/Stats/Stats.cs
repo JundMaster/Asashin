@@ -12,15 +12,14 @@ public abstract class Stats : MonoBehaviour, IDamageable, ICommonDamage
     protected CommonStatsScriptableObj commonStats;
 
     public float Health { get; protected set; }
+    public float MaxHealth => commonStats.MaxHealth;
 
     public float LightDamage => commonStats.Damage;
 
     public float RangedDamage => commonStats.RangedDamage;
 
-    protected void Start()
-    {
+    protected void Start() =>
         Health = commonStats.MaxHealth;
-    }
 
     /// <summary>
     /// Takes an amount of damage.

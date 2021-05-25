@@ -9,6 +9,8 @@ public class TextInTextScenes : MonoBehaviour
 
     private IEnumerator Start()
     {
+        Time.timeScale = 1f;
+
         // Transparent text
         textMeshPro.color = new Color(0, 0, 0, 0);
 
