@@ -58,8 +58,7 @@ public class TargetScript : MonoBehaviour
             spriteGameObject.GetComponent<RawImage>().enabled = false;
         else
         {
-            if (targetParent.gameObject.activeSelf)
-                spriteGameObject.GetComponent<RawImage>().enabled = true;
+            spriteGameObject.GetComponent<RawImage>().enabled = true;
         }
     }
 }
