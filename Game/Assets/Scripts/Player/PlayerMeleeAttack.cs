@@ -327,7 +327,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     }
 
     /// <summary>
-    /// Checks if this object has a damgeable body, if it doesn't it will check
+    /// Checks if this object has a damgeable body, if it's null, it it will check
     /// its parent until parent is null.
     /// </summary>
     /// <param name="col">Gameobject to check.</param>
