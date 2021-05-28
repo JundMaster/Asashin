@@ -28,17 +28,20 @@ public class UIBackConfirmationCheck : MonoBehaviour
     public void BackConfirmationIfValuesAreDifferent()
     {
         // Current values are equal, so it doesn't need to set confirmation active
-        if (uiOptions.CompareCurrentValues())
+        if (uiOptions != null)
         {
-            backButtonFromSettingsMenu.SetActive(true);
-            eventSys.SetSelectedGameObject(noConfirmationButtonToSelect);
-            parentOfBackButtonToDeactivate.SetActive(false);
-        }
-        // Current values are not equal, so it needs to set confirmation active.
-        else
-        {
-            confirmationToSetActive.SetActive(true);
-            eventSys.SetSelectedGameObject(confirmationButtonToSelect);
-        }
+            if (uiOptions.CompareCurrentValues())
+            {
+                backButtonFromSettingsMenu.SetActive(true);
+                eventSys.SetSelectedGameObject(noConfirmationButtonToSelect);
+                parentOfBackButtonToDeactivate.SetActive(false);
+            }
+            // Current values are not equal, so it needs to set confirmation active.
+            else
+            {
+                confirmationToSetActive.SetActive(true);
+                eventSys.SetSelectedGameObject(confirmationButtonToSelect);
+            }
+        } 
     }
 }
