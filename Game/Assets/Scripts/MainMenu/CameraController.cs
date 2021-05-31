@@ -97,7 +97,7 @@ public class CameraController : MonoBehaviour
         SetActiveCam();
     }
 
-    public void SwitchActiveCamUp()
+    public void SwitchActiveCamDown()
     {
         if (activeCam == newGameCam) SwitchToContinueCam();
 
@@ -108,7 +108,7 @@ public class CameraController : MonoBehaviour
         else SwitchToNewGameCam();
     }
 
-    public void SwitchActiveCamDown()
+    public void SwitchActiveCamUp()
     {
         if (activeCam == newGameCam) SwitchToQuitCam();
 
