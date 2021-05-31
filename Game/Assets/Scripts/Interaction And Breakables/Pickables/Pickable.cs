@@ -14,6 +14,7 @@ public abstract class Pickable : MonoBehaviour, IPickable
     private readonly LayerMask PLAYERLAYER = 11;
     private Rigidbody rb;
     protected System.Random rand;
+    protected Animator anim;
 
     public CustomVector2 Quantity { get; set; }
     protected int quantity;
@@ -26,6 +27,7 @@ public abstract class Pickable : MonoBehaviour, IPickable
         capsuleCollider.enabled = false;
         rand = new System.Random();
         rb = GetComponent<Rigidbody>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     /// <summary>
@@ -76,8 +78,6 @@ public abstract class Pickable : MonoBehaviour, IPickable
 
             if (itemsUI != null)
                 itemsUI.UpdateAllItemUI();
-
-            Destroy(gameObject);
         }
     }
 
@@ -90,5 +90,18 @@ public abstract class Pickable : MonoBehaviour, IPickable
     {
         if (Quantity.x <= Quantity.y) quantity = Quantity.x;
         else quantity = rand.Next(Quantity.x, Quantity.y + 1);
+
+        StartCoroutine(DestroyAfterSeconds());
+    }
+
+    protected IEnumerator DestroyAfterSeconds()
+    {
+        capsuleCollider.enabled = false;
+        sphereCollider.enabled = false;
+        if (anim != null)
+            anim.SetTrigger("ItemPicked");
+
+        yield return new WaitForSeconds(0.5f);
+        Destroy(gameObject);
     }
 }
