@@ -121,12 +121,20 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
             return enemy.DefenseState;
         }
 
+        // If enemy was hit
         if (hitFromBehind)
         {
-            enemy.CurrentReaction = TypeOfReaction.HitFromBehind;
+            // If the enemy is also following a sound and player is not fighting
+            // (meaning the enemy was hit and heard a sound at the same time)
+            if (followSound && enemy.PlayerCurrentlyFighting == 0)
+                enemy.CurrentReaction = TypeOfReaction.FollowSound;
+            else
+                enemy.CurrentReaction = TypeOfReaction.HitFromBehind;
+
             return enemy.LostPlayerState;
         }
 
+        // If enemy heard a sound
         if (followSound)
         {
             enemy.CurrentReaction = TypeOfReaction.FollowSound;
