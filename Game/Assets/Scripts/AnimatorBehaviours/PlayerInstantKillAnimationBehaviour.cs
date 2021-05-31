@@ -30,7 +30,6 @@ public class PlayerInstantKillAnimationBehaviour : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        playerMovement.Walking = false;
         playerAttack.InInstantKill = false;
         playerAttack.Performing = false;
         playerAttack.Anim.applyRootMotion = false;
