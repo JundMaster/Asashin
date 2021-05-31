@@ -90,13 +90,19 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         if (alert)
             return enemy.DefenseState;
 
-        // Listened to a sound
-        if (followSound && hitFromBehind == false)
-            SetNewPosition(TypeOfReaction.FollowSound);
-
         // If it got hit from afar inside this state
-        else if (followSound == false && hitFromBehind)
-            SetNewPosition(TypeOfReaction.HitFromBehind);
+        if (hitFromBehind)
+        {
+            // If the enemy is also following a sound and player is not fighting
+            // (meaning the enemy was hit and heard a sound at the same time)
+            if (followSound && enemy.PlayerCurrentlyFighting == 0)
+                SetNewPosition(TypeOfReaction.FollowSound);
+            else
+                SetNewPosition(TypeOfReaction.HitFromBehind);
+        }
+        // Listened to a sound without being hit
+        else if (followSound && hitFromBehind == false)
+            SetNewPosition(TypeOfReaction.FollowSound);
 
         if (NearPlayer())
         {
