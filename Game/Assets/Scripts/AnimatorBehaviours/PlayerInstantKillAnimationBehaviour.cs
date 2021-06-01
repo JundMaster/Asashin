@@ -34,6 +34,10 @@ public class PlayerInstantKillAnimationBehaviour : StateMachineBehaviour
         playerAttack.Performing = false;
         playerAttack.Anim.applyRootMotion = false;
         playerAttack.Anim.ResetTrigger("MeleeLightAttack");
+
+        // If player is still pressing walk, player will walk, else it will go back to normal movement
+        if (playerMovement.PressingWalk) playerMovement.HandleWalk(true);
+        else playerMovement.HandleWalk(false);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

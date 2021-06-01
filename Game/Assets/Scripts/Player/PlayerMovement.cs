@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour, IAction
 
     // Hidden variables
     public bool Walking { get; set; }
+    public bool PressingWalk { get; private set; }
     private bool hidden;
     public bool Hidden 
     {
@@ -207,7 +208,7 @@ public class PlayerMovement : MonoBehaviour, IAction
     /// <summary>
     /// Turns sneak on or off.
     /// </summary>
-    private void HandleWalk(bool condition)
+    public void HandleWalk(bool condition)
     {
         if (condition == true)
         {
@@ -215,11 +216,13 @@ public class PlayerMovement : MonoBehaviour, IAction
                 OnTutorialWalk(TypeOfTutorial.Walk);
 
             Walking = true;
+            PressingWalk = true;
             return;
         }
         else
         {
             Walking = false;
+            PressingWalk = false;
             OnHide(false);
         }
     }
