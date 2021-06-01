@@ -55,4 +55,28 @@ public static class Vector3Extensions
         }
         return false;
     }
+
+    /// <summary>
+    /// Checks if a vector3 can see another transform in any direction. 
+    /// Parameter "to" must have the desired layer to check
+    /// (this layer must be on layers parameter as well).
+    /// </summary>
+    /// <param name="from">From this vector3.</param>
+    /// <param name="to">Final transform. Must have the desired layer
+    /// to check.</param>
+    /// <param name="layers">Layers to check.</param>
+    /// <returns>Returns true if source vector3 can see the final 
+    /// transform.</returns>
+    public static bool CanSee(this Vector3 from, Transform to,
+        LayerMask layers)
+    {
+        Ray rayTo = new Ray(from, from.Direction(to.position));
+        float distance = Vector3.Distance(from, to.position);
+        if (Physics.Raycast(rayTo, out RaycastHit hit, distance, layers))
+        {
+            if (hit.collider.gameObject.layer == to.gameObject.layer)
+                return true;
+        }
+        return false;
+    }
 }

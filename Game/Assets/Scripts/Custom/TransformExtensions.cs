@@ -56,7 +56,9 @@ public static class TransformExtentions
         if (Physics.Raycast(rayTo, out RaycastHit hit, distance, layers))
         {
             if (hit.collider.gameObject.layer == to.gameObject.layer)
+            {
                 return true;
+            }
         }
         return false;
     }

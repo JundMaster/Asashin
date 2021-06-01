@@ -11,10 +11,14 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
     [Header("Checks if player is in cone range every X seconds")]
     [Range(0.01f,2f)][SerializeField] private float searchCheckDelay;
 
+    // Cone variables
     [Header("Enemy cone render variables")]
     [Range(0, 255)][SerializeField] private byte amountOfVertices;
     [SerializeField] private Material coneMaterial;
     private VisionCone visionCone;
+    private Camera mainCamera;
+    [SerializeField] private LayerMask cameraCollisionLayers;
+    private float[] coneRenderChecks;
 
     [Header("Rotation speed after reaching final point (less means faster)")]
     [Range(0.1f, 1f)] [SerializeField] private float turnSpeed;
@@ -49,13 +53,16 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
             meshFilter, meshRenderer, coneMaterial, amountOfVertices,
             desiredConeAngle, coneRange, collisionLayers, enemy.transform);
 
+        coneRenderChecks = new[] { 0, 0.25f, 0.5f, 0.75f, 1f };
+        mainCamera = Camera.main;
+
         // Agent destination setup
         breakState = false;
         patrolPoints = enemy.PatrolPoints;
         patrolIndex = 0;
 
         options = FindObjectOfType<Options>();
-
+        
         // Updates options dependant values as soon as the enemy spawns
         enemy.StartCoroutine(UpdateValuesCoroutine());
     }
@@ -147,24 +154,44 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
             return enemy.DefenseState;
         }
 
-        // Calculates vision cone if the player isn't too far
+        // Calculates vision cone
         if (playerTarget != null)
         {
             if (enemy.VisionConeScript != null)
             {
+                // If the player isn't too far
                 if (Vector3.Distance(
-                    myTarget.position, playerTarget.position) < 75)
+                    myTarget.position, playerTarget.position) < 50)
                 {
-                    if (!enemy.VisionConeGameObject.activeSelf)
-                        enemy.VisionConeGameObject.SetActive(true);
+                    // Checks if main camera cansee (not blocked) any of the
+                    // pre determined vision cone points
+                    for (int i = 0; i < coneRenderChecks.Length; i++)
+                    {
+                        if ((myTarget.position + myTarget.forward * coneRange * 
+                            coneRenderChecks[i]).
+                            CanSee(mainCamera.transform, cameraCollisionLayers))
+                        {
+                            if (!enemy.VisionConeGameObject.activeSelf)
+                                enemy.VisionConeGameObject.SetActive(true);
 
-                    visionCone?.Calculate();
+                            // If any of the points sees the camera, it renders
+                            // the cone
+                            visionCone?.Calculate();
+                            break;
+                        }
+                        else
+                        {
+                            if (enemy.VisionConeGameObject.activeSelf)
+                                enemy.VisionConeGameObject.SetActive(false);
+                        }
+                    }
                 }
                 else
                 {
                     if (enemy.VisionConeGameObject.activeSelf)
                         enemy.VisionConeGameObject.SetActive(false);
                 }
+
             }
         }
 
