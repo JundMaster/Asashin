@@ -1,13 +1,23 @@
 fileFormatVersion: 2
-guid: b07713b0386f76143927704d04056c35
+guid: 92c322f4ff86d744793a6d18b2db199f
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: FullWallMaterial
+    second: {fileID: 2100000, guid: 8c9fad4d0a59786439f70a639e203154, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RoofMaterial
+    second: {fileID: 2100000, guid: bd481101e67e14643b61197cf3ff21cb, type: 2}
   materials:
     materialImportMode: 1
-    materialName: 0
-    materialSearch: 1
+    materialName: 1
+    materialSearch: 2
     materialLocation: 1
   animations:
     legacyGenerateAnimations: 4

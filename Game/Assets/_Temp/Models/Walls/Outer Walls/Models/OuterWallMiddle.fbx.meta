@@ -1,13 +1,23 @@
 fileFormatVersion: 2
-guid: 607968d215e562a4ba1ef78ef2be009b
+guid: 75d6cf6ea04cab44d9bf907b97d2d21f
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: FullWallMaterial
+    second: {fileID: 2100000, guid: 8c9fad4d0a59786439f70a639e203154, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RoofMaterial
+    second: {fileID: 2100000, guid: bd481101e67e14643b61197cf3ff21cb, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
-    materialSearch: 1
+    materialSearch: 2
     materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
@@ -63,7 +73,7 @@ ModelImporter:
     secondaryUVMinLightmapResolution: 40
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
-    useFileScale: 1
+    useFileScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
