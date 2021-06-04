@@ -161,33 +161,47 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     /// <summary>
     /// Instantiates an interrogation or exclamation mark.
     /// </summary>
-    protected void SpawnPunctuationMark(TypeOfMark type)
+    /// <param name="type"></param>
+    /// <returns>Wait for seconds.</returns>
+    protected IEnumerator SpawnPunctuationMark(TypeOfMark type)
     {
         float punctuationMarkDelay = 1;
+        float waitForSeconds = 0.15f;
 
-        // Instantiates an exclamation mark
-        if (type == TypeOfMark.Interrogation)
+        yield return new WaitForSeconds(waitForSeconds);
+        if (die == false)
         {
-            // Interrogation mark has a delay so it will be prevented from
-            // spawning constantly while the enemy is reacting
-            if (Time.time - punctuationMarkCurrentTimer > punctuationMarkDelay)
+            // Instantiates an exclamation mark
+            if (type == TypeOfMark.Interrogation)
             {
-                if (currentPunctuationMark == TypeOfMark.Exclamation)
-                    enemy.ExclamationMark.SetActive(false);
+                // Interrogation mark has a delay so it will be prevented from
+                // spawning constantly while the enemy is reacting
+                if (Time.time - 
+                    punctuationMarkCurrentTimer > punctuationMarkDelay)
+                {
+                    if (currentPunctuationMark == TypeOfMark.Exclamation)
+                        enemy.ExclamationMark.SetActive(false);
 
-                enemy.InterrogationMark.SetActive(true);
+                    enemy.InterrogationMark.SetActive(true);
 
-                punctuationMarkCurrentTimer = Time.time;
-                currentPunctuationMark = TypeOfMark.Interrogation;
+                    punctuationMarkCurrentTimer = Time.time;
+                    currentPunctuationMark = TypeOfMark.Interrogation;
+                }
             }
-        }
-        else if (type == TypeOfMark.Exclamation)
-        {
-            if (currentPunctuationMark == TypeOfMark.Interrogation)
-                enemy.InterrogationMark.SetActive(false);
+            else if (type == TypeOfMark.Exclamation)
+            {
+                if (currentPunctuationMark == TypeOfMark.Interrogation)
+                    enemy.InterrogationMark.SetActive(false);
 
-            enemy.ExclamationMark.SetActive(true);
-            currentPunctuationMark = TypeOfMark.Exclamation;
+                enemy.ExclamationMark.SetActive(true);
+                currentPunctuationMark = TypeOfMark.Exclamation;
+            }
+            else
+            {
+                enemy.InterrogationMark.SetActive(false);
+                enemy.ExclamationMark.SetActive(false);
+                currentPunctuationMark = TypeOfMark.None;
+            }
         }
         else
         {

@@ -124,7 +124,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
 
         if (alert)
         {
-            SpawnPunctuationMark(TypeOfMark.Exclamation);
+            enemy.StartCoroutine(SpawnPunctuationMark(TypeOfMark.Exclamation));
             return enemy.DefenseState;
         }
 
@@ -150,7 +150,7 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
 
         if (NearPlayer())
         {
-            SpawnPunctuationMark(TypeOfMark.Exclamation);
+            enemy.StartCoroutine(SpawnPunctuationMark(TypeOfMark.Exclamation));
             return enemy.DefenseState;
         }
 
@@ -223,7 +223,8 @@ public class EnemySimplePatrolState : EnemySimpleAbstractStateWithVision,
             // in case the enemy doesn't have defense
             if (PlayerInRange())
             {
-                SpawnPunctuationMark(TypeOfMark.Exclamation);
+                enemy.StartCoroutine(
+                    SpawnPunctuationMark(TypeOfMark.Exclamation));
 
                 return 
                     enemy.DefenseState ?? 

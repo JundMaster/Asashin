@@ -104,17 +104,17 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         else if (followSound && hitFromBehind == false)
             SetNewPosition(TypeOfReaction.FollowSound);
 
-        if (NearPlayer())
+        if (NearPlayer() && die == false)
         {
-            SpawnPunctuationMark(TypeOfMark.Exclamation);
+            enemy.StartCoroutine(SpawnPunctuationMark(TypeOfMark.Exclamation));
             return enemy.DefenseState;
         }
 
         // If enemy is in range, it stops looking for player coroutine
-        if (PlayerInRange())
+        if (PlayerInRange() && die == false)
         {
             // Instantiates an exclamation mark
-            SpawnPunctuationMark(TypeOfMark.Exclamation);
+            enemy.StartCoroutine(SpawnPunctuationMark(TypeOfMark.Exclamation));
             return enemy.DefenseState ?? enemy.PatrolState;
         }
 
@@ -194,7 +194,7 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         enteredInPosition = enemy.transform.position;
 
         // Instantiates an interrogation mark
-        SpawnPunctuationMark(TypeOfMark.Interrogation);
+        enemy.StartCoroutine(SpawnPunctuationMark(TypeOfMark.Interrogation));
 
         // Stops coroutine in case it's already searching for the player
         if (lookForPlayerCoroutine != null)

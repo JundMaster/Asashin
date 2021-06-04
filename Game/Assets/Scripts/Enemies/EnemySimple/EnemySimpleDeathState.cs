@@ -32,7 +32,6 @@ public class EnemySimpleDeathState : EnemySimpleAbstractState
             enemy.InCombat = false;
 
         visionCone.SetActive(false);
-        SpawnPunctuationMark(TypeOfMark.None);
 
         // Variables to make sure the is no collision while the enemy is dying
         enemy.Agent.enabled = false;
