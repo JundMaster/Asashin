@@ -36,9 +36,11 @@ public class EnemySimple : EnemyBase, IHearSound
 
     [Header("Punctuation Marks")]
     [SerializeField] private GameObject interrogationMark;
-    [SerializeField] private GameObject exclamationMark;
+    [SerializeField] private GameObject exclamationHitMark;
+    [SerializeField] private GameObject exclamationCombatMark;
     public GameObject InterrogationMark => interrogationMark;
-    public GameObject ExclamationMark => exclamationMark;
+    public GameObject ExclamationHitMark => exclamationHitMark;
+    public GameObject ExclamationCombatMark => exclamationCombatMark;
 
     /// <summary>
     /// Get setter for current reaction of the enemy, meaning he's been hit or 

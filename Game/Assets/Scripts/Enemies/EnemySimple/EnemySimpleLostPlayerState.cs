@@ -104,17 +104,21 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         else if (followSound && hitFromBehind == false)
             SetNewPosition(TypeOfReaction.FollowSound);
 
-        if (NearPlayer() && die == false)
+        if (NearPlayer())
         {
-            enemy.StartCoroutine(SpawnPunctuationMark(TypeOfMark.Exclamation));
+            enemy.StartCoroutine(
+                SpawnPunctuationMark(TypeOfMark.ExclamationCombat));
+
             return enemy.DefenseState;
         }
 
         // If enemy is in range, it stops looking for player coroutine
-        if (PlayerInRange() && die == false)
+        if (PlayerInRange())
         {
             // Instantiates an exclamation mark
-            enemy.StartCoroutine(SpawnPunctuationMark(TypeOfMark.Exclamation));
+            enemy.StartCoroutine(
+                SpawnPunctuationMark(TypeOfMark.ExclamationCombat));
+
             return enemy.DefenseState ?? enemy.PatrolState;
         }
 
@@ -193,9 +197,6 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
         // So it doesn't recognize this position as last position
         enteredInPosition = enemy.transform.position;
 
-        // Instantiates an interrogation mark
-        enemy.StartCoroutine(SpawnPunctuationMark(TypeOfMark.Interrogation));
-
         // Stops coroutine in case it's already searching for the player
         if (lookForPlayerCoroutine != null)
         {
@@ -207,12 +208,32 @@ public class EnemySimpleLostPlayerState : EnemySimpleAbstractStateWithVision,
 
         if (typeOfReaction == TypeOfReaction.FollowSound)
         {
+            // Instantiates an interrogation mark
+            enemy.StartCoroutine(
+                SpawnPunctuationMark(TypeOfMark.Interrogation));
+
             // Moves the agent to a position close to the sound
             finalDestination =
                 enemy.PositionOfSoundListened + GetRandomPositionWithSound();
         }
+        else if (typeOfReaction == TypeOfReaction.HitFromBehind)
+        {
+            // Instantiates an exclamation hit mark
+            enemy.StartCoroutine(
+                SpawnPunctuationMark(TypeOfMark.ExclamationHit));
+
+            // Moves the agent to a position close to the hit
+            finalDestination = playerTarget.position + new Vector3(
+                    Random.Range(-4, 4),
+                    0,
+                    Random.Range(-4, 4));
+        }
         else
         {
+            // Instantiates an interrogation mark
+            enemy.StartCoroutine(
+                SpawnPunctuationMark(TypeOfMark.Interrogation));
+
             // Moves the agent to a position close to the hit
             finalDestination = playerTarget.position + new Vector3(
                     Random.Range(-4, 4),

@@ -162,7 +162,7 @@ public class EnemyTutorialPatrolState : EnemyTutorialAbstractStateWithVision
             // in case the enemy doesn't have defense
             if (PlayerInRange())
             {
-                enemy.ExclamationMark.SetActive(true);
+                enemy.ExclamationCombatMark.SetActive(true);
 
                 enemy.OnTutorialAlert();
 

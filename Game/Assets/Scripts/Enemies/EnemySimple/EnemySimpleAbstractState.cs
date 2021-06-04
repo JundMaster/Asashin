@@ -17,10 +17,6 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
     protected bool followSound;
     protected bool blind;
 
-    /// <summary>
-    /// Enum with possible punctuation marks.
-    /// </summary>
-    protected enum TypeOfMark { Interrogation, Exclamation , None};
     private TypeOfMark currentPunctuationMark;
     // Stops punctuation mark from spawning with delay
     private float punctuationMarkCurrentTimer;
@@ -179,8 +175,11 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
                 if (Time.time - 
                     punctuationMarkCurrentTimer > punctuationMarkDelay)
                 {
-                    if (currentPunctuationMark == TypeOfMark.Exclamation)
-                        enemy.ExclamationMark.SetActive(false);
+                    if (currentPunctuationMark != TypeOfMark.Interrogation)
+                    {
+                        enemy.ExclamationCombatMark.SetActive(false);
+                        enemy.ExclamationHitMark.SetActive(false);
+                    }
 
                     enemy.InterrogationMark.SetActive(true);
 
@@ -188,25 +187,41 @@ public abstract class EnemySimpleAbstractState : EnemyAbstractState
                     currentPunctuationMark = TypeOfMark.Interrogation;
                 }
             }
-            else if (type == TypeOfMark.Exclamation)
+            else if (type == TypeOfMark.ExclamationHit)
             {
-                if (currentPunctuationMark == TypeOfMark.Interrogation)
+                if (currentPunctuationMark != TypeOfMark.ExclamationHit)
+                {
+                    enemy.ExclamationCombatMark.SetActive(false);
                     enemy.InterrogationMark.SetActive(false);
+                }
 
-                enemy.ExclamationMark.SetActive(true);
-                currentPunctuationMark = TypeOfMark.Exclamation;
+                enemy.ExclamationHitMark.SetActive(true);
+                currentPunctuationMark = TypeOfMark.ExclamationHit;
+            }
+            else if (type == TypeOfMark.ExclamationCombat)
+            {
+                if (currentPunctuationMark != TypeOfMark.ExclamationCombat)
+                {
+                    enemy.ExclamationHitMark.SetActive(false);
+                    enemy.InterrogationMark.SetActive(false);
+                }
+
+                enemy.ExclamationCombatMark.SetActive(true);
+                currentPunctuationMark = TypeOfMark.ExclamationCombat;
             }
             else
             {
                 enemy.InterrogationMark.SetActive(false);
-                enemy.ExclamationMark.SetActive(false);
+                enemy.ExclamationCombatMark.SetActive(false);
+                enemy.ExclamationHitMark.SetActive(false);
                 currentPunctuationMark = TypeOfMark.None;
             }
         }
         else
         {
             enemy.InterrogationMark.SetActive(false);
-            enemy.ExclamationMark.SetActive(false);
+            enemy.ExclamationCombatMark.SetActive(false);
+            enemy.ExclamationHitMark.SetActive(false);
             currentPunctuationMark = TypeOfMark.None;
         }
     }
