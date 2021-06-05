@@ -110,7 +110,6 @@ public class PlayerMovement : MonoBehaviour, IAction
         slowMotion.SlowMotionEvent += ChangeTurnSmoothValue;
         input.Walk += HandleWalk;
         input.Sprint += HandleSprint;
-        wallHug.WallHug += StopMovementAfterWallHug;
         stats.TookDamage += () => Walking = false;
         Hide += HandleHidden;
     }
@@ -121,7 +120,6 @@ public class PlayerMovement : MonoBehaviour, IAction
         slowMotion.SlowMotionEvent -= ChangeTurnSmoothValue;
         input.Walk -= HandleWalk;
         input.Sprint -= HandleSprint;
-        wallHug.WallHug -= StopMovementAfterWallHug;
         stats.TookDamage -= () => Walking = false;
         Hide -= HandleHidden;
     }
@@ -166,43 +164,6 @@ public class PlayerMovement : MonoBehaviour, IAction
         // Cancels sneaking if player is fighting
         if (player.PlayerCurrentlyFighting > 0)
             Hidden = false;
-    }
-
-
-    /// <summary>
-    /// Stops movement after wall hugging while the camera is blending.
-    /// </summary>
-    /// <param name="condition">False if cancelled wall hug.</param>
-    private void StopMovementAfterWallHug(bool condition)
-    {
-        if (condition == false) 
-            StartCoroutine(StopMovementAfterWallHugCoroutine());
-    }
-
-    /// <summary>
-    /// Stops movement after wall hugging.
-    /// </summary>
-    private IEnumerator StopMovementAfterWallHugCoroutine()
-    {
-        float currentTime = Time.time;
-        // Has this timer to confirm it canceled movement for at least these seconds
-        while (Time.time - currentTime < 0.5f)
-        {
-            Direction = Vector3.zero;
-            MovementSpeed = 0;
-            stopMovementAfterWallHug = true;
-            yield return null;
-
-            // Has to contain this while too to confirm the camera stopped blending
-            while (cineTarget.IsBlending())
-            {
-                Direction = Vector3.zero;
-                HandleStopMovement();
-                stopMovementAfterWallHug = true;
-                yield return null;
-            }
-        }
-        stopMovementAfterWallHug = false;
     }
 
     /// <summary>
