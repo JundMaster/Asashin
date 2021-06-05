@@ -198,16 +198,22 @@ public class Options : MonoBehaviour
         switch (options.ScreenResolution)
         {
             case 0:
-                if (options.ScreenMode == 1 || options.ScreenMode == 2)
+                if (options.ScreenMode == 1)
                     Screen.SetResolution(1280, 720, true);
                 else
                     Screen.SetResolution(1280, 720, false);
                 break;
             case 1:
-                if (options.ScreenMode == 1 || options.ScreenMode == 2)
+                if (options.ScreenMode == 1)
                     Screen.SetResolution(1600, 900, true);
                 else
                     Screen.SetResolution(1600, 900, false);
+                break;
+            case 2:
+                if (options.ScreenMode == 1)
+                    Screen.SetResolution(1920, 1080, true);
+                else
+                    Screen.SetResolution(1920, 1080, false);
                 break;
         }
     }
@@ -224,7 +230,7 @@ public class Options : MonoBehaviour
                 windowMode = FullScreenMode.Windowed;
                 break;
             case 1:
-                windowMode = FullScreenMode.FullScreenWindow;
+                windowMode = FullScreenMode.ExclusiveFullScreen;
                 break;
         }
         Screen.fullScreenMode = windowMode;
