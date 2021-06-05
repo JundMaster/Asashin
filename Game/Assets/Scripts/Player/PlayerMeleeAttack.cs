@@ -29,6 +29,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     private Player player;
     private CinemachineTarget cineTarget;
     private Camera mainCam;
+    private PlayerTakingHitAnimationBehaviour takingHit;
 
     // Weapon
     [SerializeField] private SphereCollider sword;
@@ -68,6 +69,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
         values = GetComponent<Player>().Values;
         player = GetComponent<Player>();
         cineTarget = FindObjectOfType<CinemachineTarget>();
+        takingHit = GetComponent<Animator>().GetBehaviour<PlayerTakingHitAnimationBehaviour>();
         mainCam = Camera.main;
     }
 
@@ -248,7 +250,7 @@ public class PlayerMeleeAttack : MonoBehaviour, IAction
     {
         if (roll.Performing == false && useItem.Performing == false &&
             block.Performing == false && interact.InterectableObject == null &&
-            wallHug.Performing == false)
+            wallHug.Performing == false && takingHit.Performing == false)
         {
             if (target.Targeting)
             {

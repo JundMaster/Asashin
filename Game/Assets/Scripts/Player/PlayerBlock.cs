@@ -10,6 +10,7 @@ public class PlayerBlock : MonoBehaviour, IAction
     private PlayerRoll roll;
     private PlayerUseItem useItem;
     private CinemachineTarget cineTarget;
+    private PlayerTakingHitAnimationBehaviour takingHit;
 
     public bool Performing { get; private set; }
 
@@ -19,6 +20,7 @@ public class PlayerBlock : MonoBehaviour, IAction
         roll = GetComponent<PlayerRoll>();
         useItem = GetComponent<PlayerUseItem>();
         cineTarget = FindObjectOfType<CinemachineTarget>();
+        takingHit = GetComponent<Animator>().GetBehaviour<PlayerTakingHitAnimationBehaviour>();
     }
 
     private void OnEnable() =>
@@ -36,7 +38,8 @@ public class PlayerBlock : MonoBehaviour, IAction
     {
         if (condition == true)
         {
-            if (roll.Performing == false && useItem.Performing == false)
+            if (roll.Performing == false && useItem.Performing == false &&
+                takingHit.Performing == false)
             {
                 Performing = true;
             }

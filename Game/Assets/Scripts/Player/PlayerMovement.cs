@@ -26,10 +26,10 @@ public class PlayerMovement : MonoBehaviour, IAction
     private PlayerRoll roll;
     private PlayerBlock block;
     private PlayerWallHug wallHug;
-    private CinemachineTarget cineTarget;
     private PlayerStats stats;
     private SceneEnum currentScene;
     private Transform myTarget;
+    private PlayerTakingHitAnimationBehaviour takingHit;
 
     public bool Sprinting { get; private set; }
     public bool Performing { get; private set; }
@@ -86,12 +86,12 @@ public class PlayerMovement : MonoBehaviour, IAction
         useItem = GetComponent<PlayerUseItem>();
         block = GetComponent<PlayerBlock>();
         wallHug = GetComponent<PlayerWallHug>();
-        cineTarget = FindObjectOfType<CinemachineTarget>();
         stats = GetComponent<PlayerStats>();
         postProcessing =
             GameObject.FindGameObjectWithTag("postProcessing").GetComponent<Volume>();
         currentScene = FindObjectOfType<SceneControl>().CurrentSceneEnum();
         myTarget = GameObject.FindGameObjectWithTag("playerTarget").transform;
+        takingHit = GetComponent<Animator>().GetBehaviour<PlayerTakingHitAnimationBehaviour>();
     }
 
     private void Start()
@@ -325,7 +325,8 @@ public class PlayerMovement : MonoBehaviour, IAction
     {
         if (Direction.magnitude > 0.01f && block.Performing == false &&
             roll.Performing == false && wallHug.Performing == false &&
-            stopMovementAfterWallHug == false && input.GetActionMap() == "Gameplay")
+            stopMovementAfterWallHug == false && input.GetActionMap() == "Gameplay" &&
+            takingHit.Performing == false)
         {
             // Moves Controllers towards the moveDirection set on Rotation()
             // Transition to walking

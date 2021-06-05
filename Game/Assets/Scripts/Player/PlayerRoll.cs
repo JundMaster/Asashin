@@ -14,6 +14,7 @@ public class PlayerRoll : MonoBehaviour, IAction
     private PlayerWallHug wallHug;
     private PlayerMovement movement;
     private Player player;
+    private PlayerTakingHitAnimationBehaviour takingHit;
 
     public bool Performing { get; set; }
     public float PerformingTime { get; set; }
@@ -26,6 +27,7 @@ public class PlayerRoll : MonoBehaviour, IAction
         wallHug = GetComponent<PlayerWallHug>();
         movement = GetComponent<PlayerMovement>();
         player = GetComponent<Player>();
+        takingHit = GetComponent<Animator>().GetBehaviour<PlayerTakingHitAnimationBehaviour>();
     }
 
     private void Start() =>
@@ -53,8 +55,9 @@ public class PlayerRoll : MonoBehaviour, IAction
     private void HandleRoll()
     {
         if (Performing == false &&
-            movement.IsGrounded() && useItem.Performing == false 
-            && wallHug.Performing == false)
+            movement.IsGrounded() && useItem.Performing == false && 
+            wallHug.Performing == false &&
+            takingHit.Performing == false)
         {
             OnRoll();
 

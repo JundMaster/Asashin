@@ -28,6 +28,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
     private PlayerBlock block;
     private PlayerWallHug wallHug;
     private Player player;
+    private PlayerTakingHitAnimationBehaviour takingHit;
 
     public float TimeItemWasUsed { get; private set; }
     private bool canUseItemDelayOver;
@@ -48,6 +49,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
         block = GetComponent<PlayerBlock>();
         wallHug = GetComponent<PlayerWallHug>();
         player = GetComponent<Player>();
+        takingHit = GetComponent<Animator>().GetBehaviour<PlayerTakingHitAnimationBehaviour>();
     }
 
     private void Start()
@@ -101,7 +103,8 @@ public class PlayerUseItem : MonoBehaviour, IAction
     {
         if (canUseItemDelayOver && attack.Performing == false && 
             roll.Performing == false && block.Performing == false && 
-            wallHug.Performing == false && movement.Walking == false)
+            wallHug.Performing == false && movement.Walking == false &&
+            takingHit.Performing == false)
         {
             if (player.InTutorial)
                 OnTutorialItemUse(TypeOfTutorial.ItemUse);

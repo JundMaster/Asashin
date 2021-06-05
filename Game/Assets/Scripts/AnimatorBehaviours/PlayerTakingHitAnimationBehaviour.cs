@@ -2,12 +2,7 @@
 
 public class PlayerTakingHitAnimationBehaviour : StateMachineBehaviour
 {
-    private PlayerInputCustom input;
-
-    private void Awake()
-    {
-        input = FindObjectOfType<PlayerInputCustom>();
-    }
+    public bool Performing { get; private set; }
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -18,13 +13,17 @@ public class PlayerTakingHitAnimationBehaviour : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        input.SwitchActionMapToDisable();
+        //input.SwitchActionMapToDisable();
+
+        Performing = true;
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        input.SwitchActionMapToGameplay();
+        //input.SwitchActionMapToGameplay();
+
+        Performing = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

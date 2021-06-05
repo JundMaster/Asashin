@@ -25,6 +25,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
     private PlayerStats stats;
     private PlayerMovement movement;
     private Player player;
+    private PlayerTakingHitAnimationBehaviour takingHit;
 
     private Collider[] wallsColliders;
     private Collider[] wallsCollidersRight;
@@ -52,6 +53,7 @@ public class PlayerWallHug : MonoBehaviour, IAction
         stats = GetComponent<PlayerStats>();
         movement = GetComponent<PlayerMovement>();
         player = GetComponent<Player>();
+        takingHit = GetComponent<Animator>().GetBehaviour<PlayerTakingHitAnimationBehaviour>();
         cam = Camera.main;
     }
 
@@ -97,7 +99,8 @@ public class PlayerWallHug : MonoBehaviour, IAction
                 movement.IsGrounded() &&
                 useItem.Performing == false &&
                 block.Performing == false &&
-                roll.Performing == false)
+                roll.Performing == false &&
+                takingHit.Performing == false)
             {
                 if (wallsColliders.Length > 0)
                 {
