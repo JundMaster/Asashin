@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6858825552408593909}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SmallRoof_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6858825552408593909
 Transform:
@@ -46,12 +46,13 @@ GameObject:
   - component: {fileID: 5221240031349486878}
   - component: {fileID: 774518745461505226}
   - component: {fileID: 5614772574514316434}
-  m_Layer: 0
+  - component: {fileID: 7636257019392188981}
+  m_Layer: 12
   m_Name: SmallWall_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &5221240031349486878
 Transform:
@@ -116,6 +117,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7636257019392188981
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2440124608440108114}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.44, y: 5.000001, z: 9.13}
+  m_Center: {x: 0, y: 2.5000005, z: 4.499999}
 --- !u!1 &2842890373836461244
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,12 +139,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3186341915282247174}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: OuterMiddleWallOneSideClosed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &3186341915282247174
 Transform:
@@ -158,12 +172,13 @@ GameObject:
   - component: {fileID: 698124913313363057}
   - component: {fileID: 7233373486489271811}
   - component: {fileID: 8243231131577602922}
-  m_Layer: 0
+  - component: {fileID: 4825054922664913300}
+  m_Layer: 12
   m_Name: RoofBase_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &698124913313363057
 Transform:
@@ -228,6 +243,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4825054922664913300
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3570539622108992233}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3590861707451879161, guid: aa040c595c0cbf14b80d050f65006f74, type: 3}
 --- !u!1 &4637755172753086932
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,12 +268,12 @@ GameObject:
   - component: {fileID: 7010525587894975792}
   - component: {fileID: 579744196750188139}
   - component: {fileID: 5133878621338173347}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodWallSurroundingSupports_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7010525587894975792
 Transform:
@@ -320,12 +349,12 @@ GameObject:
   - component: {fileID: 9075613778629757069}
   - component: {fileID: 5549128488710748629}
   - component: {fileID: 3988769019212895054}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodSurroundingSupports_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &9075613778629757069
 Transform:
@@ -401,12 +430,12 @@ GameObject:
   - component: {fileID: 5706371049317771833}
   - component: {fileID: 8296356397460518434}
   - component: {fileID: 8814296529316577558}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RoofTop_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &5706371049317771833
 Transform:

@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 2985307660491962102}
   - component: {fileID: 2985307660491961992}
   - component: {fileID: 2985307660491961993}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodInnerSurroundingSupport_low 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2985307660491962102
 Transform:
@@ -92,12 +92,12 @@ GameObject:
   - component: {fileID: 2985307660548314194}
   - component: {fileID: 2985307660548314196}
   - component: {fileID: 2985307660548314197}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodOutterSurroundingSupport_low 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2985307660548314194
 Transform:
@@ -173,12 +173,12 @@ GameObject:
   - component: {fileID: 2985307660578735348}
   - component: {fileID: 2985307660578735350}
   - component: {fileID: 2985307660578735351}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RoofCans_low 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2985307660578735348
 Transform:
@@ -252,12 +252,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2985307660578769327}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LargeRoof_low1 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2985307660578769327
 Transform:
@@ -291,12 +291,12 @@ GameObject:
   - component: {fileID: 2985307660624987255}
   - component: {fileID: 2985307660624987145}
   - component: {fileID: 2985307660624987254}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: CornerWoodSupports_low 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2985307660624987255
 Transform:
@@ -372,12 +372,12 @@ GameObject:
   - component: {fileID: 2985307661283925665}
   - component: {fileID: 2985307661283925667}
   - component: {fileID: 2985307661283925664}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RoofTop_low 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2985307661283925665
 Transform:
@@ -453,12 +453,13 @@ GameObject:
   - component: {fileID: 2985307661335131470}
   - component: {fileID: 2985307661335131456}
   - component: {fileID: 2985307661335131457}
-  m_Layer: 0
+  - component: {fileID: 213296665609298610}
+  m_Layer: 12
   m_Name: Roof_Low 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2985307661335131470
 Transform:
@@ -523,6 +524,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &213296665609298610
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2985307661335131471}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5810529758312442190, guid: 874d65115f547d34c867d78b1cb781f1, type: 3}
 --- !u!1 &2985307661725466203
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,12 +547,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2985307661725466202}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Wall_low1 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2985307661725466202
 Transform:
@@ -565,12 +580,12 @@ GameObject:
   - component: {fileID: 2985307661855020923}
   - component: {fileID: 2985307661855020925}
   - component: {fileID: 2985307661855020922}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SideWoodSupports_low 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2985307661855020923
 Transform:
@@ -646,12 +661,13 @@ GameObject:
   - component: {fileID: 2985307662126364859}
   - component: {fileID: 2985307662126364861}
   - component: {fileID: 2985307662126364858}
-  m_Layer: 0
+  - component: {fileID: 3098634688998938714}
+  m_Layer: 12
   m_Name: BigWall_low 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2985307662126364859
 Transform:
@@ -716,6 +732,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3098634688998938714
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2985307662126364856}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.82, y: 10.389685, z: 4.89}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3231357259196548099
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,12 +754,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3105769277176417747}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WallPillar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &3105769277176417747
 Transform:

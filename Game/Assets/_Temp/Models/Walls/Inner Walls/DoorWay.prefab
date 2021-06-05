@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 341068178389980234}
   - component: {fileID: 341068178389980232}
   - component: {fileID: 341068178389980233}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RoofTop (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &341068178389980234
 Transform:
@@ -92,12 +92,13 @@ GameObject:
   - component: {fileID: 341068179136252442}
   - component: {fileID: 341068179136252440}
   - component: {fileID: 341068179136252441}
-  m_Layer: 0
+  - component: {fileID: 2379104477751835045}
+  m_Layer: 12
   m_Name: RoofBase2 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &341068179136252442
 Transform:
@@ -162,6 +163,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2379104477751835045
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341068179136252443}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8889871000767202353, guid: 92c322f4ff86d744793a6d18b2db199f, type: 3}
 --- !u!1 &341068179462606655
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,12 +188,12 @@ GameObject:
   - component: {fileID: 341068179462606654}
   - component: {fileID: 341068179462606652}
   - component: {fileID: 341068179462606653}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodInnerSurroundingSupport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &341068179462606654
 Transform:
@@ -252,12 +267,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 341068179571871777}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DoorWay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &341068179571871777
 Transform:
@@ -293,12 +308,13 @@ GameObject:
   - component: {fileID: 341068179645199152}
   - component: {fileID: 341068179645199158}
   - component: {fileID: 341068179645199159}
-  m_Layer: 0
+  - component: {fileID: 2673760628544456711}
+  m_Layer: 12
   m_Name: SmallWall1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &341068179645199152
 Transform:
@@ -363,6 +379,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2673760628544456711
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341068179645199153}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.81, y: 3.8146415, z: 8.05}
+  m_Center: {x: 0.8084422, y: 2.980377e-24, z: 5.027419}
 --- !u!1 &341068179652624150
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,12 +403,13 @@ GameObject:
   - component: {fileID: 341068179652624149}
   - component: {fileID: 341068179652624155}
   - component: {fileID: 341068179652624148}
-  m_Layer: 0
+  - component: {fileID: 8813145256359830618}
+  m_Layer: 12
   m_Name: RoofBase2 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &341068179652624149
 Transform:
@@ -444,6 +474,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8813145256359830618
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341068179652624150}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8889871000767202353, guid: 92c322f4ff86d744793a6d18b2db199f, type: 3}
 --- !u!1 &341068179710877982
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,12 +499,13 @@ GameObject:
   - component: {fileID: 341068179710877981}
   - component: {fileID: 341068179710877987}
   - component: {fileID: 341068179710877980}
-  m_Layer: 0
+  - component: {fileID: 239971954201310546}
+  m_Layer: 12
   m_Name: SmallWall1 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &341068179710877981
 Transform:
@@ -525,6 +570,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &239971954201310546
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341068179710877982}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.81, y: 3.8146415, z: 8.05}
+  m_Center: {x: 0.8084422, y: 0, z: 5.027419}
 --- !u!1 &341068179886926027
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,12 +594,12 @@ GameObject:
   - component: {fileID: 341068179886926026}
   - component: {fileID: 341068179886926024}
   - component: {fileID: 341068179886926025}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RoofTop (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &341068179886926026
 Transform:
@@ -617,12 +675,12 @@ GameObject:
   - component: {fileID: 341068180141121258}
   - component: {fileID: 341068180141121256}
   - component: {fileID: 341068180141121257}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodInnerSurroundingSupport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &341068180141121258
 Transform:
@@ -698,12 +756,12 @@ GameObject:
   - component: {fileID: 341068180152467646}
   - component: {fileID: 341068180152467644}
   - component: {fileID: 341068180152467645}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodInnerSurroundingSupport (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &341068180152467646
 Transform:

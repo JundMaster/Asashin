@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 3820603732884233359}
   - component: {fileID: 5025794133935693309}
   - component: {fileID: 3333324043866910296}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodSurroundingSupport4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &3820603732884233359
 Transform:
@@ -90,12 +90,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1887121917966335972}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodWallSurroundingSupports
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1887121917966335972
 Transform:
@@ -124,12 +124,12 @@ GameObject:
   - component: {fileID: 1268685768519270996}
   - component: {fileID: 7429938083535051757}
   - component: {fileID: 7875223497549734401}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodWallSurroundingSupport6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1268685768519270996
 Transform:
@@ -205,12 +205,13 @@ GameObject:
   - component: {fileID: 143275759591138344}
   - component: {fileID: 35809334569730086}
   - component: {fileID: 820199378483848393}
-  m_Layer: 0
+  - component: {fileID: 3138152892165961183}
+  m_Layer: 12
   m_Name: SmallWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &143275759591138344
 Transform:
@@ -275,6 +276,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3138152892165961183
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4914766075190061653}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.75, y: 3.8146415, z: 9.16}
+  m_Center: {x: -2.7105054e-20, y: 0, z: -8.74485e-23}
 --- !u!1 &5220489342286732358
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,12 +300,12 @@ GameObject:
   - component: {fileID: 4859414380116516817}
   - component: {fileID: 4495611257101920763}
   - component: {fileID: 985733627367177247}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodWallSurroundingSupport5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4859414380116516817
 Transform:
@@ -367,12 +381,13 @@ GameObject:
   - component: {fileID: 6832628879792771115}
   - component: {fileID: 8481491312415044471}
   - component: {fileID: 7469088324671531071}
-  m_Layer: 0
+  - component: {fileID: 2947010288277281728}
+  m_Layer: 12
   m_Name: RoofBase2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6832628879792771115
 Transform:
@@ -437,6 +452,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2947010288277281728
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6195484936747877242}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8889871000767202353, guid: 92c322f4ff86d744793a6d18b2db199f, type: 3}
 --- !u!1 &7032144766043013101
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,12 +475,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7938918321677514280}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodSurroundingSupports
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7938918321677514280
 Transform:
@@ -478,12 +507,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 422829162346234009}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SmallRoof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &422829162346234009
 Transform:
@@ -512,12 +541,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7988819815007849565}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: InnerWallMiddle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7988819815007849565
 Transform:
@@ -546,12 +575,12 @@ GameObject:
   - component: {fileID: 7402908522985559547}
   - component: {fileID: 7110594531860925072}
   - component: {fileID: 1891049769346427743}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodSurroundingSupport3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7402908522985559547
 Transform:
@@ -627,12 +656,12 @@ GameObject:
   - component: {fileID: 244602853662187235}
   - component: {fileID: 1954768823935361475}
   - component: {fileID: 5503078342992858366}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RoofTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &244602853662187235
 Transform:
