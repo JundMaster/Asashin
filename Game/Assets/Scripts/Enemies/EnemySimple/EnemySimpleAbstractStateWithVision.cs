@@ -16,6 +16,7 @@ public abstract class EnemySimpleAbstractStateWithVision :
     private const byte PLAYERLAYERNUMBER = 11;
     protected float lastTimeChecked;
 
+    // Components
     private PlayerWallHug playerWallHug;
 
     /// <summary>
@@ -75,6 +76,9 @@ public abstract class EnemySimpleAbstractStateWithVision :
                                 // (enemy only sees the player if they are
                                 // basically facing or perpendicular to
                                 // each other)
+                                // This happens so the enemy won't see the
+                                // the player when the player is wall hugging 
+                                // and the enemy is behind him
                                 if (Vector3.Dot(
                                     enemy.transform.forward, 
                                     playerTarget.forward) < 

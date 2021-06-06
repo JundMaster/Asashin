@@ -407,7 +407,7 @@ public class @InputAsset : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""7bf568ce-ac42-48a0-9e0f-d0339176cc46"",
-                    ""path"": ""<Keyboard>/p"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
