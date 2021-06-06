@@ -26,6 +26,7 @@ public sealed class EnemyShinobiAggressiveState : EnemyBossAbstractState
     [Header("Prefab to spawn on melee attack hit")]
     [SerializeField] private GameObject meleeHitParticles;
 
+    // Components
     private SphereCollider weapon;
     private PlayerRoll playerRoll;
     private EnemyAnimationEvents animationEvents;
