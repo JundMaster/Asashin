@@ -7,7 +7,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Enemy Common Aggressive State")]
 public class EnemySimpleAggressiveState : EnemySimpleAbstractState
 {
-    private readonly float CHECKFORPLAYERRANGE = 20;
+    [Header("Maximum range from player")]
+    [Range(5, 100)] [SerializeField] private float checkForPlayerRange;
     private readonly float CLOSETOPLAYERRANGE = 2;
     private readonly float DISTANCEFROMPLAYER = 1;
 
@@ -305,7 +306,7 @@ public class EnemySimpleAggressiveState : EnemySimpleAbstractState
     /// else returns false.</returns>
     private bool IsPlayerInMyRange(float distance)
     {        
-        if (distance <= CHECKFORPLAYERRANGE)
+        if (distance <= checkForPlayerRange)
             return true;
 
         return false;

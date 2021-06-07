@@ -9,23 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4caef0ce2cf78242a3d442eefb0c5dc, type: 3}
-  m_Name: Enemy Kenshusei Aggressive State
+  m_Script: {fileID: 11500000, guid: e0a26a0538e1eec4aa14d2faf98d15d1, type: 3}
+  m_Name: Enemy Boss Minion Kenshusei Defense State
   m_EditorClassIdentifier: 
-  timeToTravelAfterHit: 0.25
-  takeDamageDistancePower: 2.5
+  timeToTravelAfterHit: 0.3
+  takeDamageDistancePower: 2
   runningSpeed: 3.8
-  walkingSpeed: 1
+  walkingSpeed: 2
   turnSpeedAfterBeingHit: 0.1
-  checkForPlayerRange: 20
+  coneRange: 100
+  desiredConeAngle: 180
   playerLayer:
     serializedVersion: 2
     m_Bits: 34816
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 537974784
-  lostPlayerMaxTime: 1.25
-  attackingDelay: 1.5
-  afterAttackDelay: 1.15
-  turnSpeed: 0.15
-  meleeHitParticles: {fileID: 3664975949699414532, guid: 0e1f38f4938bdf244b886fcfd61635b5, type: 3}
+    m_Bits: 537975040
+  randomDistanceFromPlayer:
+    x: 6
+    y: 13
+  timeToWalkSidewaysFromPlayer:
+    x: 2
+    y: 5

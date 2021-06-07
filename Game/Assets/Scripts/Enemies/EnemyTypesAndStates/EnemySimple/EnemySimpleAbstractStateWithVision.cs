@@ -9,8 +9,8 @@ public abstract class EnemySimpleAbstractStateWithVision :
 {
     // Vision
     [Header("Vision Cone Attributes")]
-    [Range(1, 30)][SerializeField] protected byte coneRange;
-    [Range(0, 90)] [SerializeField] protected byte desiredConeAngle;
+    [Range(1, 100)][SerializeField] protected byte coneRange;
+    [Range(0, 180)] [SerializeField] protected byte desiredConeAngle;
     [SerializeField] private LayerMask playerLayer;
     [Header("Layers of every possible collision from enemy to player")]
     [SerializeField] protected LayerMask collisionLayers;

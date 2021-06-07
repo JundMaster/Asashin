@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4caef0ce2cf78242a3d442eefb0c5dc, type: 3}
-  m_Name: Enemy Kenshusei Aggressive State
+  m_Name: Enemy Boss Minion Kenshusei Aggressive State
   m_EditorClassIdentifier: 
   timeToTravelAfterHit: 0.25
   takeDamageDistancePower: 2.5
   runningSpeed: 3.8
   walkingSpeed: 1
   turnSpeedAfterBeingHit: 0.1
-  checkForPlayerRange: 20
+  checkForPlayerRange: 100
   playerLayer:
     serializedVersion: 2
     m_Bits: 34816
   collisionLayers:
     serializedVersion: 2
     m_Bits: 537974784
-  lostPlayerMaxTime: 1.25
+  lostPlayerMaxTime: 5
   attackingDelay: 1.5
   afterAttackDelay: 1.15
   turnSpeed: 0.15
