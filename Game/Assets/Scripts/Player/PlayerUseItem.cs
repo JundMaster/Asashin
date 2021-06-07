@@ -58,15 +58,11 @@ public class PlayerUseItem : MonoBehaviour, IAction
         canUseItemDelayOver = true;
     }
 
-    private void OnEnable()
-    {
+    private void OnEnable() =>
         input.ItemUse += HandleItemUse;
-    }
 
-    private void OnDisable()
-    {
+    private void OnDisable() =>
         input.ItemUse -= HandleItemUse;
-    }
 
     /// <summary>
     /// Rotates the character towards something.
@@ -103,8 +99,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
     {
         if (canUseItemDelayOver && attack.Performing == false && 
             roll.Performing == false && block.Performing == false && 
-            wallHug.Performing == false && movement.Walking == false &&
-            takingHit.Performing == false)
+            wallHug.Performing == false && takingHit.Performing == false)
         {
             if (player.InTutorial)
                 OnTutorialItemUse(TypeOfTutorial.ItemUse);
@@ -121,6 +116,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                         TimeItemWasUsed = Time.time;
                         canUseItemDelayOver = false;
                         OnUsedItemDelay();
+                        movement.Walking = false;
                     }
                     break;
                 case ListOfItems.FirebombKunai:
@@ -132,6 +128,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                         TimeItemWasUsed = Time.time;
                         canUseItemDelayOver = false;
                         OnUsedItemDelay();
+                        movement.Walking = false;
                     }
                     break;
                 case ListOfItems.HealthFlask:
@@ -143,6 +140,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                         TimeItemWasUsed = Time.time;
                         canUseItemDelayOver = false;
                         OnUsedItemDelay();
+                        movement.Walking = false;
                     }
                     break;
                 case ListOfItems.SmokeGrenade:
@@ -154,6 +152,7 @@ public class PlayerUseItem : MonoBehaviour, IAction
                         TimeItemWasUsed = Time.time;
                         canUseItemDelayOver = false;
                         OnUsedItemDelay();
+                        movement.Walking = false;
                     }
                     break;           
             }
