@@ -107,7 +107,7 @@ public class BossCutsceneControl : MonoBehaviour
         Instantiate(smokeParticles, bossPosition.transform.position + offset, Quaternion.identity);
 
         spawnedBoss = 
-            Instantiate(bossPrefab, bossPosition.transform.position, Quaternion.Euler(0, 90, 0));
+            Instantiate(bossPrefab, bossPosition.transform.position, bossPosition.transform.rotation);
 
         bossHealthBar.SetActive(true);
     }
@@ -126,9 +126,10 @@ public class BossCutsceneControl : MonoBehaviour
         boss = spawnedBoss.GetComponentInChildren<EnemyBoss>();
         Animator agentAnimator = spawnedBoss.GetComponentInChildren<Animator>();
         NavMeshAgent agent = spawnedBoss.GetComponentInChildren<NavMeshAgent>();
-        agentAnimator.SetTrigger("Jump");
+
         agent.enabled = false;
         boss.enabled = false;
+        agentAnimator.SetTrigger("Jump");
 
         // Gets boss position animator
         Animator bossPos = bossPosition.GetComponentInParent<Animator>();
