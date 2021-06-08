@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5020646842761392932}
   - component: {fileID: 5955645365500411831}
   - component: {fileID: 4025220272992455092}
-  - component: {fileID: 1102084931027887726}
+  - component: {fileID: 7280741859251590564}
   m_Layer: 12
   m_Name: Roof_Low
   m_TagString: Untagged
@@ -82,8 +82,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1102084931027887726
-MeshCollider:
+--- !u!65 &7280741859251590564
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -92,10 +92,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4008808778657372231, guid: 874d65115f547d34c867d78b1cb781f1, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 9.240546, y: 3.9432802, z: 9.240546}
+  m_Center: {x: -0.0005617142, y: 11.968227, z: 5.9999976}
 --- !u!1 &39360303700716551
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,7 +886,7 @@ GameObject:
   - component: {fileID: 5116537574654255192}
   - component: {fileID: 1099518353922125287}
   - component: {fileID: 690656257906702459}
-  - component: {fileID: 199295289628563145}
+  - component: {fileID: 6459113001579634856}
   m_Layer: 12
   m_Name: RoofBase_low
   m_TagString: Untagged
@@ -958,8 +957,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &199295289628563145
-MeshCollider:
+--- !u!65 &6459113001579634856
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -968,10 +967,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3590861707451879161, guid: 874d65115f547d34c867d78b1cb781f1, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 3.9210777, y: 1.8879995, z: 11.21904}
+  m_Center: {x: -0.049489975, y: -0.94399977, z: -5.60952}
 --- !u!1 &2829924175937987645
 GameObject:
   m_ObjectHideFlags: 0
@@ -2297,6 +2295,19 @@ Transform:
   m_Father: {fileID: 9014835900765911010}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5537162817424071340
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6480189354912108001}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.822097, y: 1.8879995, z: 9}
+  m_Center: {x: 0, y: -0.94399977, z: -4.500001}
 --- !u!1 &7739344319557751633
 GameObject:
   m_ObjectHideFlags: 0
@@ -2389,7 +2400,7 @@ GameObject:
   - component: {fileID: 2927606333435234128}
   - component: {fileID: 3271028949221688436}
   - component: {fileID: 4224950158440078446}
-  - component: {fileID: 6221142974684079321}
+  - component: {fileID: 7605983031894875027}
   m_Layer: 12
   m_Name: Roof_Low 1
   m_TagString: Untagged
@@ -2460,8 +2471,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6221142974684079321
-MeshCollider:
+--- !u!65 &7605983031894875027
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2470,10 +2481,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5810529758312442190, guid: 874d65115f547d34c867d78b1cb781f1, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 9.240548, y: 3.9432802, z: 9.240548}
+  m_Center: {x: -0.00055980694, y: 11.968227, z: 5.9999924}
 --- !u!1 &7997441177983645125
 GameObject:
   m_ObjectHideFlags: 0
@@ -2661,7 +2671,7 @@ GameObject:
   - component: {fileID: 7166344640446921150}
   - component: {fileID: 3303895331787244602}
   - component: {fileID: 1790293570284357353}
-  - component: {fileID: 4232210737035952552}
+  - component: {fileID: 1280065479699744749}
   m_Layer: 12
   m_Name: RoofBase_low 1
   m_TagString: Untagged
@@ -2732,8 +2742,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4232210737035952552
-MeshCollider:
+--- !u!65 &1280065479699744749
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2742,10 +2752,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -696164304635697238, guid: 874d65115f547d34c867d78b1cb781f1, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 3.9210787, y: 1.8879995, z: 11.219043}
+  m_Center: {x: -0.049489986, y: -0.94399977, z: -5.6095195}
 --- !u!1 &8525579977501404504
 GameObject:
   m_ObjectHideFlags: 0
@@ -3011,8 +3020,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7103732174280690364, guid: b370c0379ebf49c4fa7c67fa9aa6c81d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b370c0379ebf49c4fa7c67fa9aa6c81d, type: 3}
+--- !u!1 &6480189354912108001 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8676489079812956218, guid: b370c0379ebf49c4fa7c67fa9aa6c81d, type: 3}
+  m_PrefabInstance: {fileID: 2415993439599685083}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5309754965918639166 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7509575605318388197, guid: b370c0379ebf49c4fa7c67fa9aa6c81d, type: 3}

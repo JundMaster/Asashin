@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 545435613471487934}
   - component: {fileID: 3241995588684096161}
   - component: {fileID: 3118803867296598023}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodWallSurroundingSupport6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6961098157743993280
 Transform:
@@ -974,7 +974,7 @@ GameObject:
   - component: {fileID: 3535304831113616223}
   - component: {fileID: 6685245470834592449}
   - component: {fileID: 4272515934583248782}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodSurroundingSupport3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1055,7 +1055,7 @@ GameObject:
   - component: {fileID: 7812211250044012827}
   - component: {fileID: 2771668747074732502}
   - component: {fileID: 6396912475566820307}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodWallSurroundingSupport5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1134,7 +1134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8541782667075960347}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodSurroundingSupports
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1166,7 +1166,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 736480126943698097}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SmallRoof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1202,8 +1202,8 @@ GameObject:
   - component: {fileID: 7325417984875822152}
   - component: {fileID: 1129513348332523299}
   - component: {fileID: 4976056657984815231}
-  - component: {fileID: 8617921148817039608}
-  m_Layer: 0
+  - component: {fileID: 8667310872804017035}
+  m_Layer: 12
   m_Name: RoofBase2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1273,8 +1273,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8617921148817039608
-MeshCollider:
+--- !u!65 &8667310872804017035
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1283,10 +1283,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8889871000767202353, guid: 898bffd7ecc5b894fa20181f23104e48, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 3.7243044, y: 1.8783064, z: 9.000001}
+  m_Center: {x: -7.1054274e-15, y: -1.4149634e-31, z: -0.7942386}
 --- !u!1 &6958590130064781052
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,7 +1297,7 @@ GameObject:
   - component: {fileID: 6465520926643434166}
   - component: {fileID: 510886229011823937}
   - component: {fileID: 70345991950570469}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RoofTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1440,7 +1439,7 @@ GameObject:
   - component: {fileID: 8860948593195842234}
   - component: {fileID: 2682514136889059988}
   - component: {fileID: 2536606407510512224}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodSurroundingSupport4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1519,7 +1518,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4496315163505982639}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: WoodWallSurroundingSupports
   m_TagString: Untagged
   m_Icon: {fileID: 0}

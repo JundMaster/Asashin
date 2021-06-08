@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 698124913313363057}
   - component: {fileID: 7233373486489271811}
   - component: {fileID: 8243231131577602922}
-  - component: {fileID: 4825054922664913300}
+  - component: {fileID: 504508995588328963}
   m_Layer: 12
   m_Name: RoofBase_low
   m_TagString: Untagged
@@ -243,8 +243,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4825054922664913300
-MeshCollider:
+--- !u!65 &504508995588328963
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -253,10 +253,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3590861707451879161, guid: aa040c595c0cbf14b80d050f65006f74, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 3.822096, y: 1.8879995, z: 8.999998}
+  m_Center: {x: 0, y: -0.94399977, z: 4.499999}
 --- !u!1 &4637755172753086932
 GameObject:
   m_ObjectHideFlags: 0
