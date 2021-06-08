@@ -18,6 +18,8 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     private SlowMotionBehaviour slowMotion;
     private SceneControl sceneControl;
 
+    private IEnumerator masterVolumeCoroutine;
+
     #region Singleton
     public static AudioController instance = null;
     private void Awake()
@@ -59,6 +61,8 @@ public class AudioController : MonoBehaviour, IUpdateOptions
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         StartCoroutine(RegisterToEvents());
+
+        if (masterVolumeCoroutine != null) StopCoroutine(masterVolumeCoroutine);
         StartCoroutine(FadeInMasterCoroutine());
     }
 
@@ -75,7 +79,11 @@ public class AudioController : MonoBehaviour, IUpdateOptions
         if (sceneControl != null) sceneControl.StartedLoadingScene += FadeOutMaster;
     }
 
-    private void FadeOutMaster() => StartCoroutine(FadeOutMasterCoroutine());
+    private void FadeOutMaster()
+    {
+        masterVolumeCoroutine = FadeOutMasterCoroutine();
+        StartCoroutine(masterVolumeCoroutine);
+    }
 
     /// <summary>
     /// Fades out master volume.

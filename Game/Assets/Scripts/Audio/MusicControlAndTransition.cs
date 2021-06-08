@@ -8,11 +8,13 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class MusicControlAndTransition : MonoBehaviour
 {
+    [Range(0.1f, 1f)][SerializeField] private float transitionTimeBetweenSongs;
     [SerializeField] private AudioSource baseBackground;
     [SerializeField] private AudioSource combatBackground;
     [SerializeField] private AudioSource alertAudioSource;
+
+    [Header("THE EMPTY AUDIO SOURCE IN THIS GAMEOBJECT IS FOR THIS SOUND - DONT DELETE")]
     [SerializeField] private AbstractSoundScriptableObject alert;
-    [Range(0.1f, 1f)][SerializeField] private float transitionTimeBetweenSongs;
 
     // Music management
     private float baseDefaultVolume;
@@ -162,7 +164,7 @@ public class MusicControlAndTransition : MonoBehaviour
 
         while (true)
         {
-            if (combatBackground.isPlaying)
+            if (combatBackground.isPlaying && bossCutscene == null)
             {
                 while (combatBackground.volume > 0)
                 {
@@ -172,6 +174,15 @@ public class MusicControlAndTransition : MonoBehaviour
                 combatBackground.Stop();
 
                 baseBackground.Play();
+                while (baseBackground.volume < baseDefaultVolume)
+                {
+                    baseBackground.volume += Time.fixedDeltaTime * (1 - transitionTimeBetweenSongs);
+                    yield return wffu;
+                }
+            }
+
+            else // is in boss scene
+            {
                 while (baseBackground.volume < baseDefaultVolume)
                 {
                     baseBackground.volume += Time.fixedDeltaTime * (1 - transitionTimeBetweenSongs);

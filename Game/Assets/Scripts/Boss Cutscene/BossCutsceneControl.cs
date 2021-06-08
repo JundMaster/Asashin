@@ -110,6 +110,8 @@ public class BossCutsceneControl : MonoBehaviour
             Instantiate(bossPrefab, bossPosition.transform.position, bossPosition.transform.rotation);
 
         bossHealthBar.SetActive(true);
+
+        FindObjectOfType<AfterBossDeathCutscene>().FindObjectsAndRegisterEvents();
     }
 
     /// <summary>
