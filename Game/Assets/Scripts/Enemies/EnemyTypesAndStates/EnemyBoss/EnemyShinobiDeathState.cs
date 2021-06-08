@@ -15,8 +15,11 @@ public sealed class EnemyShinobiDeathState : EnemyBossAbstractState
         agent.isStopped = true;
 
         foreach (GameObject minion in enemy.SpawnedMinions)
-            Destroy(minion);
-
+        {
+            if (minion != null)
+                Destroy(minion);
+        }
+            
         enemy.StopAllCoroutines();
         enemy.StartCoroutine(Die());
     }
