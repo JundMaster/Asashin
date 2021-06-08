@@ -35,6 +35,8 @@ public sealed class EnemyBoss : EnemyBase
 
         if (TESTVARIABLETOTESTBOSSOUTSIDEAREA)
             InitializeStateMachine();
+
+        SpawnedMinions = new GameObject[0];
     }
 
     /// <summary>

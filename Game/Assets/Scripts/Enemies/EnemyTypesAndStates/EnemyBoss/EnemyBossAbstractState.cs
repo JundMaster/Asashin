@@ -66,12 +66,11 @@ public abstract class EnemyBossAbstractState : EnemyAbstractState
         agent.SetDestination(myTarget.position);
         agent.enabled = false;
 
-        Vector3 offset = new Vector3(0, 0.5f, 0);
-        Instantiate(
-            smokePrefab, enemy.transform.position + offset, Quaternion.identity);
+        SpawnSmokeOnBoss();
 
         // Makes the enemy disappear for wfs
-        enemy.transform.position = new Vector3(100000, enemy.transform.position.y, 100000);
+        enemy.transform.position = 
+            new Vector3(100000, enemy.transform.position.y, 100000);
         yield return wfs;
 
         // Teleports enemy to a random position and stops him
@@ -82,5 +81,15 @@ public abstract class EnemyBossAbstractState : EnemyAbstractState
         enemy.AlertSurroundings();
 
         teleportBoss = null;
+    }
+
+    /// <summary>
+    /// Spawns smoke around the boss.
+    /// </summary>
+    protected void SpawnSmokeOnBoss()
+    {
+        Vector3 offset = new Vector3(0, 0.5f, 0);
+        Instantiate(
+            smokePrefab, enemy.transform.position + offset, Quaternion.identity);
     }
 }
