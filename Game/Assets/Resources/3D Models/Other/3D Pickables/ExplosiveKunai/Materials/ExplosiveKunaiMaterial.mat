@@ -21,14 +21,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ExplosiveKunaiMaterial
-  m_Shader: {fileID: 4800000, guid: 650dd9526735d5b46b79224bc6e94025, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: e5758feb058c2274aa52765533251ce3, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
-  stringTagMap:
-    RenderType: Opaque
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -37,8 +36,24 @@ Material:
         m_Texture: {fileID: 2800000, guid: cdceeeb6214a48b4ebb2f28036a29121, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - Texture2D_59E31B2:
+        m_Texture: {fileID: 2800000, guid: 4a450368681c9fd4087b88b7b2636a1c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - Texture2D_6B1DF9A9:
         m_Texture: {fileID: 2800000, guid: fd0121b494fd8fd4e9aadbbb020e52a6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_6D3558CF:
+        m_Texture: {fileID: 2800000, guid: 7227dfd376c4b3f419e3b51192cc172f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_8E03CC06:
+        m_Texture: {fileID: 2800000, guid: fd0121b494fd8fd4e9aadbbb020e52a6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_A33B0904:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -70,6 +85,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Boolean_A4CEF813: 0
     - Vector1_42383810: 0
     - Vector1_60BE0B: 0.2
     - Vector1_63330E6D: 1
@@ -77,6 +93,8 @@ Material:
     - Vector1_8020413A: 0
     - Vector1_AF235C83: 1
     - Vector1_B5927665: 0.3
+    - Vector1_B8EA5A8E_Glow_Intensity: 3.75
+    - Vector1_C5144E07: 1
     - Vector1_CCE960B8: 0
     - Vector1_DC7A30A: 0.15
     - Vector1_E6BDE25B: 0.3
@@ -104,7 +122,9 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_11BF5673: {r: 1, g: 1, b: 1, a: 0}
     - Color_327B413C: {r: 0, g: 0, b: 0, a: 0}
+    - Color_4E6FFAF_Glow_Color: {r: 7.0417585, g: 0, b: 0, a: 0}
     - Color_942779B8: {r: 0.16981131, g: 0.16981131, b: 0.16981131, a: 0}
     - Color_B48C64CF: {r: 1, g: 1, b: 1, a: 0}
     - Vector2_FDBD2BB1: {r: 3, g: 0, b: 0, a: 0}
