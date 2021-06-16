@@ -13,13 +13,20 @@ public sealed class EnemyShinobiDeathState : EnemyBossAbstractState
         enemy.GetComponent<CapsuleCollider>().enabled = false;
         enemy.gameObject.layer = 0; // Changes to default layer
         agent.isStopped = true;
-        
-        foreach (GameObject minion in enemy.SpawnedMinions)
+
+        for (int i = 0; i < enemy.SpawnedMinions.Length; i++)
         {
-            if (minion != null)
-                Destroy(minion);
+            if (enemy.SpawnedMinions[i] != null)
+            {
+                EnemySimple minionSpawned =
+                    enemy.SpawnedMinions[i].
+                    GetComponentInChildren<EnemySimple>();
+
+                if (minionSpawned != null)
+                    minionSpawned.OnInstanteDeath();
+            }
         }
-            
+
         enemy.StopAllCoroutines();
         enemy.StartCoroutine(Die());
     }

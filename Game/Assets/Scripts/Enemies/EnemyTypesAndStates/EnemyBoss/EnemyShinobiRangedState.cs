@@ -67,7 +67,8 @@ public sealed class EnemyShinobiRangedState : EnemyBossAbstractState
                         enemy.SpawnedMinions[i].
                         GetComponentInChildren<EnemySimple>();
 
-                    minionSpawned.OnInstanteDeath();
+                    if (minionSpawned != null)
+                        minionSpawned.OnInstanteDeath();
                 }
 
                 if (i == enemy.SpawnedMinions.Length - 1)
