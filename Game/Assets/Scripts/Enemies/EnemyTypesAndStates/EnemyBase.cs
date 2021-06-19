@@ -94,7 +94,7 @@ public abstract class EnemyBase : MonoBehaviour, IFindPlayer
             {
                 if (enemyCollider.TryGetComponent(out EnemySimple otherEnemy))
                 {
-                    if (transform.CanSee(otherEnemy.transform, wallsWithEnemy))
+                    if (myTarget.CanSee(otherEnemy.transform, wallsWithEnemy))
                     {
                         if (otherEnemy.gameObject != gameObject)
                         {
