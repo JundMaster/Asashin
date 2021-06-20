@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2f46764b3251483458692f8a2105d103, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6cec0f4a52af33a4ca9810f29ce2cfea, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1034,7 +1034,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -0.8931885, y: -0.5019531}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1569546566
@@ -3656,6 +3656,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6407589012593788358}
     m_Modifications:
+    - target: {fileID: 475986571390335882, guid: e7560ff1d9cd7de4d8a124d2562dbcd9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1843241540518552218, guid: e7560ff1d9cd7de4d8a124d2562dbcd9, type: 3}
       propertyPath: m_Name
       value: UnsavedProgressWindows(LoadGame)
@@ -6312,6 +6316,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnsavedProgressConfirmationImage
       objectReference: {fileID: 0}
+    - target: {fileID: 8412323601518967348, guid: e7560ff1d9cd7de4d8a124d2562dbcd9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6cec0f4a52af33a4ca9810f29ce2cfea, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7560ff1d9cd7de4d8a124d2562dbcd9, type: 3}
 --- !u!114 &6407589013187516532 stripped
